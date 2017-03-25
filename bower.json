@@ -1,0 +1,17 @@
+{
+  "name": "andystevens.name-source",
+  "description": "",
+  "main": "app.js",
+  "authors": [
+    "Andy Stevens"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/andystevensname/andystevens.name-source",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+  ]
+}
