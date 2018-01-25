@@ -11,8 +11,22 @@
     <link href="https://fonts.googleapis.com/css?family=Fjalla+One" rel="stylesheet">
     <link rel="stylesheet" href="css/index.css">
   </head>
-  <body role="document"><!-- header --><!-- i.fa.fa-bars.menu-icon -->
-    <main role="main" id="index"><!-- This is a test comment --><!-- Stealth test 4 -->
+  <body role="document">
+    <header id="main">
+      <i class="fa fa-bars menu-icon" onClick="openNav()"></i>
+    </header>
+    <nav id="nav">
+      <div class="navContainer">
+        <i class="fa fa-times menu-icon" onClick="closeNav()"></i>
+        
+        <ul>
+          <li><a href="#poetry" onClick="closeNav()">Poetry</a></li>
+          <li><a href="#gadgets" onClick="closeNav()">Gadgets</a></li>
+          <li><a href="#code" onClick="closeNav()">Code</a></li>
+        </ul>
+      </div>
+    </nav>
+    <main>
       <div id="gears">
         <svg id="svg2" xmlns:dc="http://purl.org/dc/elements/1.1/" , xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" version="1.1" viewbox="0 0 744.09448819 1052.3622047">
           <path id="path6863" style="fill:none;stroke:#000000;stroke-width:1" , d="m 215.42169,-22.08672 12.31225,-1.26235 14.95886,2.1162 27.83871,12.00872 0,18.4483 -27.83871,12.00872 -14.95886,2.1162 -12.31225,-1.26235 -5.43742,30.83711 12.00149,3.02481 13.33294,7.10482 22.05261,20.8059 -6.30969,17.33573 -30.26705,1.76311 -14.78052,-3.12765 -11.13799,-5.39726 -15.6564,27.11769 10.24315,6.94715 10.09889,11.23648 13.60663,27.09359 -11.85834,14.13221 -29.04474,-8.69516 -12.81943,-7.99427 -8.62031,-8.88118 -23.987,20.12749 7.24935,10.03155 5.64675,14.01286 3.51949,30.11339 -15.97669,9.22415 -24.31921,-18.10467 -9.31212,-11.89666 -5.0629,-11.2939 -29.42442,10.70962 3.38117,11.906 0.51353,15.09907 -6.99214,29.50107 -18.16803,3.20352 -16.66042,-25.33049 -4.68163,-14.36413 -0.89483,-12.3444 -31.31282,0 -0.89483,12.3444 -4.68163,14.36413 -16.66042,25.33049 -18.16803,-3.20352 -6.99214,-29.50107 0.51353,-15.09907 3.38117,-11.906 -29.42442,-10.70962 -5.0629,11.2939 -9.31212,11.89666 -24.31921,18.10467 -15.97669,-9.22415 3.51949,-30.11339 5.64675,-14.01286 7.24935,-10.03155 -23.987,-20.12749 -8.62031,8.88118 -12.81943,7.99427 -29.04474,8.69516 -11.85834,-14.13221 13.60663,-27.09359 10.09889,-11.23648 10.24315,-6.94715 -15.6564,-27.11769 -11.13799,5.39726 -14.78052,3.12765 -30.26705,-1.76311 -6.30969,-17.33573 22.05261,-20.8059 13.33294,-7.10482 12.00149,-3.02481 -5.43742,-30.83711 -12.31225,1.26235 -14.95886,-2.1162 -27.83871,-12.00872 0,-18.4483 27.83871,-12.00872 14.95886,-2.1162 12.31225,1.26235 5.43742,-30.83711 -12.00149,-3.02481 -13.33294,-7.10482 -22.05261,-20.8059 6.30969,-17.33573 30.26705,-1.76311 14.78052,3.12765 11.13799,5.39726 15.6564,-27.11769 -10.24315,-6.94715 -10.09889,-11.23648 -13.60663,-27.09359 11.85834,-14.13221 29.04474,8.69516 12.81943,7.99427 8.62031,8.88118 23.987,-20.12749 -7.24935,-10.03155 -5.64675,-14.01286 -3.51949,-30.11339 15.97669,-9.22415 24.31921,18.10467 9.31212,11.89666 5.0629,11.2939 29.42442,-10.70962 -3.38117,-11.906 -0.51353,-15.09907 6.99214,-29.50107 18.16803,-3.20352 16.66042,25.33049 4.68163,14.36413 0.89483,12.3444 31.31282,0 0.89483,-12.3444 4.68163,-14.36413 16.66042,-25.33049 18.16803,3.20352 6.99214,29.50107 -0.51353,15.09907 -3.38117,11.906 29.42442,10.70962 5.0629,-11.2939 9.31212,-11.89666 24.31921,-18.10467 15.97669,9.22415 -3.51949,30.11339 -5.64675,14.01286 -7.24935,10.03155 23.987,20.12749 8.62031,-8.88118 12.81943,-7.99427 29.04474,-8.69516 11.85834,14.13221 -13.60663,27.09359 -10.09889,11.23648 -10.24315,6.94715 15.6564,27.11769 11.13799,-5.39726 14.78052,-3.12765 30.26705,1.76311 6.30969,17.33573 -22.05261,20.8059 -13.33294,7.10482 -12.00149,3.02481 z"></path>
@@ -25,7 +39,48 @@
         </svg>
       </div>
       <div id="canvas-container"></div>
+      <article>
+        <header>
+          <a name="poetry"><h1>Poetry</h1></a>
+        </header>
+        <h2>Publications</h2>
+        <ul>
+          <li>Eckerd Review - 2011</li>
+          <li><a href="http://www.magcloud.com/browse/issue/387253">Digital Americana</a> - Summer 2012 (published under Leroy van Stets)</li>
+          <li><a href="http://issuu.com/barelysouth/docs/barely_south_review_fall_2013">Barely South Review</a> - Fall 2013</li>
+          <li><a href="http://prickofthespindle.org/product/print-edition-issue-8/">Prick of the Spindle</a> - Issue 8, Spring/Summer 2015</li>
+        </ul>
+        <h2>Awards and Other Recognition</h2>
+        <ul>
+          <li>2009 ASPEC Mason Daly Poetry Award from Eckerd College</li>
+          <li>June 2013 Winner Tampa Bay Hotel / Plant Hall Beautiful-Weird-Cool-Spooky Old Place Writing Contest at University of Tampa</li>
+          <li>Finalist for Old Dominion’s 2013 Norton Girault Poetry Prize</li>
+        </ul>
+      </article>
+      <article>
+        <header>
+          <a name="gadgets"><h1>Gadgets</h1></a>
+        </header>
+        <ul>
+          <li><a href="https://github.com/andystevensname/PoetryBox">Poetry Box</a></li>
+        </ul>
+      </article>
+      <article>
+        <header>
+          <a name="code"><h1>Code</h1></a>
+          <ul>
+            <li>
+              <a href="https://github.com/andystevens.name/astreamforvoices">A Stream for Voices</a></li>
+            </li>
+          </ul>
+        </header>
+      </article>
     </main>
-    <script src="js/main.js" defer></script>
+
+    
+    <!-- <script src="js/main.js" defer></script> -->
+    <script src="vendor/jequery-3.1.1.min.js"></script>
+    <script src="vendor/two.min.js"></script>
+    <script src="js/index.js"></script>
   </body>
 </html>
