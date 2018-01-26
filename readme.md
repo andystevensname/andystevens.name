@@ -1,3 +1,3 @@
-# [http://andystevens.name](andystevens.name)
+# [andystevens.name](http://andystevens.name)
 
 My personal homepage.
