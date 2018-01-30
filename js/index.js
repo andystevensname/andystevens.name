@@ -416,33 +416,36 @@ two.bind('resize', function() {
         thingsGroup.visible = false;
         beams.destroy();
       }
-      utils.fade([things, thingsGroup], 1, iframeCount, 0, 9);
-      utils.fade([things, thingsGroup], -1, iframeCount, 440, 449)
+      utils.fade([makes, things, thingsGroup], 1, iframeCount, 0, 9);
+      utils.fade([makes, things, thingsGroup], -1, iframeCount, 440, 449)
 
       if (iframeCount == 450) {
         poetryGroup.visible = true;
+        makes.value = 'Crafts'
         things.value = 'Poems';
       }
       if (iframeCount == 899) {
         poetryGroup.visible = false;
         poetry.destroy();
       }
-      utils.fade([things, poetryGroup], 1, iframeCount, 450, 459);
-      utils.fade([things, poetryGroup], -1, iframeCount, 890, 899);
+      utils.fade([makes, things, poetryGroup], 1, iframeCount, 450, 459);
+      utils.fade([makes, things, poetryGroup], -1, iframeCount, 890, 899);
 
       if (iframeCount == 900) {
+        makes.value = 'Constructs';
         things.value = 'Gadgets';
         gadgetsGroup.visible = true;
       }
       if (iframeCount == 1349) {
         gears.destroy();
       }
-      utils.fade([things, gadgetsGroup], 1, iframeCount, 900, 909);
-      utils.fade([things, gadgetsGroup], -1, iframeCount, 1340, 1349);
+      utils.fade([makes, things, gadgetsGroup], 1, iframeCount, 900, 909);
+      utils.fade([makes, things, gadgetsGroup], -1, iframeCount, 1340, 1349);
 
       iframeCount += 1;
       if (iframeCount == 1350) {
         iframeCount = 0;
+        makes.value = 'Makes';
         things.value = 'Things';
       }
     }
