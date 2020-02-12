@@ -1,0 +1,9 @@
+deploy:
+  provider: s3
+  access_key_id: "UDJFSL3W82768B9SLNTL"
+  secret_access_key: "ZzEfooFzBnS6mk4qM9jVJbao5cwpX+5rkIGZ58e5mLqH1vGtSOPnvczgECm2uEWJzCj+PLbwGrvxcZM0iNwSgA6JOILMrS9VMoYo3i2bsJjMS9pz1gKAGO1AC/YwHDR3orAYNjNa58LzD7KTZDHOssUC4RxnIILAMt/s3bhL6XcIQZozN58PGz5hXHOEcs1td9B+EMzfFI/y262Top4ubwuolGVdP73pCzE97bHfLTv17TMMJBZsMeeCMEKk63r5g+y3HtEzgu8alPJFy15WeRjVtU/tK8HFhyWD1LmbV6IPCcIGqyO8b8x9R/dO1J0qYm1v66DiFLcXggz4WHDJnlMcD+3jMlCDiS79Lf3Ojg+t3jmJDRWWBHEp23lDtgs7HnDqU3q7Mm5y9wuMjiASBgVpj6kCd6vGhhaNjuYb5/nJfNR+9jiYDZmqni5iSZgqmPXRBOKI3176QtFBOUYnjUzYOCoiGlizMgU6xfzO6aGdsk1+lfXYsxBiNPOvWcTjpV9+PPqulfKRlqj7Jq869eqGP9qUErLxlyZhMWh+EjluppIeERLbFrqnhfyhMvhlbj01rCZ4z9M0PmRqR05LzhAVSDE4wu7V6GT4EItGSYv6dxXFgCjwvwpHfggk8Fq9Cglkv4FAMJXSdRGj+wNjXIKlXR1xtwVxosGwFfGxIak="
+  bucket: "andystevensname"
+  endpoint: https://us-east-1.linodeobjects.com
+  skip_cleanup: true
+  on:
+    branch: master
