@@ -1,6 +1,6 @@
-language: python
-python:
-  - "3.6"
+language: node_js
+node_js:
+  - node
 
 deploy:
   provider: s3
@@ -13,3 +13,7 @@ deploy:
     repo: andystevensname/andystevens.name
     branch: master
   endpoint: https://us-east-1.linodeobjects.com
+
+branches:
+  only:
+    - master

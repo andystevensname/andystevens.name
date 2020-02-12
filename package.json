@@ -1,0 +1,19 @@
+{
+  "name": "andystevens.name",
+  "version": "0.0.0",
+  "description": "The homepage of Andy Stevens",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"No tests\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andystevensname/andystevens.name.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andystevensname/andystevens.name/issues"
+  },
+  "homepage": "https://github.com/andystevensname/andystevens.name#readme"
+}
