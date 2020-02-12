@@ -1,3 +1,7 @@
+language: node_js
+node_js:
+  - node
+
 deploy:
   provider: s3
   access_key_id: 51CJ41XWD7J4Z24HDIJH
@@ -9,3 +13,7 @@ deploy:
     repo: andystevensname/andystevens.name
     branch: master
   endpoint: https://us-east-1.linodeobjects.com
+
+branches:
+  only:
+    - master
