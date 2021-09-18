@@ -1,19 +1,26 @@
 {
-  "name": "andystevens.name",
-  "version": "0.0.0",
-  "description": "The homepage of Andy Stevens",
-  "main": "index.html",
+  "name": "andystevens.name-gridsome",
+  "private": true,
   "scripts": {
-    "test": "echo \"No tests\" && exit 0"
+    "develop": "gridsome develop",
+    "explore": "gridsome explore",
+    "build": "gridsome build"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/andystevensname/andystevens.name.git"
+  "dependencies": {
+    "@gridsome/remark-prismjs": "^0.5.0",
+    "@gridsome/source-filesystem": "^0.6.2",
+    "@gridsome/transformer-remark": "^0.6.4",
+    "gridsome": "^0.7.0",
+    "twojs-ts": "^0.7.0-13",
+    "vue2-hammer": "^2.1.2"
   },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/andystevensname/andystevens.name/issues"
-  },
-  "homepage": "https://github.com/andystevensname/andystevens.name#readme"
+  "devDependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/free-brands-svg-icons": "^5.15.4",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@fortawesome/vue-fontawesome": "^2.0.2",
+    "autoprefixer": "^10.3.4",
+    "postcss": "^8.3.6",
+    "tailwindcss": "^2.2.15"
+  }
 }

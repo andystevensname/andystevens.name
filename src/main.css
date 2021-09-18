@@ -1,0 +1,291 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+    height: 100%;
+    min-height: 100%;
+    width: 100%;
+    position: relative;
+  }
+  
+body {
+    background-color: #212121;
+    height: 100%;
+    min-height: 100%;
+    width: 100%;
+    margin: 0;
+    position: relative;
+    font-size: 100%;
+    font-size: 16px;
+    color: white;
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+#app {
+    min-height: 100%;
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    min-height: 100%;
+    width: 100%;
+    position: relative;
+    overflow-x: hidden;
+}
+
+article {
+    width: 100%;
+    padding-top: 6em;
+}
+
+footer {
+    font-size: .875rem;
+    line-height: 3rem;
+    padding: 0 1rem;
+}
+  
+a:visited, a:hover, a:active {
+    color: white;
+}
+
+article a, article a:visited {
+    text-decoration: none;
+    border-bottom: 2px dotted #00b2cc; 
+}
+article a:hover, article a:active {
+    color: #00b2cc;
+}
+
+
+ul {
+    list-style: square outside;
+}
+
+ol {
+    list-style: decimal outside;
+}
+
+h1 {
+    font-weight: bold;
+}
+
+h2 {
+    display: border-box;
+    width: 100%;
+    padding: 0;
+    margin: 0 0 1.5rem 0;
+    font-size: 1.875rem;
+    line-height: 3rem;
+    font-weight: bold;
+}
+
+h3 {
+    display: border-box;
+    width: 100%;
+    padding: 0;
+    margin: 0 0 1.5rem 0;
+    font-size: 1.25rem;
+    line-height: 1.5rem;
+    font-weight: bold;
+}
+
+p {
+    display: inline-block;
+    width: 100%;    
+    font-size: 1rem;
+    line-height: 1.5rem;
+    padding: 0;
+    margin: 0 0 1.5rem 0;
+}
+
+ul {
+    display: block;
+    width: 100%;
+    padding: 0 0 0 1rem;
+    margin-bottom: 1.5rem;
+}
+
+ol {
+    display: inline-block;
+    width: 100%;
+    position: relative;
+    padding-left: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+ol li p, ul li p {
+    display: inline-block;
+    padding: 0;
+}
+
+ol li p:last-child, ul li p:last-child {
+    margin-bottom: 0;
+}
+
+blockquote {
+    width: 100%;
+    display: border-box;
+    border-left: 4px solid white;
+    padding: 0 1rem;
+    margin: 0 0 1.5rem 0;
+}
+
+blockquote p:last-child {
+    margin-bottom: 0;
+}
+
+blockquote ul:last-child, blockquote ol:last-child {
+  margin-bottom: 0;
+}
+
+blockquote > h2, h3, h4, h5, h6 {
+    border: 0;
+}
+
+code {
+  display: inline-block;
+  font-family: "Courier New", monospace;
+  background: black;
+  line-height: 1rem;
+  margin: 0 0 1.5rem 0;
+}
+
+p code {
+  margin-bottom: 0;
+}
+
+pre {
+  width: 100%;
+}
+
+.date {
+    height: 1.5rem;
+    border-top: 1px dashed white;
+    font-size: .875rem;
+    line-height: 1.5rem;
+    display: border-box;
+    margin: 0 0 1.5rem 0;
+    width: 100%;
+}
+
+#nav ul li {
+    line-height: 3;
+    width: 100%;
+    height: 3rem;
+    margin: 0;
+}
+
+.icon::before {
+    content: "#";
+    font-size: 1rem;
+}
+
+@media (min-width: 640px) {
+
+    h2 {
+      border-top: 1px solid white;
+      color: white;
+      width: 33.333%;
+      margin: 0;
+      float: left;
+      clear: both;
+      padding: 1.5rem 1rem 0 0;
+    }
+
+    h3 {
+      width: 66.666%;
+      float: right;
+    }
+
+    h2+p, h2+h3 {
+        border-top: 1px solid white;
+        padding-top: 1.5rem;
+    }
+
+    p, blockquote, ul, ol {
+        width: 66.666%;
+        float: right;
+    }
+  
+    p:first-child {
+        border-top: 0;
+        width: 100%;
+        font-size: 2rem;
+        line-height: 3rem;
+    }
+  
+    blockquote p:first-child, li p:first-child {
+        font-size: 1rem;
+        line-height: 1.5rem;
+        padding: 0;
+        margin: 0 0 1.5rem 0;
+        border: 0;
+    }
+  
+    blockquote p {
+        width: 100%;
+    }
+
+    blockquote p:last-child {
+        margin-bottom: 0;
+    }
+  
+    blockquote > blockquote {
+        width: 100%;
+    }
+  
+    blockquote h2, blockquote h3, blockquote h4, blockquote h5, blockquote h6 {
+        border: 0;
+        float: none;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    blockquote ul, blockquote ol {
+        width: 100%;
+    }
+  
+    ul li p, ol li p {
+        font-size: 1rem;
+        width: 100%;
+        clear: both;
+        float: none;
+    }
+
+    ol li p:first-of-type, ul li p:first-of-type {
+        font-size: 1rem;
+        padding: 0;
+        float: none;
+    }
+
+    blockquote ul:last-child, blockquote ol:last-child {
+      margin-bottom: 0;
+    }
+  
+    pre {
+      width: 66.666%;
+      float: right;
+    }
+
+    ul li pre, ol li pre, ul li blockquote, ol li blockquote {
+        width: 100%;
+        float: none;
+    }
+
+    .date {
+      width: 66.666%;
+      float: right;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    article {
+      width: 60rem;
+      margin: 0 auto;
+    }
+  }
