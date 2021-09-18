@@ -1,6 +1,8 @@
 <template>
   <div id="container w-full h-full relative">
-    <Header />
+    <ClientOnly>
+      <Header />
+    </ClientOnly>
     <main class="w-full flex-grow relative">
       <slot>
       </slot>
