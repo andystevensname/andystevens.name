@@ -19,7 +19,13 @@ export default function (Vue, { router, head, isClient }) {
   if (isClient) {
     const { VueHammer } = require('vue2-hammer')
     Vue.use(VueHammer)
-}
+  }  
+  head.link.push({
+    rel: 'alternate',
+    type: 'application/rss+xml',
+    title: 'RSS',
+    href: 'https://andystevens.name/rss.xml'
+  })
   // Set default layout as a global component
   Vue.component('Layout', DefaultLayout)
   Vue.component('font-awesome', FontAwesomeIcon)

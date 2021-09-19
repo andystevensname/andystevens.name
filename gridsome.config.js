@@ -12,6 +12,7 @@ const postcssPlugins = [
 
 module.exports = {
     siteName: 'Andy Stevens',
+    siteUrl: 'https://andystevens.name',
     plugins: [
       {
         use: '@gridsome/source-filesystem',
@@ -25,6 +26,34 @@ module.exports = {
         use: '@gridsome/plugin-google-analytics',
         options: {
           id: 'UA-66844301-1'
+        }
+      },
+      {
+        use: 'gridsome-plugin-rss',
+        options: {
+          contentTypeName: 'Post',
+          latest: true,
+          maxItems: 20,
+          feedOptions: {
+            title: "Andy Stevens' Blog",
+            feed_url: 'https://andystevens.name/rss.xml',
+            site_url: 'https://andystevens.name'
+          },
+          feedItemOptions: node => ({
+            title: node.title,
+            description: node.description,
+            url: 'https://andystevens.name/blog/' + node.slug,
+          }),
+          output: {
+            dir: './static',
+            name: 'rss.xml'
+          }
+        }
+      },
+      {
+        use: '@gridsome/plugin-sitemap',
+        options: {
+          include: ['/blog', '/blog/**','/about','/writing/']
         }
       }
     ],
