@@ -13,6 +13,7 @@ const postcssPlugins = [
 module.exports = {
     siteName: 'Andy Stevens',
     siteUrl: 'https://andystevens.name',
+    siteDescription: 'The homepage of writer, poet, and tinkerer Andy Stevens.',
     plugins: [
       {
         use: '@gridsome/source-filesystem',
@@ -53,7 +54,7 @@ module.exports = {
       {
         use: '@gridsome/plugin-sitemap',
         options: {
-          include: ['/blog', '/blog/**','/about','/writing/']
+          include: ['/','/blog/', '/blog/**','/about/','/writing/']
         }
       }
     ],

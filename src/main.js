@@ -26,6 +26,16 @@ export default function (Vue, { router, head, isClient }) {
     title: 'RSS',
     href: 'https://andystevens.name/rss.xml'
   })
+  head.link.push({
+    rel: 'sitemap',
+    type: 'application/xml',
+    title: 'Sitemap',
+    href: 'https://andystevens.name/sitemap.xml'
+  })
+  head.meta.push({
+    name: 'author',
+    content: 'Andy Stevens'
+  })
   // Set default layout as a global component
   Vue.component('Layout', DefaultLayout)
   Vue.component('font-awesome', FontAwesomeIcon)
