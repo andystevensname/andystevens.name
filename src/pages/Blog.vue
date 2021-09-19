@@ -33,7 +33,12 @@ export default {
   },
   metaInfo: {
     title: 'Blog',
-    description: 'Blog posts, essays, and missives from Andy Stevens.'
+    meta: [
+      {
+        name: 'description',
+        content: 'Blog posts, essays, and missives by Andy Stevens'
+      }
+    ]
   }
 }
 </script>

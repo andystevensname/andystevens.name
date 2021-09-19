@@ -24,7 +24,12 @@
 export default {
   metaInfo: {
     title: 'About',
-    description: 'About Andy Stevens, contact information, and website information.'
+    meta: [
+      {
+        name: 'description',
+        content: 'About Andy Stevens, contact information, and website information.'
+      }
+    ]
   }
 }
 </script>
