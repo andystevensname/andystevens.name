@@ -55,6 +55,13 @@ module.exports = {
         options: {
           include: ['/','/blog/', '/blog/**','/about/','/writing/']
         }
+      },
+      {
+        use: `gridsome-plugin-netlify-cms`,
+        options: {
+          publicPath: `/admin`,
+          modulePath: `src/admin/index.js`
+        }
       }
     ],
     transformers: {

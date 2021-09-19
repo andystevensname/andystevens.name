@@ -13,7 +13,9 @@
     "@gridsome/source-filesystem": "^0.6.2",
     "@gridsome/transformer-remark": "^0.6.4",
     "gridsome": "^0.7.0",
+    "gridsome-plugin-netlify-cms": "^1.0.9",
     "gridsome-plugin-rss": "^1.2.0",
+    "netlify-cms": "^2.10.164",
     "twojs-ts": "^0.7.0-13",
     "vue2-hammer": "^2.1.2"
   },
