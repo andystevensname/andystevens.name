@@ -32,7 +32,8 @@ export default {
     PostCard
   },
   metaInfo: {
-    title: 'Blog'
+    title: 'Blog',
+    description: 'Blog posts, essays, and missives from Andy Stevens.'
   }
 }
 </script>

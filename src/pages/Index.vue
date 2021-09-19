@@ -10,6 +10,9 @@ import Animation from '~/components/Animation'
 export default {
   components: {
     Animation
+  },
+  metaInfo: {
+    title: 'Homepage'
   }
 }
 </script>

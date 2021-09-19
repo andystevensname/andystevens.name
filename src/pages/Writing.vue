@@ -31,7 +31,8 @@
 <script>
 export default {
   metaInfo: {
-    title: 'Writing'
+    title: 'Writing',
+    description: 'A full list of publications by Andy Stevens, including poetry and other writing.'
   }
 }
 </script>
