@@ -9,24 +9,23 @@ body {
     background-color: #212121;
     height: 100%;
     min-height: 100%;
-    width: 100%;
+    max-width: 100%;
     margin: 0;
     position: relative;
+    padding: 0 1.5rem;
     font-size: 100%;
     font-size: 16px;
     color: white;
     font-family: Helvetica, Arial, sans-serif;
 }
   
-a:visited, a:hover, a:active {
+a, a:visited {
     color: white;
-}
-
-article a, article a:visited {
     text-decoration: none;
     border-bottom: 2px dotted #00b2cc; 
 }
-article a:hover, article a:active {
+
+a:hover, a:active {
     color: #00b2cc;
 }
 
@@ -40,6 +39,9 @@ ol {
 
 h1 {
     font-weight: bold;
+    font-size: 3rem;
+    width: 100%;
+    text-align: center;
 }
 
 h2 {
@@ -96,7 +98,7 @@ ol li p:last-child, ul li p:last-child {
 }
 
 blockquote {
-    width: 100%;
+    max-width: 100%;
     display: border-box;
     border-left: 4px solid white;
     padding: 0 1rem;
@@ -129,4 +131,14 @@ p code {
 
 pre {
   width: 100%;
+}
+
+.date {
+    height: 1.5rem;
+    border-top: 1px dashed white;
+    font-size: .875rem;
+    line-height: 1.5rem;
+    display: border-box;
+    margin: 0 0 1.5rem 0;
+    width: 100%;
 }
