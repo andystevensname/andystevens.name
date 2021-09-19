@@ -12,7 +12,10 @@
 export default {
   metaInfo() {
     return {
-      title: this.$page.post.title
+      title: this.$page.post.title,
+      meta: [
+        { name: 'description', content: this.$page.post.description }
+      ],
     }
   }
 }
@@ -25,6 +28,7 @@ query ($id: ID!) {
     content
     slug
     date (format: "MMMM D, Y")
+    description
   }
 }
 </page-query>

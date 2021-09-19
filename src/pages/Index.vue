@@ -12,7 +12,14 @@ export default {
     Animation
   },
   metaInfo: {
-    title: 'Homepage'
+    title: 'Homepage',
+    meta: [
+      {
+        name: 'description',
+        content: 'The homepage of writer, poet, and tinkerer Andy Stevens.'
+      }
+    ]
   }
+  
 }
 </script>

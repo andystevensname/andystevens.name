@@ -32,7 +32,12 @@
 export default {
   metaInfo: {
     title: 'Writing',
-    description: 'A full list of publications by Andy Stevens, including poetry and other writing.'
+    meta: [
+      {
+        name: 'description',
+        content: 'A full list of publications by Andy Stevens, including poetry and other writing.'
+      }
+    ]
   }
 }
 </script>
