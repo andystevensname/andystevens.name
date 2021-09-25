@@ -8,10 +8,9 @@ var PostPreview = createClass({
   
       return h('article', {},
                 h('h1', {}, entry.getIn(['data', 'title']) ),
-                h('div', {}, this.props.widgetFor('body'),
-                h('div', { className: 'date'}, entry.getIn(['data', 'date']) ),
-              )
-        )    
+                h('div', {}, this.props.widgetFor('body')),
+                h('div', { className: 'date'}, this.props.widgetFor('date') ),
+              )   
     }
   })
 
