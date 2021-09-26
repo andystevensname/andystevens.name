@@ -3,13 +3,17 @@
     <article class="px-4 relative h-full table">
       <h1 class="w-full text-5xl mb-6 text-center">{{ $page.post.title }}</h1>
       <div v-html="$page.post.content" />
-      <div class="date" v-html="$page.post.date" />
+      <PostMeta :key="$page.post.id" :post="$page.post" />
     </article>
   </Layout>
 </template>
 
 <script>
+import PostMeta from '~/components/PostMeta.vue'
 export default {
+  components: {
+    PostMeta
+  },
   metaInfo() {
     return {
       title: this.$page.post.title,
@@ -29,6 +33,11 @@ query ($id: ID!) {
     slug
     date (format: "MMMM D, Y")
     description
+    tags {
+      id
+      title
+      path
+    }
   }
 }
 </page-query>

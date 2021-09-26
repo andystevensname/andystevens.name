@@ -19,6 +19,11 @@ query {
         published
         description
         date (format: "MMMM D, Y")
+        tags {
+          id
+          title
+          path
+        }
       }
     }
   }
@@ -27,6 +32,7 @@ query {
 
 <script>
 import PostCard from '~/components/PostCard.vue'
+
 export default {
   components: {
     PostCard

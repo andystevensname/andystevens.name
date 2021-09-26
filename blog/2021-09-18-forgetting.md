@@ -2,7 +2,7 @@
 title: On Forgetting
 date: 2021-09-12
 published: true
-tags: ['recollections']
+tags: ['memory']
 canonical_url: false
 description: "We spend so much time trying to remember, but what happens when we want to forget?"
 slug: on-forgetting

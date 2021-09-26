@@ -162,7 +162,7 @@ pre {
   width: 100%;
 }
 
-.date {
+.meta {
     height: 1.5rem;
     border-top: 1px dashed white;
     font-size: .875rem;
@@ -277,7 +277,7 @@ pre {
         float: none;
     }
 
-    .date {
+    .meta {
       width: 66.666%;
       float: right;
     }
