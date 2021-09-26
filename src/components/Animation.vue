@@ -16,28 +16,33 @@
 </template>
 <script>
 import * as Two from 'twojs-ts';
+var two = true;
 
 export default {
     name: "Animation",
     data: function() {
         return {
             active: true,
-            two: new Two({
+            /*two: new Two({
                 fullscreen: false,
                 type: Two.Types.svg
-            })
+            })*/
         }
     },
     mounted() {
         self = this;
+        two = new Two({
+            fullscreen: false,
+            type: Two.Types.svg
+        })
         var style = window.getComputedStyle(document.getElementById("canvas-container"));
         var canvas = document.getElementById('canvas-container');
         var footer = document.getElementById("footer");
         var newHeight = window.innerHeight - footer.clientHeight - 1;
 
-        self.two.appendTo(document.getElementById('canvas-container'));
-        self.two.width = window.innerWidth;
-        self.two.height = newHeight;
+        two.appendTo(document.getElementById('canvas-container'));
+        two.width = window.innerWidth;
+        two.height = newHeight;
 
         // Let's try to make this accessible as possible
 
@@ -62,9 +67,9 @@ export default {
         * Main Groups
         */
 
-        var background = self.two.makeGroup();
+        var background = two.makeGroup();
         background.id = 'background';
-        var foreground = self.two.makeGroup();
+        var foreground = two.makeGroup();
         foreground.id = "foreground";
 
 
@@ -72,15 +77,15 @@ export default {
         * Background Groups
         */
 
-        var gadgetsGroup = self.two.makeGroup();
+        var gadgetsGroup = two.makeGroup();
         gadgetsGroup.addTo(background);
         gadgetsGroup.id = 'gadget-group';
 
-        var thingsGroup = self.two.makeGroup();
+        var thingsGroup = two.makeGroup();
         thingsGroup.addTo(background);
         thingsGroup.id = 'things-group';
 
-        var poetryGroup = self.two.makeGroup();
+        var poetryGroup = two.makeGroup();
         poetryGroup.addTo(background);
         poetryGroup.id = 'poetry-group';
 
@@ -88,7 +93,7 @@ export default {
         * Foreground Groups
         */
 
-        var textGroup = self.two.makeGroup();
+        var textGroup = two.makeGroup();
         textGroup.addTo(foreground);
         textGroup.id = 'text-group';
 
@@ -99,7 +104,7 @@ export default {
         */
 
         for (var i = 0; i < background.children.length - 1; i++) {
-            var bb = self.two.makeRectangle(250, self.two.height / 2, 500, self.two.height);
+            var bb = two.makeRectangle(250, two.height / 2, 500, two.height);
             bb.noStroke().noFill().visible = false;
             background.children[i].add(bb);
         }
@@ -109,7 +114,7 @@ export default {
         * Timer Line
         */
 
-        var timerLine = self.two.makeLine(0, 187, 130, 187);
+        var timerLine = two.makeLine(0, 187, 130, 187);
         timerLine.visible = false;
         timerLine.linewidth = 10;
         timerLine.noFill().stroke = 'white';
@@ -131,9 +136,9 @@ export default {
 
         textStyles['size'] = 50;
         textStyles['leading'] = 50;
-        var andy = self.two.makeText('Andy', 0, 20, textStyles);
-        var makes = self.two.makeText('Makes', 0, 90, textStyles);
-        var things = self.two.makeText('Things', 0, 160, textStyles);
+        var andy = two.makeText('Andy', 0, 20, textStyles);
+        var makes = two.makeText('Makes', 0, 90, textStyles);
+        var things = two.makeText('Things', 0, 160, textStyles);
         textGroup.add(andy, makes, things);
         textGroup.translation.set(16, 88);
 
@@ -206,7 +211,7 @@ export default {
                 }
             },
             create: function() {
-                var beam = self.two.makePath(300, 0, utils.randomNumber(400, 0), self.two.height, utils.randomNumber(400, 0), self.two.height)
+                var beam = two.makePath(300, 0, utils.randomNumber(400, 0), two.height, utils.randomNumber(400, 0), two.height)
                 beam.noStroke().fill = '#FFEB3B';
                 beam.opacity = 0;
                 beam.controller = this.createController();
@@ -255,7 +260,7 @@ export default {
 
             create: function(i) {
                 var width = utils.randomNumber(this.line.maxWidth, this.line.minWidth);
-                var line = self.two.makeRectangle(
+                var line = two.makeRectangle(
                     (width / 2) + this.line.x,
                     this.line.y + (i * this.step),
                     width,
@@ -356,9 +361,9 @@ export default {
                 }
             },
             create: function(i, svg) {
-                var assembly = self.two.makeGroup();
+                var assembly = two.makeGroup();
                 this.assemblies.push(assembly);
-                var gear = self.two.interpret(svg).center();
+                var gear = two.interpret(svg).center();
                 assembly.add(gear);
                 this.gears.push(gear);
                 if (this.scaleRatio == undefined) {
@@ -371,7 +376,7 @@ export default {
                 gear.fill = gear.stroke = this.colors[i];
                 gear.opacity = .7;
 
-                var circle = self.two.makeCircle(0, 0, (gear.getBoundingClientRect().width - 60) / 2);
+                var circle = two.makeCircle(0, 0, (gear.getBoundingClientRect().width - 60) / 2);
                 assembly.add(circle);
                 circle.fill =  '#212121'; // colors[i];
                 circle.stroke = this.colors[i];
@@ -410,7 +415,7 @@ export default {
 
         utils.resize(gadgetsGroup);
         var iframeCount = 0;
-        self.two.bind('resize', function() {
+        two.bind('resize', function() {
             utils.resize(background);
         })
         .bind('update', function(frameCount) {
@@ -476,7 +481,7 @@ export default {
         }).play();
     },
     destroyed() {
-        this.two.unbind("update");
+        two.unbind("update");
     }
 };
 </script>
