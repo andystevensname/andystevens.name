@@ -20,6 +20,13 @@ module.exports = {
           baseDir: './blog',
           path: '*.md',
           typeName: 'Post',
+          refs: {
+            // Creates a GraphQL collection from 'tags' in front-matter and adds a reference.
+            tags: {
+              typeName: 'Tag',
+              create: true
+            }
+          }
         }
       },
       {
@@ -86,6 +93,7 @@ module.exports = {
         },
     },
     templates: {
-        Post: '/blog/:slug'
+        Post: '/blog/:slug',
+        Tag: '/tag/:id'
     }
 }

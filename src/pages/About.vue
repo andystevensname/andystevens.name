@@ -13,7 +13,7 @@
       </ul>
 
       <h2>Colophon</h2>
-      <p>This website using the <a href="https://gridsome.org/">Gridsome</a> static site generator, which uses the <a href="https://vuejs.org">Vue.js framework</a>.</p>
+      <p>This website uses the <a href="https://gridsome.org/">Gridsome</a> static site generator, which employs the <a href="https://vuejs.org">Vue.js framework</a>.</p>
       <p>The animation on the front page is powered by <a href="https://two.js.org/">two.js</a>, an SVG animation library.</p>
       <p>This site's code is available on <a href="https://github.com/andystevensname/andystevens.name">GitHub</a>, and the website itself is hosted for free on <a href="https://www.netlify.com/">Netlify</a>.</p>
     </article>
