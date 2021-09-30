@@ -1,7 +1,8 @@
 backend:
   name: github
   repo: andystevensname/andystevens.name
-
+site_url: https://andystevens.name
+publish_mode: editorial_workflow
 media_folder: "static/uploads"
 public_folder: "/uploads"
 
@@ -10,9 +11,29 @@ collections:
     label: "Posts"
     folder: "blog"
     create: true
-    slug: "{{slug}}"
+    slug: "{{year}}-{{month}}-{{day}}-{{fields.slug}}"
+    preview_path: "blog/{{fields.slug}}"
     fields:
-      - {label: "Title", name: "title", widget: "string"}
-      - {label: "Description", name: "description", widget: "string"}
-      - {label: "Publish Date", name: "date", widget: "date"}
-      - {label: "Body", name: "body", widget: "markdown"}
+      - label: "Title" 
+        name: "title"
+        widget: "string"
+      - label: "Slug"
+        name: "slug"
+        widget: "string"
+      - label: "Description"
+        name: "description"
+        widget: "string"
+      - label: "Publish Date"
+        name: "date"
+        widget: "datetime"
+        default: ""
+        date_format: "YYYY-MM-DD" # e.g. 24.12.2021
+        time_format: "HH:mm" # e.g. 21:07
+        format: "YYYY-MM-DD"
+        picker_utc: false
+      - label: "Tags"
+        name: "tags"
+        widget: "list"
+      - label: "Body"
+        name: "body"
+        widget: "markdown"
