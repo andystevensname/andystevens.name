@@ -20,6 +20,7 @@ body {
     font-size: 16px;
     color: white;
     font-family: Helvetica, Arial, sans-serif;
+    /* background-image: repeating-linear-gradient(to bottom, #212121, white 1px, transparent 1px, transparent 24px); */
 }
 
 #app {
@@ -43,8 +44,8 @@ article {
 }
 
 footer {
-    font-size: .875rem;
-    line-height: 3rem;
+    font-size: .875rem; /* 14px */
+    line-height: 3.4285;
     padding: 0 1rem;
 }
   
@@ -78,8 +79,8 @@ h2 {
     width: 100%;
     padding: 0;
     margin: 0 0 1.5rem 0;
-    font-size: 1.875rem;
-    line-height: 3rem;
+    font-size: 1.875rem; /* 30px */
+    line-height: 1.6;
     font-weight: bold;
 }
 
@@ -88,16 +89,16 @@ h3 {
     width: 100%;
     padding: 0;
     margin: 0 0 1.5rem 0;
-    font-size: 1.25rem;
-    line-height: 1.5rem;
+    font-size: 1.25rem; /* 20px */
+    line-height: 1.2;
     font-weight: bold;
 }
 
 p {
     display: inline-block;
     width: 100%;    
-    font-size: 1rem;
-    line-height: 1.5rem;
+    font-size: 1rem; /* 16px */
+    line-height: 1.5;
     padding: 0;
     margin: 0 0 1.5rem 0;
 }
@@ -150,7 +151,7 @@ code {
   display: inline-block;
   font-family: "Courier New", monospace;
   background: black;
-  line-height: 1rem;
+  line-height: 1;
   margin: 0 0 1.5rem 0;
 }
 
@@ -214,13 +215,13 @@ pre {
     p:first-child {
         border-top: 0;
         width: 100%;
-        font-size: 2rem;
-        line-height: 3rem;
+        font-size: 2rem; /* 32px */
+        line-height: 1.5;
     }
   
     blockquote p:first-child, li p:first-child {
         font-size: 1rem;
-        line-height: 1.5rem;
+        line-height: 1.5;
         padding: 0;
         margin: 0 0 1.5rem 0;
         border: 0;
