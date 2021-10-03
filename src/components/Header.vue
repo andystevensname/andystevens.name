@@ -1,20 +1,9 @@
 <template>
 <div id="header-container">
     <header id="main" class="block fixed inset-0 border-box z-10 h-12 border-b border-solid border-white duration-500">
-      <font-awesome :icon="['fa', 'bars']" v-on:click="openNav" size="lg" class="cursor-pointer text-white" style="margin: 14px 16px 14px 16px"/>
+      <font-awesome :icon="['fa', 'bars']" v-on:click="$root.$emit('open-nav')" size="lg" class="cursor-pointer text-white" style="margin: 14px 16px 14px 16px"/>
       <span class="title-text h-12 block float-right mr-4 font-bold">Andy Stevens</span>
     </header>
-    <nav id="nav" class="h-full fixed top-0 bottom-0 z-20 overflow-x-hidden duration-500" v-hammer:swipe.left="closeNav">
-      <div class="navContainer h-full border-r border-solid border-white">
-        <font-awesome :icon="['fa', 'times']" v-on:click="closeNav"  size="lg" class="cursor-pointer text-white"  style="margin: 14px 16px 10px 16px"/>
-        <ul class="border-box w-full list-none px-4 divide-y divide-white m-0">
-          <li class="p-0 m-0 w-full h-12 border-box"><g-link to="/" v-on:click="closeNav" class="w-full block no-underline text-current">Home</g-link></li>
-          <li class="p-0 m-0 w-full h-12 border-box"><g-link to="/blog/" v-on:click="closeNav" class="w-full block no-underline text-current">Blog</g-link></li>
-          <li class="p-0 m-0 w-full h-12 border-box"><g-link to="/writing/" v-on:click="closeNav" class="w-full block no-underline text-current">Writing</g-link></li>
-          <li class="p-0 m-0 w-full h-12 border-box"><g-link to="/about/" v-on:click="closeNav" class="w-full block no-underline text-current">About</g-link></li>
-        </ul>
-      </div>
-    </nav>
 </div>
 </template>
 
@@ -22,14 +11,6 @@
   export default {
     name: 'Header',
     methods: {
-      openNav(){
-          document.getElementById("nav").style.left = "0";
-          document.getElementById("nav").style.boxShadow = "0px 0px 1.5rem black";
-      },
-      closeNav(){
-          document.getElementById("nav").style.left = "-15rem";
-          document.getElementById("nav").style.boxShadow = "unset";
-      }
     },
     mounted() {
         // https://webdesign.tutsplus.com/tutorials/how-to-hide-reveal-a-sticky-header-on-scroll-with-javascript--cms-33756
