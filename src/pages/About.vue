@@ -7,7 +7,7 @@
       <p>His poetry and writing have been published in a few places, but the internet being what it is, not all of it still exists. He is currently working on his first book-length collection. If you're a friend or family member, or an editor, and would like an advanced copy of the collection-in-progress, please reach out.</p>
 
       <h2> Social Media</h2>
-      <p>Andy can be reached on th following social media platforms:</p>
+      <p>Andy can be reached on the following social media platforms:</p>
       <ul>
         <li>Twitter: <a href="https://twitter.com/andystevensname">@andystevensname</a></li>
       </ul>

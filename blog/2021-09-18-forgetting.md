@@ -28,7 +28,7 @@ In the past I've described how I combat an intrusive thought entering my mind as
 
 I've tried meditation, tried to just observe my thoughts as they run circles around my head, always returning to the breath. It may work for some, but I've never been successful in *not* going down the rabbit hole. Usually, I just feel exhausted afterwards. But with thought suppression, with saying to myself "no, I don't think I will do that," I've at least been able to stem the tide.
 
-The interesting part about doing this is that sometimes I avoid a memory without even realizing that I've done it. I've sort of trained myself to see those thoughts coming on, and I shake them off (sometimes physically so). Do I still think the things I don't want to think? Yes, every day. Do I spend hours ruminating on them? Sometimes, sadly, yes, I give in. But, when it works, there's no panic, there's no banging my head against a wall, a fist against my temples.
+The interesting part about doing this is that sometimes I avoid a memory without even realizing that I've done it. I've sort of trained myself to see those thoughts coming on, and I shake them off (sometimes physically so). Do I still think the things I don't want to think? Yes, every day. Do I spend hours ruminating on them? Sometimes, sadly, yes, I give in. But, when it works, there's no panic, there's no banging my head against a wall, no fists against my temples.
 
 I think the key is the thing I talked about at the beginning of this post. The return, the coming back to the memories we want to keep. Luckily, I still have some of those. Earlier in that NYT article I referred to there's a good line:
 
