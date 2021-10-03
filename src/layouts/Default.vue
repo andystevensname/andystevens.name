@@ -1,9 +1,7 @@
 <template>
     <div id="container w-full h-full relative">
-        <!-- <ClientOnly> -->
-            <Header />
-            <Navigation v-on:close-nav="closeNav" />
-        <!-- </ClientOnly> -->
+        <Header />
+        <Navigation v-on:close-nav="closeNav" v-hammer:swipe.left="closeNav" />
         <main class="w-full flex-grow relative">
             <slot>
             </slot>
@@ -33,14 +31,14 @@ export default {
     },
     methods: {
         openNav: function () {
-            document.getElementById("nav").style.left = "0";
-            document.getElementById("nav").style.boxShadow = "0px 0px 1.5rem black";
-            console.log('open')
+            document.getElementById("nav").classList.remove('-translate-x-60')
+            /*document.getElementById("nav").style.left = "0";
+            document.getElementById("nav").style.boxShadow = "0px 0px 1.5rem black";*/
         },
         closeNav: function() {
-            document.getElementById("nav").style.left = "-15rem";
-            document.getElementById("nav").style.boxShadow = "unset";
-            console.log('close')
+            document.getElementById("nav").classList.add('-translate-x-60');
+            /*document.getElementById("nav").style.left = "-15rem";
+            document.getElementById("nav").style.boxShadow = "unset";*/
         }
     },
     mounted() {
