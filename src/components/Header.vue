@@ -16,8 +16,10 @@ export default {
             localStorage.theme = 'dark'
             document.documentElement.classList.add('dark');
             this.$root.$emit('changeTheme');
-            document.getElementById('theme-moon').classList.add('hidden')
-            document.getElementById('theme-sun').classList.remove('hidden')
+            document.getElementById('theme-moon').classList.add('hidden');
+            document.getElementById('theme-sun').classList.remove('hidden');
+            document.getElementById('theme-moon').style.setProperty('display', 'none');
+            document.getElementById('theme-sun').style.setProperty('display', 'inline-block');
         },
 
         setLight: function() {
@@ -25,8 +27,10 @@ export default {
             localStorage.theme = 'light'
             document.documentElement.classList.remove('dark');
             this.$root.$emit('changeTheme');
-            document.getElementById('theme-moon').classList.remove('hidden')
-            document.getElementById('theme-sun').classList.add('hidden')
+            document.getElementById('theme-moon').classList.remove('hidden');
+            document.getElementById('theme-sun').classList.add('hidden');
+            document.getElementById('theme-moon').style.setProperty('display', 'inline-block');
+            document.getElementById('theme-sun').style.setProperty('display', 'none');
         },
 
         // On page load or when changing themes, best to add inline in `head` to avoid FOUC
