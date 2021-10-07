@@ -20,15 +20,6 @@ var two = true;
 
 export default {
     name: "Animation",
-    data: function() {
-        return {
-            active: true,
-            /*two: new Two({
-                fullscreen: false,
-                type: Two.Types.svg
-            })*/
-        }
-    },
     mounted() {
         self = this;
         two = new Two({
@@ -38,11 +29,11 @@ export default {
         var style = window.getComputedStyle(document.getElementById("canvas-container"));
         var canvas = document.getElementById('canvas-container');
         var footer = document.getElementById("footer");
-        var newHeight = window.innerHeight - footer.clientHeight - 1;
-
+        // var newHeight = window.visualViewport.height - footer.clientHeight - 1;
+        two.width = window.visualViewport.width;
+        two.height = window.visualViewport.height - footer.clientHeight - 1;
         two.appendTo(document.getElementById('canvas-container'));
-        two.width = window.innerWidth;
-        two.height = newHeight;
+
 
         // Let's try to make this accessible as possible
 
@@ -117,7 +108,11 @@ export default {
         var timerLine = two.makeLine(0, 187, 130, 187);
         timerLine.visible = false;
         timerLine.linewidth = 10;
-        timerLine.noFill().stroke = 'white';
+        if (localStorage.theme === 'dark') {
+            timerLine.noFill().stroke = 'white';
+        } else {
+            timerLine.noFill().stroke = '#212121';
+        }
         timerLine.opacity = .4
         textGroup.add(timerLine);
 
@@ -130,8 +125,7 @@ export default {
             family: "'Fjalla One', sans-serif",
             weight: 400,
             alignment: 'left',
-            visible: false,
-            fill: 'white'
+            visible: false
         };
 
         textStyles['size'] = 50;
@@ -139,6 +133,15 @@ export default {
         var andy = two.makeText('Andy', 0, 20, textStyles);
         var makes = two.makeText('Makes', 0, 90, textStyles);
         var things = two.makeText('Things', 0, 160, textStyles);
+        if (localStorage.theme === 'dark') {
+            andy.fill = 'white';
+            makes.fill = 'white';
+            things.fill = 'white';
+        } else {
+            andy.fill = "#212121";
+            makes.fill = "#212121";
+            things.fill = "#212121";
+        }
         textGroup.add(andy, makes, things);
         textGroup.translation.set(16, 88);
 
@@ -220,7 +223,7 @@ export default {
             },
             createController: function() {
                 return {
-                peak: utils.randomNumber(.3, .1, false),
+                peak: utils.randomNumber(.7, .1, false),
                 length: utils.randomNumber(180, 30, false),
                 speed: utils.randomNumber(.1, .01, false),
                 travel: utils.randomNumber(.5, -.5, false),
@@ -373,12 +376,14 @@ export default {
                 gear.teeth = this.teeth[i];
                 gear.diametralPitch = (gear.teeth + 2) / gear.getBoundingClientRect().width;
                 gear.pitchDiameter = gear.getBoundingClientRect().width - (2 / gear.diametralPitch);
-                gear.fill = gear.stroke = this.colors[i];
+                gear.fill = 'transparent';
+                gear.stroke = this.colors[i];
+                gear.linewidth = 5;
                 gear.opacity = .7;
 
                 var circle = two.makeCircle(0, 0, (gear.getBoundingClientRect().width - 60) / 2);
                 assembly.add(circle);
-                circle.fill =  '#212121'; // colors[i];
+                circle.fill =  'transparent'; // colors[i];
                 circle.stroke = this.colors[i];
                 circle.linewidth = 15;
                 this.group.add(assembly);
@@ -413,8 +418,12 @@ export default {
             background.children[i].opacity = 0;
         }
 
-        utils.resize(gadgetsGroup);
+        //utils.resize(gadgetsGroup);
+        gadgetsGroup.scale = background.scale;
         var iframeCount = 0;
+        window.addEventListener('resize', function(){
+            utils.resize(background);
+        });
         two.bind('resize', function() {
             utils.resize(background);
         })
@@ -479,6 +488,33 @@ export default {
                 }
             }
         }).play();
+
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                andy.fill = 'white';
+                makes.fill = 'white';
+                things.fill = 'white';
+                timeLine.noFull().strike = 'white';
+            } else {
+                andy.fill = '#212121';
+                makes.fill = '#212121';
+                things.fill = '#212121';
+                timerLine.noFill().stroke = '#212121';
+            }
+        })
+        this.$root.$on('changeTheme', function() {
+            if (localStorage.theme === 'dark') {
+                andy.fill = 'white';
+                makes.fill = 'white';
+                things.fill = 'white';
+                timerLine.noFill().stroke = 'white';
+            } else {
+                andy.fill = '#212121';
+                makes.fill = '#212121';
+                things.fill = '#212121';
+                timerLine.noFill().stroke = '#212121';
+            }
+        });
     },
     destroyed() {
         two.unbind("update");

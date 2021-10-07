@@ -5,7 +5,7 @@ require('~/main.css')
 import DefaultLayout from '~/layouts/Default.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { config, library } from '@fortawesome/fontawesome-svg-core'
-import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faBars, faTimes, faMoon, faSun } from '@fortawesome/free-solid-svg-icons'
 import { faGithub, faTwitter } from '@fortawesome/free-brands-svg-icons'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import 'prismjs/themes/prism.css'
@@ -13,7 +13,7 @@ import 'prismjs/themes/prism.css'
 import 'prismjs/plugins/line-numbers/prism-line-numbers.css'
 
 config.autoAddCss = false;
-library.add(faGithub, faTwitter, faBars, faTimes)
+library.add(faGithub, faTwitter, faBars, faTimes, faMoon, faSun)
 
 export default function (Vue, { router, head, isClient }) {
   if (isClient) {
