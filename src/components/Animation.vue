@@ -133,7 +133,7 @@ export default {
         var andy = two.makeText('Andy', 0, 20, textStyles);
         var makes = two.makeText('Makes', 0, 90, textStyles);
         var things = two.makeText('Things', 0, 160, textStyles);
-        if (localStorage.theme === 'dark') {
+        if (window.__theme == 'dark') {
             andy.fill = 'white';
             makes.fill = 'white';
             things.fill = 'white';
