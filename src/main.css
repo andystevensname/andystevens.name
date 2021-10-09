@@ -10,7 +10,6 @@ html {
   }
   
 body {
-    background-color: #212121;
     height: 100%;
     min-height: 100%;
     width: 100%;
@@ -18,14 +17,14 @@ body {
     position: relative;
     font-size: 100%;
     font-size: 16px;
-    color: white;
     font-family: Helvetica, Arial, sans-serif;
+    @apply transition-colors duration-500 bg-white text-googleGray dark:bg-googleGray dark:text-white;
     /* background-image: repeating-linear-gradient(to bottom, #212121, white 1px, transparent 1px, transparent 24px); */
 }
 
 #app {
-    min-height: 100%;
     width: 100%;
+    min-height: 100%;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -49,8 +48,8 @@ footer {
     padding: 0 1rem;
 }
   
-a:visited, a:hover, a:active {
-    color: white;
+a, a:visited, a:hover, a:active {
+    @apply text-googleGray dark:text-white;
 }
 
 article a, article a:visited {
@@ -79,7 +78,8 @@ h2 {
     width: 100%;
     padding: 0;
     margin: 0 0 1.5rem 0;
-    font-size: 1.875rem; /* 30px */
+    @apply text-3xl;
+    /*font-size: 1.875rem; /* 30px */
     line-height: 1.6;
     font-weight: bold;
 }
@@ -131,6 +131,7 @@ blockquote {
     width: 100%;
     display: border-box;
     border-left: 4px solid white;
+    @apply border-l-4 border-solid border-googleGray dark:border-white;
     padding: 0 1rem;
     margin: 0 0 1.5rem 0;
 }
@@ -165,7 +166,7 @@ pre {
 
 .meta {
     height: 1.5rem;
-    border-top: 1px dashed white;
+    @apply border-t border-dashed border-googleGray dark:border-white;
     font-size: .875rem;
     line-height: 1.5rem;
     display: border-box;
@@ -188,8 +189,7 @@ pre {
 @media (min-width: 640px) {
 
     h2 {
-      border-top: 1px solid white;
-      color: white;
+      @apply border-t border-solid border-googleGray dark:border-white;
       width: 33.333%;
       margin: 0;
       float: left;
@@ -203,7 +203,7 @@ pre {
     }
 
     h2+p, h2+h3 {
-        border-top: 1px solid white;
+        @apply border-t border-solid border-googleGray dark:border-white;
         padding-top: 1.5rem;
     }
 

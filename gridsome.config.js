@@ -29,12 +29,6 @@ module.exports = {
           }
         }
       },
-      /*{
-        use: '@gridsome/plugin-google-analytics',
-        options: {
-          id: 'UA-66844301-1'
-        }
-      },*/
       {
           use: 'gridsome-plugin-gtag',
           options: {

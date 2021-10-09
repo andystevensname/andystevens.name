@@ -6,7 +6,7 @@
             <slot>
             </slot>
         </main>
-        <footer id="footer" class="w-full relative border-t border-white h-12">
+        <footer id="footer" class="w-full relative h-12 border-t border-googleGray dark:border-white">
             &copy; 2021 Andy Stevens
         </footer>
     </div>
