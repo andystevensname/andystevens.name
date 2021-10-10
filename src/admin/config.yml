@@ -31,6 +31,12 @@ collections:
         time_format: "HH:mm" # e.g. 21:07
         format: "YYYY-MM-DD"
         picker_utc: false
+      - label: "Publish Status"
+        name: "published"
+        widget: "select"
+        options:
+          - { label: "Not Published", value: "false" }
+          - { label: "Published", value: "true" }
       - label: "Tags"
         name: "tags"
         widget: "list"

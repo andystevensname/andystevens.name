@@ -29,30 +29,9 @@ export default {
         var style = window.getComputedStyle(document.getElementById("canvas-container"));
         var canvas = document.getElementById('canvas-container');
         var footer = document.getElementById("footer");
-        // var newHeight = window.visualViewport.height - footer.clientHeight - 1;
         two.width = window.visualViewport.width;
         two.height = window.visualViewport.height - footer.clientHeight - 1;
         two.appendTo(document.getElementById('canvas-container'));
-
-
-        // Let's try to make this accessible as possible
-
-        /* var title = document.createElement('title');
-        title.id = 'backgroundTitle';
-        var titleText = document.createTextNode('A series of abstract animations representing page categories');
-        title.appendChild(titleText);
-
-        var desc = document.createElement('desc');
-        desc.id = 'backgroundDescription';
-        var descText = document.createTextNode('An animation cycles every few seconds between the following animations: ten yellow triangles on top of one another fading in and out and moving back and forth representing light through the trees or a stage spotlight, a number of jittering red horizontal lines staged vertically to look like lines of an anxious poem, three neon gears (two large and one small pinion gear) slowly cranking away.');
-        desc.append(descText);
-
-        var svg = document.querySelector('#canvas-container svg');
-        svg.append(title);
-        svg.append(desc);
-        svg.setAttribute('aria-labelledby', 'backgroundTitle backgroundDescription');
-        svg.setAttribute('role', 'img'); */
-
 
         /*
         * Main Groups
