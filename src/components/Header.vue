@@ -1,5 +1,5 @@
 <template>
-    <header id="header" class="block fixed inset-0 border-box z-10 h-12 border-b border-solid border-googleGray bg-white duration-500 transform dark:bg-googleGray dark:border-white bg-opacity-80">
+    <header id="header" class="block fixed inset-0 border-box z-10 h-12 border-b border-solid border-googleGray bg-white duration-500 transform dark:bg-googleGray dark:border-white bg-opacity-80 dark:bg-opacity-80">
         <font-awesome :icon="['fa', 'bars']" v-on:click="$root.$emit('open-nav')" size="lg" class="cursor-pointer text-googleGray dark:text-white" style="margin: 14px 16px 14px 16px"/>
         <font-awesome v-if="darkTheme === false" :icon="['fa', 'moon']" v-on:click="toggleTheme" size="lg" id="theme-moon" class="cursor-pointer text-googleGray dark:text-white" style="margin: 14px 16px 14px 16px"/>
         <font-awesome v-else :icon="['fa', 'sun']" v-on:click="toggleTheme" size="lg" id="theme-sun" class="cursor-pointer text-googleGray dark:text-white" style="margin: 14px 16px 14px 16px"/>
