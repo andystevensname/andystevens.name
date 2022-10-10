@@ -23,13 +23,21 @@ var two = new Two({
     type: Two.Types.svg
 })
 
-
 var theme = useState('theme');
 
 const canvasContainer = ref(null);
 const gearsContainer = ref(null);
 
+var resizeObserver, clientHeight;
+
 onMounted(() => {
+   function onResize() {
+        clientHeight = canvasContainer.value.clientHeight;
+    }
+
+    resizeObserver = new ResizeObserver(onResize);
+    resizeObserver.observe(canvasContainer.value);
+
     var footer = document.getElementById('footer');
     two.width = window.visualViewport.width;
     two.height = window.visualViewport.height - footer.clientHeight - 2;
@@ -119,8 +127,9 @@ onMounted(() => {
                 return Math.random() * (max - min) + min;
             }
         },
-        resize: function(background, foreground) {
-            background.scale = canvasContainer.value.clientHeight / 540;
+        resize: async function(background, foreground) {
+            await nextTick()
+            background.scale = onResize() / 540;
         },
         fade: function(objects, direction, frameCount, start, end) {
             if (frameCount >= start && frameCount <= end){
@@ -397,13 +406,17 @@ onMounted(() => {
         background.children[i].opacity = 0;
     }
 
+    utils.setThemeColor(theme.value);
+    watchEffect(() => {
+        utils.setThemeColor(theme.value);
+    })
+
     //utils.resize(gadgetsGroup);
     gadgetsGroup.scale = background.scale;
     var iframeCount = 0;
-    window.addEventListener('resize', utils.resize(background))
-    two.bind('resize', function() {
-        utils.resize(background);
-    })
+    window.addEventListener('resize',  utils.resize(background))
+
+    two
     .bind('update', function(frameCount) {
         if (frameCount == 20) {
             andy.visible = true;
@@ -465,21 +478,24 @@ onMounted(() => {
                 things.value = 'Things';
             }
         }
-    }).play();
-
-    utils.setThemeColor(theme.value)
-
-    watchEffect(() => {
-        utils.setThemeColor(theme.value)
     })
+    .appendTo(canvasContainer.value)
+    .addEventListener('resize', function() {
+        utils.resize(background);
+    })
+    .dispatchEvent('resize')
+    .play();
+})
 
-    two.appendTo(canvasContainer.value);
-    two.trigger('resize');
+onBeforeUnmount(() => {
+    resizeObserver.unobserve(canvasContainer.value)
 })
 
 onUnmounted(() => {
     two.unbind('update')
     two.clear()
+    background.remove()
+    foreground.remove()
 })
 </script>
 

@@ -5,7 +5,6 @@
 </template>
 
 <script setup>
-
   var darkTheme = useState('theme', () => false )
   
   useHead({
