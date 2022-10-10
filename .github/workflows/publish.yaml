@@ -30,4 +30,3 @@ jobs:
       - name: Upload Files to Bucket
         run: |
           s3cmd --recursive --acl-public --delete-removed --no-mime-magic sync .output/public/ s3://andystevens.name
-
