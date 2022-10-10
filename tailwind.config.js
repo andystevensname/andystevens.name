@@ -1,15 +1,20 @@
 module.exports = {
-  purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
-  darkMode: 'class',
-  theme: {
-    extend: {
-      colors: {
-        googleGray: '#212121'
-      }
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: {
+          googleGray: '#212121'
+        }
+      },
     },
-  },
-  variants: {
-    extend: {},
-  },
-  plugins: [],
-}
+    plugins: [],
+    content: [
+      `components/**/*.{vue,js}`,
+      `layouts/**/*.vue`,
+      `pages/**/*.vue`,
+      `composables/**/*.{js,ts}`,
+      `plugins/**/*.{js,ts}`,
+      `App.{js,ts,vue}`,
+      `app.{js,ts,vue}`
+    ]
+  }
