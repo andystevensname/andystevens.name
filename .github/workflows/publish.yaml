@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - Name: Checkout Files
+      - name: Checkout Files
         uses: actions/checkout@v2
       - name: Setup Node
         uses: actions/setup-node@v3
@@ -30,3 +30,4 @@ jobs:
       - name: Upload Files to Bucket
         run: |
           s3cmd --recursive --acl-public --delete-removed --no-mime-magic sync .output/public/ s3://andystevens.name.us-east-1.linodeobjects.com
+
