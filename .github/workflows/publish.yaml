@@ -8,9 +8,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    runs-on: ubunut-latest
     steps:
-      - Name: Checkout Files
+      - name: Checkout Files
         uses: actions/checkout@v2
       - name: Setup Node
         uses: actions/setup-node@v3
