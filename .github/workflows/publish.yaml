@@ -29,5 +29,5 @@ jobs:
           secret_key: ${{ secrets.OBJ_SECRET_KEY }}
       - name: Upload Files to Bucket
         run: |
-          s3cmd --recursive --acl-public --delete-removed --no-mime-magic sync .output/public/ s3://andystevens.name.us-east-1.linodeobjects.com
+          s3cmd --recursive --acl-public --delete-removed --no-mime-magic sync .output/public/ s3://andystevens
 
