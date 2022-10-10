@@ -19,7 +19,7 @@ jobs:
       - name: Install NPM Packages
         run: npm install
       - name: Generate Site
-        run: nuxt generate
+        run: npx nuxi generate
       - name: Set up S3cmd
         uses: s3-actions/s3cmd@v1.2.0
         with:
@@ -30,3 +30,4 @@ jobs:
       - name: Upload Files to Bucket
         run: |
           s3cmd --recursive --acl-public --delete-removed --no-mime-magic sync .output/public/ s3://andystevens.name.us-east-1.linodeobjects.com
+
