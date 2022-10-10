@@ -1,0 +1,32 @@
+name: Publish Workflow
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubunut-latest
+    steps:
+      - Name: Checkout Files
+        uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+      - name: Install NPM Packages
+        run: npm install
+      - name: Generate Site
+        run: nuxt generate
+      - name: Set up S3cmd
+        uses: s3-actions/s3cmd@v1.2.0
+        with:
+          provider: linode
+          region: 'us-east-1'
+          access_key: ${{ secrets.OBJ_ACCESS_KEY }}
+          secret_key: ${{ secrets.OBJ_SECRET_KEY }}
+      - name: Upload Files to Bucket
+        run: |
+          s3cmd --recursive --acl-public --delete-removed --no-mime-magic sync .output/public/ s3://andystevens.name.us-east-1.linodeobjects.com
