@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubunut-latest
+    runs-on: ubuntu-latest
     steps:
       - Name: Checkout Files
         uses: actions/checkout@v2
