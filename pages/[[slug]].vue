@@ -12,10 +12,9 @@
 </template>
 
 <script setup>
-  const { path } = useRoute();
-  console.log(path)
-  const { data } = await useAsyncData(`content-${path}`, async () => {
-    let post = queryContent(path).findOne();
+  const path = useRoute();
+  const { data } = await useAsyncData(`content-/${path.params.slug}/`, async () => {
+    let post = queryContent().where({ 'slug': path.params.slug }).findOne();
     return {
       post: await post
     };
