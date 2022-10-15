@@ -4,19 +4,12 @@
       <Header @open-nav="openNav" />
     </client-only>
     <client-only>
-      <Navigation
-        @close-nav="closeNav"
-        @open-nav="openNav"
-        v-hammer:swipe.left="closeNav"
-      />
+      <Navigation @close-nav="closeNav" @open-nav="openNav" v-hammer:swipe.left="closeNav" />
     </client-only>
     <main class="w-full flex-grow relative">
       <slot />
     </main>
-    <footer
-      id="footer"
-      class="w-full relative h-12 border-t border-googleGray dark:border-white"
-    >
+    <footer id="footer" class="w-full relative h-12 border-t border-googleGray dark:border-white">
       &copy; 2021 Andy Stevens
     </footer>
   </div>

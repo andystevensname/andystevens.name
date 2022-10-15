@@ -3,18 +3,15 @@
     <h1 class="w-full text-5xl mb-6 text-center">
       Posts Tagged with '{{ slug }}'
     </h1>
-    <ContentList
-      path="/blog"
-      :query="{
-        only: ['title', 'description', 'tags', 'date', '_path', 'img'],
-        where: {
-          tags: {
-            $contains: filter,
-          },
+    <ContentList path="/blog" :query="{
+      only: ['title', 'description', 'tags', 'date', '_path', 'img'],
+      where: {
+        tags: {
+          $contains: filter,
         },
-        $sensitivity: 'base',
-      }"
-    >
+      },
+      $sensitivity: 'base',
+    }">
       <template v-slot="{ list }">
         <PostCard v-for="post in list" :key="[post]._path" :post="post" />
       </template>

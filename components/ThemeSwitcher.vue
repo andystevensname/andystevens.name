@@ -1,23 +1,9 @@
 <template>
   <div id="theme-switcher">
-    <font-awesome-icon
-      v-if="theme === false"
-      icon="moon"
-      @click="toggleTheme"
-      size="lg"
-      id="theme-moon"
-      class="cursor-pointer text-googleGray dark:text-white"
-      style="margin: 14px 16px 14px 16px"
-    />
-    <font-awesome-icon
-      v-else
-      icon="sun"
-      @click="toggleTheme"
-      size="lg"
-      id="theme-sun"
-      class="cursor-pointer text-googleGray dark:text-white"
-      style="margin: 14px 16px 14px 16px"
-    />
+    <font-awesome-icon v-if="theme === false" icon="moon" @click="toggleTheme" size="lg" id="theme-moon"
+      class="cursor-pointer text-googleGray dark:text-white" style="margin: 14px 16px 14px 16px" />
+    <font-awesome-icon v-else icon="sun" @click="toggleTheme" size="lg" id="theme-sun"
+      class="cursor-pointer text-googleGray dark:text-white" style="margin: 14px 16px 14px 16px" />
   </div>
 </template>
 
@@ -26,7 +12,7 @@ var theme = useState("theme");
 var preferredTheme;
 try {
   preferredTheme = localStorage.getItem("theme");
-} catch (err) {}
+} catch (err) { }
 
 function setTheme(newTheme) {
   if (newTheme === "light") {
@@ -47,7 +33,7 @@ function setPreferredTheme(newTheme) {
   setTheme(newTheme);
   try {
     localStorage.setItem("theme", newTheme);
-  } catch (err) {}
+  } catch (err) { }
 }
 
 onMounted(() => {

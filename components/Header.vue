@@ -1,16 +1,8 @@
 <template>
-  <header
-    id="header"
-    ref="header"
-    class="block fixed inset-0 border-box z-10 h-12 border-b border-solid border-googleGray bg-white duration-500 transform dark:bg-googleGray dark:border-white bg-opacity-80 dark:bg-opacity-80"
-  >
-    <font-awesome-icon
-      icon="bars"
-      @click="$emit('openNav')"
-      size="lg"
-      class="cursor-pointer text-googleGray dark:text-white"
-      style="margin: 14px 16px 14px 16px"
-    />
+  <header id="header" ref="header"
+    class="block fixed inset-0 border-box z-10 h-12 border-b border-solid border-googleGray bg-white duration-500 transform dark:bg-googleGray dark:border-white bg-opacity-80 dark:bg-opacity-80">
+    <font-awesome-icon icon="bars" @click="$emit('openNav')" size="lg"
+      class="cursor-pointer text-googleGray dark:text-white" style="margin: 14px 16px 14px 16px" />
     <ThemeSwitcher />
     <span class="title-text h-12 block float-right mr-4 font-bold">
       <NuxtLink to="/">Andy Stevens</NuxtLink>
