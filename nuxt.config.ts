@@ -10,4 +10,9 @@ export default defineNuxtConfig({
       routes: ["/about", "/writing"],
     },
   },
+  vite: {
+    define: {
+      __VUE_OPTIONS_API__: false,
+    }
+  }
 });
