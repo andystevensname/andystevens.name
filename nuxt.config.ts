@@ -1,4 +1,5 @@
 import { defineNuxtConfig } from "nuxt/config";
+import { webpack } from "webpack"
 
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
@@ -10,4 +11,9 @@ export default defineNuxtConfig({
       routes: ["/about", "/writing"],
     },
   },
+  vite: {
+    define: {
+      __VUE_OPTIONS_API__: false,
+    }
+  }
 });
