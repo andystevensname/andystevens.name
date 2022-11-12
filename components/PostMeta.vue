@@ -12,7 +12,9 @@
 const props = defineProps(["post"]);
 var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 var date = new Date(props.post.date);
-var day = date.getDay();
+console.log(date)
+var day = date.getDate();
+console.log(day)
 var month = date.getMonth();
 var year = date.getFullYear();
 </script>
