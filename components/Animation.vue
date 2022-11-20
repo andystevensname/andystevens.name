@@ -552,8 +552,8 @@ onBeforeUnmount(() => {
 onUnmounted(() => {
   two.unbind("update");
   two.clear();
-  background.remove();
-  foreground.remove();
+  //background.remove();
+  //foreground.remove();
 });
 </script>
 

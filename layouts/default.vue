@@ -4,7 +4,7 @@
       <Header @open-nav="openNav" />
     </client-only>
     <client-only>
-      <Navigation @close-nav="closeNav" @open-nav="openNav" v-hammer:swipe.left="closeNav" />
+      <Navigation @close-nav="closeNav" @open-nav="openNav" />
     </client-only>
     <main class="w-full flex-grow relative">
       <slot />
