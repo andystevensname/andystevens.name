@@ -1,6 +1,10 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-googleGray: #212121;
+}
 
 html {
   height: 100%;
@@ -18,7 +22,6 @@ body {
   font-size: 100%;
   font-size: 16px;
   font-family: Helvetica, Arial, sans-serif;
-  @apply transition-colors duration-500 bg-white text-googleGray dark:bg-googleGray dark:text-white;
   /* background-image: repeating-linear-gradient(to bottom, #212121, white 1px, transparent 1px, transparent 24px); */
 }
 

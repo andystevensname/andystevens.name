@@ -1,5 +1,5 @@
 <template>
-  <div id="theme-switcher">
+  <div id="theme-switcher" v-if="mounted">
     <font-awesome-icon v-if="theme === false" icon="moon" @click="toggleTheme" size="lg" id="theme-moon"
       class="cursor-pointer text-googleGray dark:text-white" style="margin: 14px 16px 14px 16px" />
     <font-awesome-icon v-else icon="sun" @click="toggleTheme" size="lg" id="theme-sun"
@@ -8,45 +8,41 @@
 </template>
 
 <script setup>
-var theme = useState("theme");
-var preferredTheme;
-try {
-  preferredTheme = localStorage.getItem("theme");
-} catch (err) { }
+import { ref, onMounted } from 'vue'
+const theme = useState('theme', () => false)
+const mounted = ref(false)
 
-function setTheme(newTheme) {
-  if (newTheme === "light") {
-    document.documentElement.classList.remove("dark");
-    theme.value = false;
+function setTheme(isDark) {
+  if (isDark) {
+    document.documentElement.classList.add('dark')
+    theme.value = true
   } else {
-    document.documentElement.classList.add("dark");
-    theme.value = true;
+    document.documentElement.classList.remove('dark')
+    theme.value = false
   }
 }
 
 function toggleTheme() {
-  theme.value = !theme.value;
-  setPreferredTheme(theme.value ? "dark" : "light");
-}
-
-function setPreferredTheme(newTheme) {
-  setTheme(newTheme);
+  setTheme(!theme.value)
   try {
-    localStorage.setItem("theme", newTheme);
-  } catch (err) { }
+    localStorage.setItem('theme', theme.value ? 'dark' : 'light')
+  } catch (err) {}
 }
 
 onMounted(() => {
-  var darkThemePreference = window.matchMedia("(prefers-color-scheme: dark)");
-
-  setTheme(preferredTheme || (darkThemePreference.matches ? "dark" : "light"));
-
-  window
-    .matchMedia("(prefers-color-scheme: dark)")
-    .addEventListener("change", (event) => {
-      setTheme(event.matches ? "dark" : "light");
-    });
-});
+  let preferredTheme = null
+  try {
+    preferredTheme = localStorage.getItem('theme')
+  } catch (err) {}
+  const darkThemePreference = window.matchMedia('(prefers-color-scheme: dark)')
+  if (preferredTheme === 'dark') setTheme(true)
+  else if (preferredTheme === 'light') setTheme(false)
+  else setTheme(darkThemePreference.matches)
+  darkThemePreference.addEventListener('change', (event) => {
+    setTheme(event.matches)
+  })
+  mounted.value = true
+})
 </script>
 
 <style>

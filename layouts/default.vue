@@ -1,11 +1,7 @@
 <template>
   <div id="content">
-    <client-only>
-      <Header @open-nav="openNav" />
-    </client-only>
-    <client-only>
-      <Navigation @close-nav="closeNav" @open-nav="openNav" />
-    </client-only>
+    <Header @open-nav="navOpen = true" />
+    <Navigation :open="navOpen" @close-nav="navOpen = false" @open-nav="navOpen = true" />
     <main class="w-full flex-grow relative">
       <slot />
     </main>
@@ -15,11 +11,5 @@
   </div>
 </template>
 <script setup>
-function openNav() {
-  document.getElementById("nav").classList.remove("-translate-x-60");
-}
-
-function closeNav() {
-  document.getElementById("nav").classList.add("-translate-x-60");
-}
+const navOpen = ref(false)
 </script>

@@ -3,6 +3,7 @@
     <client-only placeholder="loading...">
       <Animation />
     </client-only>
+    <div class="text-center text-2xl mt-20">Welcome to Andy Stevens' site!</div>
   </div>
 </template>
 

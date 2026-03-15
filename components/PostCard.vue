@@ -1,9 +1,9 @@
 <template>
   <div>
     <h2>
-      <NuxtLink :to="post._path">{{ post.title }}</NuxtLink>
+      <NuxtLink :to="post.path">{{ post.title }}</NuxtLink>
     </h2>
-    <p class="md:pt-6" v-html="post.description" />
+    <p class="md:pt-6">{{ post.description }}</p>
     <PostMeta :post="post" />
   </div>
 </template>

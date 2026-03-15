@@ -1,36 +1,29 @@
 <template>
   <main>
     <article class="px-4 relative h-full table">
-      <h1 class="w-full text-5xl mb-6 text-center">{{ data.post.title }}</h1>
-      <ContentRenderer :value="data.post">
-        <template #empty>
-          <p>No content found.</p>
-        </template>
-      </ContentRenderer>
+      <template v-if="doc">
+        <h1 class="w-full text-5xl mb-6 text-center">{{ doc.title }}</h1>
+        <ContentRenderer :value="doc" />
+      </template>
+      <template v-else>
+        <p>No content found.</p>
+      </template>
     </article>
   </main>
 </template>
 
 <script setup>
-const path = useRoute();
-const { data } = await useAsyncData(
-  `content-/${path.params.slug}/`,
-  async () => {
-    let post = queryContent(path.params.slug).findOne();
-    return {
-      post: await post,
-    };
-  }
-);
+import { useRoute } from 'vue-router'
+const route = useRoute()
 
-// set the meta
+const { data: doc } = await useAsyncData(route.params.slug, () =>
+  queryCollection('content').path(`/${route.params.slug}`).first()
+)
+
 useHead({
-  title: data.value.post.title,
+  title: doc.value?.title || 'Post',
   meta: [
-    {
-      name: "description",
-      content: data.value.post.description,
-    },
+    { name: 'description', content: doc.value?.description || '' },
   ],
-});
+})
 </script>

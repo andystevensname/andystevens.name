@@ -43,16 +43,24 @@ const gearsContainer = ref(null);
 var resizeObserver, clientHeight;
 
 onMounted(() => {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+  if (!canvasContainer.value) return;
   function onResize() {
-    clientHeight = canvasContainer.value.clientHeight;
+    if (canvasContainer.value) {
+      clientHeight = canvasContainer.value.clientHeight;
+    }
   }
 
-  resizeObserver = new ResizeObserver(onResize);
-  resizeObserver.observe(canvasContainer.value);
+  if (typeof ResizeObserver !== 'undefined') {
+    resizeObserver = new ResizeObserver(onResize);
+    resizeObserver.observe(canvasContainer.value);
+  }
 
   var footer = document.getElementById("footer");
-  two.width = window.visualViewport.width;
-  two.height = window.visualViewport.height - footer.clientHeight - 2;
+  if (window.visualViewport && footer) {
+    two.width = window.visualViewport.width;
+    two.height = window.visualViewport.height - footer.clientHeight - 2;
+  }
 
   /*
    * Main Groups
@@ -472,10 +480,13 @@ onMounted(() => {
   //utils.resize(gadgetsGroup);
   gadgetsGroup.scale = background.scale;
   var iframeCount = 0;
-  window.addEventListener("resize", utils.resize(background));
+  if (typeof window !== 'undefined') {
+    window.addEventListener("resize", () => utils.resize(background));
+  }
 
   two
     .bind("update", function (frameCount) {
+      if (!canvasContainer.value) return;
       if (frameCount == 20) {
         andy.visible = true;
       }
@@ -538,10 +549,6 @@ onMounted(() => {
       }
     })
     .appendTo(canvasContainer.value)
-    .addEventListener("resize", function () {
-      utils.resize(background);
-    })
-    .dispatchEvent("resize")
     .play();
 });
 

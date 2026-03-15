@@ -3,13 +3,12 @@ import { defineNuxtConfig } from "nuxt/config";
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
   modules: [
-    "@nuxt/content",
+    "@nuxt/content"
   ],
   postcss: {
     plugins: {
-      tailwindcss: {},
-      autoprefixer: {},
-    }
+      '@tailwindcss/postcss': {},
+    },
   },
   css: [
     "~/assets/css/tailwind.css",
@@ -25,6 +24,16 @@ export default defineNuxtConfig({
     prerender: {
       crawlLinks: true,
       routes: ["/about", "/writing"],
+    },
+  },
+  routeRules: {
+    '/**': {
+      headers: {
+        'Content-Security-Policy': "default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:;",
+        'X-Content-Type-Options': 'nosniff',
+        'X-Frame-Options': 'DENY',
+        'Referrer-Policy': 'strict-origin-when-cross-origin',
+      },
     },
   },
   vite: {

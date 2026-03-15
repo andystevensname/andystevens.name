@@ -1,5 +1,5 @@
 <template>
-  <nav id="nav" class="h-full w-60 -translate-x-60 fixed top-0 bottom-0 z-20 overflow-x-hidden transform duration-500">
+  <nav class="h-full w-60 fixed top-0 bottom-0 z-20 overflow-x-hidden transform duration-500" :class="open ? 'translate-x-0' : '-translate-x-60'">
     <div
       class="navContainer h-full border-r border-solid border-googleGray bg-white dark:bg-googleGray dark:border-white">
       <font-awesome-icon icon="times" @click="$emit('close-nav')" size="lg"
@@ -26,14 +26,13 @@
   </nav>
 </template>
 
-<script setup></script>
+<script setup>
+defineProps(['open'])
+defineEmits(['close-nav', 'open-nav'])
+</script>
 
 <style>
-#nav {
-  display: block;
-}
-
-#nav ul li a {
+nav ul li a {
   border-bottom: 0;
 }
 </style>
