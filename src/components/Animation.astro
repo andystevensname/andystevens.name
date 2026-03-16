@@ -194,10 +194,6 @@ if (canvasContainer && gearsContainer) {
     requestAnimationFrame(tick);
   };
 
-  if ('requestIdleCallback' in window) {
-    requestIdleCallback(loadAnimation);
-  } else {
-    setTimeout(loadAnimation, 200);
-  }
+  loadAnimation();
 }
 </script>

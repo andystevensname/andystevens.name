@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'Fjalla One';
+  font-style: normal;
+  font-weight: 400;
+  font-display: optional;
+  src: url('/fonts/FjallaOne.woff2') format('woff2');
+}
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
