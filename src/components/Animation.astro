@@ -49,159 +49,150 @@ const gearsContainer = document.getElementById('gears');
 if (canvasContainer && gearsContainer) {
   const loadAnimation = async () => {
     const [
-      { default: Two },
+      { svgEl, SVG_NS },
       { fade, handleTimer },
       { createBeams },
       { createPoetry },
       { createGears },
     ] = await Promise.all([
-      import('two.js'),
+      import('../lib/animation/svg.js'),
       import('../lib/animation/utils.js'),
       import('../lib/animation/beams.js'),
       import('../lib/animation/poetry.js'),
       import('../lib/animation/gears.js'),
     ]);
 
-  const two = new Two({ fullscreen: false, type: Two.Types.svg });
+    const footer = document.getElementById('footer');
+    const svgW = window.visualViewport?.width ?? window.innerWidth;
+    const svgH = (window.visualViewport?.height ?? window.innerHeight) - (footer?.clientHeight ?? 0) - 2;
 
-  let clientHeight: number | undefined;
-  function onResize() {
-    if (canvasContainer) clientHeight = canvasContainer.clientHeight;
-    return clientHeight;
-  }
-  const resizeObserver = new ResizeObserver(onResize);
-  resizeObserver.observe(canvasContainer);
+    const svg = document.createElementNS(SVG_NS, 'svg') as SVGSVGElement;
+    svg.setAttribute('width', String(svgW));
+    svg.setAttribute('height', String(svgH));
+    canvasContainer.appendChild(svg);
 
-  const footer = document.getElementById('footer');
-  if (window.visualViewport && footer) {
-    two.width = window.visualViewport.width;
-    two.height = window.visualViewport.height - footer.clientHeight - 2;
-  }
+    let clientHeight = canvasContainer.clientHeight;
+    new ResizeObserver(() => { clientHeight = canvasContainer.clientHeight; }).observe(canvasContainer);
 
-  const background = two.makeGroup();
-  background.id = 'background';
-  const foreground = two.makeGroup();
-  foreground.id = 'foreground';
+    // Scene groups
+    const background = svgEl<SVGGElement>('g');
+    const foreground = svgEl<SVGGElement>('g');
+    svg.appendChild(background);
+    svg.appendChild(foreground);
 
-  const gadgetsGroup = two.makeGroup();
-  gadgetsGroup.addTo(background);
-  gadgetsGroup.id = 'gadget-group';
+    const gadgetsGroup = svgEl<SVGGElement>('g');
+    const thingsGroup = svgEl<SVGGElement>('g');
+    const poetryGroup = svgEl<SVGGElement>('g');
+    background.append(gadgetsGroup, thingsGroup, poetryGroup);
 
-  const thingsGroup = two.makeGroup();
-  thingsGroup.addTo(background);
-  thingsGroup.id = 'things-group';
+    const textGroup = svgEl<SVGGElement>('g', { transform: 'translate(16,88)' });
+    foreground.appendChild(textGroup);
 
-  const poetryGroup = two.makeGroup();
-  poetryGroup.addTo(background);
-  poetryGroup.id = 'poetry-group';
+    const timerLine = svgEl<SVGLineElement>('line', {
+      x1: '0', y1: '187', x2: '130', y2: '187',
+      'stroke-width': '10', opacity: '0.4', visibility: 'hidden',
+    });
+    textGroup.appendChild(timerLine);
 
-  const textGroup = two.makeGroup();
-  textGroup.addTo(foreground);
-  textGroup.id = 'text-group';
+    const textAttrs = {
+      'font-family': "'Fjalla One', sans-serif",
+      'font-weight': '400',
+      'text-anchor': 'start',
+      'font-size': '50',
+      visibility: 'hidden',
+      opacity: '1',
+    };
+    const andy = svgEl<SVGTextElement>('text', { ...textAttrs, x: '0', y: '20' });
+    andy.textContent = 'Andy';
+    const makes = svgEl<SVGTextElement>('text', { ...textAttrs, x: '0', y: '90' });
+    makes.textContent = 'Makes';
+    const things = svgEl<SVGTextElement>('text', { ...textAttrs, x: '0', y: '160' });
+    things.textContent = 'Things';
+    textGroup.append(andy, makes, things);
 
-  for (let i = 0; i < background.children.length - 1; i++) {
-    const bb = two.makeRectangle(250, two.height / 2, 500, two.height);
-    bb.noStroke().noFill().visible = false;
-    (background.children[i] as any).add(bb);
-  }
+    function setThemeColor(isDark: boolean) {
+      const color = isDark ? 'white' : '#212121';
+      andy.setAttribute('fill', color);
+      makes.setAttribute('fill', color);
+      things.setAttribute('fill', color);
+      timerLine.setAttribute('stroke', color);
+    }
 
-  const timerLine = two.makeLine(0, 187, 130, 187);
-  timerLine.visible = false;
-  timerLine.linewidth = 10;
-  timerLine.opacity = 0.4;
-  textGroup.add(timerLine);
+    for (const child of Array.from(background.children) as SVGElement[]) {
+      child.setAttribute('visibility', 'hidden');
+      child.setAttribute('opacity', '0');
+    }
 
-  const textStyles = {
-    family: "'Fjalla One', sans-serif",
-    weight: 400,
-    alignment: 'left' as const,
-    visible: false,
-    size: 50,
-    leading: 50,
-  };
-
-  const andy = two.makeText('Andy', 0, 20, textStyles);
-  const makes = two.makeText('Makes', 0, 90, textStyles);
-  const things = two.makeText('Things', 0, 160, textStyles);
-  textGroup.add(andy, makes, things);
-  textGroup.translation.set(16, 88);
-
-  function setThemeColor(isDark: boolean) {
-    const color = isDark ? 'white' : '#212121';
-    andy.fill = color;
-    makes.fill = color;
-    things.fill = color;
-    timerLine.noFill().stroke = color;
-  }
-
-  const beams = createBeams(two, thingsGroup);
-  const poetry = createPoetry(two, poetryGroup);
-  const gears = createGears(two, gadgetsGroup, gearsContainer);
-
-  for (let i = 0; i < background.children.length; i++) {
-    (background.children[i] as any).visible = false;
-    (background.children[i] as any).opacity = 0;
-  }
-
-  setThemeColor(document.documentElement.classList.contains('dark'));
-
-  const themeObserver = new MutationObserver(() => {
     setThemeColor(document.documentElement.classList.contains('dark'));
-  });
-  themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    new MutationObserver(() => setThemeColor(document.documentElement.classList.contains('dark')))
+      .observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
 
-  gadgetsGroup.scale = background.scale;
-  window.addEventListener('resize', () => { background.scale = (onResize() ?? 0) / 540; });
+    window.addEventListener('resize', () => {
+      background.setAttribute('transform', `scale(${clientHeight / 540})`);
+    });
 
-  let iframeCount = 0;
+    const beams = createBeams(thingsGroup, svgH);
+    const poetry = createPoetry(poetryGroup);
+    const gears = createGears(svg, gadgetsGroup, gearsContainer);
 
-  two
-    .bind('update', function (frameCount: number) {
-      if (!canvasContainer) return;
-      if (frameCount === 20) andy.visible = true;
-      if (frameCount === 50) makes.visible = true;
+    let frameCount = 0;
+    let iframeCount = 0;
+
+    function tick() {
+      if (frameCount === 20) andy.setAttribute('visibility', 'visible');
+      if (frameCount === 50) makes.setAttribute('visibility', 'visible');
       if (frameCount === 80) {
-        timerLine.visible = true;
+        timerLine.setAttribute('visibility', 'visible');
         fade([timerLine], 1, frameCount, 80, 89);
       }
 
       if (frameCount >= 80) {
-        timerLine.visible = true;
         handleTimer(450, iframeCount, timerLine);
         beams.animate(iframeCount, 0, 449);
         poetry.animate(iframeCount, 450, 899);
         gears.animate(iframeCount, 900, 1349);
 
         if (iframeCount === 0) {
-          things.visible = true;
-          things.value = 'Things';
-          thingsGroup.visible = true;
+          things.setAttribute('visibility', 'visible');
+          things.textContent = 'Things';
+          thingsGroup.setAttribute('visibility', 'visible');
         }
-        if (iframeCount === 449) { thingsGroup.visible = false; beams.destroy(); }
+        if (iframeCount === 449) { thingsGroup.setAttribute('visibility', 'hidden'); beams.destroy(); }
         fade([makes, things, thingsGroup], 1, iframeCount, 0, 9);
         fade([makes, things, thingsGroup], -1, iframeCount, 440, 449);
 
-        if (iframeCount === 450) { poetryGroup.visible = true; makes.value = 'Crafts'; things.value = 'Poems'; }
-        if (iframeCount === 899) { poetryGroup.visible = false; poetry.destroy(); }
+        if (iframeCount === 450) {
+          poetryGroup.setAttribute('visibility', 'visible');
+          makes.textContent = 'Crafts';
+          things.textContent = 'Poems';
+        }
+        if (iframeCount === 899) { poetryGroup.setAttribute('visibility', 'hidden'); poetry.destroy(); }
         fade([makes, things, poetryGroup], 1, iframeCount, 450, 459);
         fade([makes, things, poetryGroup], -1, iframeCount, 890, 899);
 
-        if (iframeCount === 900) { makes.value = 'Constructs'; things.value = 'Gadgets'; gadgetsGroup.visible = true; }
+        if (iframeCount === 900) {
+          makes.textContent = 'Constructs';
+          things.textContent = 'Gadgets';
+          gadgetsGroup.setAttribute('visibility', 'visible');
+        }
         if (iframeCount === 1349) { gears.destroy(); }
         fade([makes, things, gadgetsGroup], 1, iframeCount, 900, 909);
         fade([makes, things, gadgetsGroup], -1, iframeCount, 1340, 1349);
 
-        iframeCount += 1;
+        iframeCount++;
         if (iframeCount === 1350) {
           iframeCount = 0;
-          makes.value = 'Makes';
-          things.value = 'Things';
+          makes.textContent = 'Makes';
+          things.textContent = 'Things';
         }
       }
-    })
-    .appendTo(canvasContainer)
-    .play();
-  }; // end loadAnimation
+
+      frameCount++;
+      requestAnimationFrame(tick);
+    }
+
+    requestAnimationFrame(tick);
+  };
 
   if ('requestIdleCallback' in window) {
     requestIdleCallback(loadAnimation);

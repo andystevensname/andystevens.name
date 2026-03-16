@@ -4,28 +4,24 @@ export function randomNumber(max: number, min: number, whole = true): number {
 }
 
 export function fade(
-  objects: any[],
+  objects: SVGElement[],
   direction: number,
   frameCount: number,
   start: number,
-  end: number,
+  end: number
 ): void {
-  if (frameCount >= start && frameCount <= end) {
-    for (let i = 0; i < objects.length; i++) {
-      if (direction === 1) {
-        if (objects[i].opacity < 1) objects[i].opacity += 0.1;
-        else if (objects[i].opacity > 1) objects[i].opacity = Math.floor(objects[i].opacity);
-      } else {
-        if (objects[i].opacity > 0) objects[i].opacity -= 0.1;
-        else if (objects[i].opacity < 0) objects[i].opacity = Math.floor(objects[i].opacity);
-      }
+  if (frameCount < start || frameCount > end) return;
+  for (const obj of objects) {
+    const current = parseFloat(obj.getAttribute('opacity') ?? '1');
+    if (direction === 1) {
+      if (current < 1) obj.setAttribute('opacity', Math.min(1, current + 0.1).toFixed(2));
+    } else {
+      if (current > 0) obj.setAttribute('opacity', Math.max(0, current - 0.1).toFixed(2));
     }
   }
 }
 
-export function handleTimer(timeOut: number, frameCount: number, timerLine: any): void {
-  const modulo = frameCount % timeOut;
-  const pctTime = modulo / timeOut;
-  const pctBar = pctTime * 130;
-  timerLine.vertices[1].x = 130 - pctBar;
+export function handleTimer(timeOut: number, frameCount: number, timerLine: SVGLineElement): void {
+  const pctBar = ((frameCount % timeOut) / timeOut) * 130;
+  timerLine.setAttribute('x2', String(130 - pctBar));
 }

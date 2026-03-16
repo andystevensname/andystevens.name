@@ -1,9 +1,25 @@
 import { randomNumber } from './utils.js';
+import { svgEl } from './svg.js';
 
-export function createBeams(two: any, group: any) {
-  const paths: any[] = [];
+interface Controller {
+  peak: number;
+  length: number;
+  speed: number;
+  travel: number;
+  frameCount: number;
+}
 
-  function createController() {
+interface Beam {
+  el: SVGPolygonElement;
+  controller: Controller;
+  x1: number;
+  x2: number;
+}
+
+export function createBeams(group: SVGGElement, height: number) {
+  const beams: Beam[] = [];
+
+  function createController(): Controller {
     return {
       peak: randomNumber(0.7, 0.1, false),
       length: randomNumber(180, 30, false),
@@ -14,49 +30,44 @@ export function createBeams(two: any, group: any) {
   }
 
   function create() {
-    const beam = two.makePath(
-      300, 0,
-      randomNumber(400, 0), two.height,
-      randomNumber(400, 0), two.height,
-    );
-    beam.noStroke().fill = '#FFEB3B';
-    beam.opacity = 0;
-    beam.controller = createController();
-    paths.push(beam);
-    group.add(beam);
-  }
-
-  function populate(target: number) {
-    if (paths.length < target) {
-      const current = paths.length;
-      for (let i = current; i < target; i++) create();
-    }
+    const x1 = randomNumber(400, 0);
+    const x2 = randomNumber(400, 0);
+    const el = svgEl<SVGPolygonElement>('polygon', {
+      points: `300,0 ${x1},${height} ${x2},${height}`,
+      fill: '#FFEB3B',
+      stroke: 'none',
+      opacity: '0',
+    });
+    group.appendChild(el);
+    beams.push({ el, controller: createController(), x1, x2 });
   }
 
   return {
-    paths,
     animate(frameCount: number, startFrame: number, endFrame: number) {
-      if (frameCount >= startFrame && frameCount <= endFrame && frameCount % 3 === 0) {
-        populate(10);
-        for (let i = 0; i < paths.length; i++) {
-          paths[i].controller.frameCount++;
-          if (paths[i].controller.frameCount > paths[i].controller.length / 2) {
-            paths[i].opacity -= paths[i].controller.speed;
-          } else if (paths[i].opacity <= paths[i].controller.peak) {
-            paths[i].opacity += paths[i].controller.speed;
-          }
-          paths[i].vertices[1].x += paths[i].controller.travel;
-          paths[i].vertices[2].x += paths[i].controller.travel;
-          if (paths[i].opacity <= 0) {
-            paths[i].opacity = 0;
-            paths[i].controller = createController();
-          }
+      if (frameCount < startFrame || frameCount > endFrame || frameCount % 3 !== 0) return;
+      while (beams.length < 10) create();
+      for (const beam of beams) {
+        const c = beam.controller;
+        c.frameCount++;
+        let opacity = parseFloat(beam.el.getAttribute('opacity') ?? '0');
+        if (c.frameCount > c.length / 2) {
+          opacity -= c.speed;
+        } else if (opacity <= c.peak) {
+          opacity += c.speed;
         }
+        if (opacity <= 0) {
+          opacity = 0;
+          beam.controller = createController();
+        }
+        beam.el.setAttribute('opacity', String(opacity));
+        beam.x1 += c.travel;
+        beam.x2 += c.travel;
+        beam.el.setAttribute('points', `300,0 ${beam.x1},${height} ${beam.x2},${height}`);
       }
     },
     destroy() {
-      group.remove(paths);
-      paths.length = 0;
+      for (const b of beams) b.el.remove();
+      beams.length = 0;
     },
   };
 }
