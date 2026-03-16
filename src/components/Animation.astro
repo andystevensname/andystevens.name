@@ -43,16 +43,25 @@
 </style>
 
 <script>
-import Two from 'two.js';
-import { fade, handleTimer } from '../lib/animation/utils.js';
-import { createBeams } from '../lib/animation/beams.js';
-import { createPoetry } from '../lib/animation/poetry.js';
-import { createGears } from '../lib/animation/gears.js';
-
 const canvasContainer = document.getElementById('canvas-container');
 const gearsContainer = document.getElementById('gears');
 
 if (canvasContainer && gearsContainer) {
+  const loadAnimation = async () => {
+    const [
+      { default: Two },
+      { fade, handleTimer },
+      { createBeams },
+      { createPoetry },
+      { createGears },
+    ] = await Promise.all([
+      import('two.js'),
+      import('../lib/animation/utils.js'),
+      import('../lib/animation/beams.js'),
+      import('../lib/animation/poetry.js'),
+      import('../lib/animation/gears.js'),
+    ]);
+
   const two = new Two({ fullscreen: false, type: Two.Types.svg });
 
   let clientHeight: number | undefined;
@@ -192,5 +201,12 @@ if (canvasContainer && gearsContainer) {
     })
     .appendTo(canvasContainer)
     .play();
+  }; // end loadAnimation
+
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(loadAnimation);
+  } else {
+    setTimeout(loadAnimation, 200);
+  }
 }
 </script>
