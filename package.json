@@ -8,10 +8,7 @@
     "preview": "astro preview"
   },
   "dependencies": {
-    "astro": "^5.0.0",
-    "two.js": "^0.8.23",
-    "@tailwindcss/vite": "^4.2.1",
-    "tailwindcss": "^4.2.1"
+    "astro": "^5.0.0"
   },
   "devDependencies": {
     "prettier": "^3.8.1"

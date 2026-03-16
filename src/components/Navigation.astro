@@ -1,50 +1,31 @@
 ---
 ---
 
-<nav
-  id="nav"
-  class="h-full w-60 fixed top-0 bottom-0 z-20 overflow-x-hidden transform duration-500 -translate-x-60"
->
-  <div class="navContainer h-full border-r border-solid border-googleGray bg-white dark:bg-googleGray dark:border-white">
-    <button id="close-nav-btn" aria-label="Close navigation" class="cursor-pointer text-googleGray dark:text-white" style="margin: 12px 16px 8px; background: none; border: none; padding: 0;">
+<nav id="nav">
+  <div class="navContainer">
+    <button id="close-nav-btn" aria-label="Close navigation">
       <!-- fa-xmark -->
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" width="20" height="20" fill="currentColor">
         <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/>
       </svg>
     </button>
-    <ul class="border-box w-full list-none px-4 m-0 divide-y divide-googleGray dark:divide-white">
-      <li class="p-0 m-0 w-full h-12 border-box">
-        <a href="/" class="w-full block no-underline text-googleGray dark:text-white nav-link">Home</a>
-      </li>
-      <li class="p-0 m-0 w-full h-12 border-box">
-        <a href="/blog/" class="w-full block no-underline text-googleGray dark:text-white nav-link">Blog</a>
-      </li>
-      <li class="p-0 m-0 w-full h-12 border-box">
-        <a href="/writing/" class="w-full block no-underline text-googleGray dark:text-white nav-link">Writing</a>
-      </li>
-      <li class="p-0 m-0 w-full h-12 border-box">
-        <a href="/about/" class="w-full block no-underline text-googleGray dark:text-white nav-link">About</a>
-      </li>
+    <ul>
+      <li><a href="/" class="nav-link">Home</a></li>
+      <li><a href="/blog/" class="nav-link">Blog</a></li>
+      <li><a href="/writing/" class="nav-link">Writing</a></li>
+      <li><a href="/about/" class="nav-link">About</a></li>
     </ul>
   </div>
 </nav>
-
-<style>
-nav ul li a {
-  border-bottom: 0;
-}
-</style>
 
 <script>
   const nav = document.getElementById('nav');
 
   function openNav() {
-    nav?.classList.remove('-translate-x-60');
     nav?.classList.add('translate-x-0');
   }
 
   function closeNav() {
-    nav?.classList.add('-translate-x-60');
     nav?.classList.remove('translate-x-0');
   }
 

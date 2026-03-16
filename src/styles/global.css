@@ -1,5 +1,3 @@
-@import "tailwindcss";
-
 @font-face {
   font-family: 'Fjalla One';
   font-style: normal;
@@ -8,11 +6,12 @@
   src: url('/fonts/FjallaOne.woff2') format('woff2');
 }
 
-@custom-variant dark (&:where(.dark, .dark *));
-
-@theme {
-  --color-googleGray: #212121;
+:root {
+  --c-gray: #212121;
+  --c-accent: #00b2cc;
 }
+
+/* === Base === */
 
 html {
   height: 100%;
@@ -27,11 +26,17 @@ body {
   width: 100%;
   margin: 0;
   position: relative;
-  font-size: 100%;
   font-size: 16px;
   font-family: Helvetica, Arial, sans-serif;
-  @apply dark:bg-googleGray dark:text-white;
+  color: var(--c-gray);
 }
+
+html.dark body {
+  background: var(--c-gray);
+  color: white;
+}
+
+/* === Layout === */
 
 #content {
   width: 100%;
@@ -42,39 +47,203 @@ body {
 }
 
 main {
-  min-height: 100%;
   width: 100%;
+  flex-grow: 1;
   position: relative;
   overflow-x: hidden;
 }
 
-article {
-  width: 100%;
-  padding-top: 6em;
+/* === Header === */
+
+#header {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  box-sizing: border-box;
+  z-index: 10;
+  height: 3rem;
+  border-bottom: 1px solid var(--c-gray);
+  background: rgba(255, 255, 255, 0.8);
+  transition: transform 500ms;
 }
 
-footer {
-  font-size: 0.875rem; /* 14px */
+html.dark #header {
+  background: rgba(33, 33, 33, 0.8);
+  border-color: white;
+}
+
+#header.-translate-y-12 {
+  transform: translateY(-3rem);
+}
+
+#open-nav-btn {
+  cursor: pointer;
+  color: var(--c-gray);
+  margin: 12px 16px;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+html.dark #open-nav-btn {
+  color: white;
+}
+
+.title-text {
+  height: 3rem;
+  display: block;
+  float: right;
+  margin-right: 1rem;
+  font-weight: bold;
+  line-height: 3;
+}
+
+/* === Navigation === */
+
+#nav {
+  height: 100%;
+  width: 15rem;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  z-index: 20;
+  overflow-x: hidden;
+  transition: transform 500ms;
+  transform: translateX(-15rem);
+}
+
+#nav.translate-x-0 {
+  transform: translateX(0);
+}
+
+.navContainer {
+  height: 100%;
+  border-right: 1px solid var(--c-gray);
+  background: white;
+}
+
+html.dark .navContainer {
+  background: var(--c-gray);
+  border-color: white;
+}
+
+#close-nav-btn {
+  cursor: pointer;
+  color: var(--c-gray);
+  margin: 12px 16px 8px;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+html.dark #close-nav-btn {
+  color: white;
+}
+
+#nav ul {
+  box-sizing: border-box;
+  width: 100%;
+  list-style: none;
+  padding: 0 1rem;
+  margin: 0;
+}
+
+#nav ul li {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 3rem;
+  box-sizing: border-box;
+  border-top: 1px solid var(--c-gray);
+  line-height: 3;
+}
+
+#nav ul li:first-child {
+  border-top: none;
+}
+
+html.dark #nav ul li {
+  border-color: white;
+}
+
+#nav ul li a {
+  width: 100%;
+  display: block;
+  text-decoration: none;
+  color: var(--c-gray);
+  border-bottom: 0;
+}
+
+html.dark #nav ul li a {
+  color: white;
+}
+
+/* === Theme switcher === */
+
+#theme-switcher button {
+  cursor: pointer;
+  color: var(--c-gray);
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+html.dark #theme-switcher button {
+  color: white;
+}
+
+#theme-sun { display: none; }
+#theme-moon { display: inline-flex; }
+html.dark #theme-sun { display: inline-flex; }
+html.dark #theme-moon { display: none; }
+
+/* === Footer === */
+
+#footer {
+  width: 100%;
+  position: relative;
+  height: 3rem;
+  border-top: 1px solid var(--c-gray);
+  font-size: 0.875rem;
   line-height: 3.4285;
   padding: 0 1rem;
+  box-sizing: border-box;
 }
+
+html.dark #footer {
+  border-color: white;
+}
+
+/* === Links === */
 
 a,
 a:visited,
 a:hover,
 a:active {
-  @apply text-googleGray dark:text-white;
+  color: var(--c-gray);
+}
+
+html.dark a,
+html.dark a:visited,
+html.dark a:hover,
+html.dark a:active {
+  color: white;
 }
 
 article a,
 article a:visited {
   text-decoration: none;
-  border-bottom: 2px dotted #00b2cc;
+  border-bottom: 2px dotted var(--c-accent);
 }
+
 article a:hover,
 article a:active {
-  color: #00b2cc;
+  color: var(--c-accent);
 }
+
+/* === Typography === */
 
 ul {
   list-style: square outside;
@@ -89,21 +258,21 @@ h1 {
 }
 
 h2 {
-  display: border-box;
+  box-sizing: border-box;
   width: 100%;
   padding: 0;
   margin: 0 0 1.5rem 0;
-  @apply text-3xl;
+  font-size: 1.875rem;
   line-height: 1.6;
   font-weight: bold;
 }
 
 h3 {
-  display: border-box;
+  box-sizing: border-box;
   width: 100%;
   padding: 0;
   margin: 0 0 1.5rem 0;
-  font-size: 1.25rem; /* 20px */
+  font-size: 1.25rem;
   line-height: 1.2;
   font-weight: bold;
 }
@@ -111,7 +280,7 @@ h3 {
 p {
   display: inline-block;
   width: 100%;
-  font-size: 1rem; /* 16px */
+  font-size: 1rem;
   line-height: 1.5;
   padding: 0;
   margin: 0 0 1.5rem 0;
@@ -145,11 +314,14 @@ ul li p:last-child {
 
 blockquote {
   width: 100%;
-  display: border-box;
-  border-left: 4px solid white;
-  @apply border-l-4 border-solid border-googleGray dark:border-white;
+  box-sizing: border-box;
+  border-left: 4px solid var(--c-gray);
   padding: 0 1rem;
   margin: 0 0 1.5rem 0;
+}
+
+html.dark blockquote {
+  border-color: white;
 }
 
 blockquote p:last-child {
@@ -185,42 +357,50 @@ pre {
   width: 100%;
 }
 
+/* === Article === */
+
+article {
+  width: 100%;
+  padding-top: 6em;
+}
+
+/* === Meta === */
+
 .meta {
   height: 1.5rem;
-  @apply border-t border-dashed border-googleGray dark:border-white;
+  border-top: 1px dashed var(--c-gray);
   font-size: 0.875rem;
   line-height: 1.5rem;
-  display: border-box;
+  box-sizing: border-box;
   margin: 0 0 1.5rem 0;
   width: 100%;
 }
 
-#nav ul li {
-  line-height: 3;
-  width: 100%;
-  height: 3rem;
-  margin: 0;
+html.dark .meta {
+  border-color: white;
 }
+
+/* === Nav icon === */
 
 .icon::before {
   content: "#";
   font-size: 1rem;
 }
 
-/* Theme switcher icon visibility */
-#theme-sun { display: none; }
-#theme-moon { display: inline-flex; }
-.dark #theme-sun { display: inline-flex; }
-.dark #theme-moon { display: none; }
+/* === Responsive === */
 
 @media (min-width: 640px) {
   h2 {
-    @apply border-t border-solid border-googleGray dark:border-white;
+    border-top: 1px solid var(--c-gray);
     width: 33.333%;
     margin: 0;
     float: left;
     clear: both;
     padding: 1.5rem 1rem 0 0;
+  }
+
+  html.dark h2 {
+    border-color: white;
   }
 
   h3 {
@@ -230,8 +410,13 @@ pre {
 
   h2 + p,
   h2 + h3 {
-    @apply border-t border-solid border-googleGray dark:border-white;
+    border-top: 1px solid var(--c-gray);
     padding-top: 1.5rem;
+  }
+
+  html.dark h2 + p,
+  html.dark h2 + h3 {
+    border-color: white;
   }
 
   p,
@@ -245,7 +430,7 @@ pre {
   p:first-child {
     border-top: 0;
     width: 100%;
-    font-size: 2rem; /* 32px */
+    font-size: 2rem;
     line-height: 1.5;
   }
 

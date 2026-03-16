@@ -38,10 +38,10 @@ const pageTitle = title ? `${title} — Andy Stevens` : 'Andy Stevens';
     <div id="content">
       <Header />
       <Navigation />
-      <main class="w-full flex-grow relative">
+      <main>
         <slot />
       </main>
-      <footer id="footer" class="w-full relative h-12 border-t border-googleGray dark:border-white">
+      <footer id="footer">
         &copy; 2021 Andy Stevens
       </footer>
     </div>
