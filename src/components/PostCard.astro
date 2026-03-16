@@ -1,0 +1,25 @@
+---
+import PostMeta from './PostMeta.astro';
+
+interface Props {
+  post: {
+    id: string;
+    data: {
+      title: string;
+      description?: string;
+      date?: Date;
+      tags?: string[];
+    };
+  };
+}
+
+const { post } = Astro.props;
+---
+
+<div>
+  <h2>
+    <a href={`/blog/${post.id}/`}>{post.data.title}</a>
+  </h2>
+  <p class="md:pt-6">{post.data.description}</p>
+  <PostMeta post={post} />
+</div>

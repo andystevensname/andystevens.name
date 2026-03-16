@@ -1,0 +1,30 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../../layouts/Layout.astro';
+import PostCard from '../../../components/PostCard.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => data.published !== false);
+  const allTags = [...new Set(posts.flatMap((p) => p.data.tags ?? []))];
+
+  return allTags.map((tag) => ({
+    params: { slug: tag },
+    props: { tag, posts: posts.filter((p) => p.data.tags?.includes(tag)) },
+  }));
+}
+
+const { tag, posts } = Astro.props;
+---
+
+<Layout
+  title={`All posts with ${tag}`}
+  description={`Posts tagged with ${tag}`}
+>
+  <article class="px-4 relative h-full table">
+    <h1 class="w-full text-5xl mb-6 text-center">Posts Tagged with '{tag}'</h1>
+    {posts.length > 0
+      ? posts.map((post) => <PostCard post={post} />)
+      : <p>No articles found.</p>
+    }
+  </article>
+</Layout>
