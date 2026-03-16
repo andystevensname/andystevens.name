@@ -30,10 +30,7 @@
 import { ref, watchEffect } from "vue";
 import Two from "two.js";
 
-var two = new Two({
-  fullscreen: false,
-  type: Two.Types.svg,
-});
+var two = null;
 
 var theme = useState("theme");
 
@@ -45,6 +42,10 @@ var resizeObserver, clientHeight;
 onMounted(() => {
   if (typeof window === 'undefined' || typeof document === 'undefined') return;
   if (!canvasContainer.value) return;
+  two = new Two({
+    fullscreen: false,
+    type: Two.Types.svg,
+  });
   function onResize() {
     if (canvasContainer.value) {
       clientHeight = canvasContainer.value.clientHeight;
@@ -281,12 +282,15 @@ onMounted(() => {
 
     create: function (i) {
       var width = utils.randomNumber(this.line.maxWidth, this.line.minWidth);
-      var line = two.makeRectangle(
-        width / 2 + this.line.x,
-        this.line.y + i * this.step,
-        width,
-        this.line.height
+      var halfW = width / 2;
+      var halfH = this.line.height / 2;
+      var line = two.makePath(
+        -halfW, -halfH,
+        halfW, -halfH,
+        halfW, halfH,
+        -halfW, halfH
       );
+      line.translation.set(halfW + this.line.x, this.line.y + i * this.step);
       line.rotation = utils.randomNumber(5, -5) * (Math.PI / 180);
       line.noStroke().fill = "red";
       line.opacity = 0.75;
@@ -553,12 +557,12 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
-  resizeObserver.unobserve(canvasContainer.value);
+  resizeObserver?.unobserve(canvasContainer.value);
 });
 
 onUnmounted(() => {
-  two.unbind("update");
-  two.clear();
+  two?.unbind("update");
+  two?.clear();
   //background.remove();
   //foreground.remove();
 });
