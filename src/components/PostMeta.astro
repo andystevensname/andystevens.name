@@ -14,11 +14,13 @@ const { post } = Astro.props;
 const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
 let dateStr = '';
+let isoDate = '';
 if (post.data.date) {
   const d = new Date(post.data.date);
   // Adjust for UTC offset to avoid off-by-one day
   const utcDate = new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
   dateStr = `${months[utcDate.getMonth()]} ${utcDate.getDate()}, ${utcDate.getFullYear()}`;
+  isoDate = post.data.date.toISOString();
 }
 
 const tags = post.data.tags ?? [];
@@ -26,10 +28,10 @@ const tags = post.data.tags ?? [];
 
 <div>
   <div class="meta">
-    {dateStr && <span>{dateStr}</span>}
+    {dateStr && <time datetime={isoDate}>{dateStr}</time>}
     {dateStr && tags.length > 0 && <span> &middot; </span>}
     {tags.map((tag) => (
-      <a href={`/blog/tags/${tag}/`}>#{tag} </a>
+      <a class="p-category" href={`/blog/tags/${tag}/`}>#{tag} </a>
     ))}
   </div>
 </div>

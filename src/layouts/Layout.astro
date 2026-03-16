@@ -7,10 +7,13 @@ interface Props {
   title?: string;
   description?: string;
   extraHead?: string;
+  canonical?: string;
+  ogType?: string;
 }
 
-const { title, description, extraHead } = Astro.props;
+const { title, description, extraHead, canonical, ogType = 'website' } = Astro.props;
 const pageTitle = title ? `${title} — Andy Stevens` : 'Andy Stevens';
+const canonicalUrl = canonical ?? new URL(Astro.url.pathname, Astro.site).href;
 ---
 
 <!doctype html>
@@ -20,6 +23,29 @@ const pageTitle = title ? `${title} — Andy Stevens` : 'Andy Stevens';
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     {description && <meta name="description" content={description} />}
     <title>{pageTitle}</title>
+
+    <!-- Canonical -->
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonicalUrl} />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:site_name" content="Andy Stevens" />
+
+    <!-- rel-me -->
+    <link rel="me" href="https://github.com/andystevensname" />
+
+    <!-- IndieWeb endpoints -->
+    <link rel="webmention" href="https://webmention.io/andystevens.name/webmention" />
+    <link rel="pingback" href="https://webmention.io/andystevens.name/xmlrpc" />
+    <link rel="authorization_endpoint" href="https://indieauth.com/auth" />
+    <link rel="token_endpoint" href="https://tokens.indieauth.com/token" />
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/rss+xml" title="Andy Stevens" href="/feed.xml" />
+
     <!-- Anti-FOUC: apply saved theme before paint -->
     <script is:inline>
       (function () {
@@ -35,6 +61,13 @@ const pageTitle = title ? `${title} — Andy Stevens` : 'Andy Stevens';
     {extraHead && <Fragment set:html={extraHead} />}
   </head>
   <body>
+    <!-- Representative h-card (visually hidden, machine-readable) -->
+    <div class="h-card" id="representative-hcard" aria-hidden="true">
+      <a class="p-name u-url u-uid" href="https://andystevens.name" rel="me">Andy Stevens</a>
+      <span class="p-note">Poet, technical writer, and web tinkerer.</span>
+      <a class="u-url" href="https://github.com/andystevensname" rel="me">GitHub</a>
+      <!-- TODO: add u-email, p-locality, u-photo when ready -->
+    </div>
     <div id="content">
       <Header />
       <Navigation />
@@ -43,6 +76,8 @@ const pageTitle = title ? `${title} — Andy Stevens` : 'Andy Stevens';
       </main>
       <footer id="footer">
         &copy; 2021 Andy Stevens
+        <span aria-hidden="true">&middot;</span>
+        <a rel="me" href="https://github.com/andystevensname">GitHub</a>
       </footer>
     </div>
   </body>

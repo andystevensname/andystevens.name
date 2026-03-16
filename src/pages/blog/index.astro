@@ -12,7 +12,9 @@ posts.sort((a, b) => {
 ---
 
 <Layout title="Blog Listing" description="A listing of all blogs, articles, and missives.">
-  <article class="px-4 relative h-full">
+  <article class="px-4 relative h-full h-feed">
+    <span class="p-name" style="display:none" aria-hidden="true">Andy Stevens — Blog</span>
+    <a class="p-author h-card" href="https://andystevens.name" style="display:none" aria-hidden="true">Andy Stevens</a>
     <h1 class="w-full text-5xl mb-6 text-center">Blog</h1>
     {posts.length > 0
       ? posts.map((post) => <PostCard post={post} />)

@@ -16,10 +16,10 @@ interface Props {
 const { post } = Astro.props;
 ---
 
-<div>
+<div class="h-entry">
   <h2>
-    <a href={`/blog/${post.id}/`}>{post.data.title}</a>
+    <a class="p-name u-url" href={`/blog/${post.id}/`}>{post.data.title}</a>
   </h2>
-  <p class="md:pt-6">{post.data.description}</p>
+  {post.data.description && <p class="p-summary">{post.data.description}</p>}
   <PostMeta post={post} />
 </div>

@@ -12,14 +12,14 @@ His poetry and writing have been published in a few places, but the internet bei
 
 ## Social Media
 
-Andy can be reached on the following social media platforms:
+Andy can be reached on the following platforms:
 
-- Twitter: [@andystevensname](https://twitter.com/andystevensname)
+- GitHub: [andystevensname](https://github.com/andystevensname)
 
 ## Colophon
 
-This website is powered by [Nuxt.js 3](https://v3.nuxtjs.org/) acting as a static site generator, which employs the [Vue.js framework](https://vuejs.org/).
+This website is built with [Astro](https://astro.build), a static site generator, and deployed on [Netlify](https://netlify.com).
 
-The animation on the front page is powered by [two.js](https://two.js.org/), an SVG animation library.
+The animation on the front page is hand-written SVG, animated with `requestAnimationFrame`.
 
 This site's code is available on [GitHub](https://github.com/andystevensname/andystevens.name).
