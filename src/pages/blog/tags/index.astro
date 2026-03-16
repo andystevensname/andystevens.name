@@ -1,0 +1,23 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../../layouts/Layout.astro';
+
+const posts = await getCollection('blog', ({ data }) => data.published !== false);
+const tags = [...new Set(posts.flatMap((p) => p.data.tags ?? []))].sort();
+---
+
+<Layout title="Blog Tags" description="A listing of various tags used on the blog.">
+  <article class="px-4 relative h-full">
+    <h1 class="w-full text-5xl mb-6 text-center">Tags</h1>
+    {tags.length > 0
+      ? (
+        <ul>
+          {tags.map((tag) => (
+            <li><a href={`/blog/tags/${tag}/`}>#{tag}</a></li>
+          ))}
+        </ul>
+      )
+      : <p>No tags found.</p>
+    }
+  </article>
+</Layout>

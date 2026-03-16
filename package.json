@@ -1,25 +1,19 @@
 {
-  "private": true,
+  "name": "andystevens.name",
+  "type": "module",
   "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview"
-  },
-  "devDependencies": {
-    "@nuxt/content": "^3.12.0",
-    "@tailwindcss/postcss": "^4.2.1",
-    "autoprefixer": "^10.4.27",
-    "nuxt": "^4.1.3",
-    "postcss": "^8.5.8",
-    "prettier": "^3.8.1",
-    "tailwindcss": "^4.2.1"
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^7.2.0",
-    "@fortawesome/free-solid-svg-icons": "^7.2.0",
-    "@fortawesome/vue-fontawesome": "^3.1.3",
-    "better-sqlite3": "^12.8.0",
-    "two.js": "^0.8.23"
+    "astro": "^5.0.0",
+    "two.js": "^0.8.23",
+    "@tailwindcss/vite": "^4.2.1",
+    "tailwindcss": "^4.2.1"
+  },
+  "devDependencies": {
+    "prettier": "^3.8.1"
   }
 }

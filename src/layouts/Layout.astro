@@ -1,0 +1,49 @@
+---
+import Header from '../components/Header.astro';
+import Navigation from '../components/Navigation.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  extraHead?: string;
+}
+
+const { title, description, extraHead } = Astro.props;
+const pageTitle = title ? `${title} — Andy Stevens` : 'Andy Stevens';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {description && <meta name="description" content={description} />}
+    <title>{pageTitle}</title>
+    <!-- Anti-FOUC: apply saved theme before paint -->
+    <script is:inline>
+      (function () {
+        try {
+          var theme = localStorage.getItem('theme');
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (theme === 'dark' || (!theme && prefersDark)) {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
+    {extraHead && <Fragment set:html={extraHead} />}
+  </head>
+  <body>
+    <div id="content">
+      <Header />
+      <Navigation />
+      <main class="w-full flex-grow relative">
+        <slot />
+      </main>
+      <footer id="footer" class="w-full relative h-12 border-t border-googleGray dark:border-white">
+        &copy; 2021 Andy Stevens
+      </footer>
+    </div>
+  </body>
+</html>
