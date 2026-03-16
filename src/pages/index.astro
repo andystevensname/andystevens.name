@@ -6,7 +6,11 @@ import Animation from '../components/Animation.astro';
 <Layout
   title="Andy Stevens"
   description="The homepage of poet and writer Andy Stevens."
-  extraHead='<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fjalla+One" crossorigin="" />'
+  extraHead={`
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="">
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Fjalla+One&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fjalla+One&display=swap"></noscript>
+  `}
 >
   <div class="w-full h-full relative">
     <Animation />
