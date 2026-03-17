@@ -1,11 +1,23 @@
+# Dependencies
 node_modules
-*.log*
-.nuxt
-.nitro
-.cache
-.output
-.env
+
+# Build output
 dist
+
+# Astro
+.astro
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log*
+
+# macOS
 .DS_Store
-.data
-postcss.config.js
+
+# Misc
+report.json
+.claude
