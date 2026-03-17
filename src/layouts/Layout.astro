@@ -36,6 +36,7 @@ const canonicalUrl = canonical ?? new URL(Astro.url.pathname, Astro.site).href;
 
     <!-- rel-me -->
     <link rel="me" href="https://github.com/andystevensname" />
+    <link rel="me" href="https://bsky.app/profile/andystevens.name" />
 
     <!-- IndieWeb endpoints -->
     <link rel="webmention" href="https://webmention.io/andystevens.name/webmention" />
@@ -66,6 +67,7 @@ const canonicalUrl = canonical ?? new URL(Astro.url.pathname, Astro.site).href;
       <a class="p-name u-url u-uid" href="https://andystevens.name" rel="me">Andy Stevens</a>
       <span class="p-note">Poet, technical writer, and web tinkerer.</span>
       <a class="u-url" href="https://github.com/andystevensname" rel="me">GitHub</a>
+      <a class="u-url" href="https://bsky.app/profile/andystevens.name" rel="me">Bluesky</a>
       <!-- TODO: add u-email, p-locality, u-photo when ready -->
     </div>
     <div id="content">
@@ -78,6 +80,8 @@ const canonicalUrl = canonical ?? new URL(Astro.url.pathname, Astro.site).href;
         &copy; 2021 Andy Stevens
         <span aria-hidden="true">&middot;</span>
         <a rel="me" href="https://github.com/andystevensname">GitHub</a>
+        <span aria-hidden="true">&middot;</span>
+        <a rel="me" href="https://bsky.app/profile/andystevens.name">Bluesky</a>
       </footer>
     </div>
   </body>
