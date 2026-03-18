@@ -22,6 +22,10 @@ slug: 'writing'
 
 ## Other Writing
 
+### Non-fiction
+
+- [Other People's Email](https://www.uaf.edu/permafrostmag/online-issues/issue-45.1/other-peoples-email.php) - Permafrost Magazine 45.1, 2023.
+
 ### Documentation
 
 - [Implementing Docs as Code - Lessons and Benefits](https://jaxenter.com/docs-as-code-174941.html) - JAXenter - August 9, 2021

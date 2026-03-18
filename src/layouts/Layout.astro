@@ -14,6 +14,7 @@ interface Props {
 const { title, description, extraHead, canonical, ogType = 'website' } = Astro.props;
 const pageTitle = title ? `${title} — Andy Stevens` : 'Andy Stevens';
 const canonicalUrl = canonical ?? new URL(Astro.url.pathname, Astro.site).href;
+const currentYear = new Date().getFullYear();
 ---
 
 <!doctype html>
@@ -39,10 +40,10 @@ const canonicalUrl = canonical ?? new URL(Astro.url.pathname, Astro.site).href;
     <link rel="me" href="https://bsky.app/profile/andystevens.name" />
 
     <!-- IndieWeb endpoints -->
-    <link rel="webmention" href="https://webmention.io/andystevens.name/webmention" />
-    <link rel="pingback" href="https://webmention.io/andystevens.name/xmlrpc" />
-    <link rel="authorization_endpoint" href="https://indieauth.com/auth" />
-    <link rel="token_endpoint" href="https://tokens.indieauth.com/token" />
+    <link rel="webmention" href="https://webmention.andystevens.name/webmention" />
+    <link rel="micropub" href="https://ik.andystevens.name/micropub">
+    <link rel="authorization_endpoint" href="https://ik.andystevens.name/auth">
+    <link rel="token_endpoint" href="https://ik.andystevens.name/auth/token">
 
     <!-- RSS -->
     <link rel="alternate" type="application/rss+xml" title="Andy Stevens" href="/feed.xml" />
@@ -77,7 +78,7 @@ const canonicalUrl = canonical ?? new URL(Astro.url.pathname, Astro.site).href;
         <slot />
       </main>
       <footer id="footer">
-        &copy; 2021 Andy Stevens
+        &copy; 2021&ndash;{currentYear} Andy Stevens
         <span aria-hidden="true">&middot;</span>
         <a rel="me" href="https://github.com/andystevensname">GitHub</a>
         <span aria-hidden="true">&middot;</span>
