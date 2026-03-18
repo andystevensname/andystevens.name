@@ -1,0 +1,45 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import PostMeta from '../../components/PostMeta.astro';
+
+export async function getStaticPaths() {
+  const photos = await getCollection('photos');
+  return photos.map((photo) => ({
+    params: { slug: photo.id },
+    props: { photo },
+  }));
+}
+
+const { photo } = Astro.props;
+const { Content } = await render(photo);
+const photoUrl = new URL(`/photos/${photo.id}/`, Astro.site).href;
+const isoDate = photo.data.date?.toISOString() ?? '';
+const photoSrcs = Array.isArray(photo.data.photo) ? photo.data.photo : [photo.data.photo];
+---
+
+<Layout
+  title={photo.data.title ?? 'Photo'}
+  description={photo.data.alt ?? 'A photo post'}
+  canonical={photoUrl}
+>
+  <main>
+    <article class="px-4 relative h-full table h-entry">
+      {photo.data.title && <h1 class="w-full text-5xl mb-6 text-center p-name">{photo.data.title}</h1>}
+
+      <a class="u-url u-uid" href={photoUrl} style="display:none" aria-hidden="true">{photoUrl}</a>
+      {isoDate && <time class="dt-published" datetime={isoDate} style="display:none" aria-hidden="true">{isoDate}</time>}
+      <a class="p-author h-card" href="https://andystevens.name" style="display:none" aria-hidden="true">Andy Stevens</a>
+
+      {photoSrcs.map((src) => (
+        <img class="u-photo" src={src} alt={photo.data.alt ?? ''} />
+      ))}
+
+      <div class="e-content">
+        <Content />
+      </div>
+
+      <PostMeta post={photo} />
+    </article>
+  </main>
+</Layout>

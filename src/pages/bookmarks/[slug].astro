@@ -1,0 +1,42 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import PostMeta from '../../components/PostMeta.astro';
+
+export async function getStaticPaths() {
+  const bookmarks = await getCollection('bookmarks');
+  return bookmarks.map((bookmark) => ({
+    params: { slug: bookmark.id },
+    props: { bookmark },
+  }));
+}
+
+const { bookmark } = Astro.props;
+const { Content } = await render(bookmark);
+const bookmarkUrl = new URL(`/bookmarks/${bookmark.id}/`, Astro.site).href;
+const isoDate = bookmark.data.date?.toISOString() ?? '';
+---
+
+<Layout
+  title={bookmark.data.title ?? 'Bookmark'}
+  description={`Bookmark of ${bookmark.data['bookmark-of']}`}
+  canonical={bookmarkUrl}
+>
+  <main>
+    <article class="px-4 relative h-full table h-entry">
+      {bookmark.data.title && <h1 class="w-full text-5xl mb-6 text-center p-name">{bookmark.data.title}</h1>}
+
+      <a class="u-url u-uid" href={bookmarkUrl} style="display:none" aria-hidden="true">{bookmarkUrl}</a>
+      {isoDate && <time class="dt-published" datetime={isoDate} style="display:none" aria-hidden="true">{isoDate}</time>}
+      <a class="p-author h-card" href="https://andystevens.name" style="display:none" aria-hidden="true">Andy Stevens</a>
+
+      <p>Bookmarked: <a class="u-bookmark-of" href={bookmark.data['bookmark-of']}>{bookmark.data['bookmark-of']}</a></p>
+
+      <div class="e-content">
+        <Content />
+      </div>
+
+      <PostMeta post={bookmark} />
+    </article>
+  </main>
+</Layout>

@@ -1,0 +1,32 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import PostMeta from '../../components/PostMeta.astro';
+
+const bookmarks = await getCollection('bookmarks', ({ data }) => data.published !== false);
+bookmarks.sort((a, b) => {
+  const aDate = a.data.date?.getTime() ?? 0;
+  const bDate = b.data.date?.getTime() ?? 0;
+  return bDate - aDate;
+});
+---
+
+<Layout title="Bookmarks" description="Links and bookmarks I've saved.">
+  <article class="px-4 relative h-full h-feed">
+    <span class="p-name" style="display:none" aria-hidden="true">Andy Stevens — Bookmarks</span>
+    <a class="p-author h-card" href="https://andystevens.name" style="display:none" aria-hidden="true">Andy Stevens</a>
+    <h1 class="w-full text-5xl mb-6 text-center">Bookmarks</h1>
+    {bookmarks.length > 0
+      ? bookmarks.map((bookmark) => (
+        <div class="h-entry">
+          <h2>
+            <a class="u-bookmark-of" href={bookmark.data['bookmark-of']}>{bookmark.data.title ?? bookmark.data['bookmark-of']}</a>
+          </h2>
+          {bookmark.body && <p class="p-summary">{bookmark.body.slice(0, 200)}</p>}
+          <PostMeta post={bookmark} />
+        </div>
+      ))
+      : <p>No bookmarks yet.</p>
+    }
+  </article>
+</Layout>

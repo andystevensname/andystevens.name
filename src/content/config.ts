@@ -22,4 +22,60 @@ const pages = defineCollection({
   }),
 });
 
-export const collections = { blog, pages };
+const bookmarks = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/content/bookmarks' }),
+  schema: z.object({
+    title: z.string().optional(),
+    'bookmark-of': z.string(),
+    date: z.coerce.date().optional(),
+    published: z.boolean().optional().default(true),
+    tags: z.array(z.string()).optional().default([]),
+    slug: z.string().optional(),
+  }),
+});
+
+const likes = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/content/likes' }),
+  schema: z.object({
+    'like-of': z.string(),
+    date: z.coerce.date().optional(),
+    published: z.boolean().optional().default(true),
+    slug: z.string().optional(),
+  }),
+});
+
+const notes = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/content/notes' }),
+  schema: z.object({
+    date: z.coerce.date().optional(),
+    published: z.boolean().optional().default(true),
+    tags: z.array(z.string()).optional().default([]),
+    slug: z.string().optional(),
+  }),
+});
+
+const photos = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/content/photos' }),
+  schema: z.object({
+    title: z.string().optional(),
+    photo: z.union([z.string(), z.array(z.string())]),
+    alt: z.string().optional(),
+    date: z.coerce.date().optional(),
+    published: z.boolean().optional().default(true),
+    tags: z.array(z.string()).optional().default([]),
+    slug: z.string().optional(),
+  }),
+});
+
+const replies = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/content/replies' }),
+  schema: z.object({
+    'in-reply-to': z.string(),
+    date: z.coerce.date().optional(),
+    published: z.boolean().optional().default(true),
+    tags: z.array(z.string()).optional().default([]),
+    slug: z.string().optional(),
+  }),
+});
+
+export const collections = { blog, pages, bookmarks, likes, notes, photos, replies };

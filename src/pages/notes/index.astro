@@ -1,0 +1,29 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import PostMeta from '../../components/PostMeta.astro';
+
+const notes = await getCollection('notes', ({ data }) => data.published !== false);
+notes.sort((a, b) => {
+  const aDate = a.data.date?.getTime() ?? 0;
+  const bDate = b.data.date?.getTime() ?? 0;
+  return bDate - aDate;
+});
+---
+
+<Layout title="Notes" description="Short notes and status updates.">
+  <article class="px-4 relative h-full h-feed">
+    <span class="p-name" style="display:none" aria-hidden="true">Andy Stevens — Notes</span>
+    <a class="p-author h-card" href="https://andystevens.name" style="display:none" aria-hidden="true">Andy Stevens</a>
+    <h1 class="w-full text-5xl mb-6 text-center">Notes</h1>
+    {notes.length > 0
+      ? notes.map((note) => (
+        <div class="h-entry">
+          <p class="e-content"><a href={`/notes/${note.id}/`}>{note.body?.slice(0, 140) ?? ''}</a></p>
+          <PostMeta post={note} />
+        </div>
+      ))
+      : <p>No notes yet.</p>
+    }
+  </article>
+</Layout>

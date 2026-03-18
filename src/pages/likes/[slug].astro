@@ -1,0 +1,40 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import PostMeta from '../../components/PostMeta.astro';
+
+export async function getStaticPaths() {
+  const likes = await getCollection('likes');
+  return likes.map((like) => ({
+    params: { slug: like.id },
+    props: { like },
+  }));
+}
+
+const { like } = Astro.props;
+const { Content } = await render(like);
+const likeUrl = new URL(`/likes/${like.id}/`, Astro.site).href;
+const isoDate = like.data.date?.toISOString() ?? '';
+---
+
+<Layout
+  title="Like"
+  description={`Liked ${like.data['like-of']}`}
+  canonical={likeUrl}
+>
+  <main>
+    <article class="px-4 relative h-full table h-entry">
+      <a class="u-url u-uid" href={likeUrl} style="display:none" aria-hidden="true">{likeUrl}</a>
+      {isoDate && <time class="dt-published" datetime={isoDate} style="display:none" aria-hidden="true">{isoDate}</time>}
+      <a class="p-author h-card" href="https://andystevens.name" style="display:none" aria-hidden="true">Andy Stevens</a>
+
+      <p>Liked <a class="u-like-of" href={like.data['like-of']}>{like.data['like-of']}</a></p>
+
+      <div class="e-content">
+        <Content />
+      </div>
+
+      <PostMeta post={like} />
+    </article>
+  </main>
+</Layout>
