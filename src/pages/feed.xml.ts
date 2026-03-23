@@ -30,14 +30,14 @@ export async function GET(context: APIContext) {
       categories: n.data.tags,
     })),
     ...bookmarks.map((b) => ({
-      title: b.data.title ?? `Bookmark: ${b.data['bookmark-of']}`,
+      title: b.data.title ?? `Bookmark: ${b.data.bookmark_of}`,
       pubDate: b.data.date,
       description: b.body?.slice(0, 200),
       link: `/bookmarks/${b.id}/`,
       categories: b.data.tags,
     })),
     ...likes.map((l) => ({
-      title: `Liked ${l.data['like-of']}`,
+      title: `Liked ${l.data.like_of}`,
       pubDate: l.data.date,
       link: `/likes/${l.id}/`,
     })),
@@ -49,7 +49,7 @@ export async function GET(context: APIContext) {
       categories: p.data.tags,
     })),
     ...replies.map((r) => ({
-      title: `Reply to ${r.data['in-reply-to']}`,
+      title: `Reply to ${r.data.in_reply_to}`,
       pubDate: r.data.date,
       description: r.body?.slice(0, 200),
       link: `/replies/${r.id}/`,

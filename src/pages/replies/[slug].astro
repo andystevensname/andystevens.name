@@ -20,13 +20,13 @@ const replyUrl = new URL(`/replies/${reply.id}/`, Astro.site).href;
 
 <Layout
   title="Reply"
-  description={`Reply to ${reply.data['in-reply-to']}`}
+  description={`Reply to ${reply.data.in_reply_to}`}
   canonical={replyUrl}
 >
   <article class="h-entry">
     <HEntryMeta url={replyUrl} date={reply.data.date} syndication={reply.data.syndication} />
 
-    <p>In reply to <a class="u-in-reply-to" href={reply.data['in-reply-to']}>{reply.data['in-reply-to']}</a></p>
+    <p>In reply to <a class="u-in-reply-to" href={reply.data.in_reply_to}>{reply.data.in_reply_to}</a></p>
 
     <div class="e-content">
       <Content />

@@ -41,7 +41,7 @@ export function mapBookmarks(bookmarks: any[]): FeedItemData[] {
     url: `/bookmarks/${b.id}/`,
     date: b.data.date ?? new Date(0),
     title: b.data.title,
-    linkTo: b.data['bookmark-of'],
+    linkTo: b.data.bookmark_of,
     summary: b.body?.slice(0, 200),
     tags: b.data.tags ?? [],
   }));
@@ -52,7 +52,7 @@ export function mapLikes(likes: any[]): FeedItemData[] {
     type: 'like' as const,
     url: `/likes/${l.id}/`,
     date: l.data.date ?? new Date(0),
-    linkTo: l.data['like-of'],
+    linkTo: l.data.like_of,
   }));
 }
 
@@ -73,7 +73,7 @@ export function mapReplies(replies: any[]): FeedItemData[] {
     type: 'reply' as const,
     url: `/replies/${r.id}/`,
     date: r.data.date ?? new Date(0),
-    linkTo: r.data['in-reply-to'],
+    linkTo: r.data.in_reply_to,
     summary: r.body?.slice(0, 200),
     tags: r.data.tags ?? [],
   }));

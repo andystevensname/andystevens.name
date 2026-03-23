@@ -20,13 +20,13 @@ const likeUrl = new URL(`/likes/${like.id}/`, Astro.site).href;
 
 <Layout
   title="Like"
-  description={`Liked ${like.data['like-of']}`}
+  description={`Liked ${like.data.like_of}`}
   canonical={likeUrl}
 >
   <article class="h-entry">
     <HEntryMeta url={likeUrl} date={like.data.date} syndication={like.data.syndication} />
 
-    <p>Liked <a class="u-like-of" href={like.data['like-of']}>{like.data['like-of']}</a></p>
+    <p>Liked <a class="u-like-of" href={like.data.like_of}>{like.data.like_of}</a></p>
 
     <div class="e-content">
       <Content />

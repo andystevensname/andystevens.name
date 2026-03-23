@@ -30,7 +30,7 @@ const bookmarks = defineCollection({
   loader: glob({ pattern: '*.md', base: './src/content/bookmarks' }),
   schema: z.object({
     title: z.string().optional(),
-    'bookmark-of': z.string(),
+    bookmark_of: z.string(),
     date: z.coerce.date().optional(),
     published: z.boolean().optional().default(true),
     tags: z.array(z.string()).optional().default([]),
@@ -42,7 +42,7 @@ const bookmarks = defineCollection({
 const likes = defineCollection({
   loader: glob({ pattern: '*.md', base: './src/content/likes' }),
   schema: z.object({
-    'like-of': z.string(),
+    like_of: z.string(),
     date: z.coerce.date().optional(),
     published: z.boolean().optional().default(true),
     syndication,
@@ -78,7 +78,7 @@ const photos = defineCollection({
 const replies = defineCollection({
   loader: glob({ pattern: '*.md', base: './src/content/replies' }),
   schema: z.object({
-    'in-reply-to': z.string(),
+    in_reply_to: z.string(),
     date: z.coerce.date().optional(),
     published: z.boolean().optional().default(true),
     tags: z.array(z.string()).optional().default([]),

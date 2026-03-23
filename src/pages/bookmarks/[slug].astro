@@ -20,14 +20,14 @@ const bookmarkUrl = new URL(`/bookmarks/${bookmark.id}/`, Astro.site).href;
 
 <Layout
   title={bookmark.data.title ?? 'Bookmark'}
-  description={`Bookmark of ${bookmark.data['bookmark-of']}`}
+  description={`Bookmark of ${bookmark.data.bookmark_of}`}
   canonical={bookmarkUrl}
 >
   <article class="h-entry">
     {bookmark.data.title && <h1 class="p-name">{bookmark.data.title}</h1>}
     <HEntryMeta url={bookmarkUrl} date={bookmark.data.date} syndication={bookmark.data.syndication} />
 
-    <p>Bookmarked: <a class="u-bookmark-of" href={bookmark.data['bookmark-of']}>{bookmark.data['bookmark-of']}</a></p>
+    <p>Bookmarked: <a class="u-bookmark-of" href={bookmark.data.bookmark_of}>{bookmark.data.bookmark_of}</a></p>
 
     <div class="e-content">
       <Content />
