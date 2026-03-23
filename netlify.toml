@@ -2,6 +2,9 @@
   command = "npm run build"
   publish = "dist"
 
+[[plugins]]
+  package = "./netlify/plugins/send-webmentions"
+
 [[headers]]
   for = "/fonts/*"
   [headers.values]

@@ -14,13 +14,14 @@ const { page } = Astro.props;
 const { Content } = await render(page);
 ---
 
-<Layout title={page.data.title} description={page.data.description}>
-  <main>
-    <article class="px-4 relative h-full table">
-      <h1 class="w-full text-5xl mb-6 text-center">{page.data.title}</h1>
-      <div>
-        <Content />
-      </div>
-    </article>
-  </main>
+<Layout
+  title={page.data.title}
+  description={page.data.description}
+>
+  <article>
+    <h1>{page.data.title}</h1>
+    <div class="e-content">
+      <Content />
+    </div>
+  </article>
 </Layout>

@@ -8,13 +8,14 @@ interface GearInfo {
   teeth: number;
   diametralPitch: number;
   pitchDiameter: number;
+  scaledWidth: number;
   rotation: number;
   cx: number;
   cy: number;
   scaleRatio: number;
 }
 
-export function createGears(canvas: SVGSVGElement, group: SVGGElement, gearsContainer: Element) {
+export function createGears(canvas: SVGSVGElement, group: SVGGElement, gearsContainer: Element, width = 400) {
   const colors = ['#D500F9', '#00B0FF', '#FF1744'];
   const teethCounts = [18, 36, 52];
   const gears: GearInfo[] = [];
@@ -73,7 +74,7 @@ export function createGears(canvas: SVGSVGElement, group: SVGGElement, gearsCont
 
     const gear: GearInfo = {
       assemblyEl, wrapEl, pathEl, circleEl,
-      teeth, diametralPitch, pitchDiameter,
+      teeth, diametralPitch, pitchDiameter, scaledWidth,
       rotation: 0, cx, cy, scaleRatio,
     };
     applyGearTransform(gear);
@@ -82,15 +83,29 @@ export function createGears(canvas: SVGSVGElement, group: SVGGElement, gearsCont
 
   function place() {
     const [g0, g1, g2] = gears;
-    const x1 = 50, y1 = 547.5;
-    g1.assemblyEl.setAttribute('transform', `translate(${x1},${y1})`);
 
-    const x0 = x1 + ((g1.pitchDiameter + g0.pitchDiameter) / 2) * Math.cos(-(5 * (360 / 36)) * (Math.PI / 180));
+    // Calculate positions with gear 1 at origin
+    const ox1 = 0, y1 = 547.5;
+    const ox0 = ox1 + ((g1.pitchDiameter + g0.pitchDiameter) / 2) * Math.cos(-(5 * (360 / 36)) * (Math.PI / 180));
     const y0 = y1 + ((g1.pitchDiameter + g0.pitchDiameter) / 2) * Math.sin(-(5 * (360 / 36)) * (Math.PI / 180));
-    g0.assemblyEl.setAttribute('transform', `translate(${x0},${y0})`);
-
-    const x2 = x0 + ((g2.pitchDiameter + g0.pitchDiameter) / 2) * Math.cos((13 * (360 / 18) - 0.25) * (Math.PI / 180));
+    const ox2 = ox0 + ((g2.pitchDiameter + g0.pitchDiameter) / 2) * Math.cos((13 * (360 / 18) - 0.25) * (Math.PI / 180));
     const y2 = y0 + ((g2.pitchDiameter + g0.pitchDiameter) / 2) * Math.sin((13 * (360 / 18) - 0.25) * (Math.PI / 180));
+
+    // Find the rightmost edge across all gears
+    const rightEdge = Math.max(
+      ox1 + g1.scaledWidth / 2,
+      ox0 + g0.scaledWidth / 2,
+      ox2 + g2.scaledWidth / 2,
+    );
+
+    // Offset so rightmost edge aligns with container right edge
+    const offset = width - rightEdge;
+    const x1 = ox1 + offset;
+    const x0 = ox0 + offset;
+    const x2 = ox2 + offset;
+
+    g1.assemblyEl.setAttribute('transform', `translate(${x1},${y1})`);
+    g0.assemblyEl.setAttribute('transform', `translate(${x0},${y0})`);
     g2.assemblyEl.setAttribute('transform', `translate(${x2},${y2})`);
   }
 

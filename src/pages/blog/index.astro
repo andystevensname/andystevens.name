@@ -1,24 +1,24 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
-import PostCard from '../../components/PostCard.astro';
+import FeedItem from '../../components/FeedItem.astro';
+import { mapBlogPosts, sortByDate } from '../../lib/feed';
 
 const posts = await getCollection('blog', ({ data }) => data.published !== false);
-posts.sort((a, b) => {
-  const aDate = a.data.date?.getTime() ?? 0;
-  const bDate = b.data.date?.getTime() ?? 0;
-  return bDate - aDate;
-});
+const feed = sortByDate(mapBlogPosts(posts));
 ---
 
-<Layout title="Blog Listing" description="A listing of all blogs, articles, and missives.">
-  <article class="px-4 relative h-full h-feed">
+<Layout
+  title="Blog"
+  description="A listing of all blogs, articles, and missives."
+>
+  <h1>Blog</h1>
+  <div class="recent-feed h-feed">
     <span class="p-name" style="display:none" aria-hidden="true">Andy Stevens — Blog</span>
     <a class="p-author h-card" href="https://andystevens.name" style="display:none" aria-hidden="true">Andy Stevens</a>
-    <h1 class="w-full text-5xl mb-6 text-center">Blog</h1>
-    {posts.length > 0
-      ? posts.map((post) => <PostCard post={post} />)
+    {feed.length > 0
+      ? feed.map((item) => <FeedItem {...item} />)
       : <p>No articles found.</p>
     }
-  </article>
+  </div>
 </Layout>

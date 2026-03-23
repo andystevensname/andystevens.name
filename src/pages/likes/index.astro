@@ -1,29 +1,21 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
-import PostMeta from '../../components/PostMeta.astro';
+import FeedItem from '../../components/FeedItem.astro';
+import { mapLikes, sortByDate } from '../../lib/feed';
 
 const likes = await getCollection('likes', ({ data }) => data.published !== false);
-likes.sort((a, b) => {
-  const aDate = a.data.date?.getTime() ?? 0;
-  const bDate = b.data.date?.getTime() ?? 0;
-  return bDate - aDate;
-});
+const feed = sortByDate(mapLikes(likes));
 ---
 
 <Layout title="Likes" description="Things I've liked around the web.">
-  <article class="px-4 relative h-full h-feed">
+  <h1>Likes</h1>
+  <div class="recent-feed h-feed">
     <span class="p-name" style="display:none" aria-hidden="true">Andy Stevens — Likes</span>
     <a class="p-author h-card" href="https://andystevens.name" style="display:none" aria-hidden="true">Andy Stevens</a>
-    <h1 class="w-full text-5xl mb-6 text-center">Likes</h1>
-    {likes.length > 0
-      ? likes.map((like) => (
-        <div class="h-entry">
-          <p>Liked <a class="u-like-of" href={like.data['like-of']}>{like.data['like-of']}</a></p>
-          <PostMeta post={like} />
-        </div>
-      ))
+    {feed.length > 0
+      ? feed.map((item) => <FeedItem {...item} />)
       : <p>No likes yet.</p>
     }
-  </article>
+  </div>
 </Layout>

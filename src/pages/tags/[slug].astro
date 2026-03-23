@@ -1,0 +1,51 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import FeedItem from '../../components/FeedItem.astro';
+import { mapBlogPosts, mapBookmarks, mapNotes, mapPhotos, mapReplies, mapWriting, sortByDate } from '../../lib/feed';
+
+export async function getStaticPaths() {
+  const [posts, bookmarks, notes, photos, replies, writing] = await Promise.all([
+    getCollection('blog', ({ data }) => data.published !== false),
+    getCollection('bookmarks', ({ data }) => data.published !== false),
+    getCollection('notes', ({ data }) => data.published !== false),
+    getCollection('photos', ({ data }) => data.published !== false),
+    getCollection('replies', ({ data }) => data.published !== false),
+    getCollection('writing', ({ data }) => data.published !== false),
+  ]);
+
+  const feed = sortByDate([
+    ...mapBlogPosts(posts),
+    ...mapBookmarks(bookmarks),
+    ...mapNotes(notes),
+    ...mapPhotos(photos),
+    ...mapReplies(replies),
+    ...mapWriting(writing),
+  ]);
+
+  const allTags = [...new Set(feed.flatMap((f) => f.tags ?? []))];
+
+  return allTags.map((tag) => ({
+    params: { slug: tag },
+    props: {
+      tag,
+      items: feed.filter((f) => f.tags?.includes(tag)),
+    },
+  }));
+}
+
+const { tag, items } = Astro.props;
+---
+
+<Layout
+  title={`Posts tagged "${tag}"`}
+  description={`All content tagged with ${tag}`}
+>
+  <h1>#{tag}</h1>
+  <div class="recent-feed">
+    {items.length > 0
+      ? items.map((item) => <FeedItem {...item} />)
+      : <p>Nothing found.</p>
+    }
+  </div>
+</Layout>

@@ -1,0 +1,35 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import FeedItem from '../../components/FeedItem.astro';
+import { mapNotes, mapBookmarks, mapLikes, mapReplies, sortByDate } from '../../lib/feed';
+
+const [notes, bookmarks, likes, replies] = await Promise.all([
+  getCollection('notes', ({ data }) => data.published !== false),
+  getCollection('bookmarks', ({ data }) => data.published !== false),
+  getCollection('likes', ({ data }) => data.published !== false),
+  getCollection('replies', ({ data }) => data.published !== false),
+]);
+
+const feed = sortByDate([
+  ...mapNotes(notes),
+  ...mapBookmarks(bookmarks),
+  ...mapLikes(likes),
+  ...mapReplies(replies),
+]);
+---
+
+<Layout
+  title="Commonplace"
+  description="Notes, bookmarks, likes, and replies collected from around the web."
+>
+  <h1>Commonplace</h1>
+  <div class="recent-feed h-feed">
+    <span class="p-name" style="display:none" aria-hidden="true">Andy Stevens — Commonplace</span>
+    <a class="p-author h-card" href="https://andystevens.name" style="display:none" aria-hidden="true">Andy Stevens</a>
+    {feed.length > 0
+      ? feed.map((item) => <FeedItem {...item} />)
+      : <p>Nothing here yet.</p>
+    }
+  </div>
+</Layout>

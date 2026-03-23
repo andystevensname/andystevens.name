@@ -15,9 +15,11 @@ interface PoetryItem {
   vertices: Vertex[];
 }
 
-export function createPoetry(group: SVGGElement) {
+export function createPoetry(group: SVGGElement, width = 400) {
   const items: PoetryItem[] = [];
-  const line = { x: 20, y: -30, height: 40, minWidth: 100, maxWidth: 380 };
+  const maxW = width - 40;
+  const minW = width / 4;
+  const line = { x: 20, y: -30, height: 40, minWidth: minW, maxWidth: maxW };
   const step = 60;
 
   function pointsStr(verts: Vertex[]): string {

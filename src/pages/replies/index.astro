@@ -1,30 +1,21 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
-import PostMeta from '../../components/PostMeta.astro';
+import FeedItem from '../../components/FeedItem.astro';
+import { mapReplies, sortByDate } from '../../lib/feed';
 
 const replies = await getCollection('replies', ({ data }) => data.published !== false);
-replies.sort((a, b) => {
-  const aDate = a.data.date?.getTime() ?? 0;
-  const bDate = b.data.date?.getTime() ?? 0;
-  return bDate - aDate;
-});
+const feed = sortByDate(mapReplies(replies));
 ---
 
 <Layout title="Replies" description="Replies to posts around the web.">
-  <article class="px-4 relative h-full h-feed">
+  <h1>Replies</h1>
+  <div class="recent-feed h-feed">
     <span class="p-name" style="display:none" aria-hidden="true">Andy Stevens — Replies</span>
     <a class="p-author h-card" href="https://andystevens.name" style="display:none" aria-hidden="true">Andy Stevens</a>
-    <h1 class="w-full text-5xl mb-6 text-center">Replies</h1>
-    {replies.length > 0
-      ? replies.map((reply) => (
-        <div class="h-entry">
-          <p>In reply to <a class="u-in-reply-to" href={reply.data['in-reply-to']}>{reply.data['in-reply-to']}</a></p>
-          <p><a href={`/replies/${reply.id}/`}>{reply.body?.slice(0, 140) ?? ''}</a></p>
-          <PostMeta post={reply} />
-        </div>
-      ))
+    {feed.length > 0
+      ? feed.map((item) => <FeedItem {...item} />)
       : <p>No replies yet.</p>
     }
-  </article>
+  </div>
 </Layout>

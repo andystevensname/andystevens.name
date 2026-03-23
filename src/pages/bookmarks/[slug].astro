@@ -1,7 +1,9 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import HEntryMeta from '../../components/HEntryMeta.astro';
 import PostMeta from '../../components/PostMeta.astro';
+import Webmentions from '../../components/Webmentions.astro';
 
 export async function getStaticPaths() {
   const bookmarks = await getCollection('bookmarks');
@@ -14,7 +16,6 @@ export async function getStaticPaths() {
 const { bookmark } = Astro.props;
 const { Content } = await render(bookmark);
 const bookmarkUrl = new URL(`/bookmarks/${bookmark.id}/`, Astro.site).href;
-const isoDate = bookmark.data.date?.toISOString() ?? '';
 ---
 
 <Layout
@@ -22,21 +23,17 @@ const isoDate = bookmark.data.date?.toISOString() ?? '';
   description={`Bookmark of ${bookmark.data['bookmark-of']}`}
   canonical={bookmarkUrl}
 >
-  <main>
-    <article class="px-4 relative h-full table h-entry">
-      {bookmark.data.title && <h1 class="w-full text-5xl mb-6 text-center p-name">{bookmark.data.title}</h1>}
+  <article class="h-entry">
+    {bookmark.data.title && <h1 class="p-name">{bookmark.data.title}</h1>}
+    <HEntryMeta url={bookmarkUrl} date={bookmark.data.date} syndication={bookmark.data.syndication} />
 
-      <a class="u-url u-uid" href={bookmarkUrl} style="display:none" aria-hidden="true">{bookmarkUrl}</a>
-      {isoDate && <time class="dt-published" datetime={isoDate} style="display:none" aria-hidden="true">{isoDate}</time>}
-      <a class="p-author h-card" href="https://andystevens.name" style="display:none" aria-hidden="true">Andy Stevens</a>
+    <p>Bookmarked: <a class="u-bookmark-of" href={bookmark.data['bookmark-of']}>{bookmark.data['bookmark-of']}</a></p>
 
-      <p>Bookmarked: <a class="u-bookmark-of" href={bookmark.data['bookmark-of']}>{bookmark.data['bookmark-of']}</a></p>
+    <div class="e-content">
+      <Content />
+    </div>
 
-      <div class="e-content">
-        <Content />
-      </div>
-
-      <PostMeta post={bookmark} />
-    </article>
-  </main>
+    <PostMeta post={bookmark} />
+    <Webmentions url={bookmarkUrl} />
+  </article>
 </Layout>

@@ -1,0 +1,26 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import FeedItem from '../../components/FeedItem.astro';
+import { mapWriting, mapAwards, sortByDate } from '../../lib/feed';
+
+const [writing, awards] = await Promise.all([
+  getCollection('writing', ({ data }) => data.published !== false),
+  getCollection('awards', ({ data }) => data.published !== false),
+]);
+
+const feed = sortByDate([
+  ...mapWriting(writing),
+  ...mapAwards(awards),
+]);
+---
+
+<Layout title="Writing" description="Publications, writing, and awards.">
+  <h1>Writing</h1>
+  <div class="recent-feed">
+    {feed.length > 0
+      ? feed.map((item) => <FeedItem {...item} />)
+      : <p>Nothing here yet.</p>
+    }
+  </div>
+</Layout>
