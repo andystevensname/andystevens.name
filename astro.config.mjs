@@ -6,4 +6,12 @@ export default defineConfig({
   build: {
     inlineStylesheets: 'always',
   },
+  markdown: {
+    shikiConfig: {
+      themes: {
+        light: 'github-light',
+        dark: 'github-dark',
+      },
+    },
+  },
 });

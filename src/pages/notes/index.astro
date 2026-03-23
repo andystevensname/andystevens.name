@@ -1,29 +1,21 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
-import PostMeta from '../../components/PostMeta.astro';
+import FeedItem from '../../components/FeedItem.astro';
+import { mapNotes, sortByDate } from '../../lib/feed';
 
 const notes = await getCollection('notes', ({ data }) => data.published !== false);
-notes.sort((a, b) => {
-  const aDate = a.data.date?.getTime() ?? 0;
-  const bDate = b.data.date?.getTime() ?? 0;
-  return bDate - aDate;
-});
+const feed = sortByDate(mapNotes(notes));
 ---
 
 <Layout title="Notes" description="Short notes and status updates.">
-  <article class="px-4 relative h-full h-feed">
+  <h1>Notes</h1>
+  <div class="recent-feed h-feed">
     <span class="p-name" style="display:none" aria-hidden="true">Andy Stevens — Notes</span>
     <a class="p-author h-card" href="https://andystevens.name" style="display:none" aria-hidden="true">Andy Stevens</a>
-    <h1 class="w-full text-5xl mb-6 text-center">Notes</h1>
-    {notes.length > 0
-      ? notes.map((note) => (
-        <div class="h-entry">
-          <p class="e-content"><a href={`/notes/${note.id}/`}>{note.body?.slice(0, 140) ?? ''}</a></p>
-          <PostMeta post={note} />
-        </div>
-      ))
+    {feed.length > 0
+      ? feed.map((item) => <FeedItem {...item} />)
       : <p>No notes yet.</p>
     }
-  </article>
+  </div>
 </Layout>

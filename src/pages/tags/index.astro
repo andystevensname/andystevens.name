@@ -1,0 +1,30 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+const [posts, bookmarks, notes, photos, replies, writing] = await Promise.all([
+  getCollection('blog', ({ data }) => data.published !== false),
+  getCollection('bookmarks', ({ data }) => data.published !== false),
+  getCollection('notes', ({ data }) => data.published !== false),
+  getCollection('photos', ({ data }) => data.published !== false),
+  getCollection('replies', ({ data }) => data.published !== false),
+  getCollection('writing', ({ data }) => data.published !== false),
+]);
+
+const allItems = [...posts, ...bookmarks, ...notes, ...photos, ...replies, ...writing];
+const tags = [...new Set(allItems.flatMap((p) => p.data.tags ?? []))].sort();
+---
+
+<Layout title="Tags" description="A listing of all tags across the site.">
+  <h1>Tags</h1>
+  {tags.length > 0
+    ? (
+      <ul>
+        {tags.map((tag) => (
+          <li><a href={`/tags/${tag}/`}>#{tag}</a></li>
+        ))}
+      </ul>
+    )
+    : <p>No tags found.</p>
+  }
+</Layout>

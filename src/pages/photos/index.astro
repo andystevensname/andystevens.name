@@ -1,35 +1,21 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
-import PostMeta from '../../components/PostMeta.astro';
+import FeedItem from '../../components/FeedItem.astro';
+import { mapPhotos, sortByDate } from '../../lib/feed';
 
 const photos = await getCollection('photos', ({ data }) => data.published !== false);
-photos.sort((a, b) => {
-  const aDate = a.data.date?.getTime() ?? 0;
-  const bDate = b.data.date?.getTime() ?? 0;
-  return bDate - aDate;
-});
+const feed = sortByDate(mapPhotos(photos));
 ---
 
 <Layout title="Photos" description="Photos I've shared.">
-  <article class="px-4 relative h-full h-feed">
+  <h1>Photos</h1>
+  <div class="recent-feed h-feed">
     <span class="p-name" style="display:none" aria-hidden="true">Andy Stevens — Photos</span>
     <a class="p-author h-card" href="https://andystevens.name" style="display:none" aria-hidden="true">Andy Stevens</a>
-    <h1 class="w-full text-5xl mb-6 text-center">Photos</h1>
-    {photos.length > 0
-      ? photos.map((photo) => {
-        const src = Array.isArray(photo.data.photo) ? photo.data.photo[0] : photo.data.photo;
-        return (
-          <div class="h-entry">
-            <a href={`/photos/${photo.id}/`}>
-              <img class="u-photo" src={src} alt={photo.data.alt ?? ''} loading="lazy" />
-            </a>
-            {photo.data.title && <p class="p-name">{photo.data.title}</p>}
-            <PostMeta post={photo} />
-          </div>
-        );
-      })
+    {feed.length > 0
+      ? feed.map((item) => <FeedItem {...item} />)
       : <p>No photos yet.</p>
     }
-  </article>
+  </div>
 </Layout>

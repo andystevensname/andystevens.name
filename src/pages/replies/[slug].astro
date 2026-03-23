@@ -1,7 +1,9 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import HEntryMeta from '../../components/HEntryMeta.astro';
 import PostMeta from '../../components/PostMeta.astro';
+import Webmentions from '../../components/Webmentions.astro';
 
 export async function getStaticPaths() {
   const replies = await getCollection('replies');
@@ -14,7 +16,6 @@ export async function getStaticPaths() {
 const { reply } = Astro.props;
 const { Content } = await render(reply);
 const replyUrl = new URL(`/replies/${reply.id}/`, Astro.site).href;
-const isoDate = reply.data.date?.toISOString() ?? '';
 ---
 
 <Layout
@@ -22,19 +23,16 @@ const isoDate = reply.data.date?.toISOString() ?? '';
   description={`Reply to ${reply.data['in-reply-to']}`}
   canonical={replyUrl}
 >
-  <main>
-    <article class="px-4 relative h-full table h-entry">
-      <a class="u-url u-uid" href={replyUrl} style="display:none" aria-hidden="true">{replyUrl}</a>
-      {isoDate && <time class="dt-published" datetime={isoDate} style="display:none" aria-hidden="true">{isoDate}</time>}
-      <a class="p-author h-card" href="https://andystevens.name" style="display:none" aria-hidden="true">Andy Stevens</a>
+  <article class="h-entry">
+    <HEntryMeta url={replyUrl} date={reply.data.date} syndication={reply.data.syndication} />
 
-      <p>In reply to <a class="u-in-reply-to" href={reply.data['in-reply-to']}>{reply.data['in-reply-to']}</a></p>
+    <p>In reply to <a class="u-in-reply-to" href={reply.data['in-reply-to']}>{reply.data['in-reply-to']}</a></p>
 
-      <div class="e-content">
-        <Content />
-      </div>
+    <div class="e-content">
+      <Content />
+    </div>
 
-      <PostMeta post={reply} />
-    </article>
-  </main>
+    <PostMeta post={reply} />
+    <Webmentions url={replyUrl} />
+  </article>
 </Layout>

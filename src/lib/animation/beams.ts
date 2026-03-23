@@ -16,7 +16,7 @@ interface Beam {
   x2: number;
 }
 
-export function createBeams(group: SVGGElement, height: number) {
+export function createBeams(group: SVGGElement, height: number, width = 400) {
   const beams: Beam[] = [];
 
   function createController(): Controller {
@@ -29,11 +29,13 @@ export function createBeams(group: SVGGElement, height: number) {
     };
   }
 
+  const topX = width * 0.5;
+
   function create() {
-    const x1 = randomNumber(400, 0);
-    const x2 = randomNumber(400, 0);
+    const x1 = randomNumber(width, 0);
+    const x2 = randomNumber(width, 0);
     const el = svgEl<SVGPolygonElement>('polygon', {
-      points: `300,0 ${x1},${height} ${x2},${height}`,
+      points: `${topX},0 ${x1},${height} ${x2},${height}`,
       fill: '#FFEB3B',
       stroke: 'none',
       opacity: '0',
@@ -60,9 +62,9 @@ export function createBeams(group: SVGGElement, height: number) {
           beam.controller = createController();
         }
         beam.el.setAttribute('opacity', String(opacity));
-        beam.x1 += c.travel;
-        beam.x2 += c.travel;
-        beam.el.setAttribute('points', `300,0 ${beam.x1},${height} ${beam.x2},${height}`);
+        beam.x1 = Math.max(0, Math.min(width, beam.x1 + c.travel));
+        beam.x2 = Math.max(0, Math.min(width, beam.x2 + c.travel));
+        beam.el.setAttribute('points', `${topX},0 ${beam.x1},${height} ${beam.x2},${height}`);
       }
     },
     destroy() {

@@ -1,6 +1,8 @@
 ---
+import { ClientRouter } from 'astro:transitions';
 import Header from '../components/Header.astro';
 import Navigation from '../components/Navigation.astro';
+import Animation from '../components/Animation.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -9,12 +11,31 @@ interface Props {
   extraHead?: string;
   canonical?: string;
   ogType?: string;
+  jsonLd?: Record<string, any>;
 }
 
-const { title, description, extraHead, canonical, ogType = 'website' } = Astro.props;
+const { title, description, extraHead, canonical, ogType = 'website', jsonLd } = Astro.props;
 const pageTitle = title ? `${title} — Andy Stevens` : 'Andy Stevens';
 const canonicalUrl = canonical ?? new URL(Astro.url.pathname, Astro.site).href;
 const currentYear = new Date().getFullYear();
+
+const defaultJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Andy Stevens',
+  url: 'https://andystevens.name',
+  author: {
+    '@type': 'Person',
+    name: 'Andy Stevens',
+    url: 'https://andystevens.name',
+    sameAs: [
+      'https://github.com/andystevensname',
+      'https://bsky.app/profile/andystevens.name',
+    ],
+  },
+};
+
+const structuredData = jsonLd ?? defaultJsonLd;
 ---
 
 <!doctype html>
@@ -22,6 +43,8 @@ const currentYear = new Date().getFullYear();
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#212121" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
     {description && <meta name="description" content={description} />}
     <title>{pageTitle}</title>
 
@@ -45,8 +68,12 @@ const currentYear = new Date().getFullYear();
     <link rel="authorization_endpoint" href="https://ik.andystevens.name/auth">
     <link rel="token_endpoint" href="https://ik.andystevens.name/auth/token">
 
-    <!-- RSS -->
+    <!-- Feeds -->
     <link rel="alternate" type="application/rss+xml" title="Andy Stevens" href="/feed.xml" />
+    <link rel="feed" type="text/html" href="/" />
+
+    <!-- Structured data -->
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
 
     <!-- Anti-FOUC: apply saved theme before paint -->
     <script is:inline>
@@ -60,9 +87,12 @@ const currentYear = new Date().getFullYear();
         } catch (e) {}
       })();
     </script>
+    <link rel="preload" as="font" href="/fonts/InstrumentSerif.woff2" type="font/woff2" crossorigin="" />
     {extraHead && <Fragment set:html={extraHead} />}
+    <ClientRouter />
   </head>
   <body>
+    <a href="#main-content" class="skip-link">Skip to content</a>
     <!-- Representative h-card (visually hidden, machine-readable) -->
     <div class="h-card" id="representative-hcard" aria-hidden="true">
       <a class="p-name u-url u-uid" href="https://andystevens.name" rel="me">Andy Stevens</a>
@@ -71,11 +101,17 @@ const currentYear = new Date().getFullYear();
       <a class="u-url" href="https://bsky.app/profile/andystevens.name" rel="me">Bluesky</a>
       <!-- TODO: add u-email, p-locality, u-photo when ready -->
     </div>
+    <Navigation />
     <div id="content">
       <Header />
-      <Navigation />
-      <main>
-        <slot />
+      <main class="site-layout">
+        <div class="site-title" aria-hidden="true"><span>Andy</span> <span>Makes</span> <span>Things</span></div>
+        <div class="site-sidebar" aria-hidden="true" transition:persist="sidebar">
+          <Animation />
+        </div>
+        <section class="site-content" id="main-content">
+          <slot />
+        </section>
       </main>
       <footer id="footer">
         &copy; 2021&ndash;{currentYear} Andy Stevens

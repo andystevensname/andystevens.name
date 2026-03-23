@@ -1,0 +1,39 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import HEntryMeta from '../../components/HEntryMeta.astro';
+import PostMeta from '../../components/PostMeta.astro';
+import Webmentions from '../../components/Webmentions.astro';
+
+export async function getStaticPaths() {
+  const awards = await getCollection('awards');
+  return awards.map((award) => ({
+    params: { slug: award.id },
+    props: { award },
+  }));
+}
+
+const { award } = Astro.props;
+const { Content } = await render(award);
+const awardUrl = new URL(`/awards/${award.id}/`, Astro.site).href;
+---
+
+<Layout
+  title={award.data.title}
+  description={`${award.data.title}${award.data.issuer ? ` from ${award.data.issuer}` : ''}`}
+  canonical={awardUrl}
+>
+  <article class="h-entry">
+    <h1 class="p-name">{award.data.title}</h1>
+    <HEntryMeta url={awardUrl} date={award.data.date} />
+
+    {award.data.issuer && <p>{award.data.issuer}</p>}
+
+    <div class="e-content">
+      <Content />
+    </div>
+
+    <PostMeta post={award} />
+    <Webmentions url={awardUrl} />
+  </article>
+</Layout>

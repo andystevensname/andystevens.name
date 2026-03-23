@@ -1,40 +1,119 @@
 ---
+const currentPath = Astro.url.pathname;
+
+const links = [
+  { href: '/', label: 'Home' },
+  { href: '/blog/', label: 'Blog' },
+  { href: '/commonplace/', label: 'Commonplace' },
+  { href: '/writing/', label: 'Writing' },
+  { href: '/about/', label: 'About' },
+];
+
+function isCurrent(href: string): boolean {
+  if (href === '/') return currentPath === '/';
+  return currentPath.startsWith(href);
+}
 ---
 
 <nav id="nav">
   <div class="navContainer">
     <button id="close-nav-btn" aria-label="Close navigation">
-      <!-- fa-xmark -->
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" width="20" height="20" fill="currentColor">
         <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/>
       </svg>
     </button>
     <ul>
-      <li><a href="/" class="nav-link">Home</a></li>
-      <li><a href="/blog/" class="nav-link">Blog</a></li>
-      <li><a href="/writing/" class="nav-link">Writing</a></li>
-      <li><a href="/about/" class="nav-link">About</a></li>
+      {links.map(({ href, label }) => (
+        <li>
+          <a href={href} class="nav-link" aria-current={isCurrent(href) ? 'page' : undefined}>{label}</a>
+        </li>
+      ))}
     </ul>
   </div>
 </nav>
 
 <script>
-  const nav = document.getElementById('nav');
+  document.addEventListener('astro:page-load', () => {
+    const nav = document.getElementById('nav');
+    const content = document.getElementById('content');
+    const openBtn = document.getElementById('open-nav-btn');
+    const closeBtn = document.getElementById('close-nav-btn');
+    const isOpen = () => nav?.classList.contains('translate-x-0');
 
-  function openNav() {
-    nav?.classList.add('translate-x-0');
-  }
+    function openNav() {
+      nav?.classList.add('translate-x-0');
+      content?.setAttribute('inert', '');
+      openBtn?.setAttribute('aria-expanded', 'true');
+      closeBtn?.focus();
+    }
 
-  function closeNav() {
-    nav?.classList.remove('translate-x-0');
-  }
+    function closeNav() {
+      nav?.classList.remove('translate-x-0');
+      content?.removeAttribute('inert');
+      openBtn?.setAttribute('aria-expanded', 'false');
+      openBtn?.focus();
+    }
 
-  document.getElementById('close-nav-btn')?.addEventListener('click', closeNav);
-  document.addEventListener('open-nav', openNav);
-  document.addEventListener('close-nav', closeNav);
+    closeBtn?.addEventListener('click', closeNav);
+    document.addEventListener('open-nav', openNav);
+    document.addEventListener('close-nav', closeNav);
 
-  // Close nav when a link is clicked
-  nav?.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', closeNav);
+    // Close nav when a link is clicked
+    nav?.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', closeNav);
+    });
+
+    // Close nav on Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isOpen()) {
+        closeNav();
+      }
+    });
+
+    // Swipe to open/close nav
+    const EDGE_WIDTH = 30;
+    const SWIPE_THRESHOLD = 50;
+    let startX = 0;
+    let startY = 0;
+    let tracking = false;
+
+    document.addEventListener('pointerdown', (e) => {
+      if (isOpen()) {
+        startX = e.clientX;
+        startY = e.clientY;
+        tracking = true;
+      } else if (e.clientX < EDGE_WIDTH) {
+        startX = e.clientX;
+        startY = e.clientY;
+        tracking = true;
+      }
+    });
+
+    document.addEventListener('pointermove', (e) => {
+      if (!tracking) return;
+      const dx = e.clientX - startX;
+      const dy = Math.abs(e.clientY - startY);
+
+      if (dy > Math.abs(dx)) {
+        tracking = false;
+        return;
+      }
+
+      if (!isOpen() && dx > SWIPE_THRESHOLD) {
+        openNav();
+        tracking = false;
+      } else if (isOpen() && dx < -SWIPE_THRESHOLD) {
+        closeNav();
+        tracking = false;
+      }
+    });
+
+    document.addEventListener('pointerup', () => {
+      tracking = false;
+    });
+
+    document.addEventListener('pointercancel', () => {
+      tracking = false;
+    });
   });
 </script>

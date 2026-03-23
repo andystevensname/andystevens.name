@@ -1,14 +1,42 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Animation from '../components/Animation.astro';
+import FeedItem from '../components/FeedItem.astro';
+import { getCollection } from 'astro:content';
+import { mapBlogPosts, mapNotes, mapBookmarks, mapLikes, mapPhotos, mapReplies, mapWriting, mapAwards, sortByDate } from '../lib/feed';
+
+const [posts, notes, bookmarks, likes, photos, replies, writing, awards] = await Promise.all([
+  getCollection('blog', ({ data }) => data.published !== false),
+  getCollection('notes', ({ data }) => data.published !== false),
+  getCollection('bookmarks', ({ data }) => data.published !== false),
+  getCollection('likes', ({ data }) => data.published !== false),
+  getCollection('photos', ({ data }) => data.published !== false),
+  getCollection('replies', ({ data }) => data.published !== false),
+  getCollection('writing', ({ data }) => data.published !== false),
+  getCollection('awards', ({ data }) => data.published !== false),
+]);
+
+const feed = sortByDate([
+  ...mapBlogPosts(posts),
+  ...mapNotes(notes),
+  ...mapBookmarks(bookmarks),
+  ...mapLikes(likes),
+  ...mapPhotos(photos),
+  ...mapReplies(replies),
+  ...mapWriting(writing),
+  ...mapAwards(awards),
+]);
+
+const recent = feed.slice(0, 20);
 ---
 
 <Layout
   title="Andy Stevens"
   description="The homepage of poet and writer Andy Stevens."
-  extraHead='<link rel="preload" as="font" href="/fonts/FjallaOne.woff2" type="font/woff2" crossorigin="">'
 >
-  <div class="w-full h-full relative">
-    <Animation />
+  <h1>Recent</h1>
+  <div class="recent-feed h-feed">
+    <span class="p-name" style="display:none" aria-hidden="true">Andy Stevens</span>
+    <a class="p-author h-card" href="https://andystevens.name" style="display:none" aria-hidden="true">Andy Stevens</a>
+    {recent.map((item) => <FeedItem {...item} />)}
   </div>
 </Layout>

@@ -1,0 +1,69 @@
+---
+import { fetchWebmentions, getWebmentionsForUrl, groupWebmentions } from '../lib/webmentions';
+
+interface Props {
+  url: string;
+}
+
+const { url } = Astro.props;
+const allMentions = await fetchWebmentions();
+const mentions = getWebmentionsForUrl(allMentions, url);
+const { likes, reposts, replies } = groupWebmentions(mentions);
+const hasAny = likes.length > 0 || reposts.length > 0 || replies.length > 0;
+---
+
+{hasAny && (
+  <div class="webmentions">
+    {likes.length > 0 && (
+      <div class="wm-likes">
+        <p class="wm-heading">{likes.length} {likes.length === 1 ? 'like' : 'likes'}</p>
+        <ul class="wm-faces">
+          {likes.map((like) => (
+            <li>
+              <a href={like.author?.name ? like.source : like.url ?? like.source}>
+                {like.author?.picture
+                  ? <img src={like.author.picture} alt={like.author.name ?? 'Anonymous'} loading="lazy" />
+                  : <span>{like.author?.name?.charAt(0) ?? '?'}</span>
+                }
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    {reposts.length > 0 && (
+      <div class="wm-reposts">
+        <p class="wm-heading">{reposts.length} {reposts.length === 1 ? 'repost' : 'reposts'}</p>
+        <ul class="wm-faces">
+          {reposts.map((repost) => (
+            <li>
+              <a href={repost.source}>
+                {repost.author?.picture
+                  ? <img src={repost.author.picture} alt={repost.author.name ?? 'Anonymous'} loading="lazy" />
+                  : <span>{repost.author?.name?.charAt(0) ?? '?'}</span>
+                }
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    {replies.length > 0 && (
+      <div class="wm-replies">
+        <p class="wm-heading">{replies.length} {replies.length === 1 ? 'reply' : 'replies'}</p>
+        {replies.map((reply) => (
+          <div class="wm-reply">
+            <div class="wm-reply-meta">
+              {reply.author?.picture && <img src={reply.author.picture} alt={reply.author.name ?? ''} loading="lazy" />}
+              <a href={reply.source}>{reply.author?.name ?? reply.source}</a>
+              {reply.published && <time datetime={reply.published}>{reply.published.slice(0, 10)}</time>}
+            </div>
+            {reply.content && <p>{reply.content}</p>}
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+)}

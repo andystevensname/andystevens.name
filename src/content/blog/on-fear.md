@@ -4,6 +4,7 @@ date: 2022-11-12
 published: true
 tags: ['fear','life']
 description: "Making a deal with ourselves, either rationally or irrationally, to win over fear."
+quote: "When I was little and had to get up at night, I would leap far from my bed, convinced that a monster's slimy, scaly claw would burst from beneath my mattress and snare my ankles if I didn't, dragging me down into the underworld. But If I leaped far enough, landing somewhere squarely in the middle of the room, just out of reach of the bed, I could defeat the monster. Those were the rules."
 slug: the-rules-of-fear
 ---
 

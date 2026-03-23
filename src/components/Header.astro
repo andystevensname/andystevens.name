@@ -4,7 +4,7 @@ import ThemeSwitcher from './ThemeSwitcher.astro';
 
 <header id="header">
   <!-- Hamburger / open nav -->
-  <button id="open-nav-btn" aria-label="Open navigation">
+  <button id="open-nav-btn" aria-label="Open navigation" aria-expanded="false" aria-controls="nav">
     <!-- fa-bars -->
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="20" height="20" fill="currentColor">
       <path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/>
@@ -19,20 +19,24 @@ import ThemeSwitcher from './ThemeSwitcher.astro';
 </header>
 
 <script>
-  const header = document.getElementById('header');
-  let lastScroll = 0;
+  document.addEventListener('astro:page-load', () => {
+    const header = document.getElementById('header');
+    let lastScroll = 0;
 
-  window.addEventListener('scroll', () => {
-    const currentScroll = window.pageYOffset;
-    if (currentScroll > lastScroll && !header?.classList.contains('-translate-y-12')) {
-      header?.classList.add('-translate-y-12');
-    } else if (currentScroll < lastScroll && header?.classList.contains('-translate-y-12')) {
-      header?.classList.remove('-translate-y-12');
-    }
-    lastScroll = currentScroll;
-  });
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.scrollY;
+      if (currentScroll <= 0) {
+        header?.classList.remove('-translate-y-12');
+      } else if (currentScroll > lastScroll) {
+        header?.classList.add('-translate-y-12');
+      } else if (currentScroll < lastScroll) {
+        header?.classList.remove('-translate-y-12');
+      }
+      lastScroll = currentScroll;
+    });
 
-  document.getElementById('open-nav-btn')?.addEventListener('click', () => {
-    document.dispatchEvent(new CustomEvent('open-nav'));
+    document.getElementById('open-nav-btn')?.addEventListener('click', () => {
+      document.dispatchEvent(new CustomEvent('open-nav'));
+    });
   });
 </script>
