@@ -1,6 +1,6 @@
 ---
 title: "End of the Day"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/2222000986.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2222000986.jpg"
 date: 2008-01-19 05:48:59
 published: false
 tags:

@@ -1,6 +1,6 @@
 ---
 title: "Glassy Pond Scum"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/2256424689.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2256424689.jpg"
 date: 2008-02-10 22:19:27
 published: false
 tags:

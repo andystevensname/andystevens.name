@@ -1,6 +1,6 @@
 ---
 title: "Painters of Madrid 3"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/61913289.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/61913289.jpg"
 alt: "This man was doing this copy entirely by hand. The original is a Velazquez I believe, but I don't know the name. The Barber, possibly?"
 date: 2005-11-10 10:48:35
 published: false

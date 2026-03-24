@@ -1,6 +1,6 @@
 ---
 title: "Alfonso XI"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/60452841.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/60452841.jpg"
 alt: "On one of the walls of the Plaza Mayor in Salamanca, Spain."
 date: 2005-11-06 07:40:50
 published: false

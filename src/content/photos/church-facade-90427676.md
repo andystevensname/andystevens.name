@@ -1,6 +1,6 @@
 ---
 title: "Church Facade"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/90427676.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/90427676.jpg"
 alt: "The Cathedral at Salamanca. The whole building is actually built off-center, with adornments to the structure being a full foot or so off at the top left. This is about as symetrical as I could get this shot."
 date: 2006-01-21 09:50:49
 published: false

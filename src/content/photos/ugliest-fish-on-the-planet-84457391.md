@@ -1,6 +1,6 @@
 ---
 title: "Ugliest Fish on the Planet"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/84457391.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/84457391.jpg"
 alt: "Again, no clue what this fish is called, but I can assure you it is one of the most oddly and ugly shaped fish in the sea."
 date: 2006-01-06 20:02:12
 published: false

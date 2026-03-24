@@ -1,6 +1,6 @@
 ---
 title: "River Kid Fishing"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/2221222518.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2221222518.jpg"
 date: 2008-01-12 00:06:17
 published: false
 tags:

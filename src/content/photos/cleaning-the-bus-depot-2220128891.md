@@ -1,6 +1,6 @@
 ---
 title: "Cleaning the Bus Depot"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/2220128891.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2220128891.jpg"
 date: 2008-01-06 22:01:45
 published: false
 tags:

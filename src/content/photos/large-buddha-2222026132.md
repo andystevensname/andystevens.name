@@ -1,6 +1,6 @@
 ---
 title: "Large Buddha"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/2222026132.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2222026132.jpg"
 date: 2008-01-20 06:04:51
 published: false
 tags:

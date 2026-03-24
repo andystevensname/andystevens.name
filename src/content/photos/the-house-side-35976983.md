@@ -1,6 +1,6 @@
 ---
 title: "The House, side"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/35976983.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/35976983.jpg"
 alt: "Side of the house, with the sea bleached out on the left."
 date: 2004-04-11 02:06:53
 published: false

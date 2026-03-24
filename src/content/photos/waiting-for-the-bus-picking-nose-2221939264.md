@@ -1,6 +1,6 @@
 ---
 title: "Waiting for the Bus, Picking Nose"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/2221939264.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2221939264.jpg"
 date: 2008-01-17 06:29:57
 published: false
 tags:

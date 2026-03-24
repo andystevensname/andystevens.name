@@ -1,6 +1,6 @@
 ---
 title: "Tropical Fish"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/84456651.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/84456651.jpg"
 alt: "I'm pretty sure this is a Windows XP background."
 date: 2006-01-06 19:56:41
 published: false

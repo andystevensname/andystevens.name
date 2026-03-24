@@ -1,6 +1,6 @@
 ---
 title: "Tenzing Norgay"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/2222518806.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2222518806.jpg"
 date: 2008-01-23 03:20:43
 published: false
 tags:

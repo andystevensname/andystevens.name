@@ -1,6 +1,6 @@
 ---
 title: "Grassy Tounge"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/84140632.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/84140632.jpg"
 date: 2006-01-07 15:34:08
 published: false
 tags:

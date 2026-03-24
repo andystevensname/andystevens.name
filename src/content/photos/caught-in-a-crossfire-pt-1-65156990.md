@@ -1,6 +1,6 @@
 ---
 title: "Caught in a Crossfire, pt. 1"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/65156990.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/65156990.jpg"
 alt: "I was trying to take a picture of this man, and I guess John had a similar idea. Crazy the way John came out though, looks almost unreal."
 date: 2005-11-20 08:31:18
 published: true

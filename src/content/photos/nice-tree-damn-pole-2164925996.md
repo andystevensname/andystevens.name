@@ -1,6 +1,6 @@
 ---
 title: "Nice tree. Damn pole."
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/2164925996.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2164925996.jpg"
 date: 2007-11-25 14:59:54
 published: true
 license: "All Rights Reserved"

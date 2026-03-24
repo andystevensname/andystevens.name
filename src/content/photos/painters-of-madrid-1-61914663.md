@@ -1,6 +1,6 @@
 ---
 title: "Painters of Madrid 1"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/61914663.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/61914663.jpg"
 alt: "This man has been working on his version of El Greco's &quot;St. Andrew and St. Francis&quot; for weeks. Obviously, nobody beats the master, but he is doing a good job making a fair representation of the original."
 date: 2005-11-10 10:04:48
 published: false

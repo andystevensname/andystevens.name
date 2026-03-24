@@ -1,6 +1,6 @@
 ---
 title: "Loyola Resedencia"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/43296491.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/43296491.jpg"
 alt: "Outside Loyola Resedencia, the boys dorm."
 date: 2005-09-13 05:42:59
 published: true

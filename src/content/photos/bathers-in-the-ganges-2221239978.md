@@ -1,6 +1,6 @@
 ---
 title: "Bathers in the Ganges"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/2221239978.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2221239978.jpg"
 date: 2008-01-12 00:09:27
 published: false
 tags:

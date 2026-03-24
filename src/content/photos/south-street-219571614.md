@@ -1,6 +1,6 @@
 ---
 title: "South Street"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/219571614.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/219571614.jpg"
 alt: "Tatooed Mom. Best viewed high res."
 date: 2006-08-07 13:12:51
 published: false

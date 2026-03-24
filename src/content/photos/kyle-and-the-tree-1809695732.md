@@ -1,6 +1,6 @@
 ---
 title: "Kyle and the Tree"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/1809695732.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/1809695732.jpg"
 date: 2007-10-27 18:35:14
 published: false
 tags:

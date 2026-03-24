@@ -1,6 +1,6 @@
 ---
 title: "Clear Skies"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/35974334.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/35974334.jpg"
 alt: "McClellan Park, Milbridge, Maine"
 date: 2004-04-07 23:11:05
 published: false

@@ -1,6 +1,6 @@
 ---
 title: "Needle Nosed Fish"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/84456372.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/84456372.jpg"
 alt: "I haven't the slightest clue what this fish is called, but regardless it's pretty funny looking. "
 date: 2006-01-06 19:56:05
 published: false

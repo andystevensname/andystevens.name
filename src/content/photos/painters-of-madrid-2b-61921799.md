@@ -1,6 +1,6 @@
 ---
 title: "Painters of Madrid 2b"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/61921799.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/61921799.jpg"
 alt: "Goya's St. John the Baptist as a Boy in the Wilderness."
 date: 2005-11-10 12:11:51
 published: false

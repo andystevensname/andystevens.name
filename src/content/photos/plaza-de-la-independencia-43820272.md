@@ -1,6 +1,6 @@
 ---
 title: "Plaza de la Independencia"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/43820272.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/43820272.jpg"
 alt: "The Plaza de la Independencia near Parque Del Retiro, similar to the Arc de Triumphe in Paris I suppose...another war time arch. Not really accessible by foot."
 date: 2005-09-16 03:16:54
 published: false

@@ -1,6 +1,6 @@
 ---
 title: "Salamanca"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/44763671.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/44763671.jpg"
 alt: "Various heights, various people and various mountains. All taken by the good sir John Holder."
 date: 2005-09-19 20:21:54
 published: false

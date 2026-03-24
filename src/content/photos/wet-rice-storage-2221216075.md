@@ -1,6 +1,6 @@
 ---
 title: "Wet Rice Storage"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/2221216075.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2221216075.jpg"
 date: 2008-01-19 06:42:55
 published: false
 tags:

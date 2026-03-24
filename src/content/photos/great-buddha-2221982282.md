@@ -1,6 +1,6 @@
 ---
 title: "Great Buddha"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/2221982282.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2221982282.jpg"
 date: 2008-01-18 07:28:35
 published: false
 tags:

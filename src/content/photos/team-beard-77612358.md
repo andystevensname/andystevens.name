@@ -1,6 +1,6 @@
 ---
 title: "Team Beard"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/77612358.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/77612358.jpg"
 date: 2005-12-25 23:00:11
 published: false
 albums:

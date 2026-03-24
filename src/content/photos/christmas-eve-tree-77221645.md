@@ -1,6 +1,6 @@
 ---
 title: "Christmas Eve Tree"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/77221645.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/77221645.jpg"
 date: 2005-12-24 23:46:31
 published: false
 albums:

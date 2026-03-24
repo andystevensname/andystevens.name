@@ -1,6 +1,6 @@
 ---
 title: "The Softening of Mountains"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/2222517270.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2222517270.jpg"
 date: 2008-01-22 19:55:13
 published: false
 tags:

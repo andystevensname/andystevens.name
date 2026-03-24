@@ -1,6 +1,6 @@
 ---
 title: "Listening Greg"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/79694092.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/79694092.jpg"
 date: 2005-12-30 20:24:42
 published: false
 tags:

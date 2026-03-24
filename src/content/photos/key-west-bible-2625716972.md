@@ -1,6 +1,6 @@
 ---
 title: "Key West Bible"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/2625716972.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2625716972.jpg"
 date: 2008-06-28 13:37:45
 published: false
 tags:

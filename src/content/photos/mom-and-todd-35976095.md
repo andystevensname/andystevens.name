@@ -1,6 +1,6 @@
 ---
 title: "Mom and Todd"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/35976095.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/35976095.jpg"
 alt: "Hanging out.
 Schoodic Point, Acadia National Park, Maine."
 date: 2004-04-10 20:31:27

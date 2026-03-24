@@ -1,6 +1,6 @@
 ---
 title: "Luminous Pole"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/2292711162.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2292711162.jpg"
 date: 2008-02-24 21:43:17
 published: false
 tags:

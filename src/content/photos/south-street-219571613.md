@@ -1,6 +1,6 @@
 ---
 title: "South Street"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/219571613.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/219571613.jpg"
 alt: "Since the 60's Philadelphia artist and '95 Pew Fellow Isaiah Zagar has been covering the buildings and sidestreets of South Street, Philadelphia, with tiles, bottles, bike tire rims, anything really. More on Zagar and his work, <a href=\"http://www.isaiahzagar.org/\">his personal site</a> and <a href=\"http://www.pewarts.org/95/Zagar/\">his Pew Fellow page</a>."
 date: 2006-08-07 12:50:15
 published: false

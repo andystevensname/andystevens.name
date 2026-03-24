@@ -1,6 +1,6 @@
 ---
 title: "Prayer Flags"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/2221976192.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2221976192.jpg"
 date: 2008-01-18 04:44:47
 published: false
 tags:

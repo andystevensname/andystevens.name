@@ -1,6 +1,6 @@
 ---
 title: "Pilgrim Child"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/2221294394.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2221294394.jpg"
 date: 2008-01-12 02:25:09
 published: false
 tags:

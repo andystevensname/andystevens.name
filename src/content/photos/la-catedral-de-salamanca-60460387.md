@@ -1,6 +1,6 @@
 ---
 title: "La Catedral de Salamanca"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/60460387.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/60460387.jpg"
 date: 2005-11-05 11:22:28
 published: false
 albums:

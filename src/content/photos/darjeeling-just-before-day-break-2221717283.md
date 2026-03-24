@@ -1,6 +1,6 @@
 ---
 title: "Darjeeling, Just Before Day Break"
-photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/2221717283.jpg"
+photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2221717283.jpg"
 date: 2008-01-22 19:16:50
 published: false
 tags:
