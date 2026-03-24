@@ -6,6 +6,6 @@ url: https://www.uaf.edu/permafrostmag/online-issues/issue-45.1/other-peoples-em
 date: 2023-07-23
 slug: other-peoples-email
 ---
-This is the first creative non-fiction I've ever had published, about a strang series of emails I received over the course of a few weeks.
+I get lots of email intended for other folks, but this time was different. So I wrote an essay. This is the first creative non-fiction I've ever had published, about scams, relationships, and private communication on the public internet.
 
 Permafrost Magazine 45.1, 2023.

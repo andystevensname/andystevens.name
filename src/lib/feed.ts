@@ -11,7 +11,21 @@ export type FeedItemData = {
   venue?: string;
   category?: string;
   tags?: string[];
+  truncated?: boolean;
 };
+
+function truncate(text: string | undefined, maxChars: number): string | undefined {
+  if (!text) return undefined;
+  if (text.length <= maxChars) return text;
+  const words = text.split(/\s+/);
+  let result = '';
+  for (const word of words) {
+    const next = result ? `${result} ${word}` : word;
+    if (next.length > maxChars) break;
+    result = next;
+  }
+  return result || words[0];
+}
 
 export function mapBlogPosts(posts: any[]): FeedItemData[] {
   return posts.map((p) => ({
@@ -30,7 +44,8 @@ export function mapNotes(notes: any[]): FeedItemData[] {
     type: 'note' as const,
     url: `/notes/${n.id}/`,
     date: n.data.date ?? new Date(0),
-    summary: n.body?.slice(0, 200),
+    summary: truncate(n.body, 200),
+    truncated: (n.body?.length ?? 0) > 200,
     tags: n.data.tags ?? [],
   }));
 }
@@ -42,7 +57,8 @@ export function mapBookmarks(bookmarks: any[]): FeedItemData[] {
     date: b.data.date ?? new Date(0),
     title: b.data.title,
     linkTo: b.data.bookmark_of,
-    summary: b.body?.slice(0, 200),
+    summary: truncate(b.body, 200),
+    truncated: (b.body?.length ?? 0) > 200,
     tags: b.data.tags ?? [],
   }));
 }
@@ -74,7 +90,8 @@ export function mapReplies(replies: any[]): FeedItemData[] {
     url: `/replies/${r.id}/`,
     date: r.data.date ?? new Date(0),
     linkTo: r.data.in_reply_to,
-    summary: r.body?.slice(0, 200),
+    summary: truncate(r.body, 200),
+    truncated: (r.body?.length ?? 0) > 200,
     tags: r.data.tags ?? [],
   }));
 }
@@ -87,7 +104,9 @@ export function mapWriting(writing: any[]): FeedItemData[] {
     title: w.data.title,
     linkTo: w.data.url,
     venue: w.data.venue,
-    category: w.data.category.charAt(0).toUpperCase() + w.data.category.slice(1),
+    category: w.data.category,
+    summary: truncate(w.body, 200),
+    truncated: (w.body?.length ?? 0) > 200,
     tags: w.data.tags ?? [],
   }));
 }

@@ -683,6 +683,41 @@ article .e-content li ol {
   font-size: 1rem;
 }
 
+/* === Filters === */
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0 0 1.5rem 0;
+}
+
+.filter-btn {
+  background: none;
+  border: 1px solid var(--c-gray-lighter);
+  padding: 0.25rem 0.75rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  color: light-dark(var(--c-gray), white);
+  border-radius: 4px;
+}
+
+.filter-btn:hover {
+  background: light-dark(var(--c-gray-lighter), var(--c-gray-light));
+  color: light-dark(var(--c-gray), white);
+  border-color: light-dark(var(--c-gray-lighter), var(--c-gray-light));
+}
+
+.filter-btn[aria-pressed="true"] {
+  background: var(--c-accent);
+  color: white;
+  border-color: var(--c-accent);
+}
+
+.truncated::after {
+  content: '\2026';
+}
+
 .feed-time {
   font-size: 0.875rem;
   line-height: 1.5;

@@ -11,9 +11,10 @@ interface Props {
   alt?: string;
   venue?: string;
   category?: string;
+  truncated?: boolean;
 }
 
-const { type, url, date, title, summary, quote, linkTo, photo, alt, venue, category } = Astro.props;
+const { type, url, date, title, summary, quote, linkTo, photo, alt, venue, category, truncated } = Astro.props;
 
 function shortDate(d: Date) {
   const utc = new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
@@ -21,7 +22,7 @@ function shortDate(d: Date) {
 }
 ---
 
-<div class={`feed-item feed-item--${type} h-entry`}>
+<div class={`feed-item feed-item--${type} h-entry`} data-category={category ?? type}>
   <a href={url} class="feed-time"><time datetime={date.toISOString()}>{shortDate(date)}</time></a>
   <span class="feed-type">
     {type === 'article' && (
@@ -55,11 +56,12 @@ function shortDate(d: Date) {
       {quote && <p>{quote} <a href={url}><svg stroke-width="1.5" viewBox="0 0 24 24" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.75 12H16.75M16.75 12L14 14.75M16.75 12L14 9.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M2 15V9C2 6.79086 3.79086 5 6 5H18C20.2091 5 22 6.79086 22 9V15C22 17.2091 20.2091 19 18 19H6C3.79086 19 2 17.2091 2 15Z" stroke="currentColor" stroke-width="1.5"></path></svg></a></p>}
     </>)}
     {type === 'note' && (
-      <p class="feed-note">{summary}</p>
+      <p class:list={['feed-note', { truncated }]}>{summary}</p>
     )}
-    {type === 'bookmark' && (
-      <p><a href={linkTo}>{title ?? linkTo}</a>{summary ? ` - ${summary}` : ''}</p>
-    )}
+    {type === 'bookmark' && (<>
+      <p><a href={linkTo}>{title ?? linkTo}</a></p>
+      {summary && <p class:list={{ truncated }}>{summary}</p>}
+    </>)}
     {type === 'like' && (
       <p><a href={linkTo}>{linkTo}</a></p>
     )}
@@ -69,11 +71,12 @@ function shortDate(d: Date) {
     </>)}
     {type === 'reply' && (<>
       <p>Replied to <a href={linkTo}>{linkTo}</a></p>
-      {summary && <p>{summary}</p>}
+      {summary && <p class:list={{ truncated }}>{summary}</p>}
     </>)}
     {type === 'writing' && (<>
       <p>{linkTo ? <a href={linkTo}>{title}</a> : title}</p>
-      <p>{[category, venue].filter(Boolean).join(' — ')}</p>
+      {(venue || category) && <p>{[venue, category ? category.charAt(0).toUpperCase() + category.slice(1) : ''].filter(Boolean).join(' — ')}</p>}
+      {summary && <p class:list={{ truncated }}>{summary}</p>}
     </>)}
     {type === 'award' && (<>
       <p>{title}</p>

@@ -70,6 +70,13 @@ const photos = defineCollection({
     date: z.coerce.date().optional(),
     published: z.boolean().optional().default(true),
     tags: z.array(z.string()).optional().default([]),
+    albums: z.array(z.string()).optional().default([]),
+    license: z.string().optional(),
+    geo: z.object({
+      latitude: z.number(),
+      longitude: z.number(),
+    }).optional(),
+    flickr_url: z.string().optional(),
     syndication,
     slug: z.string().optional(),
   }),

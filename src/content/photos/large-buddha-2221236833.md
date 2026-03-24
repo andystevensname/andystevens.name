@@ -1,0 +1,14 @@
+---
+title: "Large Buddha"
+photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/2221236833.jpg"
+date: 2008-01-20 06:14:56
+published: false
+tags:
+  - "bodh gaya"
+  - "buddha"
+albums:
+  - "India"
+license: "All Rights Reserved"
+flickr_url: "https://www.flickr.com/photos/taylorstevens/2221236833/"
+slug: "large-buddha-2221236833"
+---

@@ -1,0 +1,9 @@
+---
+title: "Over-night in November"
+photo: "https://media.andystevens.name.us-east-1.linodeobjects.com/photos/2164124191.jpg"
+date: 2007-11-24 12:15:14
+published: true
+license: "All Rights Reserved"
+flickr_url: "https://www.flickr.com/photos/taylorstevens/2164124191/"
+slug: "over-night-in-november-2164124191"
+---

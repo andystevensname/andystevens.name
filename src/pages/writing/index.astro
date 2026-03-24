@@ -13,14 +13,71 @@ const feed = sortByDate([
   ...mapWriting(writing),
   ...mapAwards(awards),
 ]);
+
+const categories = [...new Set(writing.map((w) => w.data.category))].sort();
 ---
 
 <Layout title="Writing" description="Publications, writing, and awards.">
   <h1>Writing</h1>
-  <div class="recent-feed">
+
+  <nav class="filter-bar" aria-label="Filter by category">
+    <button class="filter-btn" aria-pressed="true" data-filter="all">All</button>
+    {categories.map((cat) => (
+      <button class="filter-btn" aria-pressed="false" data-filter={cat}>
+        {cat.charAt(0).toUpperCase() + cat.slice(1)}
+      </button>
+    ))}
+    <button class="filter-btn" aria-pressed="false" data-filter="award">Awards</button>
+  </nav>
+
+  <div class="recent-feed" id="writing-feed" aria-live="polite">
     {feed.length > 0
       ? feed.map((item) => <FeedItem {...item} />)
       : <p>Nothing here yet.</p>
     }
   </div>
 </Layout>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const buttons = document.querySelectorAll('.filter-btn');
+    const feed = document.getElementById('writing-feed');
+    if (!feed || !buttons.length) return;
+
+    function applyFilter(filter: string) {
+      const items = feed!.querySelectorAll('.feed-item');
+      let visible = 0;
+
+      items.forEach((item) => {
+        const category = (item as HTMLElement).dataset.category;
+        const show = filter === 'all' || category === filter;
+        (item as HTMLElement).style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+
+      buttons.forEach((btn) => {
+        btn.setAttribute('aria-pressed', btn.getAttribute('data-filter') === filter ? 'true' : 'false');
+      });
+
+      // Update URL hash
+      if (filter === 'all') {
+        history.replaceState(null, '', window.location.pathname);
+      } else {
+        history.replaceState(null, '', `#${filter}`);
+      }
+    }
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const filter = btn.getAttribute('data-filter') ?? 'all';
+        applyFilter(filter);
+      });
+    });
+
+    // Apply filter from URL hash on load
+    const hash = window.location.hash.slice(1);
+    if (hash) {
+      applyFilter(hash);
+    }
+  });
+</script>
