@@ -1,0 +1,62 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import HEntryMeta from '../../components/HEntryMeta.astro';
+import PostMeta from '../../components/PostMeta.astro';
+import Webmentions from '../../components/Webmentions.astro';
+
+export async function getStaticPaths() {
+  const albums = await getCollection('albums');
+  return albums.map((album) => ({
+    params: { slug: album.id },
+    props: { album },
+  }));
+}
+
+const { album } = Astro.props;
+const { Content } = await render(album);
+const albumUrl = new URL(`/albums/${album.id}/`, Astro.site).href;
+
+// Get all photos that belong to this album
+const allPhotos = await getCollection('photos', ({ data }) => {
+  return (data.albums || []).includes(album.data.title);
+});
+
+// Sort photos by date
+allPhotos.sort((a, b) => {
+  const aDate = a.data.date?.getTime() ?? 0;
+  const bDate = b.data.date?.getTime() ?? 0;
+  return aDate - bDate;
+});
+---
+
+<Layout
+  title={album.data.title}
+  description={album.data.description ?? `Photo album: ${album.data.title}`}
+  canonical={albumUrl}
+>
+  <article class="h-entry">
+    <h1 class="p-name">{album.data.title}</h1>
+    <HEntryMeta url={albumUrl} date={album.data.date} syndication={album.data.syndication} />
+
+    {album.data.description && <p class="p-summary">{album.data.description}</p>}
+
+    <div class="e-content">
+      <Content />
+    </div>
+
+    <div class="album-grid">
+      {allPhotos.map((photo) => {
+        const src = Array.isArray(photo.data.photo) ? photo.data.photo[0] : photo.data.photo;
+        return (
+          <a href={`/photos/${photo.id}/`} class="album-photo">
+            <img src={src} alt={photo.data.alt ?? photo.data.title ?? ''} loading="lazy" />
+          </a>
+        );
+      })}
+    </div>
+
+    <PostMeta post={album} />
+    <Webmentions url={albumUrl} />
+  </article>
+</Layout>

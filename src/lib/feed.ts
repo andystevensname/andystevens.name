@@ -1,5 +1,5 @@
 export type FeedItemData = {
-  type: 'article' | 'note' | 'bookmark' | 'like' | 'photo' | 'reply' | 'writing' | 'award';
+  type: 'article' | 'note' | 'bookmark' | 'like' | 'photo' | 'reply' | 'writing' | 'award' | 'album';
   url: string;
   date: Date;
   title?: string;
@@ -118,6 +118,18 @@ export function mapAwards(awards: any[]): FeedItemData[] {
     date: a.data.date ?? new Date(0),
     title: a.data.title,
     venue: a.data.issuer,
+  }));
+}
+
+export function mapAlbums(albums: any[]): FeedItemData[] {
+  return albums.map((a) => ({
+    type: 'album' as const,
+    url: `/albums/${a.id}/`,
+    date: a.data.date ?? new Date(0),
+    title: a.data.title,
+    summary: a.data.description,
+    photo: a.data.cover,
+    tags: a.data.tags ?? [],
   }));
 }
 

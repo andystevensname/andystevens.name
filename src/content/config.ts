@@ -120,4 +120,19 @@ const awards = defineCollection({
   }),
 });
 
-export const collections = { blog, pages, bookmarks, likes, notes, photos, replies, writing, awards };
+const albums = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/content/albums' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string().optional(),
+    cover: z.string().optional(),
+    date: z.coerce.date().optional(),
+    published: z.boolean().optional().default(true),
+    tags: z.array(z.string()).optional().default([]),
+    flickr_url: z.string().optional(),
+    syndication,
+    slug: z.string().optional(),
+  }),
+});
+
+export const collections = { blog, pages, bookmarks, likes, notes, photos, replies, writing, awards, albums };
