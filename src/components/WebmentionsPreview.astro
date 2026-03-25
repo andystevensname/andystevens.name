@@ -1,0 +1,102 @@
+---
+/**
+ * Preview component with dummy webmention data for styling purposes.
+ * Replace with <Webmentions> in production.
+ */
+
+const likes = [
+  { source: 'https://example.com/alice', author: { name: 'Alice Chen', picture: 'https://i.pravatar.cc/64?u=alice' } },
+  { source: 'https://example.com/bob', author: { name: 'Bob Martinez', picture: 'https://i.pravatar.cc/64?u=bob' } },
+  { source: 'https://example.com/carol', author: { name: 'Carol Davis', picture: 'https://i.pravatar.cc/64?u=carol' } },
+  { source: 'https://example.com/dan', author: { name: 'Dan Wilson' } },
+  { source: 'https://example.com/eve', author: { name: 'Eve Park', picture: 'https://i.pravatar.cc/64?u=eve' } },
+  { source: 'https://example.com/frank', author: { name: 'Frank Liu', picture: 'https://i.pravatar.cc/64?u=frank' } },
+  { source: 'https://example.com/grace', author: { name: 'Grace Kim', picture: 'https://i.pravatar.cc/64?u=grace' } },
+  { source: 'https://example.com/hank', author: { name: 'Hank Brown' } },
+  { source: 'https://example.com/iris', author: { name: 'Iris Zhao', picture: 'https://i.pravatar.cc/64?u=iris' } },
+  { source: 'https://example.com/jay', author: { name: 'Jay Patel', picture: 'https://i.pravatar.cc/64?u=jay' } },
+  { source: 'https://example.com/kate', author: { name: 'Kate O\'Brien', picture: 'https://i.pravatar.cc/64?u=kate' } },
+  { source: 'https://example.com/anonymous', author: {} },
+];
+
+const reposts = [
+  { source: 'https://example.com/repost1', author: { name: 'Maya Johnson', picture: 'https://i.pravatar.cc/64?u=maya' } },
+  { source: 'https://example.com/repost2', author: { name: 'Noah Garcia', picture: 'https://i.pravatar.cc/64?u=noah' } },
+  { source: 'https://example.com/repost3', author: { name: 'Olivia Singh' } },
+];
+
+const replies = [
+  {
+    source: 'https://example.com/reply1',
+    author: { name: 'Sam Rivera', picture: 'https://i.pravatar.cc/64?u=sam' },
+    content: 'This really resonated with me. I had a similar experience trying to understand abstract art — spent an hour in front of a Pollock and felt nothing, then burst into tears at a Hopper painting I\'d barely glanced at.',
+    published: '2026-03-20T14:30:00Z',
+  },
+  {
+    source: 'https://example.com/reply2',
+    author: { name: 'Taylor Kim', picture: 'https://i.pravatar.cc/64?u=taylor' },
+    content: 'The bit about tying your shoes is wonderful. We forget how much of our daily life is muscle memory until the thread snaps.',
+    published: '2026-03-21T09:15:00Z',
+  },
+  {
+    source: 'https://example.com/reply3',
+    author: { name: 'Alex Thompson' },
+    content: 'Great piece. Have you read "The Art of Looking" by Lance Esplund? Feels like a companion to what you\'re describing here.',
+    published: '2026-03-22T18:45:00Z',
+  },
+  {
+    source: 'https://bsky.app/profile/someone/post/abc123',
+    author: { name: 'Jordan Lee', picture: 'https://i.pravatar.cc/64?u=jordan' },
+    content: 'Bookmarking this to come back to.',
+    published: '2026-03-23T11:00:00Z',
+  },
+];
+---
+
+<div class="webmentions">
+  <div class="wm-likes">
+    <p class="wm-heading">{likes.length} {likes.length === 1 ? 'like' : 'likes'}</p>
+    <ul class="wm-faces">
+      {likes.map((like) => (
+        <li>
+          <a href={like.source}>
+            {like.author?.picture
+              ? <img src={like.author.picture} alt={like.author.name ?? 'Anonymous'} loading="lazy" />
+              : <span>{like.author?.name?.charAt(0) ?? '?'}</span>
+            }
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <div class="wm-reposts">
+    <p class="wm-heading">{reposts.length} {reposts.length === 1 ? 'repost' : 'reposts'}</p>
+    <ul class="wm-faces">
+      {reposts.map((repost) => (
+        <li>
+          <a href={repost.source}>
+            {repost.author?.picture
+              ? <img src={repost.author.picture} alt={repost.author.name ?? 'Anonymous'} loading="lazy" />
+              : <span>{repost.author?.name?.charAt(0) ?? '?'}</span>
+            }
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <div class="wm-replies">
+    <p class="wm-heading">{replies.length} {replies.length === 1 ? 'reply' : 'replies'}</p>
+    {replies.map((reply) => (
+      <div class="wm-reply">
+        <div class="wm-reply-meta">
+          {reply.author?.picture && <img src={reply.author.picture} alt={reply.author.name ?? ''} loading="lazy" />}
+          <a href={reply.source}>{reply.author?.name ?? reply.source}</a>
+          {reply.published && <time datetime={reply.published}>{reply.published.slice(0, 10)}</time>}
+        </div>
+        {reply.content && <p>{reply.content}</p>}
+      </div>
+    ))}
+  </div>
+</div>
