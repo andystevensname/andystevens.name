@@ -663,8 +663,8 @@ article .e-content li ol {
 .feed-item--note .feed-type { color: #FFA000; }
 .feed-item--reply .feed-type { color: #43A047; }
 .feed-item--photo .feed-type { color: #8E24AA; }
-.feed-item--article .feed-type { color: light-dark(var(--c-gray), white); }
-.feed-item--writing .feed-type { color: #6D4C41; }
+.feed-item--article .feed-type { color: #E91E63; }
+.feed-item--writing .feed-type { color: #00897B; }
 .feed-item--award .feed-type { color: #FFB300; }
 .feed-item--album .feed-type { color: #8E24AA; }
 

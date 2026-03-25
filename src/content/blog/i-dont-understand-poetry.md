@@ -4,7 +4,7 @@ date: 2022-11-08
 published: true
 tags: ['poetry']
 description: "Taking an honest look at something I love, and yet don't fully understand."
-quote: "I must admit something, and it's embarrassing: I don't understand a lot of poetry. I realize this despite having spent more than a decade of my life publically identifying myself as a poet (which, to be fair, is not a long time in this artistic pursuit, and also, to be honest, comes with a lot of stereotypical behavior). I have multiple degrees, attend workshops, read the classics, and write a good amount of my own poetry. At points, I've received some positive feedback and warm receptions to my ideas. On paper, I've got all the tools I need. Then why do I feel like such a confounded failure?"
+quote: "I must admit something, and it's embarrassing: I don't understand a lot of poetry... On paper, I've got all the tools I need. Then why do I feel like such a confounded failure?"
 slug: i-dont-understand-poetry
 ---
 

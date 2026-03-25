@@ -5,7 +5,7 @@ published: true
 tags: ['memory']
 canonical_url: false
 description: "We spend so much time trying to remember, but what happens when we want to forget?"
-quote: "There are some memories we think we'll never forget. And that may be true, especially of life's defining moments. A first kiss. A winning shot. Famously, the first time experiencing ice. They persist with hyper clarity months, years, decades later. How could we ever let them go?"
+quote: "There are some memories we think we'll never forget. And that may be true, especially of life's defining moments. A first kiss. A winning shot. Famously, the first time experiencing ice. How could we ever let them go?"
 slug: on-forgetting
 ---
 

@@ -7,6 +7,7 @@ tags:
 published: true
 slug: moving-to-astro-with-ai
 description: "I didn't vibe code this website, but I did rely heavily on AI to migrate frameworks"
+quote: "Say what you will about coders and AI-slop, but porting code between frameworks is actually a great use case for generative AI."
 ---
 
 I made the leap to [Astro](https://astro.build) from [Nuxt](https://nuxt.com). I never really felt at home with Nuxt. When I migrated to that framework some years back, I did it not because it was right-sized for this site, but because it came with bells and whistles and knobs I wanted to pull. But the documentation was thin, I wanted to hammer it into a static site generator, and the process of porting the site to a new framework left me feeling stifled. For years, I've written every line of code by hand, and just wiring up the different layouts and components and logic made my head spin. Maybe it was trying to learn Vue when I had never really grasped something like React. For me, building sites has always felt more rewarding than filling them with content, but I _did_ want to get to the point where I filled my site with content. Burning out before I got to that point was the problem.
