@@ -1,6 +1,6 @@
 ---
 title: "Bench in the Shadow"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2257235190.jpg"
+photo: "http://media.andystevens.name/photos/2257235190.jpg"
 date: 2008-02-10 22:36:43
 published: true
 tags:

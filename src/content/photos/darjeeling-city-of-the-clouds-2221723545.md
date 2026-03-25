@@ -1,6 +1,6 @@
 ---
 title: "Darjeeling, City of the Clouds"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2221723545.jpg"
+photo: "http://media.andystevens.name/photos/2221723545.jpg"
 alt: "Sorry for the odd angle."
 date: 2008-01-22 19:39:34
 published: false

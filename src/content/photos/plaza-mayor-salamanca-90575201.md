@@ -1,6 +1,6 @@
 ---
 title: "Plaza Mayor, Salamanca"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/90575201.jpg"
+photo: "http://media.andystevens.name/photos/90575201.jpg"
 alt: "This shot is stupid, and poorly composed, but I like the colors. So be it."
 date: 2006-01-21 09:28:23
 published: false

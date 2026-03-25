@@ -1,6 +1,6 @@
 ---
 title: "Eckerd Sail Team"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2256411259.jpg"
+photo: "http://media.andystevens.name/photos/2256411259.jpg"
 date: 2008-02-10 16:20:04
 published: true
 tags:

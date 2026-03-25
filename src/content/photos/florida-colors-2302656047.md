@@ -1,6 +1,6 @@
 ---
 title: "Florida Colors"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2302656047.jpg"
+photo: "http://media.andystevens.name/photos/2302656047.jpg"
 date: 2008-02-28 18:33:18
 published: false
 albums:

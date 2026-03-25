@@ -1,6 +1,6 @@
 ---
 title: "Plain and Simple"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/66321640.jpg"
+photo: "http://media.andystevens.name/photos/66321640.jpg"
 date: 2005-10-19 12:15:37
 published: false
 albums:

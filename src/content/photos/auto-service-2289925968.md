@@ -1,6 +1,6 @@
 ---
 title: "Auto Service"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2289925968.jpg"
+photo: "http://media.andystevens.name/photos/2289925968.jpg"
 date: 2008-02-24 15:38:27
 published: true
 tags:

@@ -1,6 +1,6 @@
 ---
 title: "Loyola Resedencia"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/43296541.jpg"
+photo: "http://media.andystevens.name/photos/43296541.jpg"
 alt: "Inside my (cramped) room. Picture of my spacious desk."
 date: 2005-09-13 05:51:29
 published: true

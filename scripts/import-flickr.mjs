@@ -26,7 +26,7 @@ const PHOTO_DIRS = [
 ];
 const OUTPUT_DIR = join(process.cwd(), 'src/content/photos');
 const BUCKET = 'media.andystevens.name';
-const BUCKET_HOST = `${BUCKET}.us-east-1.linodeobjects.com`;
+const BUCKET_HOST = BUCKET;
 const BUCKET_URL = `http://${BUCKET_HOST}`;
 const S3_BUCKET = `s3://${BUCKET}`;
 

@@ -1,6 +1,6 @@
 ---
 title: "River Shrines 1"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2220475089.jpg"
+photo: "http://media.andystevens.name/photos/2220475089.jpg"
 date: 2008-01-12 01:24:55
 published: false
 tags:

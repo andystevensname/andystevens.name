@@ -1,6 +1,6 @@
 ---
 title: "Queen Vic Memorial Park"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2220538487.jpg"
+photo: "http://media.andystevens.name/photos/2220538487.jpg"
 date: 2008-01-12 05:47:24
 published: false
 tags:

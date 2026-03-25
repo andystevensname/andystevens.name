@@ -1,6 +1,6 @@
 ---
 title: "The Hair with The Crusher"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2220426977.jpg"
+photo: "http://media.andystevens.name/photos/2220426977.jpg"
 date: 2008-01-07 05:22:31
 published: false
 tags:

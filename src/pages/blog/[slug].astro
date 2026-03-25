@@ -4,6 +4,7 @@ import Layout from '../../layouts/Layout.astro';
 import HEntryMeta from '../../components/HEntryMeta.astro';
 import PostMeta from '../../components/PostMeta.astro';
 import Webmentions from '../../components/Webmentions.astro';
+import WebmentionsPreview from '../../components/WebmentionsPreview.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
@@ -55,5 +56,6 @@ const jsonLd = {
 
     <PostMeta post={post} />
     <Webmentions url={postUrl} />
+    <WebmentionsPreview />
   </article>
 </Layout>

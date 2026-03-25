@@ -1,6 +1,6 @@
 ---
 title: "X Marks Enlightenment"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2221981140.jpg"
+photo: "http://media.andystevens.name/photos/2221981140.jpg"
 date: 2008-01-18 07:23:09
 published: false
 tags:

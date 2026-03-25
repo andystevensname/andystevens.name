@@ -1,6 +1,6 @@
 ---
 title: "Returning for Breakfast from the Fields"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2221180087.jpg"
+photo: "http://media.andystevens.name/photos/2221180087.jpg"
 date: 2008-01-17 20:21:58
 published: false
 tags:

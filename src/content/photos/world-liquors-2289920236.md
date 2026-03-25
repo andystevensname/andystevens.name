@@ -1,6 +1,6 @@
 ---
 title: "World Liquors"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2289920236.jpg"
+photo: "http://media.andystevens.name/photos/2289920236.jpg"
 date: 2008-02-24 15:24:54
 published: true
 tags:

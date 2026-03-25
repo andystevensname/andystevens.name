@@ -1,6 +1,6 @@
 ---
 title: "Teatro Real"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/181471255.jpg"
+photo: "http://media.andystevens.name/photos/181471255.jpg"
 alt: "Facing the Palacio Real. Nice day, really sharp lines on the building, but alas, a bad angle, the colors are off on the other buildings. But the sky was actually that blue."
 date: 2006-07-01 12:23:24
 published: false

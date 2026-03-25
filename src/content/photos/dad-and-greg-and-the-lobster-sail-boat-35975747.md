@@ -1,6 +1,6 @@
 ---
 title: "Dad and Greg and the Lobster-sail boat"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/35975747.jpg"
+photo: "http://media.andystevens.name/photos/35975747.jpg"
 alt: "Dad and Greg watching the tide go out at Schoodic Point.
 Schoodic Point, Acadia National Park, Maine."
 date: 2004-04-10 20:30:47

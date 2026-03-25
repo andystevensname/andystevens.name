@@ -1,6 +1,6 @@
 ---
 title: "Fly away man"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/52718739.jpg"
+photo: "http://media.andystevens.name/photos/52718739.jpg"
 alt: "One of the coolest looking mime costumes I've seen lately, made to look like he's been blown away. Just off of the Puerta del Sol"
 date: 2005-10-15 11:21:38
 published: false

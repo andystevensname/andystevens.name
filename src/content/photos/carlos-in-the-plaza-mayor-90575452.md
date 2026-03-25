@@ -1,6 +1,6 @@
 ---
 title: "Carlos in the Plaza Mayor"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/90575452.jpg"
+photo: "http://media.andystevens.name/photos/90575452.jpg"
 alt: "Salamanca, Spain."
 date: 2006-01-21 09:28:50
 published: false

@@ -1,6 +1,6 @@
 ---
 title: "Hemingway's Study"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2625717388.jpg"
+photo: "http://media.andystevens.name/photos/2625717388.jpg"
 date: 2008-06-28 13:54:43
 published: false
 tags:

@@ -1,6 +1,6 @@
 ---
 title: "Plain and Simple, pt. 6"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/90426863.jpg"
+photo: "http://media.andystevens.name/photos/90426863.jpg"
 alt: "Church doors. Salamanca, Spain."
 date: 2006-01-21 09:42:38
 published: false

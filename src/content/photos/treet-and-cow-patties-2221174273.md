@@ -1,6 +1,6 @@
 ---
 title: "Treet and Cow Patties"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2221174273.jpg"
+photo: "http://media.andystevens.name/photos/2221174273.jpg"
 date: 2008-01-17 20:17:34
 published: false
 tags:

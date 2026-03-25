@@ -1,6 +1,6 @@
 ---
 title: "Bodhi Tree Temple Tower"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2221983008.jpg"
+photo: "http://media.andystevens.name/photos/2221983008.jpg"
 date: 2008-01-18 07:32:00
 published: false
 tags:

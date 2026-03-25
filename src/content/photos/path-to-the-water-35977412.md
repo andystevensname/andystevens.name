@@ -1,6 +1,6 @@
 ---
 title: "Path to the Water"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/35977412.jpg"
+photo: "http://media.andystevens.name/photos/35977412.jpg"
 alt: "The walk down to the water from camp."
 date: 2004-04-11 02:08:04
 published: false

@@ -247,9 +247,8 @@ a.feed-time:active {
 }
 
 /* External link indicator */
-article .e-content a[href^="http"]:not([href*="andystevens.name"])::after,
-.feed-content a[href^="http"]:not([href*="andystevens.name"])::after,
-.site-content a[href^="http"]:not([href*="andystevens.name"])::after {
+.e-content a[href^="http"]:not([href*="andystevens.name"])::after,
+.feed-content a[href^="http"]:not([href*="andystevens.name"])::after {
   content: '';
   display: inline-block;
   width: 0.75em;
@@ -569,7 +568,7 @@ article .e-content li ol {
   color: var(--c-gray-light);
   box-sizing: border-box;
   margin: 0 0 1.5rem 0;
-  padding: 1rem 0 0;
+  padding: 1.5rem 0 0;
   width: 100%;
 }
 

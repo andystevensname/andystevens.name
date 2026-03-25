@@ -1,6 +1,6 @@
 ---
 title: "Headed into the City"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2221266780.jpg"
+photo: "http://media.andystevens.name/photos/2221266780.jpg"
 date: 2008-01-12 01:23:25
 published: false
 tags:

@@ -1,6 +1,6 @@
 ---
 title: "Steaming Rice"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2222005430.jpg"
+photo: "http://media.andystevens.name/photos/2222005430.jpg"
 date: 2008-01-19 06:42:29
 published: false
 tags:

@@ -1,6 +1,6 @@
 ---
 title: "St. Pete Police Station"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2289918256.jpg"
+photo: "http://media.andystevens.name/photos/2289918256.jpg"
 date: 2008-02-24 15:17:40
 published: true
 tags:

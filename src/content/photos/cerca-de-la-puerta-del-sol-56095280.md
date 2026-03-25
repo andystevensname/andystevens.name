@@ -1,6 +1,6 @@
 ---
 title: "Cerca de La Puerta del Sol"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/56095280.jpg"
+photo: "http://media.andystevens.name/photos/56095280.jpg"
 date: 2005-10-25 16:35:30
 published: false
 tags:

@@ -5,6 +5,9 @@
 [[plugins]]
   package = "./netlify/plugins/send-webmentions"
 
+[[plugins]]
+  package = "./netlify/plugins/post-to-bluesky"
+
 [[headers]]
   for = "/fonts/*"
   [headers.values]

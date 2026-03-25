@@ -1,6 +1,6 @@
 ---
 title: "St. Nicholas Monastery 1"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/1809628390.jpg"
+photo: "http://media.andystevens.name/photos/1809628390.jpg"
 date: 2007-10-27 10:57:18
 published: false
 tags:

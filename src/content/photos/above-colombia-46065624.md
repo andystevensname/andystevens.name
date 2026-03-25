@@ -1,6 +1,6 @@
 ---
 title: "Above Colombia"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/46065624.jpg"
+photo: "http://media.andystevens.name/photos/46065624.jpg"
 alt: "A picture of west madrid at night from above the metro stop Colombia."
 date: 2005-09-24 00:13:22
 published: false

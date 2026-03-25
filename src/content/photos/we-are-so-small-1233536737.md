@@ -1,6 +1,6 @@
 ---
 title: "We are so small"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/1233536737.jpg"
+photo: "http://media.andystevens.name/photos/1233536737.jpg"
 date: 2007-08-18 14:12:55
 published: false
 tags:

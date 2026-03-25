@@ -1,6 +1,6 @@
 ---
 title: "Siddhartha and his Cave"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2221977640.jpg"
+photo: "http://media.andystevens.name/photos/2221977640.jpg"
 date: 2008-01-18 04:55:46
 published: false
 tags:

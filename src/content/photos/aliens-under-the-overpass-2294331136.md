@@ -1,6 +1,6 @@
 ---
 title: "Aliens under the Overpass"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2294331136.jpg"
+photo: "http://media.andystevens.name/photos/2294331136.jpg"
 date: 2008-02-25 22:51:38
 published: false
 albums:

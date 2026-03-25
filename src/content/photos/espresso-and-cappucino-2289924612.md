@@ -1,6 +1,6 @@
 ---
 title: "Espresso and Cappucino"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2289924612.jpg"
+photo: "http://media.andystevens.name/photos/2289924612.jpg"
 date: 2008-02-24 15:36:26
 published: true
 tags:
