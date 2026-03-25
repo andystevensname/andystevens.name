@@ -1,6 +1,6 @@
 ---
 title: "Pyrenees (Los Pirineos)"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/44763469.jpg"
+photo: "http://media.andystevens.name/photos/44763469.jpg"
 alt: "Various heights, various people and various mountains. All taken by the good sir John Holder."
 date: 2005-09-19 14:32:53
 published: false

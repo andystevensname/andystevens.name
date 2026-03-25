@@ -1,6 +1,6 @@
 ---
 title: "Street Family"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2221933314.jpg"
+photo: "http://media.andystevens.name/photos/2221933314.jpg"
 date: 2008-01-17 06:16:41
 published: false
 tags:

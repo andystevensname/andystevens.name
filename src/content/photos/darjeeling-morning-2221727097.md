@@ -1,6 +1,6 @@
 ---
 title: "Darjeeling, Morning"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2221727097.jpg"
+photo: "http://media.andystevens.name/photos/2221727097.jpg"
 date: 2008-01-22 20:06:59
 published: false
 tags:

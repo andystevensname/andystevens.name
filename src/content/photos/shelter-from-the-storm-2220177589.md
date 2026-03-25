@@ -1,6 +1,6 @@
 ---
 title: "Shelter from the Storm"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2220177589.jpg"
+photo: "http://media.andystevens.name/photos/2220177589.jpg"
 date: 2008-01-06 22:51:00
 published: false
 tags:

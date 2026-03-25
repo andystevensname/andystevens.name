@@ -1,6 +1,6 @@
 ---
 title: "Threepart Issue 4"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/298860911.jpg"
+photo: "http://media.andystevens.name/photos/298860911.jpg"
 alt: "Threepart Issue 4 is coming soon."
 date: 2006-11-16 13:00:44
 published: true

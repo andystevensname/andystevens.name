@@ -1,6 +1,6 @@
 ---
 title: "Over-night in November"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2164124191.jpg"
+photo: "http://media.andystevens.name/photos/2164124191.jpg"
 date: 2007-11-24 12:15:14
 published: true
 license: "All Rights Reserved"

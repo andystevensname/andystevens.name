@@ -1,7 +1,7 @@
 ---
 title: "Up Close"
 description: "Head Shots"
-cover: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/90575452.jpg"
+cover: "http://media.andystevens.name/photos/90575452.jpg"
 date: 2005-08-25
 published: true
 flickr_url: "https://www.flickr.com/photos/taylorstevens/albums/826700"

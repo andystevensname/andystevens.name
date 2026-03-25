@@ -1,6 +1,6 @@
 ---
 title: "Valley Grove"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/1809677190.jpg"
+photo: "http://media.andystevens.name/photos/1809677190.jpg"
 date: 2007-10-27 16:58:09
 published: false
 tags:

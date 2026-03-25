@@ -1,6 +1,6 @@
 ---
 title: "Temple Shrine @ Bodh Gaya"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2222031180.jpg"
+photo: "http://media.andystevens.name/photos/2222031180.jpg"
 date: 2008-01-20 06:43:25
 published: false
 tags:

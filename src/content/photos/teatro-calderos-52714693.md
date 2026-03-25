@@ -1,6 +1,6 @@
 ---
 title: "Teatro Calderos"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/52714693.jpg"
+photo: "http://media.andystevens.name/photos/52714693.jpg"
 date: 2005-10-15 11:41:26
 published: false
 tags:

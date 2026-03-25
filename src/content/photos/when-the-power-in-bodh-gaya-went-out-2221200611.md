@@ -1,6 +1,6 @@
 ---
 title: "When the Power in Bodh Gaya Went Out..."
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2221200611.jpg"
+photo: "http://media.andystevens.name/photos/2221200611.jpg"
 date: 2008-01-18 08:05:43
 published: false
 tags:

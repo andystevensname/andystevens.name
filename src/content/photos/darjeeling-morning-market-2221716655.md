@@ -1,6 +1,6 @@
 ---
 title: "Darjeeling Morning Market"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2221716655.jpg"
+photo: "http://media.andystevens.name/photos/2221716655.jpg"
 date: 2008-01-22 01:08:11
 published: false
 tags:

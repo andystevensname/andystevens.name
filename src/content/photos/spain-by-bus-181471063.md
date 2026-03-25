@@ -1,6 +1,6 @@
 ---
 title: "Spain by Bus"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/181471063.jpg"
+photo: "http://media.andystevens.name/photos/181471063.jpg"
 date: 2006-07-01 12:29:00
 published: false
 tags:

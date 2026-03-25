@@ -1,6 +1,6 @@
 ---
 title: "The Himalayan Mountainerring Institute"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2222515508.jpg"
+photo: "http://media.andystevens.name/photos/2222515508.jpg"
 date: 2008-01-23 03:29:33
 published: false
 tags:

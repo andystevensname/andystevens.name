@@ -1,6 +1,6 @@
 ---
 title: "Siddhartha's Cave (National Geographic Cave)"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2221187735.jpg"
+photo: "http://media.andystevens.name/photos/2221187735.jpg"
 date: 2008-01-18 05:29:05
 published: false
 tags:

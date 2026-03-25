@@ -1,6 +1,6 @@
 ---
 title: "John in action"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/53294457.jpg"
+photo: "http://media.andystevens.name/photos/53294457.jpg"
 alt: "John at Retiro on Sunday taking pictures of the festivities."
 date: 2005-10-16 12:41:43
 published: false

@@ -1,6 +1,6 @@
 ---
 title: "Attention"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/84148595.jpg"
+photo: "http://media.andystevens.name/photos/84148595.jpg"
 date: 2006-01-08 13:10:49
 published: false
 tags:

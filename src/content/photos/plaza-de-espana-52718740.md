@@ -1,6 +1,6 @@
 ---
 title: "Plaza de Espana"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/52718740.jpg"
+photo: "http://media.andystevens.name/photos/52718740.jpg"
 alt: "My parents are coming to visit so I decided to go take a look and see where Plaza de Espana actually is. I found it, and consequently found the Don Quixote and Cervantes statues that occupy the park."
 date: 2005-10-15 10:41:29
 published: false

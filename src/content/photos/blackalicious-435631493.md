@@ -1,6 +1,6 @@
 ---
 title: "Blackalicious"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/435631493.png"
+photo: "http://media.andystevens.name/photos/435631493.png"
 alt: "Langerado, '07"
 date: 2007-03-26 18:26:34
 published: false

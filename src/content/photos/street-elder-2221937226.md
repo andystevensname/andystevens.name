@@ -1,6 +1,6 @@
 ---
 title: "Street Elder"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2221937226.jpg"
+photo: "http://media.andystevens.name/photos/2221937226.jpg"
 date: 2008-01-17 06:17:41
 published: false
 tags:

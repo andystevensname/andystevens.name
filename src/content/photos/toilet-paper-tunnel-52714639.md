@@ -1,6 +1,6 @@
 ---
 title: "Toilet Paper Tunnel"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/52714639.jpg"
+photo: "http://media.andystevens.name/photos/52714639.jpg"
 alt: "In La Plaza Mayor today a lady took the wind coming from a subway grate and turned it into a plaything for some nearby kids."
 date: 2005-10-15 11:58:15
 published: false

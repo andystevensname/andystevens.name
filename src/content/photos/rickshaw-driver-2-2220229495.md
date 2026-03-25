@@ -1,6 +1,6 @@
 ---
 title: "Rickshaw Driver 2"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2220229495.jpg"
+photo: "http://media.andystevens.name/photos/2220229495.jpg"
 date: 2008-01-06 23:27:30
 published: false
 tags:

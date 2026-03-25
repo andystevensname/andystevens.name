@@ -1,6 +1,6 @@
 ---
 title: "India Cow Eyes"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/2221210613.jpg"
+photo: "http://media.andystevens.name/photos/2221210613.jpg"
 date: 2008-01-19 05:50:22
 published: false
 tags:

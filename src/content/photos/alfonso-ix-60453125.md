@@ -1,6 +1,6 @@
 ---
 title: "Alfonso IX"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/60453125.jpg"
+photo: "http://media.andystevens.name/photos/60453125.jpg"
 alt: "On one of the walls of the Plaza Mayor in Salamanca, Spain."
 date: 2005-11-06 07:47:12
 published: false

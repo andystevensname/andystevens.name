@@ -1,6 +1,6 @@
 ---
 title: "Bird House"
-photo: "http://media.andystevens.name.us-east-1.linodeobjects.com/photos/85427898.jpg"
+photo: "http://media.andystevens.name/photos/85427898.jpg"
 date: 2006-01-05 15:45:33
 published: false
 tags:
