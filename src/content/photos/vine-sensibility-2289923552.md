@@ -1,6 +1,6 @@
 ---
 title: "Vine Sensibility"
-photo: "http://media.andystevens.name/photos/2289923552.jpg"
+photo: "https://media.andystevens.name/photos/2289923552.jpg"
 date: 2008-02-24 15:34:06
 published: true
 tags:

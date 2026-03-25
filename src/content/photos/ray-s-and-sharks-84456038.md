@@ -1,6 +1,6 @@
 ---
 title: "Ray's and Sharks"
-photo: "http://media.andystevens.name/photos/84456038.jpg"
+photo: "https://media.andystevens.name/photos/84456038.jpg"
 alt: "Rays and sharks are very popular at the aquarium, taking up the most space and drawing the largest crowds. "
 date: 2006-01-06 19:53:28
 published: false

@@ -1,6 +1,6 @@
 ---
 title: "Morning Mist"
-photo: "http://media.andystevens.name/photos/2221939948.jpg"
+photo: "https://media.andystevens.name/photos/2221939948.jpg"
 date: 2008-01-17 20:14:01
 published: false
 tags:

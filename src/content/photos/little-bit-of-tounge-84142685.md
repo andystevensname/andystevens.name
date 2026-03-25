@@ -1,6 +1,6 @@
 ---
 title: "Little bit of Tounge"
-photo: "http://media.andystevens.name/photos/84142685.jpg"
+photo: "https://media.andystevens.name/photos/84142685.jpg"
 date: 2006-01-07 15:19:19
 published: false
 tags:

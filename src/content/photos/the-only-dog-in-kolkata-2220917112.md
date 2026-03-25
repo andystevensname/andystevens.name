@@ -1,6 +1,6 @@
 ---
 title: "The only dog in Kolkata"
-photo: "http://media.andystevens.name/photos/2220917112.jpg"
+photo: "https://media.andystevens.name/photos/2220917112.jpg"
 date: 2008-01-06 03:26:21
 published: false
 tags:

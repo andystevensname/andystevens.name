@@ -1,6 +1,6 @@
 ---
 title: "Typical Street"
-photo: "http://media.andystevens.name/photos/43820126.jpg"
+photo: "https://media.andystevens.name/photos/43820126.jpg"
 alt: "A typical sidestreet in Madrid, between Gran Via and Chueca."
 date: 2005-09-16 02:53:02
 published: false

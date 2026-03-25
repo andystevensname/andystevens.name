@@ -1,6 +1,6 @@
 ---
 title: "Cold Morning Portrait"
-photo: "http://media.andystevens.name/photos/2224551453.jpg"
+photo: "https://media.andystevens.name/photos/2224551453.jpg"
 date: 2008-01-22 19:33:13
 published: false
 tags:

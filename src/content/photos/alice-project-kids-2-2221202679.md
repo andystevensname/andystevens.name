@@ -1,6 +1,6 @@
 ---
 title: "ALICE Project Kids 2"
-photo: "http://media.andystevens.name/photos/2221202679.jpg"
+photo: "https://media.andystevens.name/photos/2221202679.jpg"
 date: 2008-01-19 03:02:00
 published: false
 tags:

@@ -1,6 +1,6 @@
 ---
 title: "View from the Loft"
-photo: "http://media.andystevens.name/photos/35977749.jpg"
+photo: "https://media.andystevens.name/photos/35977749.jpg"
 alt: "Looking out to the sea from the loft through the glass array"
 date: 2004-04-11 02:12:14
 published: false

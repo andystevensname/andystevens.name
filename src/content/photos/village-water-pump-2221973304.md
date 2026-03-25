@@ -1,6 +1,6 @@
 ---
 title: "Village Water Pump"
-photo: "http://media.andystevens.name/photos/2221973304.jpg"
+photo: "https://media.andystevens.name/photos/2221973304.jpg"
 date: 2008-01-17 20:24:34
 published: false
 tags:

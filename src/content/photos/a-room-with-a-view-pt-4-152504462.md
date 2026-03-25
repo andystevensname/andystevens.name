@@ -1,6 +1,6 @@
 ---
 title: "A Room with a View, pt. 4"
-photo: "http://media.andystevens.name/photos/152504462.png"
+photo: "https://media.andystevens.name/photos/152504462.png"
 date: 2006-05-24 07:47:00
 published: false
 albums:

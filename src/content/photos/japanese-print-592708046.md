@@ -1,6 +1,6 @@
 ---
 title: "Japanese Print"
-photo: "http://media.andystevens.name/photos/592708046.jpg"
+photo: "https://media.andystevens.name/photos/592708046.jpg"
 alt: "University of Kansas Spencer Museum of Art
 Work from Robert Shimomura"
 date: 2007-06-22 12:35:51

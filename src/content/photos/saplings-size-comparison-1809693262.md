@@ -1,6 +1,6 @@
 ---
 title: "Saplings size comparison"
-photo: "http://media.andystevens.name/photos/1809693262.jpg"
+photo: "https://media.andystevens.name/photos/1809693262.jpg"
 date: 2007-10-27 18:26:25
 published: false
 tags:

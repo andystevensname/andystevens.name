@@ -1,6 +1,6 @@
 ---
 title: "Hemingway's Study Detail"
-photo: "http://media.andystevens.name/photos/2624896547.jpg"
+photo: "https://media.andystevens.name/photos/2624896547.jpg"
 date: 2008-06-28 13:56:06
 published: false
 tags:

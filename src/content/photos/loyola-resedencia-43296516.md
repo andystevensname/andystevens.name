@@ -1,6 +1,6 @@
 ---
 title: "Loyola Resedencia"
-photo: "http://media.andystevens.name/photos/43296516.jpg"
+photo: "https://media.andystevens.name/photos/43296516.jpg"
 alt: "Outside the gate to Loyola. All of the buildings on campus (3) have gates around them, as do most of the privately owned buildings in the area. No key, no access."
 date: 2005-09-13 05:43:21
 published: true

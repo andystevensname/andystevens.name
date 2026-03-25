@@ -1,6 +1,6 @@
 ---
 title: "St. Nicholas Retreat"
-photo: "http://media.andystevens.name/photos/1808763205.jpg"
+photo: "https://media.andystevens.name/photos/1808763205.jpg"
 date: 2007-10-27 10:52:25
 published: false
 tags:

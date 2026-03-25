@@ -1,6 +1,6 @@
 ---
 title: "Foot Traffic"
-photo: "http://media.andystevens.name/photos/2289129819.jpg"
+photo: "https://media.andystevens.name/photos/2289129819.jpg"
 date: 2008-02-24 15:29:25
 published: false
 tags:

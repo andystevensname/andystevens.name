@@ -1,6 +1,6 @@
 ---
 title: "A Room with a View, pt. 2"
-photo: "http://media.andystevens.name/photos/149881066.jpg"
+photo: "https://media.andystevens.name/photos/149881066.jpg"
 alt: "I sleep on the porch at night, this is the view from my bed looking out of the window."
 date: 2006-04-09 20:26:18
 published: false

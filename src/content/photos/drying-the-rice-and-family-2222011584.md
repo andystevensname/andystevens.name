@@ -1,6 +1,6 @@
 ---
 title: "Drying the Rice and Family"
-photo: "http://media.andystevens.name/photos/2222011584.jpg"
+photo: "https://media.andystevens.name/photos/2222011584.jpg"
 date: 2008-01-19 06:47:55
 published: false
 tags:

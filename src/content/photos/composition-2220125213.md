@@ -1,6 +1,6 @@
 ---
 title: "Composition"
-photo: "http://media.andystevens.name/photos/2220125213.jpg"
+photo: "https://media.andystevens.name/photos/2220125213.jpg"
 date: 2008-01-06 05:40:40
 published: false
 tags:

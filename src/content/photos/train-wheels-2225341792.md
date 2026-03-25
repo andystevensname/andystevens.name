@@ -1,6 +1,6 @@
 ---
 title: "Train Wheels"
-photo: "http://media.andystevens.name/photos/2225341792.jpg"
+photo: "https://media.andystevens.name/photos/2225341792.jpg"
 date: 2008-01-20 13:29:32
 published: false
 tags:

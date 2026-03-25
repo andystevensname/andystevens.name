@@ -1,6 +1,6 @@
 ---
 title: "Museo de Prado"
-photo: "http://media.andystevens.name/photos/53078087.jpg"
+photo: "https://media.andystevens.name/photos/53078087.jpg"
 alt: "This one particular painting stuck out to me today at the Prado for it's incredible surrealism. Obviously, the painting isn't a surrealist painting, however the way it's composed, with such vibrant colors and intensly smooth detailing, makes it seem almost dreamlike to me."
 date: 2005-10-16 12:04:22
 published: false

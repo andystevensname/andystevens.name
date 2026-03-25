@@ -1,6 +1,6 @@
 ---
 title: "Rice Patties"
-photo: "http://media.andystevens.name/photos/2222012720.jpg"
+photo: "https://media.andystevens.name/photos/2222012720.jpg"
 date: 2008-01-19 08:22:37
 published: false
 tags:

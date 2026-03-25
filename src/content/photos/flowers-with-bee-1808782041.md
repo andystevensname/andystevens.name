@@ -1,6 +1,6 @@
 ---
 title: "Flowers with Bee"
-photo: "http://media.andystevens.name/photos/1808782041.jpg"
+photo: "https://media.andystevens.name/photos/1808782041.jpg"
 date: 2007-10-27 12:32:57
 published: false
 tags:

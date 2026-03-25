@@ -1,6 +1,6 @@
 ---
 title: "A is for Abstract"
-photo: "http://media.andystevens.name/photos/592707654.jpg"
+photo: "https://media.andystevens.name/photos/592707654.jpg"
 alt: "University of Kansas Spencer Museum of Art
 Work from Stephen Johnson
 "

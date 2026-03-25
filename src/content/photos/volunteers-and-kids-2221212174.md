@@ -1,6 +1,6 @@
 ---
 title: "Volunteers and Kids"
-photo: "http://media.andystevens.name/photos/2221212174.jpg"
+photo: "https://media.andystevens.name/photos/2221212174.jpg"
 date: 2008-01-07 01:40:53
 published: true
 tags:

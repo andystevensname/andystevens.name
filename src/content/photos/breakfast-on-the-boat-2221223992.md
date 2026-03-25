@@ -1,6 +1,6 @@
 ---
 title: "Breakfast on the Boat"
-photo: "http://media.andystevens.name/photos/2221223992.jpg"
+photo: "https://media.andystevens.name/photos/2221223992.jpg"
 date: 2008-01-12 00:08:14
 published: false
 tags:

@@ -1,6 +1,6 @@
 ---
 title: "Dad at Dinner"
-photo: "http://media.andystevens.name/photos/55336304.jpg"
+photo: "https://media.andystevens.name/photos/55336304.jpg"
 date: 2005-10-22 12:37:45
 published: true
 tags:

@@ -1,6 +1,6 @@
 ---
 title: "South Street"
-photo: "http://media.andystevens.name/photos/219571617.jpg"
+photo: "https://media.andystevens.name/photos/219571617.jpg"
 date: 2006-08-07 13:52:34
 published: false
 albums:

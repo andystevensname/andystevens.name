@@ -1,6 +1,6 @@
 ---
 title: "Trevor and John"
-photo: "http://media.andystevens.name/photos/65547024.jpg"
+photo: "https://media.andystevens.name/photos/65547024.jpg"
 alt: "John didn't actually drink from the pitcher. That'd be wrong."
 date: 2005-11-18 13:07:18
 published: false

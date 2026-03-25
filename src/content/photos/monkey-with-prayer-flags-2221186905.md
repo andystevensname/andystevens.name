@@ -1,6 +1,6 @@
 ---
 title: "Monkey with Prayer Flags"
-photo: "http://media.andystevens.name/photos/2221186905.jpg"
+photo: "https://media.andystevens.name/photos/2221186905.jpg"
 date: 2008-01-18 05:25:11
 published: false
 tags:

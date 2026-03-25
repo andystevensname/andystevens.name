@@ -1,6 +1,6 @@
 ---
 title: "Scavenger Lady 1"
-photo: "http://media.andystevens.name/photos/2220925364.jpg"
+photo: "https://media.andystevens.name/photos/2220925364.jpg"
 date: 2008-01-06 22:15:07
 published: false
 tags:

@@ -1,6 +1,6 @@
 ---
 title: "Kitchen Detail"
-photo: "http://media.andystevens.name/photos/181468159.jpg"
+photo: "https://media.andystevens.name/photos/181468159.jpg"
 alt: "Greg working hard, or hardly working?, in my cocinita"
 date: 2006-06-28 13:21:51
 published: false

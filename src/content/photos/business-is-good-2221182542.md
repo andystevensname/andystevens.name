@@ -1,6 +1,6 @@
 ---
 title: "Business is Good"
-photo: "http://media.andystevens.name/photos/2221182542.jpg"
+photo: "https://media.andystevens.name/photos/2221182542.jpg"
 date: 2008-01-06 22:56:07
 published: false
 tags:

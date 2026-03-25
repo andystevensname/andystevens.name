@@ -1,6 +1,6 @@
 ---
 title: "Power Station and Dumpsters"
-photo: "http://media.andystevens.name/photos/2289919280.jpg"
+photo: "https://media.andystevens.name/photos/2289919280.jpg"
 date: 2008-02-24 15:23:34
 published: true
 tags:

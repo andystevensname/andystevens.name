@@ -1,6 +1,6 @@
 ---
 title: "Dad and the Sea"
-photo: "http://media.andystevens.name/photos/35974679.jpg"
+photo: "https://media.andystevens.name/photos/35974679.jpg"
 alt: "Dad allowed me to snap this one quite a few times before moving around.
 McClellan Park, Milbridge, Maine."
 date: 2004-04-07 23:38:04

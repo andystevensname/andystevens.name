@@ -1,6 +1,6 @@
 ---
 title: "The Ocean, Overcast"
-photo: "http://media.andystevens.name/photos/35978608.jpg"
+photo: "https://media.andystevens.name/photos/35978608.jpg"
 alt: "From the landing above the beach, beneath the house."
 date: 2004-04-11 02:09:34
 published: false

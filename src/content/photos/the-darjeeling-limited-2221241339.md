@@ -1,6 +1,6 @@
 ---
 title: "The Darjeeling Limited"
-photo: "http://media.andystevens.name/photos/2221241339.jpg"
+photo: "https://media.andystevens.name/photos/2221241339.jpg"
 date: 2008-01-20 14:25:20
 published: false
 tags:

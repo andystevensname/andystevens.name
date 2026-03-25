@@ -1,6 +1,6 @@
 ---
 title: "Surreality"
-photo: "http://media.andystevens.name/photos/592462017.jpg"
+photo: "https://media.andystevens.name/photos/592462017.jpg"
 alt: "University of Kansas Natural History Museum
 
 This horse was named Commanche. It was the last surviving thing left at Custards Last Stand when backup arrived, after any surviving Indians escaped. So it lived for a while and when it passed the stuffed it."

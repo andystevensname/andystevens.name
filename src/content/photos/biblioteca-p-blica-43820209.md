@@ -1,6 +1,6 @@
 ---
 title: "Biblioteca Pública"
-photo: "http://media.andystevens.name/photos/43820209.jpg"
+photo: "https://media.andystevens.name/photos/43820209.jpg"
 alt: "The main public library in Madrid."
 date: 2005-09-16 03:08:50
 published: false

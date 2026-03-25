@@ -1,6 +1,6 @@
 ---
 title: "Another Typical Street Scene"
-photo: "http://media.andystevens.name/photos/43820183.jpg"
+photo: "https://media.andystevens.name/photos/43820183.jpg"
 alt: "Another typical street scene in Madrid, between Gran Via and Chueca."
 date: 2005-09-16 02:54:12
 published: false

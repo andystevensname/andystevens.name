@@ -1,6 +1,6 @@
 ---
 title: "Temple @ Bodh Gaya"
-photo: "http://media.andystevens.name/photos/2221238417.jpg"
+photo: "https://media.andystevens.name/photos/2221238417.jpg"
 date: 2008-01-20 06:40:32
 published: false
 tags:

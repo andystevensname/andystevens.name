@@ -1,6 +1,6 @@
 ---
 title: "Nuestra Señora de la Almudena"
-photo: "http://media.andystevens.name/photos/55334276.jpg"
+photo: "https://media.andystevens.name/photos/55334276.jpg"
 alt: "This church is located next to El Palacio Real, or the Royal Palace, and has one of the most dramatic renderings of the Jesus on the cross I have seen."
 date: 2005-10-22 07:40:01
 published: false

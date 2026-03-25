@@ -1,6 +1,6 @@
 ---
 title: "Transistor Radio Kid"
-photo: "http://media.andystevens.name/photos/2221180340.jpg"
+photo: "https://media.andystevens.name/photos/2221180340.jpg"
 date: 2008-01-06 22:55:43
 published: false
 tags:

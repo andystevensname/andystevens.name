@@ -1,6 +1,6 @@
 ---
 title: "First time in Philly"
-photo: "http://media.andystevens.name/photos/2164926778.jpg"
+photo: "https://media.andystevens.name/photos/2164926778.jpg"
 date: 2007-11-25 15:00:42
 published: true
 license: "All Rights Reserved"

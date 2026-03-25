@@ -1,6 +1,6 @@
 ---
 title: "Plain and Simple, pt. 4"
-photo: "http://media.andystevens.name/photos/85392665.jpg"
+photo: "https://media.andystevens.name/photos/85392665.jpg"
 date: 2006-01-11 16:56:24
 published: false
 albums:

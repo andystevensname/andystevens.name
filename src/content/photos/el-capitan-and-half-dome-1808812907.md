@@ -1,6 +1,6 @@
 ---
 title: "El Capitan and Half Dome"
-photo: "http://media.andystevens.name/photos/1808812907.jpg"
+photo: "https://media.andystevens.name/photos/1808812907.jpg"
 date: 2007-10-27 16:30:59
 published: false
 tags:

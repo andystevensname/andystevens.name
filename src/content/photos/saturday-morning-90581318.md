@@ -1,6 +1,6 @@
 ---
 title: "Saturday Morning"
-photo: "http://media.andystevens.name/photos/90581318.jpg"
+photo: "https://media.andystevens.name/photos/90581318.jpg"
 date: 2006-01-21 08:58:12
 published: true
 license: "CC BY-NC 2.0"

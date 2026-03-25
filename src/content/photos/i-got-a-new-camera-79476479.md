@@ -1,6 +1,6 @@
 ---
 title: "I got a new camera"
-photo: "http://media.andystevens.name/photos/79476479.jpg"
+photo: "https://media.andystevens.name/photos/79476479.jpg"
 alt: "I got a new camera for Christmas. Nikon D50. The Finepix will probably find a new home on eBay."
 date: 2005-12-29 23:41:02
 published: false

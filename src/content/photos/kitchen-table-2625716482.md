@@ -1,6 +1,6 @@
 ---
 title: "Kitchen Table"
-photo: "http://media.andystevens.name/photos/2625716482.jpg"
+photo: "https://media.andystevens.name/photos/2625716482.jpg"
 date: 2008-06-11 14:34:20
 published: true
 license: "All Rights Reserved"

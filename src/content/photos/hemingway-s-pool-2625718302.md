@@ -1,6 +1,6 @@
 ---
 title: "Hemingway's Pool"
-photo: "http://media.andystevens.name/photos/2625718302.jpg"
+photo: "https://media.andystevens.name/photos/2625718302.jpg"
 date: 2008-06-28 13:57:19
 published: false
 tags:

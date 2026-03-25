@@ -1,6 +1,6 @@
 ---
 title: "Large Buddha"
-photo: "http://media.andystevens.name/photos/2221236833.jpg"
+photo: "https://media.andystevens.name/photos/2221236833.jpg"
 date: 2008-01-20 06:14:56
 published: false
 tags:

@@ -1,6 +1,6 @@
 ---
 title: "Listless Afternoon Turn Around"
-photo: "http://media.andystevens.name/photos/2303457020.jpg"
+photo: "https://media.andystevens.name/photos/2303457020.jpg"
 date: 2008-02-29 18:28:12
 published: false
 albums:

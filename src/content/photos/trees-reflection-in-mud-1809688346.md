@@ -1,6 +1,6 @@
 ---
 title: "Trees, Reflection in Mud"
-photo: "http://media.andystevens.name/photos/1809688346.jpg"
+photo: "https://media.andystevens.name/photos/1809688346.jpg"
 date: 2007-10-27 17:50:11
 published: false
 tags:

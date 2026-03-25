@@ -1,6 +1,6 @@
 ---
 title: "Ocean Side"
-photo: "http://media.andystevens.name/photos/35978134.jpg"
+photo: "https://media.andystevens.name/photos/35978134.jpg"
 alt: "The front of the house, from the ocean."
 date: 2004-04-11 02:08:43
 published: false

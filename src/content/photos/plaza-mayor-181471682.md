@@ -1,6 +1,6 @@
 ---
 title: "Plaza Mayor"
-photo: "http://media.andystevens.name/photos/181471682.jpg"
+photo: "https://media.andystevens.name/photos/181471682.jpg"
 alt: "Plaza Mayor, or parts around the outside of it, used to be jail cells. I'm not sure which buildings are jail cells, but I'd like to think this one is. - Uploaded with a demo version of <a href=\"http://connectedflow.com/flickrexport\">FlickrExport 2</a>."
 date: 2006-07-01 12:45:45
 published: false

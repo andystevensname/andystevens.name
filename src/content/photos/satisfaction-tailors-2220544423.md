@@ -1,6 +1,6 @@
 ---
 title: "Satisfaction Tailors"
-photo: "http://media.andystevens.name/photos/2220544423.jpg"
+photo: "https://media.andystevens.name/photos/2220544423.jpg"
 date: 2008-01-12 05:59:48
 published: false
 tags:

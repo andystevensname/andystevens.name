@@ -1,6 +1,6 @@
 ---
 title: "Surreality"
-photo: "http://media.andystevens.name/photos/592704724.jpg"
+photo: "https://media.andystevens.name/photos/592704724.jpg"
 alt: "University of Kansas Natural History Museum"
 date: 2007-06-22 11:21:25
 published: false

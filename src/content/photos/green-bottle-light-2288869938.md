@@ -1,6 +1,6 @@
 ---
 title: "Green Bottle Light"
-photo: "http://media.andystevens.name/photos/2288869938.jpg"
+photo: "https://media.andystevens.name/photos/2288869938.jpg"
 date: 2008-02-22 15:14:11
 published: true
 license: "All Rights Reserved"

@@ -1,6 +1,6 @@
 ---
 title: "The Streets of Ávila"
-photo: "http://media.andystevens.name/photos/65158406.jpg"
+photo: "https://media.andystevens.name/photos/65158406.jpg"
 alt: "To the left is the right wall of the cathedral of Ávila. The wall in the background is the wall at Ávila, the second largest city wall still intact in the world."
 date: 2005-11-20 08:56:42
 published: false

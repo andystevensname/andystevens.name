@@ -1,6 +1,6 @@
 ---
 title: "Owen and Snoof"
-photo: "http://media.andystevens.name/photos/2288079731.jpg"
+photo: "https://media.andystevens.name/photos/2288079731.jpg"
 date: 2008-02-21 13:06:08
 published: false
 albums:

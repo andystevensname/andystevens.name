@@ -1,6 +1,6 @@
 ---
 title: "Meta-Photography"
-photo: "http://media.andystevens.name/photos/65156993.jpg"
+photo: "https://media.andystevens.name/photos/65156993.jpg"
 date: 2005-11-20 08:38:12
 published: true
 license: "CC BY-NC 2.0"

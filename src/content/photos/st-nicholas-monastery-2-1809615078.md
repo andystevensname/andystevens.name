@@ -1,6 +1,6 @@
 ---
 title: "St. Nicholas Monastery 2"
-photo: "http://media.andystevens.name/photos/1809615078.jpg"
+photo: "https://media.andystevens.name/photos/1809615078.jpg"
 date: 2007-10-27 10:56:30
 published: false
 tags:

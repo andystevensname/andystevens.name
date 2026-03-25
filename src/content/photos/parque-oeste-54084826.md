@@ -1,6 +1,6 @@
 ---
 title: "Parque Oeste"
-photo: "http://media.andystevens.name/photos/54084826.jpg"
+photo: "https://media.andystevens.name/photos/54084826.jpg"
 alt: "Took this today at the Egyptian ruins that are in El Parque Oeste here in Madrid"
 date: 2005-10-19 12:04:50
 published: false

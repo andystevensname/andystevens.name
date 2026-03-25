@@ -1,6 +1,6 @@
 ---
 title: "Bodhi Tree Temple Lotus Pond"
-photo: "http://media.andystevens.name/photos/2221192665.jpg"
+photo: "https://media.andystevens.name/photos/2221192665.jpg"
 date: 2008-01-18 07:46:46
 published: false
 tags:

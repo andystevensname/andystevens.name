@@ -1,6 +1,6 @@
 ---
 title: "Night Fisher"
-photo: "http://media.andystevens.name/photos/2256423455.jpg"
+photo: "https://media.andystevens.name/photos/2256423455.jpg"
 date: 2008-02-10 21:59:49
 published: false
 tags:

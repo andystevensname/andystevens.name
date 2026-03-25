@@ -1,6 +1,6 @@
 ---
 title: "Classy Doors"
-photo: "http://media.andystevens.name/photos/2289136537.jpg"
+photo: "https://media.andystevens.name/photos/2289136537.jpg"
 date: 2008-02-24 15:41:41
 published: false
 tags:

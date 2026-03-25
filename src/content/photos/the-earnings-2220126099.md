@@ -1,6 +1,6 @@
 ---
 title: "The Earnings"
-photo: "http://media.andystevens.name/photos/2220126099.jpg"
+photo: "https://media.andystevens.name/photos/2220126099.jpg"
 date: 2008-01-06 05:44:30
 published: false
 tags:

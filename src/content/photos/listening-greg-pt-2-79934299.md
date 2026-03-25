@@ -1,6 +1,6 @@
 ---
 title: "Listening Greg, pt. 2"
-photo: "http://media.andystevens.name/photos/79934299.jpg"
+photo: "https://media.andystevens.name/photos/79934299.jpg"
 date: 2005-12-30 21:06:43
 published: false
 tags:

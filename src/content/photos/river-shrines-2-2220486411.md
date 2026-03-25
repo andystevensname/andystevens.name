@@ -1,6 +1,6 @@
 ---
 title: "River Shrines 2"
-photo: "http://media.andystevens.name/photos/2220486411.jpg"
+photo: "https://media.andystevens.name/photos/2220486411.jpg"
 date: 2008-01-12 01:28:32
 published: false
 tags:

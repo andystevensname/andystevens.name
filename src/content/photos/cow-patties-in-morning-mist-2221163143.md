@@ -1,6 +1,6 @@
 ---
 title: "Cow Patties in Morning Mist"
-photo: "http://media.andystevens.name/photos/2221163143.jpg"
+photo: "https://media.andystevens.name/photos/2221163143.jpg"
 date: 2008-01-17 20:15:52
 published: false
 tags:

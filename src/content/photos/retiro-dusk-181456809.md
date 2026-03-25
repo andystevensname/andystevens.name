@@ -1,6 +1,6 @@
 ---
 title: "Retiro, dusk"
-photo: "http://media.andystevens.name/photos/181456809.jpg"
+photo: "https://media.andystevens.name/photos/181456809.jpg"
 alt: "Check out the mega-crop."
 date: 2006-07-04 03:35:11
 published: false

@@ -1,6 +1,6 @@
 ---
 title: "Rob, Sandwich Shop"
-photo: "http://media.andystevens.name/photos/90580533.jpg"
+photo: "https://media.andystevens.name/photos/90580533.jpg"
 alt: "About to eat a charro: eggs benedict with steak, jamon and cheese."
 date: 2006-01-21 08:55:58
 published: true

@@ -1,6 +1,6 @@
 ---
 title: "Spider and Dinner"
-photo: "http://media.andystevens.name/photos/2303457294.jpg"
+photo: "https://media.andystevens.name/photos/2303457294.jpg"
 date: 2008-02-29 19:22:28
 published: true
 license: "All Rights Reserved"

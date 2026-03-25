@@ -1,6 +1,6 @@
 ---
 title: "Polio Sunday"
-photo: "http://media.andystevens.name/photos/2220919064.jpg"
+photo: "https://media.andystevens.name/photos/2220919064.jpg"
 date: 2008-01-06 05:06:43
 published: false
 tags:

@@ -1,6 +1,6 @@
 ---
 title: "Vacation Family"
-photo: "http://media.andystevens.name/photos/35975097.jpg"
+photo: "https://media.andystevens.name/photos/35975097.jpg"
 alt: "A random family I snapped on the coast of Schoodic Point in Acadia National Park. The mountain in the background is Cadillac Mountain.
 Schoodic Point, Acadia National Park, Maine."
 date: 2004-04-10 20:21:26

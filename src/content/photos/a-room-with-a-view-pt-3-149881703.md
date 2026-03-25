@@ -1,6 +1,6 @@
 ---
 title: "A Room with a View, pt. 3"
-photo: "http://media.andystevens.name/photos/149881703.jpg"
+photo: "https://media.andystevens.name/photos/149881703.jpg"
 alt: "The porch from the living room."
 date: 2006-04-18 16:53:45
 published: false

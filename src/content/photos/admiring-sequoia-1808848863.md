@@ -1,6 +1,6 @@
 ---
 title: "Admiring Sequoia"
-photo: "http://media.andystevens.name/photos/1808848863.jpg"
+photo: "https://media.andystevens.name/photos/1808848863.jpg"
 date: 2007-10-27 18:30:38
 published: false
 tags:

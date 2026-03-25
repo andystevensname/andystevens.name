@@ -1,6 +1,6 @@
 ---
 title: "Lysistrata"
-photo: "http://media.andystevens.name/photos/65546926.jpg"
+photo: "https://media.andystevens.name/photos/65546926.jpg"
 alt: "Friends in a version of Lysistrata."
 date: 2005-11-18 16:14:20
 published: true

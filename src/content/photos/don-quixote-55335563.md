@@ -1,6 +1,6 @@
 ---
 title: "Don Quixote"
-photo: "http://media.andystevens.name/photos/55335563.jpg"
+photo: "https://media.andystevens.name/photos/55335563.jpg"
 alt: "I suppose Don Quixote has always been one of the most recognizable figures in Spanish culture, but I would bet that only within the past year (the 400th anniversary of Don Quixote) has he become as infamous as he is now."
 date: 2005-10-22 08:14:06
 published: false

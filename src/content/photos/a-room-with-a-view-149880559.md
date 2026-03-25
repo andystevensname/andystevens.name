@@ -1,6 +1,6 @@
 ---
 title: "A Room with a View"
-photo: "http://media.andystevens.name/photos/149880559.jpg"
+photo: "https://media.andystevens.name/photos/149880559.jpg"
 alt: "The view from my porch"
 date: 2006-04-07 19:56:40
 published: false

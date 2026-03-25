@@ -1,6 +1,6 @@
 ---
 title: "My Dad's new Sweater"
-photo: "http://media.andystevens.name/photos/79692870.jpg"
+photo: "https://media.andystevens.name/photos/79692870.jpg"
 alt: "My Dad got this new sweater for Christmas."
 date: 2005-12-30 20:42:12
 published: false

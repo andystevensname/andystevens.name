@@ -1,6 +1,6 @@
 ---
 title: "Loyola Resedencia"
-photo: "http://media.andystevens.name/photos/43296579.jpg"
+photo: "https://media.andystevens.name/photos/43296579.jpg"
 alt: "The corner of my desk and the opposite corner of my room in the Loyola Resedencia."
 date: 2005-09-13 05:51:49
 published: true

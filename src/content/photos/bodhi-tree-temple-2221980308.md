@@ -1,6 +1,6 @@
 ---
 title: "Bodhi Tree Temple"
-photo: "http://media.andystevens.name/photos/2221980308.jpg"
+photo: "https://media.andystevens.name/photos/2221980308.jpg"
 date: 2008-01-18 07:15:13
 published: false
 tags:

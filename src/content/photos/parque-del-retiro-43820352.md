@@ -1,6 +1,6 @@
 ---
 title: "Parque Del Retiro"
-photo: "http://media.andystevens.name/photos/43820352.jpg"
+photo: "https://media.andystevens.name/photos/43820352.jpg"
 alt: "Fountain in foreground in Parque Del Retiro, Calle de Alcalá in the middle ground, and an unnamed church in the background. Near the Retiro metro stop."
 date: 2005-09-16 03:23:52
 published: false

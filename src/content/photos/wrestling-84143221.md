@@ -1,6 +1,6 @@
 ---
 title: "Wrestling"
-photo: "http://media.andystevens.name/photos/84143221.jpg"
+photo: "https://media.andystevens.name/photos/84143221.jpg"
 date: 2006-01-07 15:21:34
 published: false
 tags:

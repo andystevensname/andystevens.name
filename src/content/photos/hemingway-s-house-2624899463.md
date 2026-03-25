@@ -1,6 +1,6 @@
 ---
 title: "Hemingway's House"
-photo: "http://media.andystevens.name/photos/2624899463.jpg"
+photo: "https://media.andystevens.name/photos/2624899463.jpg"
 date: 2008-06-28 14:16:47
 published: false
 tags:

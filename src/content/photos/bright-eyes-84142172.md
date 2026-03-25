@@ -1,6 +1,6 @@
 ---
 title: "Bright Eyes"
-photo: "http://media.andystevens.name/photos/84142172.jpg"
+photo: "https://media.andystevens.name/photos/84142172.jpg"
 date: 2006-01-07 15:25:09
 published: false
 tags:

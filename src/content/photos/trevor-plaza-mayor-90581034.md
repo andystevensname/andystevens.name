@@ -1,6 +1,6 @@
 ---
 title: "Trevor, Plaza Mayor"
-photo: "http://media.andystevens.name/photos/90581034.jpg"
+photo: "https://media.andystevens.name/photos/90581034.jpg"
 date: 2006-01-21 09:28:46
 published: false
 albums:
