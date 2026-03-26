@@ -674,7 +674,7 @@ article .e-content li ol {
 }
 
 .feed-content img {
-  max-width: 100%;
+  width: 100%;
   height: auto;
 }
 

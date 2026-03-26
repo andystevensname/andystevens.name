@@ -69,7 +69,7 @@ function shortDate(d: Date) {
       <p><a href={linkTo}>{linkTo}</a></p>
     )}
     {type === 'photo' && (<>
-      {photo && <a href={url}><img class="u-photo" src={`${photo}?class=photo400`} srcset={`${photo}?class=photo200 200w, ${photo}?class=photo400 400w`} sizes="(min-width: 640px) 200px, 100vw" alt={alt ?? title ?? ''} loading="lazy" decoding="async" /></a>}
+      {photo && <a href={url}><img class="u-photo" src={`${photo}?class=photo400`} srcset={`${photo}?class=photo200 200w, ${photo}?class=photo400 400w`} sizes="(min-width: 640px) 40rem, 100vw" alt={alt ?? title ?? ''} loading="lazy" decoding="async" /></a>}
       {title && <p>{title}</p>}
     </>)}
     {type === 'reply' && (<>
@@ -86,7 +86,7 @@ function shortDate(d: Date) {
       {venue && <p>{venue}</p>}
     </>)}
     {type === 'album' && (<>
-      {photo && <a href={url}><img class="u-photo" src={`${photo}?class=photo400`} srcset={`${photo}?class=photo200 200w, ${photo}?class=photo400 400w`} sizes="(min-width: 640px) 200px, 100vw" alt={title ?? ''} loading="lazy" decoding="async" /></a>}
+      {photo && <a href={url}><img class="u-photo" src={`${photo}?class=photo400`} srcset={`${photo}?class=photo200 200w, ${photo}?class=photo400 400w`} sizes="(min-width: 640px) 40rem, 100vw" alt={title ?? ''} loading="lazy" decoding="async" /></a>}
       <p><a href={url}>{title}</a></p>
       {summary && <p>{summary}</p>}
     </>)}
