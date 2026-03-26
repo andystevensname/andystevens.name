@@ -50,7 +50,7 @@ allPhotos.sort((a, b) => {
         const src = Array.isArray(photo.data.photo) ? photo.data.photo[0] : photo.data.photo;
         return (
           <a href={`/photos/${photo.id}/`} class="album-photo">
-            <img src={`${src}?class=photo-200`} srcset={`${src}?class=photo-200 200w, ${src}?class=photo-400 400w`} sizes="(min-width: 640px) 160px, 50vw" alt={photo.data.alt ?? photo.data.title ?? ''} loading="lazy" decoding="async" width={photo.data.width} height={photo.data.height} />
+            <img src={`${src}?class=photo200`} srcset={`${src}?class=photo200 200w, ${src}?class=photo400 400w`} sizes="(min-width: 640px) 160px, 50vw" alt={photo.data.alt ?? photo.data.title ?? ''} loading="lazy" decoding="async" width={photo.data.width} height={photo.data.height} />
           </a>
         );
       })}
