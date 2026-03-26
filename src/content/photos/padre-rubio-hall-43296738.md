@@ -11,4 +11,6 @@ tags:
 license: "CC BY-NC 2.0"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/43296738/"
 slug: "padre-rubio-hall-43296738"
+width: 1024
+height: 768
 ---

@@ -10,4 +10,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/35977749/"
 slug: "view-from-the-loft-35977749"
+width: 1920
+height: 2560
 ---

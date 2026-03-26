@@ -13,4 +13,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2289136537/"
 slug: "classy-doors-2289136537"
+width: 528
+height: 800
 ---

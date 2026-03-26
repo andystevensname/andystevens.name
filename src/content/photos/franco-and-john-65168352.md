@@ -9,4 +9,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/65168352/"
 slug: "franco-and-john-65168352"
+width: 2272
+height: 1704
 ---

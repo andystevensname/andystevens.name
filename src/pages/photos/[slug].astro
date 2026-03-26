@@ -30,7 +30,7 @@ const photoSrcs = Array.isArray(photo.data.photo) ? photo.data.photo : [photo.da
 
     {photoSrcs.map((src) => (
       <figure>
-        <img class="u-photo" src={src} alt={photo.data.alt ?? ''} />
+        <img class="u-photo" src={src} alt={photo.data.alt ?? ''} width={photo.data.width} height={photo.data.height} loading="lazy" decoding="async" />
         {photo.data.title && <figcaption>{photo.data.title}</figcaption>}
       </figure>
     ))}

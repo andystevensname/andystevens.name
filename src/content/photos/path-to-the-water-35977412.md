@@ -10,4 +10,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/35977412/"
 slug: "path-to-the-water-35977412"
+width: 1858
+height: 2513
 ---

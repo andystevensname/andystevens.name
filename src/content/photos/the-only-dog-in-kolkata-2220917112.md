@@ -11,4 +11,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2220917112/"
 slug: "the-only-dog-in-kolkata-2220917112"
+width: 800
+height: 465
 ---

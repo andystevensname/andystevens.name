@@ -9,4 +9,6 @@ albums:
 license: "CC BY-NC 2.0"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/65168353/"
 slug: "the-bottle-smashers-65168353"
+width: 2272
+height: 1704
 ---

@@ -9,4 +9,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/85391895/"
 slug: "forest-floor-85391895"
+width: 3008
+height: 2000
 ---

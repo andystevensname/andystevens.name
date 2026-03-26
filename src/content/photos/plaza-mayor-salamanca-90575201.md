@@ -9,4 +9,6 @@ albums:
 license: "CC BY-NC 2.0"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/90575201/"
 slug: "plaza-mayor-salamanca-90575201"
+width: 3001
+height: 1989
 ---

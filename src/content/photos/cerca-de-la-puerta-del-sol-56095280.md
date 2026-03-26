@@ -12,4 +12,6 @@ albums:
 license: "CC BY-NC 2.0"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/56095280/"
 slug: "cerca-de-la-puerta-del-sol-56095280"
+width: 1280
+height: 960
 ---

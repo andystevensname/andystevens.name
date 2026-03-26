@@ -13,4 +13,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/84456372/"
 slug: "needle-nosed-fish-84456372"
+width: 3024
+height: 1998
 ---

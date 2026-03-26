@@ -13,4 +13,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/84457391/"
 slug: "ugliest-fish-on-the-planet-84457391"
+width: 3024
+height: 1998
 ---

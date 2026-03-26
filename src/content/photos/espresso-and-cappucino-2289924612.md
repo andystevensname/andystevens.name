@@ -10,4 +10,6 @@ tags:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2289924612/"
 slug: "espresso-and-cappucino-2289924612"
+width: 528
+height: 800
 ---

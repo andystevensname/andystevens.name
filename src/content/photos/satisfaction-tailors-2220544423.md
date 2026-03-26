@@ -13,4 +13,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2220544423/"
 slug: "satisfaction-tailors-2220544423"
+width: 532
+height: 800
 ---

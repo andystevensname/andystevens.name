@@ -11,4 +11,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/592707654/"
 slug: "a-is-for-abstract-592707654"
+width: 530
+height: 800
 ---

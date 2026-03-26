@@ -12,4 +12,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2220932066/"
 slug: "scavenger-lady-2-2220932066"
+width: 800
+height: 532
 ---

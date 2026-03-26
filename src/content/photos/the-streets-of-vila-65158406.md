@@ -9,4 +9,6 @@ albums:
 license: "CC BY-NC 2.0"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/65158406/"
 slug: "the-streets-of-vila-65158406"
+width: 1704
+height: 2272
 ---

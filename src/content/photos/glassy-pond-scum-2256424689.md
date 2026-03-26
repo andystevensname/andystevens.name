@@ -13,4 +13,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2256424689/"
 slug: "glassy-pond-scum-2256424689"
+width: 800
+height: 532
 ---

@@ -13,4 +13,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2221294394/"
 slug: "pilgrim-child-2221294394"
+width: 490
+height: 800
 ---

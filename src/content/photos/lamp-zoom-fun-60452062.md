@@ -9,4 +9,6 @@ albums:
 license: "CC BY-NC 2.0"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/60452062/"
 slug: "lamp-zoom-fun-60452062"
+width: 1280
+height: 960
 ---

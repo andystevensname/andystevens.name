@@ -12,4 +12,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2220493515/"
 slug: "locked-into-a-career-2220493515"
+width: 532
+height: 800
 ---

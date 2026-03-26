@@ -13,4 +13,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/84456651/"
 slug: "tropical-fish-84456651"
+width: 1999
+height: 1998
 ---

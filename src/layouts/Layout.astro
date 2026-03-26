@@ -48,6 +48,12 @@ const structuredData = jsonLd ?? defaultJsonLd;
     {description && <meta name="description" content={description} />}
     <title>{pageTitle}</title>
 
+    <!-- Preconnect to external origins -->
+    <link rel="preconnect" href="https://media.andystevens.name" />
+    <link rel="dns-prefetch" href="https://media.andystevens.name" />
+    <link rel="preconnect" href="https://webmention.andystevens.name" />
+    <link rel="dns-prefetch" href="https://webmention.andystevens.name" />
+
     <!-- Canonical -->
     <link rel="canonical" href={canonicalUrl} />
 

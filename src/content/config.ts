@@ -76,6 +76,8 @@ const photos = defineCollection({
       latitude: z.number(),
       longitude: z.number(),
     }).optional(),
+    width: z.number().optional(),
+    height: z.number().optional(),
     flickr_url: z.string().optional(),
     syndication,
     slug: z.string().optional(),

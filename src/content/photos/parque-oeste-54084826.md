@@ -14,4 +14,6 @@ albums:
 license: "CC BY-NC 2.0"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/54084826/"
 slug: "parque-oeste-54084826"
+width: 640
+height: 480
 ---

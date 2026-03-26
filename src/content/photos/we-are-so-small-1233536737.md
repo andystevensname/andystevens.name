@@ -13,4 +13,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/1233536737/"
 slug: "we-are-so-small-1233536737"
+width: 800
+height: 530
 ---

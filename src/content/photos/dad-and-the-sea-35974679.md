@@ -10,4 +10,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/35974679/"
 slug: "dad-and-the-sea-35974679"
+width: 2507
+height: 1849
 ---

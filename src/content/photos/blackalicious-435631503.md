@@ -12,4 +12,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/435631503/"
 slug: "blackalicious-435631503"
+width: 2256
+height: 1496
 ---

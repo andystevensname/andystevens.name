@@ -11,4 +11,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2221241339/"
 slug: "the-darjeeling-limited-2221241339"
+width: 800
+height: 532
 ---

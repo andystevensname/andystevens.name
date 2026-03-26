@@ -12,4 +12,6 @@ albums:
 license: "CC BY-NC 2.0"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/43820272/"
 slug: "plaza-de-la-independencia-43820272"
+width: 1024
+height: 768
 ---

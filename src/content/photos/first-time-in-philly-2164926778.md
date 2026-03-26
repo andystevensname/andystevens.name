@@ -6,4 +6,6 @@ published: true
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2164926778/"
 slug: "first-time-in-philly-2164926778"
+width: 800
+height: 522
 ---

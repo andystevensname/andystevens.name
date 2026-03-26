@@ -10,4 +10,6 @@ albums:
 license: "CC BY-NC 2.0"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/90427676/"
 slug: "church-facade-90427676"
+width: 2957
+height: 1983
 ---

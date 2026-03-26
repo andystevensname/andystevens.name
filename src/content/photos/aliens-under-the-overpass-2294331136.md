@@ -8,4 +8,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2294331136/"
 slug: "aliens-under-the-overpass-2294331136"
+width: 800
+height: 528
 ---

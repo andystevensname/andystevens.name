@@ -15,4 +15,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/47200122/"
 slug: "as-spain-sees-me-47200122"
+width: 1704
+height: 1704
 ---

@@ -11,4 +11,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/35975747/"
 slug: "dad-and-greg-and-the-lobster-sail-boat-35975747"
+width: 1920
+height: 2560
 ---

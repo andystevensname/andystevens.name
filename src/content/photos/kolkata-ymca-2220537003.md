@@ -12,4 +12,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2220537003/"
 slug: "kolkata-ymca-2220537003"
+width: 646
+height: 800
 ---

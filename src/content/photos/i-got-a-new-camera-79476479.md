@@ -14,4 +14,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/79476479/"
 slug: "i-got-a-new-camera-79476479"
+width: 3024
+height: 1998
 ---

@@ -9,4 +9,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/35976983/"
 slug: "the-house-side-35976983"
+width: 2560
+height: 1920
 ---

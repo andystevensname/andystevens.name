@@ -6,4 +6,6 @@ published: true
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2302662827/"
 slug: "spider-dinner-silhoutte-2302662827"
+width: 800
+height: 528
 ---

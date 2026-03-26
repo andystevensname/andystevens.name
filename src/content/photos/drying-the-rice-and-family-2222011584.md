@@ -13,4 +13,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2222011584/"
 slug: "drying-the-rice-and-family-2222011584"
+width: 762
+height: 800
 ---

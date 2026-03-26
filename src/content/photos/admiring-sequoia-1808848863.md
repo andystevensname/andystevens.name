@@ -11,4 +11,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/1808848863/"
 slug: "admiring-sequoia-1808848863"
+width: 800
+height: 530
 ---

@@ -12,4 +12,6 @@ tags:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/43296594/"
 slug: "loyola-resedencia-43296594"
+width: 764
+height: 1021
 ---

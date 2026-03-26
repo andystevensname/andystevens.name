@@ -14,4 +14,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2221933314/"
 slug: "street-family-2221933314"
+width: 800
+height: 454
 ---

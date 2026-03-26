@@ -11,4 +11,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/1808829743/"
 slug: "el-capitan-and-half-dome-1808829743"
+width: 800
+height: 530
 ---

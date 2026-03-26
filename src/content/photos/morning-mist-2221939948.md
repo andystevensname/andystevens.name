@@ -11,4 +11,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2221939948/"
 slug: "morning-mist-2221939948"
+width: 800
+height: 532
 ---

@@ -11,4 +11,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2221210613/"
 slug: "india-cow-eyes-2221210613"
+width: 800
+height: 532
 ---

@@ -18,7 +18,7 @@
   --c-gray: #212121;
   --c-gray-light: #757575;
   --c-gray-lighter: #E0E0E0;
-  --c-accent: #039BE5;
+  --c-accent: light-dark(#0277BD, #29B6F6);
 }
 
 html.dark {

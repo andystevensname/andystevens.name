@@ -11,4 +11,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2220919064/"
 slug: "polio-sunday-2220919064"
+width: 521
+height: 800
 ---

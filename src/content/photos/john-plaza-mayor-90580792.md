@@ -9,4 +9,6 @@ albums:
 license: "CC BY-NC 2.0"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/90580792/"
 slug: "john-plaza-mayor-90580792"
+width: 3008
+height: 2000
 ---

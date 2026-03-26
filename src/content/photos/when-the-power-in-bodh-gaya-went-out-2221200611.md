@@ -13,4 +13,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2221200611/"
 slug: "when-the-power-in-bodh-gaya-went-out-2221200611"
+width: 800
+height: 532
 ---

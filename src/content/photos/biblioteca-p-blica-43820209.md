@@ -12,4 +12,6 @@ albums:
 license: "CC BY-NC 2.0"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/43820209/"
 slug: "biblioteca-p-blica-43820209"
+width: 768
+height: 1024
 ---

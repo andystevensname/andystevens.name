@@ -9,4 +9,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/44763593/"
 slug: "pyrenees-los-pirineos-44763593"
+width: 450
+height: 600
 ---

@@ -9,4 +9,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/65547024/"
 slug: "trevor-and-john-65547024"
+width: 2272
+height: 1416
 ---

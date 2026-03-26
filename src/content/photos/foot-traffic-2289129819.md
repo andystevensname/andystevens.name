@@ -11,4 +11,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2289129819/"
 slug: "foot-traffic-2289129819"
+width: 329
+height: 800
 ---

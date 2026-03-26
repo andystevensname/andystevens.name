@@ -13,4 +13,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2221186905/"
 slug: "monkey-with-prayer-flags-2221186905"
+width: 800
+height: 616
 ---

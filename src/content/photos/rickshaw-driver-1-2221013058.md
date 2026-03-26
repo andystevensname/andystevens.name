@@ -10,4 +10,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2221013058/"
 slug: "rickshaw-driver-1-2221013058"
+width: 800
+height: 752
 ---

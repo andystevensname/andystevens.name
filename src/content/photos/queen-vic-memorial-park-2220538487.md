@@ -12,4 +12,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2220538487/"
 slug: "queen-vic-memorial-park-2220538487"
+width: 475
+height: 800
 ---

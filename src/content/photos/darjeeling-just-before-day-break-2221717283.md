@@ -13,4 +13,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2221717283/"
 slug: "darjeeling-just-before-day-break-2221717283"
+width: 800
+height: 532
 ---

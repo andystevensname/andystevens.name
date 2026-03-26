@@ -10,4 +10,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/592705280/"
 slug: "surreality-592705280"
+width: 530
+height: 800
 ---

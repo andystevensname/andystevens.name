@@ -14,4 +14,6 @@ albums:
 license: "CC BY-NC 2.0"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/53078087/"
 slug: "museo-de-prado-53078087"
+width: 640
+height: 480
 ---

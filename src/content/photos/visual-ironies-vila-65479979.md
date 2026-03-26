@@ -8,4 +8,6 @@ albums:
 license: "CC BY-NC 2.0"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/65479979/"
 slug: "visual-ironies-vila-65479979"
+width: 2272
+height: 1704
 ---

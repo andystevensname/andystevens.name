@@ -11,4 +11,6 @@ tags:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2289920236/"
 slug: "world-liquors-2289920236"
+width: 800
+height: 528
 ---

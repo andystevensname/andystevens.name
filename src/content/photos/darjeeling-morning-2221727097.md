@@ -13,4 +13,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2221727097/"
 slug: "darjeeling-morning-2221727097"
+width: 800
+height: 532
 ---

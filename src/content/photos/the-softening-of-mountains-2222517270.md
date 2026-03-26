@@ -12,4 +12,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2222517270/"
 slug: "the-softening-of-mountains-2222517270"
+width: 800
+height: 413
 ---

@@ -11,4 +11,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2222000986/"
 slug: "end-of-the-day-2222000986"
+width: 467
+height: 800
 ---

@@ -13,4 +13,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2221187735/"
 slug: "siddhartha-s-cave-national-geographic-cave-2221187735"
+width: 505
+height: 800
 ---

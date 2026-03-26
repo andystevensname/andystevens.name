@@ -9,4 +9,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/85392665/"
 slug: "plain-and-simple-pt-4-85392665"
+width: 3008
+height: 2000
 ---

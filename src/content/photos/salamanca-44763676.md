@@ -9,4 +9,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/44763676/"
 slug: "salamanca-44763676"
+width: 600
+height: 450
 ---

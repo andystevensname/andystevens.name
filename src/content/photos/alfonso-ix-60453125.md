@@ -9,4 +9,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/60453125/"
 slug: "alfonso-ix-60453125"
+width: 1280
+height: 960
 ---

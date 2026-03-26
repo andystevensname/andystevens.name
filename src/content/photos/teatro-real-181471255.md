@@ -11,4 +11,6 @@ albums:
 license: "CC BY-NC 2.0"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/181471255/"
 slug: "teatro-real-181471255"
+width: 3008
+height: 2000
 ---

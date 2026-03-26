@@ -7,4 +7,6 @@ published: true
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/298860911/"
 slug: "threepart-issue-4-298860911"
+width: 300
+height: 464
 ---

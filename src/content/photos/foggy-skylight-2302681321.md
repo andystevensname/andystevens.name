@@ -9,4 +9,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2302681321/"
 slug: "foggy-skylight-2302681321"
+width: 528
+height: 800
 ---

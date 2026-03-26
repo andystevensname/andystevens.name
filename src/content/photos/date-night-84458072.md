@@ -13,4 +13,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/84458072/"
 slug: "date-night-84458072"
+width: 3024
+height: 1998
 ---

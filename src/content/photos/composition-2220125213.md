@@ -11,4 +11,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2220125213/"
 slug: "composition-2220125213"
+width: 554
+height: 800
 ---

@@ -11,4 +11,6 @@ tags:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2289919280/"
 slug: "power-station-and-dumpsters-2289919280"
+width: 528
+height: 800
 ---

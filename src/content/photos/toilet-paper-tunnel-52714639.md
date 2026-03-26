@@ -15,4 +15,6 @@ albums:
 license: "CC BY-NC 2.0"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/52714639/"
 slug: "toilet-paper-tunnel-52714639"
+width: 2272
+height: 1704
 ---

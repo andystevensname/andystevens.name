@@ -6,4 +6,6 @@ published: true
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2164124191/"
 slug: "over-night-in-november-2164124191"
+width: 464
+height: 800
 ---

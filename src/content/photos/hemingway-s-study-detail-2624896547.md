@@ -12,4 +12,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2624896547/"
 slug: "hemingway-s-study-detail-2624896547"
+width: 1998
+height: 3024
 ---

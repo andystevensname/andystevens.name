@@ -9,4 +9,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/35975361/"
 slug: "mom-and-dad-35975361"
+width: 2157
+height: 1915
 ---

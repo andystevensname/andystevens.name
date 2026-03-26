@@ -11,4 +11,6 @@ albums:
 license: "CC BY-NC 2.0"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/181471682/"
 slug: "plaza-mayor-181471682"
+width: 2000
+height: 3008
 ---

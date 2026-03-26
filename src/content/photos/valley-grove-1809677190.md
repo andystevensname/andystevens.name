@@ -12,4 +12,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/1809677190/"
 slug: "valley-grove-1809677190"
+width: 800
+height: 530
 ---

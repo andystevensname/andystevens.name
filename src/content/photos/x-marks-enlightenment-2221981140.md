@@ -13,4 +13,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2221981140/"
 slug: "x-marks-enlightenment-2221981140"
+width: 525
+height: 800
 ---

@@ -10,4 +10,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/84140632/"
 slug: "grassy-tounge-84140632"
+width: 3024
+height: 1998
 ---

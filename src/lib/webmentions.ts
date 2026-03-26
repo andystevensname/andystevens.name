@@ -14,24 +14,32 @@ export interface Webmention {
   type?: string;
 }
 
+let cachedMentions: Webmention[] | null = null;
+
 export async function fetchWebmentions(): Promise<Webmention[]> {
+  if (cachedMentions !== null) return cachedMentions;
+
   const token = import.meta.env.GO_JAMMING_TOKEN;
   if (!token) {
     console.warn('GO_JAMMING_TOKEN not set, skipping webmention fetch');
-    return [];
+    cachedMentions = [];
+    return cachedMentions;
   }
 
   try {
     const res = await fetch(`${BASE_URL}/webmention/${DOMAIN}/${token}`);
     if (!res.ok) {
       console.warn(`Webmention fetch failed: ${res.status}`);
-      return [];
+      cachedMentions = [];
+      return cachedMentions;
     }
     const data = await res.json();
-    return data.json ?? data ?? [];
+    cachedMentions = data.json ?? data ?? [];
+    return cachedMentions;
   } catch (e) {
     console.warn('Webmention fetch error:', e);
-    return [];
+    cachedMentions = [];
+    return cachedMentions;
   }
 }
 

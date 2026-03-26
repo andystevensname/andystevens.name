@@ -15,4 +15,6 @@ albums:
 license: "CC BY-NC 2.0"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/61913289/"
 slug: "painters-of-madrid-3-61913289"
+width: 2272
+height: 1704
 ---

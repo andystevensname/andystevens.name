@@ -12,4 +12,6 @@ albums:
 license: "CC BY-NC 2.0"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/43820156/"
 slug: "one-of-many-theaters-43820156"
+width: 1024
+height: 768
 ---

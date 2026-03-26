@@ -6,4 +6,6 @@ published: true
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2293541221/"
 slug: "ben-and-the-entrance-ramp-2293541221"
+width: 800
+height: 715
 ---

@@ -6,4 +6,6 @@ published: true
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2625716482/"
 slug: "kitchen-table-2625716482"
+width: 3024
+height: 1998
 ---

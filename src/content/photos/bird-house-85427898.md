@@ -10,4 +10,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/85427898/"
 slug: "bird-house-85427898"
+width: 1999
+height: 1998
 ---

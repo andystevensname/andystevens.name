@@ -10,4 +10,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2221222518/"
 slug: "river-kid-fishing-2221222518"
+width: 800
+height: 708
 ---

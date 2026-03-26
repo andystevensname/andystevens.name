@@ -13,4 +13,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2221723545/"
 slug: "darjeeling-city-of-the-clouds-2221723545"
+width: 800
+height: 532
 ---

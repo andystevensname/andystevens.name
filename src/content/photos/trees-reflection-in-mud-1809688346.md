@@ -12,4 +12,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/1809688346/"
 slug: "trees-reflection-in-mud-1809688346"
+width: 508
+height: 800
 ---

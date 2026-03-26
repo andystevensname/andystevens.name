@@ -10,4 +10,6 @@ tags:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2257235190/"
 slug: "bench-in-the-shadow-2257235190"
+width: 800
+height: 532
 ---

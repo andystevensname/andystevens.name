@@ -12,4 +12,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2224551453/"
 slug: "cold-morning-portrait-2224551453"
+width: 800
+height: 605
 ---

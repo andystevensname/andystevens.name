@@ -12,4 +12,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2292711162/"
 slug: "luminous-pole-2292711162"
+width: 528
+height: 800
 ---

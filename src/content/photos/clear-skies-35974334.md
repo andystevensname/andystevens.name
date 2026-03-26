@@ -9,4 +9,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/35974334/"
 slug: "clear-skies-35974334"
+width: 2560
+height: 1920
 ---

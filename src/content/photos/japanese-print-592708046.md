@@ -10,4 +10,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/592708046/"
 slug: "japanese-print-592708046"
+width: 800
+height: 530
 ---

@@ -10,4 +10,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2221239978/"
 slug: "bathers-in-the-ganges-2221239978"
+width: 800
+height: 532
 ---

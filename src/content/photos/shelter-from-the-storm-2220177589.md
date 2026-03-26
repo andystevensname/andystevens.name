@@ -10,4 +10,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2220177589/"
 slug: "shelter-from-the-storm-2220177589"
+width: 800
+height: 618
 ---

@@ -9,4 +9,6 @@ albums:
 license: "CC BY-NC 2.0"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/46065624/"
 slug: "above-colombia-46065624"
+width: 768
+height: 1024
 ---

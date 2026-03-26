@@ -12,4 +12,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/79692870/"
 slug: "my-dad-s-new-sweater-79692870"
+width: 3024
+height: 1998
 ---

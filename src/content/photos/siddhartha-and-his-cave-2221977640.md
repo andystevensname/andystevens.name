@@ -12,4 +12,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2221977640/"
 slug: "siddhartha-and-his-cave-2221977640"
+width: 532
+height: 800
 ---

@@ -11,4 +11,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2221180340/"
 slug: "transistor-radio-kid-2221180340"
+width: 415
+height: 800
 ---

@@ -12,4 +12,6 @@ albums:
 license: "CC BY-NC 2.0"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/43820126/"
 slug: "typical-street-43820126"
+width: 750
+height: 1010
 ---

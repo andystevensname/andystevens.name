@@ -10,4 +10,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/35976095/"
 slug: "mom-and-todd-35976095"
+width: 2560
+height: 1920
 ---

@@ -10,4 +10,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/84142685/"
 slug: "little-bit-of-tounge-84142685"
+width: 3024
+height: 1998
 ---

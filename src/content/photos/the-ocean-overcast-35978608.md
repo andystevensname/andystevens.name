@@ -9,4 +9,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/35978608/"
 slug: "the-ocean-overcast-35978608"
+width: 2560
+height: 1920
 ---

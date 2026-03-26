@@ -9,4 +9,6 @@ albums:
 license: "CC BY-NC 2.0"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/65158407/"
 slug: "the-wall-at-vila-65158407"
+width: 2272
+height: 1704
 ---

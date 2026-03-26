@@ -12,4 +12,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2221976192/"
 slug: "prayer-flags-2221976192"
+width: 800
+height: 389
 ---

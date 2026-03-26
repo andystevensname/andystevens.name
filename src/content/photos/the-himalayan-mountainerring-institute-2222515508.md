@@ -11,4 +11,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2222515508/"
 slug: "the-himalayan-mountainerring-institute-2222515508"
+width: 532
+height: 800
 ---

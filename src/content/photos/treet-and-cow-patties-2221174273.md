@@ -11,4 +11,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2221174273/"
 slug: "treet-and-cow-patties-2221174273"
+width: 481
+height: 800
 ---

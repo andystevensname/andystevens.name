@@ -12,4 +12,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2625716972/"
 slug: "key-west-bible-2625716972"
+width: 3024
+height: 1998
 ---

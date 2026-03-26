@@ -11,4 +11,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2221238417/"
 slug: "temple-bodh-gaya-2221238417"
+width: 569
+height: 800
 ---

@@ -14,4 +14,6 @@ albums:
 license: "CC BY-NC 2.0"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/55335563/"
 slug: "don-quixote-55335563"
+width: 960
+height: 1280
 ---

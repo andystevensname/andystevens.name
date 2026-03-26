@@ -11,4 +11,6 @@ tags:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2289925968/"
 slug: "auto-service-2289925968"
+width: 800
+height: 528
 ---

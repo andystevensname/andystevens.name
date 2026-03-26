@@ -8,4 +8,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/219571617/"
 slug: "south-street-219571617"
+width: 1486
+height: 974
 ---

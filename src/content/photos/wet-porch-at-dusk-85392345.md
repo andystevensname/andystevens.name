@@ -9,4 +9,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/85392345/"
 slug: "wet-porch-at-dusk-85392345"
+width: 3008
+height: 1402
 ---

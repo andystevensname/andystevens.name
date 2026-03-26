@@ -10,4 +10,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/35975097/"
 slug: "vacation-family-35975097"
+width: 1920
+height: 2560
 ---

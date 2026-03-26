@@ -13,4 +13,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2221192665/"
 slug: "bodhi-tree-temple-lotus-pond-2221192665"
+width: 800
+height: 532
 ---

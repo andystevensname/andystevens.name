@@ -10,4 +10,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/84148595/"
 slug: "attention-84148595"
+width: 3024
+height: 1998
 ---

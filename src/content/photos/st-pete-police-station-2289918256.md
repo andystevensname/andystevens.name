@@ -11,4 +11,6 @@ tags:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2289918256/"
 slug: "st-pete-police-station-2289918256"
+width: 597
+height: 800
 ---

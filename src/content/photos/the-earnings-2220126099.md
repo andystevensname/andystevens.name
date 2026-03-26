@@ -12,4 +12,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2220126099/"
 slug: "the-earnings-2220126099"
+width: 612
+height: 800
 ---

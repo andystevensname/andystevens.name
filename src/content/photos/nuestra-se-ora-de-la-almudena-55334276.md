@@ -13,4 +13,6 @@ albums:
 license: "CC BY-NC 2.0"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/55334276/"
 slug: "nuestra-se-ora-de-la-almudena-55334276"
+width: 1280
+height: 960
 ---

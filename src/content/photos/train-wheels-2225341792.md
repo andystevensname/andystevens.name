@@ -11,4 +11,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2225341792/"
 slug: "train-wheels-2225341792"
+width: 800
+height: 354
 ---

@@ -12,4 +12,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/1808782041/"
 slug: "flowers-with-bee-1808782041"
+width: 800
+height: 530
 ---

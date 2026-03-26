@@ -9,4 +9,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/77612358/"
 slug: "team-beard-77612358"
+width: 1802
+height: 1700
 ---

@@ -12,4 +12,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2222518806/"
 slug: "tenzing-norgay-2222518806"
+width: 530
+height: 800
 ---

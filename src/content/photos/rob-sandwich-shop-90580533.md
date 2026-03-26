@@ -7,4 +7,6 @@ published: true
 license: "CC BY-NC 2.0"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/90580533/"
 slug: "rob-sandwich-shop-90580533"
+width: 3008
+height: 2000
 ---

@@ -14,4 +14,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2221982282/"
 slug: "great-buddha-2221982282"
+width: 532
+height: 800
 ---

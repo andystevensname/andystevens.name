@@ -8,4 +8,6 @@ tags:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2288867696/"
 slug: "breakfast-foods-2288867696"
+width: 800
+height: 532
 ---

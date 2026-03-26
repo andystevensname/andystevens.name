@@ -12,4 +12,6 @@ albums:
 license: "CC BY-NC 2.0"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/43820311/"
 slug: "parque-del-retiro-43820311"
+width: 1024
+height: 768
 ---

@@ -13,4 +13,6 @@ tags:
 license: "CC BY-NC 2.0"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/55887693/"
 slug: "puerta-de-europa-55887693"
+width: 960
+height: 1280
 ---

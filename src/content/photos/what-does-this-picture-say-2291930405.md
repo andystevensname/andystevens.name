@@ -9,4 +9,6 @@ tags:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2291930405/"
 slug: "what-does-this-picture-say-2291930405"
+width: 528
+height: 800
 ---

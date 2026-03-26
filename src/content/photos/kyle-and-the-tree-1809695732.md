@@ -12,4 +12,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/1809695732/"
 slug: "kyle-and-the-tree-1809695732"
+width: 800
+height: 530
 ---

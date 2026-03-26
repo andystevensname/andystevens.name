@@ -7,4 +7,6 @@ published: true
 license: "CC BY 2.0"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/85438421/"
 slug: "desaturation-85438421"
+width: 1024
+height: 768
 ---

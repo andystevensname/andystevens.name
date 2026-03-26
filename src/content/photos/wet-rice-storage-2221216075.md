@@ -12,4 +12,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2221216075/"
 slug: "wet-rice-storage-2221216075"
+width: 532
+height: 800
 ---

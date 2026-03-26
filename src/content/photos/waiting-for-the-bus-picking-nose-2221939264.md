@@ -13,4 +13,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2221939264/"
 slug: "waiting-for-the-bus-picking-nose-2221939264"
+width: 800
+height: 458
 ---

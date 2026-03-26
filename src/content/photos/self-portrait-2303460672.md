@@ -6,4 +6,6 @@ published: true
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2303460672/"
 slug: "self-portrait-2303460672"
+width: 800
+height: 528
 ---

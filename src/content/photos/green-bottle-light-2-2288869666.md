@@ -6,4 +6,6 @@ published: true
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2288869666/"
 slug: "green-bottle-light-2-2288869666"
+width: 800
+height: 528
 ---

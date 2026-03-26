@@ -11,4 +11,6 @@ tags:
 license: "CC BY-NC 2.0"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/55336304/"
 slug: "dad-at-dinner-55336304"
+width: 1280
+height: 960
 ---

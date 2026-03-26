@@ -8,4 +8,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2288079731/"
 slug: "owen-and-snoof-2288079731"
+width: 800
+height: 532
 ---

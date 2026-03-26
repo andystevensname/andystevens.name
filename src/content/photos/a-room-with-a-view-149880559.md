@@ -9,4 +9,6 @@ albums:
 license: "CC BY-NC 2.0"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/149880559/"
 slug: "a-room-with-a-view-149880559"
+width: 2000
+height: 3008
 ---

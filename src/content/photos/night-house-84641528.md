@@ -10,4 +10,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/84641528/"
 slug: "night-house-84641528"
+width: 3008
+height: 2000
 ---

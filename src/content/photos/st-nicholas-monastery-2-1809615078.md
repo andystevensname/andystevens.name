@@ -11,4 +11,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/1809615078/"
 slug: "st-nicholas-monastery-2-1809615078"
+width: 800
+height: 530
 ---

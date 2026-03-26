@@ -12,4 +12,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2624899463/"
 slug: "hemingway-s-house-2624899463"
+width: 1998
+height: 3024
 ---

@@ -11,4 +11,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2256423455/"
 slug: "night-fisher-2256423455"
+width: 532
+height: 800
 ---

@@ -10,4 +10,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2220486411/"
 slug: "river-shrines-2-2220486411"
+width: 478
+height: 800
 ---

@@ -12,4 +12,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2221163143/"
 slug: "cow-patties-in-morning-mist-2221163143"
+width: 727
+height: 800
 ---

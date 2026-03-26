@@ -8,4 +8,6 @@ albums:
 license: "CC BY-NC 2.0"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/90581034/"
 slug: "trevor-plaza-mayor-90581034"
+width: 3008
+height: 2000
 ---

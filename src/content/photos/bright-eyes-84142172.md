@@ -10,4 +10,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/84142172/"
 slug: "bright-eyes-84142172"
+width: 3024
+height: 1998
 ---

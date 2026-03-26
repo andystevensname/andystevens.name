@@ -7,4 +7,6 @@ published: true
 license: "CC BY-NC 2.0"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/65156991/"
 slug: "caught-in-a-crossfire-pt-2-65156991"
+width: 1704
+height: 2272
 ---

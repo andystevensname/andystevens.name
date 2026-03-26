@@ -11,4 +11,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2221182542/"
 slug: "business-is-good-2221182542"
+width: 532
+height: 800
 ---

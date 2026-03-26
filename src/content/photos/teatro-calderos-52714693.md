@@ -14,4 +14,6 @@ albums:
 license: "CC BY-NC 2.0"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/52714693/"
 slug: "teatro-calderos-52714693"
+width: 2272
+height: 1704
 ---

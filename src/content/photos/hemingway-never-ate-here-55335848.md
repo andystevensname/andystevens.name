@@ -14,4 +14,6 @@ albums:
 license: "CC BY-NC 2.0"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/55335848/"
 slug: "hemingway-never-ate-here-55335848"
+width: 1280
+height: 960
 ---

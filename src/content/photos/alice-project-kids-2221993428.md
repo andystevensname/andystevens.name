@@ -10,4 +10,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2221993428/"
 slug: "alice-project-kids-2221993428"
+width: 606
+height: 800
 ---

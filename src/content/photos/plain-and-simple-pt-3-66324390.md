@@ -9,4 +9,6 @@ albums:
 license: "CC BY-NC 2.0"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/66324390/"
 slug: "plain-and-simple-pt-3-66324390"
+width: 1704
+height: 2272
 ---

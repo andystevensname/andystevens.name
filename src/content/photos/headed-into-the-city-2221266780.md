@@ -11,4 +11,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2221266780/"
 slug: "headed-into-the-city-2221266780"
+width: 800
+height: 469
 ---

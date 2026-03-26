@@ -10,4 +10,6 @@ albums:
 license: "CC BY-NC 2.0"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/181467847/"
 slug: "tio-pepe-revisited-181467847"
+width: 3008
+height: 2000
 ---

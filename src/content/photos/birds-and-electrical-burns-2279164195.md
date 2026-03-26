@@ -9,4 +9,6 @@ tags:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2279164195/"
 slug: "birds-and-electrical-burns-2279164195"
+width: 800
+height: 752
 ---

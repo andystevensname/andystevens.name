@@ -11,4 +11,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/79934299/"
 slug: "listening-greg-pt-2-79934299"
+width: 3024
+height: 1998
 ---

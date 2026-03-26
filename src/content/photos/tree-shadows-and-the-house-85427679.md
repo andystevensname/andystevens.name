@@ -12,4 +12,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/85427679/"
 slug: "tree-shadows-and-the-house-85427679"
+width: 3024
+height: 1998
 ---

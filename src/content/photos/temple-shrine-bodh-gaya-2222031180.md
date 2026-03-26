@@ -11,4 +11,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2222031180/"
 slug: "temple-shrine-bodh-gaya-2222031180"
+width: 540
+height: 800
 ---

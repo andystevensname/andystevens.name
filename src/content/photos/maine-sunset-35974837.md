@@ -10,4 +10,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/35974837/"
 slug: "maine-sunset-35974837"
+width: 2560
+height: 1920
 ---

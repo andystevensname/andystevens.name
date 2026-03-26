@@ -7,4 +7,6 @@ published: true
 license: "CC BY-NC 2.0"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/90580256/"
 slug: "food-shopping-90580256"
+width: 3008
+height: 2000
 ---

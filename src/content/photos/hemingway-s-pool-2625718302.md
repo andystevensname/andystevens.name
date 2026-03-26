@@ -13,4 +13,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2625718302/"
 slug: "hemingway-s-pool-2625718302"
+width: 3016
+height: 1540
 ---

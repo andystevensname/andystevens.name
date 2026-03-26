@@ -10,4 +10,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2220362477/"
 slug: "alley-cricket-2220362477"
+width: 800
+height: 743
 ---

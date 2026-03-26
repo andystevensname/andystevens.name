@@ -14,4 +14,6 @@ albums:
 license: "All Rights Reserved"
 flickr_url: "https://www.flickr.com/photos/taylorstevens/2221980308/"
 slug: "bodhi-tree-temple-2221980308"
+width: 800
+height: 518
 ---
