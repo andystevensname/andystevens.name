@@ -271,6 +271,7 @@ h1 {
   margin: 0 0 1rem 0;
   padding: 0;
   text-wrap: balance;
+  text-align: center;
 }
 
 h2, h3, h4 {
@@ -787,6 +788,10 @@ article .e-content li ol {
 @media (min-width: 640px) {
   .site-layout {
     position: relative;
+  }
+
+  h1 {
+    text-align: left;
   }
 
   .site-sidebar {
