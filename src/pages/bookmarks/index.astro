@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
-import FeedItem from '../../components/FeedItem.astro';
+import FeedList from '../../components/FeedList.astro';
 import { mapBookmarks, sortByDate } from '../../lib/feed';
 
 const bookmarks = await getCollection('bookmarks', ({ data }) => data.published !== false);
@@ -9,13 +9,5 @@ const feed = sortByDate(mapBookmarks(bookmarks));
 ---
 
 <Layout title="Bookmarks" description="Links and bookmarks I've saved.">
-  <h1>Bookmarks</h1>
-  <div class="recent-feed h-feed">
-    <span class="p-name" style="display:none" aria-hidden="true">Andy Stevens — Bookmarks</span>
-    <a class="p-author h-card" href="https://andystevens.name" style="display:none" aria-hidden="true">Andy Stevens</a>
-    {feed.length > 0
-      ? feed.map((item) => <FeedItem {...item} />)
-      : <p>No bookmarks yet.</p>
-    }
-  </div>
+  <FeedList title="Bookmarks" feed={feed} emptyMessage="No bookmarks yet." />
 </Layout>

@@ -1,4 +1,6 @@
 ---
+import { formatDate } from '../lib/date';
+
 interface Props {
   post: {
     id: string;
@@ -11,15 +13,8 @@ interface Props {
 
 const { post } = Astro.props;
 
-let dateStr = '';
-let isoDate = '';
-if (post.data.date) {
-  const d = new Date(post.data.date);
-  const utcDate = new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
-  dateStr = `${utcDate.getFullYear()}-${String(utcDate.getMonth() + 1).padStart(2, '0')}-${String(utcDate.getDate()).padStart(2, '0')}`;
-  isoDate = post.data.date.toISOString();
-}
-
+const dateStr = post.data.date ? formatDate(new Date(post.data.date)) : '';
+const isoDate = post.data.date?.toISOString() ?? '';
 const tags = post.data.tags ?? [];
 ---
 

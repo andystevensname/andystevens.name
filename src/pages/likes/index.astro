@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
-import FeedItem from '../../components/FeedItem.astro';
+import FeedList from '../../components/FeedList.astro';
 import { mapLikes, sortByDate } from '../../lib/feed';
 
 const likes = await getCollection('likes', ({ data }) => data.published !== false);
@@ -9,13 +9,5 @@ const feed = sortByDate(mapLikes(likes));
 ---
 
 <Layout title="Likes" description="Things I've liked around the web.">
-  <h1>Likes</h1>
-  <div class="recent-feed h-feed">
-    <span class="p-name" style="display:none" aria-hidden="true">Andy Stevens — Likes</span>
-    <a class="p-author h-card" href="https://andystevens.name" style="display:none" aria-hidden="true">Andy Stevens</a>
-    {feed.length > 0
-      ? feed.map((item) => <FeedItem {...item} />)
-      : <p>No likes yet.</p>
-    }
-  </div>
+  <FeedList title="Likes" feed={feed} emptyMessage="No likes yet." />
 </Layout>

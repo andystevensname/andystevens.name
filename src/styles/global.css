@@ -647,15 +647,10 @@ article .e-content li ol {
 }
 
 
-.feed-type {
-  height: 1.5rem;
-  display: flex;
-  align-items: center;
-}
-
-.feed-type svg {
+svg.feed-type {
   width: 1rem;
   height: 1rem;
+  align-self: center;
 }
 
 .feed-item--like .feed-type { color: #E53935; }

@@ -10,10 +10,11 @@ const { url, date, summary, syndication = [] } = Astro.props;
 const isoDate = date?.toISOString() ?? '';
 ---
 
-<a class="u-url u-uid" href={url} style="display:none" aria-hidden="true">{url}</a>
-{isoDate && <time class="dt-published" datetime={isoDate} style="display:none" aria-hidden="true">{isoDate}</time>}
-{summary && <p class="p-summary" style="display:none" aria-hidden="true">{summary}</p>}
-<a class="p-author h-card" href="https://andystevens.name" style="display:none" aria-hidden="true">Andy Stevens</a>
-{syndication.map((synUrl) => (
-  <a class="u-syndication" href={synUrl} style="display:none" aria-hidden="true">{synUrl}</a>
-))}
+<span class="h-entry-meta" style="display:none" aria-hidden="true">
+  <a class="u-url u-uid p-author h-card" href={url}>Andy Stevens</a>
+  {isoDate && <time class="dt-published" datetime={isoDate}>{isoDate}</time>}
+  {summary && <data class="p-summary" value={summary}/>}
+  {syndication.map((synUrl) => (
+    <a class="u-syndication" href={synUrl}>{synUrl}</a>
+  ))}
+</span>

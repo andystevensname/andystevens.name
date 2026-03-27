@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
-import FeedItem from '../../components/FeedItem.astro';
+import FeedList from '../../components/FeedList.astro';
 import { mapReplies, sortByDate } from '../../lib/feed';
 
 const replies = await getCollection('replies', ({ data }) => data.published !== false);
@@ -9,13 +9,5 @@ const feed = sortByDate(mapReplies(replies));
 ---
 
 <Layout title="Replies" description="Replies to posts around the web.">
-  <h1>Replies</h1>
-  <div class="recent-feed h-feed">
-    <span class="p-name" style="display:none" aria-hidden="true">Andy Stevens — Replies</span>
-    <a class="p-author h-card" href="https://andystevens.name" style="display:none" aria-hidden="true">Andy Stevens</a>
-    {feed.length > 0
-      ? feed.map((item) => <FeedItem {...item} />)
-      : <p>No replies yet.</p>
-    }
-  </div>
+  <FeedList title="Replies" feed={feed} emptyMessage="No replies yet." />
 </Layout>

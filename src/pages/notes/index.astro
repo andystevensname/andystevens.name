@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
-import FeedItem from '../../components/FeedItem.astro';
+import FeedList from '../../components/FeedList.astro';
 import { mapNotes, sortByDate } from '../../lib/feed';
 
 const notes = await getCollection('notes', ({ data }) => data.published !== false);
@@ -9,13 +9,5 @@ const feed = sortByDate(mapNotes(notes));
 ---
 
 <Layout title="Notes" description="Short notes and status updates.">
-  <h1>Notes</h1>
-  <div class="recent-feed h-feed">
-    <span class="p-name" style="display:none" aria-hidden="true">Andy Stevens — Notes</span>
-    <a class="p-author h-card" href="https://andystevens.name" style="display:none" aria-hidden="true">Andy Stevens</a>
-    {feed.length > 0
-      ? feed.map((item) => <FeedItem {...item} />)
-      : <p>No notes yet.</p>
-    }
-  </div>
+  <FeedList title="Notes" feed={feed} emptyMessage="No notes yet." />
 </Layout>
