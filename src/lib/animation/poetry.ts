@@ -10,9 +10,11 @@ interface Vertex {
 }
 
 interface PoetryItem {
-  groupEl: SVGGElement;
   polyEl: SVGPolygonElement;
   vertices: Vertex[];
+  tx: number;
+  ty: number;
+  rotation: number;
 }
 
 export function createPoetry(group: SVGGElement, width = 400) {
@@ -36,19 +38,18 @@ export function createPoetry(group: SVGGElement, width = 400) {
       { x:  halfW, y:  halfH, ogx:  halfW },
       { x: -halfW, y:  halfH, ogx: -halfW },
     ];
+    const tx = halfW + line.x;
+    const ty = line.y + i * step;
     const rotation = randomNumber(5, -5);
-    const groupEl = svgEl<SVGGElement>('g', {
-      transform: `translate(${halfW + line.x}, ${line.y + i * step}) rotate(${rotation})`,
-      opacity: '0.75',
-    });
     const polyEl = svgEl<SVGPolygonElement>('polygon', {
       points: pointsStr(vertices),
       fill: 'red',
       stroke: 'none',
+      opacity: '0.75',
+      transform: `translate(${tx}, ${ty}) rotate(${rotation})`,
     });
-    groupEl.appendChild(polyEl);
-    group.appendChild(groupEl);
-    items.push({ groupEl, polyEl, vertices });
+    group.appendChild(polyEl);
+    items.push({ polyEl, vertices, tx, ty, rotation });
   }
 
   function populate() {
@@ -79,7 +80,7 @@ export function createPoetry(group: SVGGElement, width = 400) {
       }
     },
     destroy() {
-      for (const item of items) item.groupEl.remove();
+      for (const item of items) item.polyEl.remove();
       items.length = 0;
     },
   };
