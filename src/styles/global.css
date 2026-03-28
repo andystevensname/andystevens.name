@@ -656,7 +656,7 @@ article .e-content li ol {
 svg.feed-type {
   width: 1rem;
   height: 1rem;
-  align-self: center;
+  margin-top: 0.25rem;
 }
 
 .feed-item--like .feed-type { color: #E53935; }
