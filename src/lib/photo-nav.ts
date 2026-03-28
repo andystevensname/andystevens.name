@@ -1,4 +1,46 @@
 document.addEventListener('astro:page-load', () => {
+  // Caption drawer (runs on all photo pages)
+  const caption = document.querySelector('.photo-caption') as HTMLElement | null;
+  const toggle = document.querySelector('.photo-caption-toggle') as HTMLButtonElement | null;
+  if (caption && toggle) {
+    const textContent = caption.querySelector('.photo-caption-text') as HTMLElement | null;
+    if (textContent && textContent.scrollHeight > caption.clientHeight) {
+      toggle.style.display = '';
+
+      const collapsedHeight = caption.clientHeight;
+
+      function toggleCaption() {
+        caption!.classList.toggle('expanded');
+        const expanded = caption!.classList.contains('expanded');
+        if (expanded) {
+          caption!.style.height = 'auto';
+          const expandedHeight = Math.min(caption!.scrollHeight, window.innerHeight * 0.33);
+          caption!.style.height = expandedHeight + 'px';
+          caption!.style.top = -(expandedHeight - collapsedHeight) + 'px';
+        } else {
+          caption!.style.height = '';
+          caption!.style.top = '';
+        }
+        toggle!.setAttribute('aria-label', expanded ? 'Collapse caption' : 'Expand caption');
+      }
+
+      toggle.addEventListener('click', toggleCaption);
+
+      // Swipe up/down on caption to expand/collapse
+      let captionStartY = 0;
+      caption.addEventListener('touchstart', (e: TouchEvent) => {
+        captionStartY = e.touches[0].clientY;
+      }, { passive: true });
+      caption.addEventListener('touchend', (e: TouchEvent) => {
+        const dy = e.changedTouches[0].clientY - captionStartY;
+        if (Math.abs(dy) < 30) return;
+        if (dy < 0 && !caption!.classList.contains('expanded')) toggleCaption();
+        if (dy > 0 && caption!.classList.contains('expanded')) toggleCaption();
+      });
+    }
+  }
+
+  // Album navigation (only when ?album= param is present)
   const nav = document.getElementById('photo-nav');
   const prevLink = document.getElementById('photo-prev') as HTMLAnchorElement | null;
   const nextLink = document.getElementById('photo-next') as HTMLAnchorElement | null;
@@ -47,24 +89,23 @@ document.addEventListener('astro:page-load', () => {
     nav.style.display = '';
 
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowLeft') window.location.href = prevLink.href;
-      if (e.key === 'ArrowRight') window.location.href = nextLink.href;
+      if (e.key === 'ArrowLeft') prevLink.click();
+      if (e.key === 'ArrowRight') nextLink.click();
     });
 
     let startX = 0;
     let startY = 0;
-    viewer.addEventListener('pointerdown', (e: PointerEvent) => {
-      if (e.pointerType !== 'touch') return;
-      startX = e.clientX;
-      startY = e.clientY;
-    });
-    viewer.addEventListener('pointerup', (e: PointerEvent) => {
-      if (e.pointerType !== 'touch') return;
-      const dx = e.clientX - startX;
-      const dy = e.clientY - startY;
+    viewer.addEventListener('touchstart', (e: TouchEvent) => {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+    }, { passive: true });
+    viewer.addEventListener('touchend', (e: TouchEvent) => {
+      const touch = e.changedTouches[0];
+      const dx = touch.clientX - startX;
+      const dy = touch.clientY - startY;
       if (Math.abs(dx) < 50 || Math.abs(dy) > Math.abs(dx)) return;
-      if (dx > 0) window.location.href = prevLink.href;
-      else window.location.href = nextLink.href;
+      if (dx > 0) prevLink.click();
+      else nextLink.click();
     });
   });
 });
