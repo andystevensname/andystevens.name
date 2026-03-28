@@ -30,6 +30,17 @@
   }
 
   document.addEventListener('astro:page-load', () => {
+    // Re-apply saved theme after client-side navigation
+    try {
+      const saved = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    } catch (e) {}
+
     document.getElementById('theme-moon')?.addEventListener('click', () => setTheme(true));
     document.getElementById('theme-sun')?.addEventListener('click', () => setTheme(false));
   });
