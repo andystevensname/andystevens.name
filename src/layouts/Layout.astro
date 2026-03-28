@@ -98,6 +98,7 @@ const structuredData = jsonLd ?? defaultJsonLd;
     <link rel="preload" as="font" href="/fonts/InstrumentSerif.woff2" type="font/woff2" crossorigin="" />
     {extraHead && <Fragment set:html={extraHead} />}
     <ClientRouter />
+    <script>import '../lib/photo-nav';</script>
   </head>
   <body>
     <a href="#main-content" class="skip-link">Skip to content</a>

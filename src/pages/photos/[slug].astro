@@ -4,6 +4,7 @@ import Layout from '../../layouts/Layout.astro';
 import HEntryMeta from '../../components/HEntryMeta.astro';
 import PostMeta from '../../components/PostMeta.astro';
 import Webmentions from '../../components/Webmentions.astro';
+import PhotoNav from '../../components/PhotoNav.astro';
 
 export async function getStaticPaths() {
   const photos = await getCollection('photos');
@@ -28,12 +29,15 @@ const photoSrcs = Array.isArray(photo.data.photo) ? photo.data.photo : [photo.da
     {photo.data.title && <h1 class="p-name">{photo.data.title}</h1>}
     <HEntryMeta url={photoUrl} date={photo.data.date} syndication={photo.data.syndication} />
 
-    {photoSrcs.map((src) => (
-      <figure>
-        <img class="u-photo" src={`${src}?class=photo800`} srcset={`${src}?class=photo400 400w, ${src}?class=photo800 800w, ${src}?class=photo1600 1600w`} sizes="(min-width: 1024px) 640px, (min-width: 640px) 75vw, 100vw" alt={photo.data.alt ?? ''} width={photo.data.width} height={photo.data.height} loading="lazy" decoding="async" />
-        {photo.data.title && <figcaption>{photo.data.title}</figcaption>}
-      </figure>
-    ))}
+    <div class="photo-viewer" id="photo-viewer">
+      <PhotoNav />
+      {photoSrcs.map((src) => (
+        <figure>
+          <img class="u-photo" src={`${src}?class=photo800`} srcset={`${src}?class=photo400 400w, ${src}?class=photo800 800w, ${src}?class=photo1600 1600w`} sizes="(min-width: 1024px) 640px, (min-width: 640px) 75vw, 100vw" alt={photo.data.alt ?? ''} width={photo.data.width} height={photo.data.height} loading="lazy" decoding="async" />
+          {photo.data.title && <figcaption>{photo.data.title}</figcaption>}
+        </figure>
+      ))}
+    </div>
 
     <div class="e-content">
       <Content />
