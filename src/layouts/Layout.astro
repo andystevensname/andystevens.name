@@ -1,5 +1,5 @@
 ---
-// Using native CSS View Transitions + Astro prefetch instead of ClientRouter
+import { ClientRouter } from 'astro:transitions';
 import Header from '../components/Header.astro';
 import Navigation from '../components/Navigation.astro';
 import Animation from '../components/Animation.astro';
@@ -97,6 +97,7 @@ const structuredData = jsonLd ?? defaultJsonLd;
     </script>
     <link rel="preload" as="font" href="/fonts/InstrumentSerif.woff2" type="font/woff2" crossorigin="" />
     {extraHead && <Fragment set:html={extraHead} />}
+    <ClientRouter />
   </head>
   <body>
     <a href="#main-content" class="skip-link">Skip to content</a>
@@ -112,7 +113,7 @@ const structuredData = jsonLd ?? defaultJsonLd;
       <Header />
       <main class="site-layout">
         <div class="site-title" aria-hidden="true"><span>Andy</span> <span>Makes</span> <span>Things</span></div>
-        <div class="site-sidebar" aria-hidden="true">
+        <div class="site-sidebar" aria-hidden="true" transition:persist="sidebar">
           <Animation />
         </div>
         <section class="site-content" id="main-content">

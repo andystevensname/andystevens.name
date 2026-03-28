@@ -19,7 +19,7 @@ import ThemeSwitcher from './ThemeSwitcher.astro';
 </header>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('astro:page-load', () => {
     const header = document.getElementById('header');
     let lastScroll = 0;
 

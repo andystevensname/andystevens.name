@@ -68,9 +68,7 @@ if (canvasContainer && gearsContainer) {
     let thingsGroup: SVGGElement;
     let poetryGroup: SVGGElement;
     let gadgetsGroup: SVGGElement;
-    // Resume animation from where it was on the previous page
-    const frameMatch = document.cookie.match(/animFrame=(\d+)/);
-    let iframeCount = frameMatch ? parseInt(frameMatch[1]) : 0;
+    let iframeCount = 0;
 
     function setup() {
       // Clear previous content
@@ -97,17 +95,8 @@ if (canvasContainer && gearsContainer) {
       poetry = createPoetry(poetryGroup, w);
       gears = createGears(svg, gadgetsGroup, gearsContainer!, w);
 
-      // Set up visibility for the current phase
-      if (iframeCount < 250) {
-        thingsGroup.setAttribute('visibility', 'visible');
-        thingsGroup.setAttribute('opacity', '1');
-      } else if (iframeCount < 500) {
-        poetryGroup.setAttribute('visibility', 'visible');
-        poetryGroup.setAttribute('opacity', '1');
-      } else {
-        gadgetsGroup.setAttribute('visibility', 'visible');
-        gadgetsGroup.setAttribute('opacity', '1');
-      }
+      thingsGroup.setAttribute('visibility', 'visible');
+      iframeCount = 0;
     }
 
     setup();
@@ -116,11 +105,6 @@ if (canvasContainer && gearsContainer) {
     window.addEventListener('resize', () => {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(setup, 150);
-    });
-
-    // Save frame count before navigating away
-    window.addEventListener('pagehide', () => {
-      document.cookie = `animFrame=${iframeCount};path=/;max-age=10`;
     });
 
     if (reducedMotion) return;

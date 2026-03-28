@@ -34,7 +34,7 @@ function isCurrent(href: string): boolean {
 </nav>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('astro:page-load', () => {
     const nav = document.getElementById('nav');
     const content = document.getElementById('content');
     const openBtn = document.getElementById('open-nav-btn');
