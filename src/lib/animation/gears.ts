@@ -40,6 +40,18 @@ export function createGears(canvas: SVGSVGElement, group: SVGGElement, gearsCont
     );
   }
 
+  function addSmilRotation(gear: GearInfo, direction: number, durationSeconds: number) {
+    const animate = document.createElementNS(SVG_NS, 'animateTransform') as SVGElement;
+    animate.setAttribute('attributeName', 'transform');
+    animate.setAttribute('type', 'rotate');
+    animate.setAttribute('from', `0`);
+    animate.setAttribute('to', `${direction * 360}`);
+    animate.setAttribute('dur', `${durationSeconds}s`);
+    animate.setAttribute('repeatCount', 'indefinite');
+    animate.setAttribute('additive', 'sum');
+    gear.wrapEl.appendChild(animate);
+  }
+
   function create(i: number, svgSource: Element) {
     const d = svgSource.querySelector('path')!.getAttribute('d')!;
     const { cx, cy, width } = measurePath(d);
@@ -115,23 +127,14 @@ export function createGears(canvas: SVGSVGElement, group: SVGGElement, gearsCont
       if (gears.length !== gearsContainer.children.length) {
         for (let i = 0; i < gearsContainer.children.length; i++) create(i, gearsContainer.children[i]);
         place();
+
+        // Gear 0 (18 teeth): 0.25°/frame at 60fps = 15°/s → 24s per revolution
+        addSmilRotation(gears[0], 1, 24);
+        // Gear 1 (36 teeth): half speed, opposite direction → 48s
+        addSmilRotation(gears[1], -1, 48);
+        // Gear 2 (52 teeth): 18/52 speed, opposite direction → ~69.3s
+        addSmilRotation(gears[2], -1, 69.3);
       }
-
-      const pinionRPM = pinionStep * 60 * 60;
-
-      gears[0].rotation += pinionStep * (Math.PI / 180);
-      if (gears[0].rotation >= Math.PI * 2) gears[0].rotation = 0;
-      applyGearTransform(gears[0]);
-
-      const gear1Step = (pinionRPM * gears[0].teeth) / gears[1].teeth / 60 / 60;
-      gears[1].rotation -= gear1Step * (Math.PI / 180);
-      if (gears[1].rotation <= -(Math.PI * 2)) gears[1].rotation = 0;
-      applyGearTransform(gears[1]);
-
-      const gear2Step = (pinionRPM * gears[0].teeth) / gears[2].teeth / 60 / 60;
-      gears[2].rotation -= gear2Step * (Math.PI / 180);
-      if (gears[2].rotation <= -(Math.PI * 2)) gears[2].rotation = 0;
-      applyGearTransform(gears[2]);
     },
     destroy() {
       for (const g of gears) g.assemblyEl.remove();
