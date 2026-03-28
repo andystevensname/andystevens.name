@@ -756,6 +756,14 @@ svg.feed-type {
   touch-action: pan-y;
 }
 
+.photo-viewer img {
+  max-height: calc(100vh - 11rem);
+  max-height: calc(100dvh - 11rem);
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
 .photo-nav {
   display: flex;
   align-items: center;
