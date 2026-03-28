@@ -25,6 +25,12 @@ html.dark {
   color-scheme: dark;
 }
 
+/* === Native cross-document view transitions === */
+
+@view-transition {
+  navigation: auto;
+}
+
 /* ============================================
    BASE (mobile-first)
    ============================================ */
