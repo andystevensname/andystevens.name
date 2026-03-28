@@ -24,7 +24,7 @@
   --footer-height: 3rem;
   --content-padding-top: 4rem;
   --photo-nav-height: 2.5rem;
-  --photo-caption-height: 4rem;
+  --photo-caption-height: 2.5rem;
 }
 
 html.dark {
@@ -465,7 +465,7 @@ article img[loading="lazy"] {
 article figure {
   margin: 0 0 1.5rem 0;
   padding: 0;
-  width: fit-content;
+  width: 100%;
 }
 
 article figcaption {
@@ -768,19 +768,17 @@ svg.feed-type {
   padding-bottom: 0;
 }
 
-/* Photo viewer: flex column, fixed height */
+/* Photo viewer: relative container for absolute caption */
 .photo-viewer {
   touch-action: pan-y;
-  display: flex;
-  flex-direction: column;
+  position: relative;
   height: calc(100dvh - var(--content-padding-top) - var(--footer-height) - var(--photo-nav-height));
   margin: 0;
 }
 
 /* Image container: fills space above caption, centers image */
 .photo-frame {
-  flex: 1;
-  min-height: 0;
+  height: calc(100% - var(--photo-caption-height));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -792,27 +790,48 @@ svg.feed-type {
   object-fit: contain;
 }
 
-/* Caption: fixed height, expands up over image */
+/* Caption: details/summary for native expand/collapse */
+.photo-viewer figcaption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
 .photo-caption {
-  flex-shrink: 0;
-  height: var(--photo-caption-height);
+  max-height: var(--photo-caption-height);
   box-sizing: border-box;
-  border-top: 1px solid var(--c-gray-lighter);
+  border-top: 1px solid light-dark(var(--c-gray-lighter), white);
   overflow: hidden;
-  position: relative;
-  top: 0;
   z-index: 1;
-  transition: height 0.3s ease, top 0.3s ease;
-}
-
-.photo-caption-content {
-  display: flex;
-  gap: 0.5rem;
-  padding: 0.5rem;
   background: light-dark(white, var(--c-gray));
+  transition: max-height 0.3s ease;
 }
 
-.photo-caption-text { flex: 1; min-width: 0; }
+.photo-caption summary {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+  cursor: pointer;
+  list-style: none;
+  position: relative;
+  padding-right: 2rem;
+}
+
+.photo-caption summary::-webkit-details-marker { display: none; }
+
+.photo-caption summary::after {
+  content: '▾';
+  position: absolute;
+  right: 0.5rem;
+  top: 0.5rem;
+  color: var(--c-gray-light);
+  transition: transform 0.3s ease;
+}
+
+.photo-caption[open] summary::after {
+  transform: rotate(180deg);
+}
 
 .photo-caption .p-name {
   display: block;
@@ -824,24 +843,29 @@ svg.feed-type {
 }
 
 .photo-meta {
-  display: block;
   font-size: 1rem;
   line-height: 1.5;
   color: var(--c-gray-light);
 }
 
-.photo-caption.expanded { overflow-y: auto; z-index: 2; }
+.photo-detail {
+  display: block;
+  padding: 0 0.5rem;
+}
 
-.photo-caption-toggle {
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
+.photo-tags {
+  display: block;
+  padding: 0 0.5rem 0.5rem;
+  font-size: 1rem;
+  line-height: 1.5;
   color: var(--c-gray-light);
 }
 
-.photo-caption-toggle:hover { color: var(--c-accent); }
-.photo-caption.expanded .photo-caption-toggle svg { transform: rotate(180deg); }
+.photo-caption[open] {
+  max-height: 33dvh;
+  overflow-y: auto;
+  z-index: 2;
+}
 
 .photo-nav {
   display: flex;
