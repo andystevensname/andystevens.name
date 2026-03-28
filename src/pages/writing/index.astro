@@ -39,7 +39,7 @@ const categories = [...new Set(writing.map((w) => w.data.category))].sort();
 </Layout>
 
 <script>
-  document.addEventListener('astro:page-load', () => {
+  document.addEventListener('DOMContentLoaded', () => {
     const buttons = document.querySelectorAll('.filter-btn');
     const feed = document.getElementById('writing-feed');
     if (!feed || !buttons.length) return;

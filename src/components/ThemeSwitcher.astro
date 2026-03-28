@@ -29,7 +29,7 @@
     } catch (e) {}
   }
 
-  document.addEventListener('astro:page-load', () => {
+  document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('theme-moon')?.addEventListener('click', () => setTheme(true));
     document.getElementById('theme-sun')?.addEventListener('click', () => setTheme(false));
   });
