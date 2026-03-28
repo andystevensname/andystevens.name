@@ -39,6 +39,27 @@
   position: relative;
   overflow: hidden;
 }
+
+
+</style>
+
+<style is:global>
+.anim-phase {
+  opacity: 0;
+  animation: phase 12.5s ease infinite;
+}
+
+@keyframes phase {
+  0% { opacity: 0; }
+  4% { opacity: 1; }
+  29.3% { opacity: 1; }
+  33.3% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-phase { animation: none; opacity: 1; }
+}
 </style>
 
 <script>
@@ -47,7 +68,7 @@ const gearsContainer = document.getElementById('gears');
 
 if (canvasContainer && gearsContainer) {
   const loadAnimation = async () => {
-    const { svgEl, SVG_NS, fade, createBeams, createPoetry, createGears } =
+    const { svgEl, SVG_NS, createBeams, createPoetry, createGears } =
       await import('../lib/animation/index.js');
 
     const svg = document.createElementNS(SVG_NS, 'svg') as SVGSVGElement;
@@ -86,16 +107,18 @@ if (canvasContainer && gearsContainer) {
       poetryGroup = svgEl<SVGGElement>('g');
       background.append(gadgetsGroup, thingsGroup, poetryGroup);
 
-      for (const child of Array.from(background.children) as SVGElement[]) {
-        child.setAttribute('visibility', 'hidden');
-        child.setAttribute('opacity', '0');
-      }
+      // Apply CSS animation classes for phase sequencing
+      thingsGroup.classList.add('anim-phase');
+      poetryGroup.classList.add('anim-phase');
+      gadgetsGroup.classList.add('anim-phase');
+      thingsGroup.style.animationDelay = '0s';
+      poetryGroup.style.animationDelay = '4.17s';
+      gadgetsGroup.style.animationDelay = '8.33s';
 
       beams = createBeams(thingsGroup, h, w);
       poetry = createPoetry(poetryGroup, w);
       gears = createGears(svg, gadgetsGroup, gearsContainer!, w);
 
-      thingsGroup.setAttribute('visibility', 'visible');
       iframeCount = 0;
     }
 
@@ -109,36 +132,16 @@ if (canvasContainer && gearsContainer) {
 
     if (reducedMotion) return;
 
+    // JS tick handles per-element randomized animations
+    // Phase fading/sequencing is handled by CSS @keyframes
+    // Gears rotate via SMIL
     function tick() {
       beams.animate(iframeCount, 0, 249);
       poetry.animate(iframeCount, 250, 499);
       gears.animate(iframeCount, 500, 749);
 
-      if (iframeCount === 0) {
-        thingsGroup.setAttribute('visibility', 'visible');
-      }
-      if (iframeCount === 249) { thingsGroup.setAttribute('visibility', 'hidden'); beams.destroy(); }
-      fade([thingsGroup], 1, iframeCount, 0, 9);
-      fade([thingsGroup], -1, iframeCount, 240, 249);
-
-      if (iframeCount === 250) {
-        poetryGroup.setAttribute('visibility', 'visible');
-      }
-      if (iframeCount === 499) { poetryGroup.setAttribute('visibility', 'hidden'); poetry.destroy(); }
-      fade([poetryGroup], 1, iframeCount, 250, 259);
-      fade([poetryGroup], -1, iframeCount, 490, 499);
-
-      if (iframeCount === 500) {
-        gadgetsGroup.setAttribute('visibility', 'visible');
-      }
-      if (iframeCount === 749) { gears.destroy(); }
-      fade([gadgetsGroup], 1, iframeCount, 500, 509);
-      fade([gadgetsGroup], -1, iframeCount, 740, 749);
-
       iframeCount++;
-      if (iframeCount === 750) {
-        iframeCount = 0;
-      }
+      if (iframeCount === 750) iframeCount = 0;
 
       requestAnimationFrame(tick);
     }
