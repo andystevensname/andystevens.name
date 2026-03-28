@@ -752,6 +752,10 @@ svg.feed-type {
 
 /* === Photo navigation === */
 
+.photo-viewer {
+  touch-action: pan-y;
+}
+
 .photo-nav {
   display: flex;
   align-items: center;

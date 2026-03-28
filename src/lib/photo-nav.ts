@@ -47,24 +47,23 @@ document.addEventListener('astro:page-load', () => {
     nav.style.display = '';
 
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowLeft') window.location.href = prevLink.href;
-      if (e.key === 'ArrowRight') window.location.href = nextLink.href;
+      if (e.key === 'ArrowLeft') prevLink.click();
+      if (e.key === 'ArrowRight') nextLink.click();
     });
 
     let startX = 0;
     let startY = 0;
-    viewer.addEventListener('pointerdown', (e: PointerEvent) => {
-      if (e.pointerType !== 'touch') return;
-      startX = e.clientX;
-      startY = e.clientY;
-    });
-    viewer.addEventListener('pointerup', (e: PointerEvent) => {
-      if (e.pointerType !== 'touch') return;
-      const dx = e.clientX - startX;
-      const dy = e.clientY - startY;
+    viewer.addEventListener('touchstart', (e: TouchEvent) => {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+    }, { passive: true });
+    viewer.addEventListener('touchend', (e: TouchEvent) => {
+      const touch = e.changedTouches[0];
+      const dx = touch.clientX - startX;
+      const dy = touch.clientY - startY;
       if (Math.abs(dx) < 50 || Math.abs(dy) > Math.abs(dx)) return;
-      if (dx > 0) window.location.href = prevLink.href;
-      else window.location.href = nextLink.href;
+      if (dx > 0) prevLink.click();
+      else nextLink.click();
     });
   });
 });
