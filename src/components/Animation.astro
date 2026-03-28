@@ -43,25 +43,6 @@
 
 </style>
 
-<style is:global>
-.anim-phase {
-  opacity: 0;
-  animation: phase 12.5s ease infinite;
-}
-
-@keyframes phase {
-  0% { opacity: 0; }
-  4% { opacity: 1; }
-  29.3% { opacity: 1; }
-  33.3% { opacity: 0; }
-  100% { opacity: 0; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .anim-phase { animation: none; opacity: 1; }
-}
-</style>
-
 <script>
 const canvasContainer = document.getElementById('canvas-container');
 const gearsContainer = document.getElementById('gears');
@@ -107,17 +88,24 @@ if (canvasContainer && gearsContainer) {
       poetryGroup = svgEl<SVGGElement>('g');
       background.append(gadgetsGroup, thingsGroup, poetryGroup);
 
-      // Apply CSS animation classes for phase sequencing
-      thingsGroup.classList.add('anim-phase');
-      poetryGroup.classList.add('anim-phase');
-      gadgetsGroup.classList.add('anim-phase');
-      thingsGroup.style.animationDelay = '0s';
-      poetryGroup.style.animationDelay = '4.17s';
-      gadgetsGroup.style.animationDelay = '8.33s';
-
       beams = createBeams(thingsGroup, h, w);
       poetry = createPoetry(poetryGroup, w);
       gears = createGears(svg, gadgetsGroup, gearsContainer!, w);
+
+      if (!reducedMotion) {
+        // Phase sequencing via Web Animations API (survives view transitions)
+        const phaseKeyframes = [
+          { opacity: 0, offset: 0 },
+          { opacity: 1, offset: 0.04 },
+          { opacity: 1, offset: 0.293 },
+          { opacity: 0, offset: 0.333 },
+          { opacity: 0, offset: 1 },
+        ];
+        const phaseTiming = { duration: 12500, iterations: Infinity };
+        thingsGroup.animate(phaseKeyframes, { ...phaseTiming, delay: 0 });
+        poetryGroup.animate(phaseKeyframes, { ...phaseTiming, delay: 4170 });
+        gadgetsGroup.animate(phaseKeyframes, { ...phaseTiming, delay: 8330 });
+      }
 
       iframeCount = 0;
     }
