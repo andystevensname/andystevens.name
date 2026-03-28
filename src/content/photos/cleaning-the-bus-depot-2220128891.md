@@ -5,6 +5,13 @@ date: 2008-01-06 22:01:45
 published: false
 tags:
   - "kolkata"
+  - "india"
+  - "street-photography"
+  - "travel"
+  - "documentary"
+  - "people"
+  - "urban"
+  - "bus-depot"
 albums:
   - "Favorites"
   - "India"

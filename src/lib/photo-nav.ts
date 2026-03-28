@@ -1,4 +1,46 @@
 document.addEventListener('astro:page-load', () => {
+  // Caption drawer (runs on all photo pages)
+  const caption = document.querySelector('.photo-caption') as HTMLElement | null;
+  const toggle = document.querySelector('.photo-caption-toggle') as HTMLButtonElement | null;
+  if (caption && toggle) {
+    const textContent = caption.querySelector('.photo-caption-text') as HTMLElement | null;
+    if (textContent && textContent.scrollHeight > caption.clientHeight) {
+      toggle.style.display = '';
+
+      const collapsedHeight = caption.clientHeight;
+
+      function toggleCaption() {
+        caption!.classList.toggle('expanded');
+        const expanded = caption!.classList.contains('expanded');
+        if (expanded) {
+          caption!.style.height = 'auto';
+          const expandedHeight = Math.min(caption!.scrollHeight, window.innerHeight * 0.33);
+          caption!.style.height = expandedHeight + 'px';
+          caption!.style.top = -(expandedHeight - collapsedHeight) + 'px';
+        } else {
+          caption!.style.height = '';
+          caption!.style.top = '';
+        }
+        toggle!.setAttribute('aria-label', expanded ? 'Collapse caption' : 'Expand caption');
+      }
+
+      toggle.addEventListener('click', toggleCaption);
+
+      // Swipe up/down on caption to expand/collapse
+      let captionStartY = 0;
+      caption.addEventListener('touchstart', (e: TouchEvent) => {
+        captionStartY = e.touches[0].clientY;
+      }, { passive: true });
+      caption.addEventListener('touchend', (e: TouchEvent) => {
+        const dy = e.changedTouches[0].clientY - captionStartY;
+        if (Math.abs(dy) < 30) return;
+        if (dy < 0 && !caption!.classList.contains('expanded')) toggleCaption();
+        if (dy > 0 && caption!.classList.contains('expanded')) toggleCaption();
+      });
+    }
+  }
+
+  // Album navigation (only when ?album= param is present)
   const nav = document.getElementById('photo-nav');
   const prevLink = document.getElementById('photo-prev') as HTMLAnchorElement | null;
   const nextLink = document.getElementById('photo-next') as HTMLAnchorElement | null;

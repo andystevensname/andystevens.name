@@ -2,9 +2,9 @@
 import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import HEntryMeta from '../../components/HEntryMeta.astro';
-import PostMeta from '../../components/PostMeta.astro';
 import Webmentions from '../../components/Webmentions.astro';
 import PhotoNav from '../../components/PhotoNav.astro';
+import { formatDate } from '../../lib/date';
 
 export async function getStaticPaths() {
   const photos = await getCollection('photos');
@@ -18,6 +18,9 @@ const { photo } = Astro.props;
 const { Content } = await render(photo);
 const photoUrl = new URL(`/photos/${photo.id}/`, Astro.site).href;
 const photoSrcs = Array.isArray(photo.data.photo) ? photo.data.photo : [photo.data.photo];
+const dateStr = photo.data.date ? formatDate(new Date(photo.data.date)) : '';
+const isoDate = photo.data.date?.toISOString() ?? '';
+const tags = photo.data.tags ?? [];
 ---
 
 <Layout
@@ -29,21 +32,35 @@ const photoSrcs = Array.isArray(photo.data.photo) ? photo.data.photo : [photo.da
     {photo.data.title && <h1 class="p-name sr-only">{photo.data.title}</h1>}
     <HEntryMeta url={photoUrl} date={photo.data.date} syndication={photo.data.syndication} />
 
-    <div class="photo-viewer" id="photo-viewer">
-      <PhotoNav />
+    <PhotoNav />
+    <figure class="photo-viewer" id="photo-viewer">
       {photoSrcs.map((src) => (
-        <figure>
+        <span class="photo-frame">
           <img class="u-photo" src={`${src}?class=photo800`} srcset={`${src}?class=photo400 400w, ${src}?class=photo800 800w, ${src}?class=photo1600 1600w`} sizes="(min-width: 1024px) 640px, (min-width: 640px) 75vw, 100vw" alt={photo.data.alt ?? ''} width={photo.data.width} height={photo.data.height} loading="lazy" decoding="async" />
-          {photo.data.title && <figcaption class="p-name">{photo.data.title}</figcaption>}
-        </figure>
+        </span>
       ))}
-    </div>
+      <figcaption class="photo-caption">
+        <div class="photo-caption-content">
+          <div class="photo-caption-text">
+            {photo.data.title && <span class="p-name">{photo.data.title}</span>}
+            <span class="photo-meta">
+              {dateStr && <time datetime={isoDate}>{dateStr}</time>}
+              {dateStr && tags.length > 0 && <span> &middot; </span>}
+              {tags.map((tag) => (
+                <a class="p-category" href={`/tags/${tag}/`}>#{tag} </a>
+              ))}
+            </span>
+          </div>
+          <button class="photo-caption-toggle" aria-label="Expand caption" style="display:none">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+        </div>
+      </figcaption>
+    </figure>
 
     <div class="e-content">
       <Content />
     </div>
-
-    <PostMeta post={photo} />
     <Webmentions url={photoUrl} />
   </article>
 </Layout>
