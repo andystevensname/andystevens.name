@@ -189,18 +189,22 @@ main {
 
 /* === Theme switcher === */
 
-#theme-switcher button {
-  cursor: pointer;
-  color: light-dark(var(--c-gray), white);
-  background: none;
-  border: none;
-  padding: 0;
+.theme-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
 }
 
-#theme-sun { display: none; }
-#theme-moon { display: inline-flex; }
-html.dark #theme-sun { display: inline-flex; }
-html.dark #theme-moon { display: none; }
+.theme-label {
+  cursor: pointer;
+  color: light-dark(var(--c-gray), white);
+  display: inline-flex;
+}
+
+.theme-icon-sun { display: none; }
+.theme-icon-moon { display: inline-flex; }
+.theme-input:checked ~ .theme-label .theme-icon-sun { display: inline-flex; }
+.theme-input:checked ~ .theme-label .theme-icon-moon { display: none; }
 
 /* === Footer === */
 
@@ -696,6 +700,14 @@ svg.feed-type {
 
 /* === Filters === */
 
+/* === Filters (CSS-only with :has) === */
+
+.filter-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
 .filter-bar {
   display: flex;
   flex-wrap: wrap;
@@ -704,6 +716,7 @@ svg.feed-type {
 }
 
 .filter-btn {
+  display: inline-block;
   background: none;
   border: 1px solid var(--c-gray-lighter);
   padding: 0.25rem 0.75rem;
@@ -719,10 +732,26 @@ svg.feed-type {
   border-color: light-dark(var(--c-gray-lighter), var(--c-gray-light));
 }
 
-.filter-btn[aria-pressed="true"] {
+.filter-input:checked + .filter-btn {
   background: var(--c-accent);
   color: white;
   border-color: var(--c-accent);
+}
+
+/* Show all items when "All" is checked (default) */
+.filter-container:has(#filter-all:checked) .feed-item { display: grid; }
+
+/* Hide non-matching items when a specific filter is checked */
+.filter-container:has(#filter-note:checked) .feed-item:not([data-category="note"]),
+.filter-container:has(#filter-bookmark:checked) .feed-item:not([data-category="bookmark"]),
+.filter-container:has(#filter-like:checked) .feed-item:not([data-category="like"]),
+.filter-container:has(#filter-reply:checked) .feed-item:not([data-category="reply"]),
+.filter-container:has(#filter-poetry:checked) .feed-item:not([data-category="poetry"]),
+.filter-container:has(#filter-non-fiction:checked) .feed-item:not([data-category="non-fiction"]),
+.filter-container:has(#filter-fiction:checked) .feed-item:not([data-category="fiction"]),
+.filter-container:has(#filter-documentation:checked) .feed-item:not([data-category="documentation"]),
+.filter-container:has(#filter-award:checked) .feed-item:not([data-category="award"]) {
+  display: none;
 }
 
 .truncated::after {

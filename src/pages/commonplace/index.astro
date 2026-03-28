@@ -25,60 +25,27 @@ const feed = sortByDate([
 >
   <h1>Commonplace</h1>
 
-  <nav class="filter-bar" aria-label="Filter by type">
-    <button class="filter-btn" aria-pressed="true" data-filter="all">All</button>
-    <button class="filter-btn" aria-pressed="false" data-filter="note">Notes</button>
-    <button class="filter-btn" aria-pressed="false" data-filter="bookmark">Bookmarks</button>
-    <button class="filter-btn" aria-pressed="false" data-filter="like">Likes</button>
-    <button class="filter-btn" aria-pressed="false" data-filter="reply">Replies</button>
-  </nav>
+  <div class="filter-container">
+    <nav class="filter-bar" aria-label="Filter by type">
+      <input type="radio" name="filter" id="filter-all" class="filter-input" value="all" checked />
+      <label for="filter-all" class="filter-btn">All</label>
+      <input type="radio" name="filter" id="filter-note" class="filter-input" value="note" />
+      <label for="filter-note" class="filter-btn">Notes</label>
+      <input type="radio" name="filter" id="filter-bookmark" class="filter-input" value="bookmark" />
+      <label for="filter-bookmark" class="filter-btn">Bookmarks</label>
+      <input type="radio" name="filter" id="filter-like" class="filter-input" value="like" />
+      <label for="filter-like" class="filter-btn">Likes</label>
+      <input type="radio" name="filter" id="filter-reply" class="filter-input" value="reply" />
+      <label for="filter-reply" class="filter-btn">Replies</label>
+    </nav>
 
-  <div class="recent-feed h-feed" id="commonplace-feed" aria-live="polite">
-    <span class="p-name" style="display:none" aria-hidden="true">Andy Stevens — Commonplace</span>
-    <a class="p-author h-card" href="https://andystevens.name" style="display:none" aria-hidden="true">Andy Stevens</a>
-    {feed.length > 0
-      ? feed.map((item) => <FeedItem {...item} />)
-      : <p>Nothing here yet.</p>
-    }
+    <div class="recent-feed h-feed" id="commonplace-feed" aria-live="polite">
+      <span class="p-name" style="display:none" aria-hidden="true">Andy Stevens — Commonplace</span>
+      <a class="p-author h-card" href="https://andystevens.name" style="display:none" aria-hidden="true">Andy Stevens</a>
+      {feed.length > 0
+        ? feed.map((item) => <FeedItem {...item} />)
+        : <p>Nothing here yet.</p>
+      }
+    </div>
   </div>
 </Layout>
-
-<script>
-  document.addEventListener('astro:page-load', () => {
-    const buttons = document.querySelectorAll('.filter-btn');
-    const feed = document.getElementById('commonplace-feed');
-    if (!feed || !buttons.length) return;
-
-    function applyFilter(filter: string) {
-      const items = feed!.querySelectorAll('.feed-item');
-
-      items.forEach((item) => {
-        const category = (item as HTMLElement).dataset.category;
-        const show = filter === 'all' || category === filter;
-        (item as HTMLElement).style.display = show ? '' : 'none';
-      });
-
-      buttons.forEach((btn) => {
-        btn.setAttribute('aria-pressed', btn.getAttribute('data-filter') === filter ? 'true' : 'false');
-      });
-
-      if (filter === 'all') {
-        history.replaceState(null, '', window.location.pathname);
-      } else {
-        history.replaceState(null, '', `#${filter}`);
-      }
-    }
-
-    buttons.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const filter = btn.getAttribute('data-filter') ?? 'all';
-        applyFilter(filter);
-      });
-    });
-
-    const hash = window.location.hash.slice(1);
-    if (hash) {
-      applyFilter(hash);
-    }
-  });
-</script>
