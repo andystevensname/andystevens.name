@@ -123,7 +123,7 @@ main {
 }
 
 .title-text-desktop { display: none; }
-.title-text-mobile { display: inline; font-family: 'Instrument Serif', serif; }
+.title-text-mobile { display: inline; font-family: 'Instrument Serif', serif; font-size: 1.5rem; line-height: 2; }
 
 /* === Navigation === */
 
