@@ -34,9 +34,9 @@ const recent = feed.slice(0, 20);
   description="The homepage of poet and writer Andy Stevens."
 >
   <h1>Recent</h1>
-  <div class="recent-feed h-feed">
+  <section class="recent-feed h-feed">
     <span class="p-name" style="display:none" aria-hidden="true">Andy Stevens</span>
     <a class="p-author h-card" href="https://andystevens.name" style="display:none" aria-hidden="true">Andy Stevens</a>
     {recent.map((item) => <FeedItem {...item} />)}
-  </div>
+  </section>
 </Layout>

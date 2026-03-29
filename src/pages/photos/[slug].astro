@@ -35,9 +35,7 @@ const tags = photo.data.tags ?? [];
     <PhotoNav />
     <figure class="photo-viewer" id="photo-viewer">
       {photoSrcs.map((src) => (
-        <span class="photo-frame">
-          <img class="u-photo" src={`${src}?class=photo800`} srcset={`${src}?class=photo400 400w, ${src}?class=photo800 800w, ${src}?class=photo1600 1600w`} sizes="(min-width: 1024px) 640px, (min-width: 640px) 75vw, 100vw" alt={photo.data.alt ?? ''} width={photo.data.width} height={photo.data.height} loading="lazy" decoding="async" />
-        </span>
+        <img class="u-photo" src={`${src}?class=photo800`} srcset={`${src}?class=photo400 400w, ${src}?class=photo800 800w, ${src}?class=photo1600 1600w`} sizes="(min-width: 1024px) 640px, (min-width: 640px) 75vw, 100vw" alt={photo.data.alt ?? ''} width={photo.data.width} height={photo.data.height} loading="lazy" decoding="async" />
       ))}
       <figcaption class="photo-caption">
         <div class="photo-caption-content">
@@ -58,9 +56,9 @@ const tags = photo.data.tags ?? [];
       </figcaption>
     </figure>
 
-    <div class="e-content">
+    <section class="e-content">
       <Content />
-    </div>
+    </section>
     <Webmentions url={photoUrl} />
   </article>
 </Layout>

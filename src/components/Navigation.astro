@@ -16,8 +16,9 @@ function isCurrent(href: string): boolean {
 }
 ---
 
-<nav id="nav">
-  <div class="navContainer">
+<!-- Mobile: dialog-based slide-in nav -->
+<dialog id="nav-dialog" aria-label="Main navigation">
+  <nav>
     <button id="close-nav-btn" aria-label="Close navigation">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" width="20" height="20" fill="currentColor">
         <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/>
@@ -30,48 +31,38 @@ function isCurrent(href: string): boolean {
         </li>
       ))}
     </ul>
-  </div>
-</nav>
+  </nav>
+</dialog>
+
 
 <script>
   document.addEventListener('astro:page-load', () => {
-    const nav = document.getElementById('nav');
-    const content = document.getElementById('content');
-    const openBtn = document.getElementById('open-nav-btn');
+    const dialog = document.getElementById('nav-dialog') as HTMLDialogElement | null;
     const closeBtn = document.getElementById('close-nav-btn');
-    const isOpen = () => nav?.classList.contains('translate-x-0');
+    const openBtn = document.getElementById('open-nav-btn');
 
-    function openNav() {
-      nav?.classList.add('translate-x-0');
-      content?.setAttribute('inert', '');
-      openBtn?.setAttribute('aria-expanded', 'true');
-      closeBtn?.focus();
-    }
+    // Open
+    document.addEventListener('open-nav', () => {
+      dialog?.showModal();
+    });
 
-    function closeNav() {
-      nav?.classList.remove('translate-x-0');
-      content?.removeAttribute('inert');
-      openBtn?.setAttribute('aria-expanded', 'false');
+    // Close button
+    closeBtn?.addEventListener('click', () => {
+      dialog?.close();
       openBtn?.focus();
-    }
-
-    closeBtn?.addEventListener('click', closeNav);
-    document.addEventListener('open-nav', openNav);
-    document.addEventListener('close-nav', closeNav);
-
-    // Close nav when a link is clicked
-    nav?.querySelectorAll('.nav-link').forEach(link => {
-      link.addEventListener('click', closeNav);
     });
 
-    // Close nav on Escape
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && isOpen()) {
-        closeNav();
-      }
+    // Close on nav link click
+    dialog?.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', () => dialog?.close());
     });
 
-    // Swipe to open/close nav
+    // Close on backdrop click
+    dialog?.addEventListener('click', (e) => {
+      if (e.target === dialog) dialog.close();
+    });
+
+    // Swipe to open/close
     const EDGE_WIDTH = 30;
     const SWIPE_THRESHOLD = 50;
     let startX = 0;
@@ -79,11 +70,11 @@ function isCurrent(href: string): boolean {
     let tracking = false;
 
     document.addEventListener('pointerdown', (e) => {
-      if (isOpen()) {
+      if (dialog?.open) {
         startX = e.clientX;
         startY = e.clientY;
         tracking = true;
-      } else if (e.clientX < EDGE_WIDTH) {
+      } else if (e.clientX < EDGE_WIDTH && e.pointerType === 'touch') {
         startX = e.clientX;
         startY = e.clientY;
         tracking = true;
@@ -94,27 +85,19 @@ function isCurrent(href: string): boolean {
       if (!tracking) return;
       const dx = e.clientX - startX;
       const dy = Math.abs(e.clientY - startY);
+      if (dy > Math.abs(dx)) { tracking = false; return; }
 
-      if (dy > Math.abs(dx)) {
+      if (!dialog?.open && dx > SWIPE_THRESHOLD) {
+        dialog?.showModal();
         tracking = false;
-        return;
-      }
-
-      if (!isOpen() && dx > SWIPE_THRESHOLD) {
-        openNav();
-        tracking = false;
-      } else if (isOpen() && dx < -SWIPE_THRESHOLD) {
-        closeNav();
+      } else if (dialog?.open && dx < -SWIPE_THRESHOLD) {
+        dialog?.close();
+        openBtn?.focus();
         tracking = false;
       }
     });
 
-    document.addEventListener('pointerup', () => {
-      tracking = false;
-    });
-
-    document.addEventListener('pointercancel', () => {
-      tracking = false;
-    });
+    document.addEventListener('pointerup', () => { tracking = false; });
+    document.addEventListener('pointercancel', () => { tracking = false; });
   });
 </script>

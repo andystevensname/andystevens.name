@@ -109,15 +109,15 @@ const structuredData = jsonLd ?? defaultJsonLd;
       <a class="u-url" href="https://github.com/andystevensname" rel="me" tabindex="-1">GitHub</a>
       <a class="u-url" href="https://bsky.app/profile/andystevens.name" rel="me" tabindex="-1">Bluesky</a>
     </div>
-    <Navigation />
     <div id="content">
       <Header />
-      <main class="site-layout">
-        <div class="site-title" aria-hidden="true"><span>Andy</span> <span>Makes</span> <span>Things</span></div>
-        <div class="site-sidebar" aria-hidden="true" transition:persist="sidebar">
+      <Navigation />
+      <main id="site-layout">
+        <div id="site-title" aria-hidden="true"><span>Andy</span> <span>Makes</span> <span>Things</span></div>
+        <div id="site-sidebar" aria-hidden="true" transition:persist="sidebar">
           <Animation />
         </div>
-        <section class="site-content" id="main-content">
+        <section id="main-content">
           <slot />
         </section>
       </main>

@@ -12,11 +12,11 @@ const { title, feed, emptyMessage = 'Nothing here yet.' } = Astro.props;
 ---
 
 <h1>{title}</h1>
-<div class="recent-feed h-feed">
+<section class="recent-feed h-feed">
   <span class="p-name" style="display:none" aria-hidden="true">Andy Stevens — {title}</span>
   <a class="p-author h-card" href="https://andystevens.name" style="display:none" aria-hidden="true" tabindex="-1">Andy Stevens</a>
   {feed.length > 0
     ? feed.map((item) => <FeedItem {...item} />)
     : <p>{emptyMessage}</p>
   }
-</div>
+</section>

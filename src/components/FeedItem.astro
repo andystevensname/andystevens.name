@@ -5,21 +5,21 @@ interface Props {
   date: Date;
   title?: string;
   summary?: string;
+  bodyHtml?: string;
   quote?: string;
   linkTo?: string;
   photo?: string;
   alt?: string;
   venue?: string;
   category?: string;
-  truncated?: boolean;
 }
 
 import { formatDate } from '../lib/date';
 
-const { type, url, date, title, summary, quote, linkTo, photo, alt, venue, category, truncated } = Astro.props;
+const { type, url, date, title, summary, bodyHtml, quote, linkTo, photo, alt, venue, category } = Astro.props;
 ---
 
-<div class={`feed-item feed-item--${type} h-entry`} data-category={category ?? type}>
+<article class={`feed-item--${type} h-entry`} data-category={category ?? type}>
   <a href={url} class="feed-time"><time datetime={date.toISOString()}>{formatDate(date)}</time></a>
   <svg class="feed-type" width="20" height="20" aria-hidden="true"><use href={`/icons.svg#icon-${type}`}/></svg>
   <div class="feed-content">
@@ -27,12 +27,12 @@ const { type, url, date, title, summary, quote, linkTo, photo, alt, venue, categ
       <p><a class="p-name u-url" href={url}>{title}</a></p>
       {quote && <p>{quote} <a href={url} aria-label={`Read ${title}`}><svg width="16" height="16" aria-hidden="true"><use href="/icons.svg#icon-readmore"/></svg></a></p>}
     </>)}
-    {type === 'note' && (
-      <p class:list={['feed-note', { truncated }]}>{summary}</p>
+    {type === 'note' && bodyHtml && (
+      <div class="feed-note e-content" set:html={bodyHtml} />
     )}
     {type === 'bookmark' && (<>
       <p><a href={linkTo}>{title ?? linkTo}</a></p>
-      {summary && <p class:list={{ truncated }}>{summary}</p>}
+      {bodyHtml && <div class="e-content" set:html={bodyHtml} />}
     </>)}
     {type === 'like' && (
       <p><a href={linkTo}>{linkTo}</a></p>
@@ -43,12 +43,12 @@ const { type, url, date, title, summary, quote, linkTo, photo, alt, venue, categ
     </>)}
     {type === 'reply' && (<>
       <p>Replied to <a href={linkTo}>{linkTo}</a></p>
-      {summary && <p class:list={{ truncated }}>{summary}</p>}
+      {bodyHtml && <div class="e-content" set:html={bodyHtml} />}
     </>)}
     {type === 'writing' && (<>
       <p>{linkTo ? <a href={linkTo}>{title}</a> : title}</p>
       {(venue || category) && <p>{[venue, category ? category.charAt(0).toUpperCase() + category.slice(1) : ''].filter(Boolean).join(' — ')}</p>}
-      {summary && <p class:list={{ truncated }}>{summary}</p>}
+      {bodyHtml && <div class="e-content" set:html={bodyHtml} />}
     </>)}
     {type === 'award' && (<>
       <p>{title}</p>
@@ -60,4 +60,4 @@ const { type, url, date, title, summary, quote, linkTo, photo, alt, venue, categ
       {summary && <p>{summary}</p>}
     </>)}
   </div>
-</div>
+</article>

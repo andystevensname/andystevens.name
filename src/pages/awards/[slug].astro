@@ -29,9 +29,9 @@ const awardUrl = new URL(`/awards/${award.id}/`, Astro.site).href;
 
     {award.data.issuer && <p>{award.data.issuer}</p>}
 
-    <div class="e-content">
+    <section class="e-content">
       <Content />
-    </div>
+    </section>
 
     <PostMeta post={award} />
     <Webmentions url={awardUrl} />

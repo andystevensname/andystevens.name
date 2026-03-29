@@ -28,9 +28,9 @@ const replyUrl = new URL(`/replies/${reply.id}/`, Astro.site).href;
 
     <p>In reply to <a class="u-in-reply-to" href={reply.data.in_reply_to}>{reply.data.in_reply_to}</a></p>
 
-    <div class="e-content">
+    <section class="e-content">
       <Content />
-    </div>
+    </section>
 
     <PostMeta post={reply} />
     <Webmentions url={replyUrl} />

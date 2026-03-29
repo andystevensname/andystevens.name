@@ -50,9 +50,9 @@ const jsonLd = {
     <h1 class="p-name">{post.data.title}</h1>
     <HEntryMeta url={postUrl} date={post.data.date} summary={post.data.description} syndication={post.data.syndication} />
 
-    <div class="e-content">
+    <section class="e-content">
       <Content />
-    </div>
+    </section>
 
     <PostMeta post={post} />
     <Webmentions url={postUrl} />

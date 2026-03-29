@@ -32,9 +32,9 @@ const itemUrl = new URL(`/writing/${item.id}/`, Astro.site).href;
       {item.data.url && <> — <a href={item.data.url}>View publication</a></>}
     </p>
 
-    <div class="e-content">
+    <section class="e-content">
       <Content />
-    </div>
+    </section>
 
     <PostMeta post={item} />
     <Webmentions url={itemUrl} />

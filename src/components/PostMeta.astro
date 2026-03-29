@@ -18,12 +18,10 @@ const isoDate = post.data.date?.toISOString() ?? '';
 const tags = post.data.tags ?? [];
 ---
 
-<div>
-  <div class="meta">
-    {dateStr && <time datetime={isoDate}>{dateStr}</time>}
-    {dateStr && tags.length > 0 && <span> &middot; </span>}
-    {tags.map((tag) => (
-      <a class="p-category" href={`/tags/${tag}/`}>#{tag} </a>
-    ))}
-  </div>
-</div>
+<footer class="meta">
+  {dateStr && <time datetime={isoDate}>{dateStr}</time>}
+  {dateStr && tags.length > 0 && <span> &middot; </span>}
+  {tags.map((tag) => (
+    <a class="p-category" href={`/tags/${tag}/`}>#{tag} </a>
+  ))}
+</footer>

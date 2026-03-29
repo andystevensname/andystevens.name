@@ -34,11 +34,11 @@ const categories = [...new Set(writing.map((w) => w.data.category))].sort();
       <label for="filter-award" class="filter-btn">Awards</label>
     </nav>
 
-    <div class="recent-feed" id="writing-feed" aria-live="polite">
+    <section class="recent-feed" id="writing-feed" aria-live="polite">
       {feed.length > 0
         ? feed.map((item) => <FeedItem {...item} />)
         : <p>Nothing here yet.</p>
       }
-    </div>
+    </section>
   </div>
 </Layout>

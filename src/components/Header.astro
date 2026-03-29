@@ -1,11 +1,24 @@
 ---
 import ThemeSwitcher from './ThemeSwitcher.astro';
+
+const currentPath = Astro.url.pathname;
+
+const links = [
+  { href: '/blog/', label: 'Blog' },
+  { href: '/commonplace/', label: 'Commonplace' },
+  { href: '/writing/', label: 'Writing' },
+  { href: '/albums/', label: 'Photography' },
+  { href: '/about/', label: 'About' },
+];
+
+function isCurrent(href: string): boolean {
+  return currentPath.startsWith(href);
+}
 ---
 
 <header id="header">
-  <!-- Hamburger / open nav -->
-  <button id="open-nav-btn" aria-label="Open navigation" aria-expanded="false" aria-controls="nav">
-    <!-- fa-bars -->
+  <!-- Mobile: hamburger -->
+  <button id="open-nav-btn" aria-label="Open navigation" aria-expanded="false" aria-controls="nav-dialog">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="20" height="20" fill="currentColor">
       <path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/>
     </svg>
@@ -13,10 +26,15 @@ import ThemeSwitcher from './ThemeSwitcher.astro';
 
   <ThemeSwitcher />
 
-  <span class="title-text">
-    <a href="/" class="title-text-desktop">Andy Stevens</a>
-    <a href="/" class="title-text-mobile">Andy Makes Things</a>
-  </span>
+  <!-- Desktop: inline nav -->
+  <nav id="header-nav" aria-label="Main navigation">
+    {links.map(({ href, label }) => (
+      <a href={href} class="header-nav-link" aria-current={isCurrent(href) ? 'page' : undefined}>{label}</a>
+    ))}
+  </nav>
+
+  <a href="/" class="title-text-desktop">Andy Stevens</a>
+  <a href="/" class="title-text-mobile">Andy Makes Things</a>
 </header>
 
 <script>
@@ -26,7 +44,8 @@ import ThemeSwitcher from './ThemeSwitcher.astro';
 
     window.addEventListener('scroll', () => {
       const currentScroll = window.scrollY;
-      if (currentScroll <= 0) {
+      const atBottom = (window.innerHeight + currentScroll) >= document.documentElement.scrollHeight - 1;
+      if (currentScroll <= 0 || atBottom) {
         header?.classList.remove('-translate-y-12');
       } else if (currentScroll > lastScroll) {
         header?.classList.add('-translate-y-12');

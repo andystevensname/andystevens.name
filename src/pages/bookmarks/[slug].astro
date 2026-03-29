@@ -29,9 +29,9 @@ const bookmarkUrl = new URL(`/bookmarks/${bookmark.id}/`, Astro.site).href;
 
     <p>Bookmarked: <a class="u-bookmark-of" href={bookmark.data.bookmark_of}>{bookmark.data.bookmark_of}</a></p>
 
-    <div class="e-content">
+    <section class="e-content">
       <Content />
-    </div>
+    </section>
 
     <PostMeta post={bookmark} />
     <Webmentions url={bookmarkUrl} />

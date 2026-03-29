@@ -26,9 +26,9 @@ const noteUrl = new URL(`/notes/${note.id}/`, Astro.site).href;
   <article class="h-entry">
     <HEntryMeta url={noteUrl} date={note.data.date} syndication={note.data.syndication} />
 
-    <div class="e-content">
+    <section class="e-content">
       <Content />
-    </div>
+    </section>
 
     <PostMeta post={note} />
     <Webmentions url={noteUrl} />

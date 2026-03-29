@@ -28,9 +28,9 @@ const likeUrl = new URL(`/likes/${like.id}/`, Astro.site).href;
 
     <p>Liked <a class="u-like-of" href={like.data.like_of}>{like.data.like_of}</a></p>
 
-    <div class="e-content">
+    <section class="e-content">
       <Content />
-    </div>
+    </section>
 
     <PostMeta post={like} />
     <Webmentions url={likeUrl} />
