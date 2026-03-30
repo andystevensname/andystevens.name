@@ -18,7 +18,7 @@ const isoDate = post.data.date?.toISOString() ?? '';
 const tags = post.data.tags ?? [];
 ---
 
-<footer class="meta">
+<footer>
   {dateStr && <time datetime={isoDate}>{dateStr}</time>}
   {dateStr && tags.length > 0 && <span> &middot; </span>}
   {tags.map((tag) => (

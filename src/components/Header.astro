@@ -29,7 +29,7 @@ function isCurrent(href: string): boolean {
   <!-- Desktop: inline nav -->
   <nav id="header-nav" aria-label="Main navigation">
     {links.map(({ href, label }) => (
-      <a href={href} class="header-nav-link" aria-current={isCurrent(href) ? 'page' : undefined}>{label}</a>
+      <a href={href} aria-current={isCurrent(href) ? 'page' : undefined}>{label}</a>
     ))}
   </nav>
 
