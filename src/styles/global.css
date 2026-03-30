@@ -349,14 +349,16 @@ h1::before,
 h1::after {
   content: '';
   position: absolute;
-  inset: -.25rem;
+  inset: -0.25rem -0.5rem;
   background: var(--h1-highlight);
   opacity: 0.5;
-  transform: rotateY(5deg) rotate(-3deg) skewX(-20deg);
-  border-radius: .525rem 2.5rem 1.4rem 0.5rem;
+  clip-path: polygon(
+    0% 8%,
+    93% 0%, 97% 3%, 98% 8%,
+    88% 85%, 85% 90%, 82% 92%,
+    3% 96%
+  );
   z-index: -1;
-  margin-left: -.5rem;
-  margin-right: -1.25rem;
 }
 
 h1::before {
@@ -364,9 +366,9 @@ h1::before {
 }
 
 h1::after {
-  opacity: 0.8;
+  opacity: .8;
   filter: blur(8px);
-  mask-image: linear-gradient(to left, transparent 0%, black 40%);
+  mask-image: linear-gradient(to right, transparent 100%, black 40%);
 }
 
 /* Detail page type colors */
