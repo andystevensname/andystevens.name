@@ -19,12 +19,13 @@ function isCurrent(href: string): boolean {
 <header id="header">
   <!-- Mobile: hamburger -->
   <button id="open-nav-btn" aria-label="Open navigation" aria-expanded="false" aria-controls="nav-dialog">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="20" height="20" fill="currentColor">
-      <path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/>
-    </svg>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5H21"/><path d="M3 12H21"/><path d="M3 19H21"/></svg>
   </button>
 
-  <ThemeSwitcher />
+  <!-- Desktop: home icon -->
+  <a href="/" id="home-link" aria-label="Home">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8L11.7317 3.13416C11.9006 3.04971 12.0994 3.0497 12.2683 3.13416L22 8"/><path d="M20 11V19C20 20.1046 19.1046 21 18 21H6C4.89543 21 4 20.1046 4 19V11"/></svg>
+  </a>
 
   <!-- Desktop: inline nav -->
   <nav id="header-nav" aria-label="Main navigation">
@@ -33,7 +34,8 @@ function isCurrent(href: string): boolean {
     ))}
   </nav>
 
-  <a href="/" class="title-text-desktop">Andy Stevens</a>
+  <ThemeSwitcher />
+
   <a href="/" class="title-text-mobile">Andy Makes Things</a>
 </header>
 
