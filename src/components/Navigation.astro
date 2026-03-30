@@ -27,7 +27,7 @@ function isCurrent(href: string): boolean {
     <ul>
       {links.map(({ href, label }) => (
         <li>
-          <a href={href} class="nav-link" aria-current={isCurrent(href) ? 'page' : undefined}>{label}</a>
+          <a href={href} aria-current={isCurrent(href) ? 'page' : undefined}>{label}</a>
         </li>
       ))}
     </ul>
@@ -53,7 +53,7 @@ function isCurrent(href: string): boolean {
     });
 
     // Close on nav link click
-    dialog?.querySelectorAll('.nav-link').forEach(link => {
+    dialog?.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => dialog?.close());
     });
 
