@@ -48,11 +48,11 @@ function isCurrent(href: string): boolean {
       const currentScroll = window.scrollY;
       const atBottom = (window.innerHeight + currentScroll) >= document.documentElement.scrollHeight - 1;
       if (currentScroll <= 0 || atBottom) {
-        header?.classList.remove('-translate-y-12');
+        header?.removeAttribute('data-hidden');
       } else if (currentScroll > lastScroll) {
-        header?.classList.add('-translate-y-12');
+        header?.setAttribute('data-hidden', '');
       } else if (currentScroll < lastScroll) {
-        header?.classList.remove('-translate-y-12');
+        header?.removeAttribute('data-hidden');
       }
       lastScroll = currentScroll;
     });

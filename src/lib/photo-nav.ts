@@ -10,8 +10,8 @@ document.addEventListener('astro:page-load', () => {
       const collapsedHeight = caption.clientHeight;
 
       function toggleCaption() {
-        caption!.classList.toggle('expanded');
-        const expanded = caption!.classList.contains('expanded');
+        caption!.toggleAttribute('data-expanded');
+        const expanded = caption!.hasAttribute('data-expanded');
         if (expanded) {
           caption!.style.height = 'auto';
           const expandedHeight = Math.min(caption!.scrollHeight, window.innerHeight * 0.33);
@@ -34,8 +34,8 @@ document.addEventListener('astro:page-load', () => {
       caption.addEventListener('touchend', (e: TouchEvent) => {
         const dy = e.changedTouches[0].clientY - captionStartY;
         if (Math.abs(dy) < 30) return;
-        if (dy < 0 && !caption!.classList.contains('expanded')) toggleCaption();
-        if (dy > 0 && caption!.classList.contains('expanded')) toggleCaption();
+        if (dy < 0 && !caption!.hasAttribute('data-expanded')) toggleCaption();
+        if (dy > 0 && caption!.hasAttribute('data-expanded')) toggleCaption();
       });
     }
   }
