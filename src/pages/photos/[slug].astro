@@ -33,7 +33,7 @@ const tags = photo.data.tags ?? [];
     <HEntryMeta url={photoUrl} date={photo.data.date} syndication={photo.data.syndication} />
 
     <PhotoNav />
-    <figure class="photo-viewer" id="photo-viewer">
+    <figure id="photo-viewer">
       {photoSrcs.map((src) => (
         <img class="u-photo" src={`${src}?class=photo800`} srcset={`${src}?class=photo400 400w, ${src}?class=photo800 800w, ${src}?class=photo1600 1600w`} sizes="(min-width: 1024px) 640px, (min-width: 640px) 75vw, 100vw" alt={photo.data.alt ?? ''} width={photo.data.width} height={photo.data.height} loading="lazy" decoding="async" />
       ))}
