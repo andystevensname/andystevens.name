@@ -29,7 +29,6 @@
   --vignette-color: rgba(0, 0, 0, 0.1);
   --vignette-start: 20%;
   --noise-opacity: 0.8;
-  --noise-frequency: 0.8;
 }
 
 html.dark {
@@ -72,15 +71,15 @@ body::before {
     radial-gradient(ellipse at 100% 100%, var(--vignette-color), transparent var(--vignette-start));
 }
 
-body::after {
+#content::after {
   content: '';
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: 9999;
   pointer-events: none;
   opacity: var(--noise-opacity);
   mix-blend-mode: soft-light;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.4' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-repeat: repeat;
 }
 
@@ -112,6 +111,7 @@ a[href="#main-content"]:focus {
   column-gap: var(--grid-gutter);
   padding: 0 var(--grid-margin);
   min-height: 100dvh;
+  position: relative;
 }
 
 main {
@@ -135,7 +135,7 @@ main {
   transition: transform 500ms;
 }
 
-#header.-translate-y-12 {
+#header[data-hidden] {
   transform: translateY(calc(-1 * var(--header-height)));
 }
 
@@ -295,7 +295,8 @@ label[for="theme-toggle"] svg:first-child { display: inline-flex; }
   border-top: 1px solid var(--c-gray-lighter);
   font-size: 0.875rem;
   line-height: 3.4285;
-  padding: 0;
+  padding: 0 var(--grid-margin);
+  margin: 0 calc(-1 * var(--grid-margin));
   position: relative;
   z-index: 5;
 }
@@ -370,9 +371,6 @@ h1 {
   transform: rotate(-1deg);
   justify-self: center;
   width: fit-content;
-}
-
-h1 {
   --h1-highlight: linear-gradient(
     35deg,
     hsl(199deg 100% 50%) 0%,
@@ -504,7 +502,7 @@ h1::after {
     hsl(349deg 82% 60%) 97%,
     hsl(340deg 82% 59%) 100%
   ); }
-.feed-item--like h1, article:has(.u-url[href*="/likes/"]) h1 { --h1-highlight: background-image: linear-gradient(
+.feed-item--like h1, article:has(.u-url[href*="/likes/"]) h1 { --h1-highlight: linear-gradient(
     130deg,
     hsl(1deg 77% 55%) 0%,
     hsl(16deg 75% 49%) 13%,
@@ -787,25 +785,20 @@ article .e-content li ol {
   margin: 0 0 1.5rem 0;
 }
 
-.wm-faces li {
-  width: 2rem;
-  height: 2rem;
-}
-
-.wm-faces img {
+.wm-faces li,
+.wm-faces img,
+.wm-faces span {
   width: 2rem;
   height: 2rem;
   border-radius: 50%;
-  object-fit: cover;
 }
+
+.wm-faces img { object-fit: cover; }
 
 .wm-faces span {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
   background: var(--c-gray-lighter);
   font-size: 0.75rem;
   color: var(--c-gray);
@@ -1129,7 +1122,7 @@ article > footer {
   color: var(--c-gray-light);
 }
 
-.photo-caption.expanded { overflow-y: auto; z-index: 2; }
+.photo-caption[data-expanded] { overflow-y: auto; z-index: 2; }
 
 .photo-caption-toggle {
   background: none;
@@ -1140,7 +1133,7 @@ article > footer {
 }
 
 .photo-caption-toggle:hover { color: var(--c-accent); }
-.photo-caption.expanded .photo-caption-toggle svg { transform: rotate(180deg); }
+.photo-caption[data-expanded] .photo-caption-toggle svg { transform: rotate(180deg); }
 
 .photo-nav {
   display: flex;
@@ -1155,9 +1148,9 @@ article > footer {
   gap: 0.25rem;
   text-decoration: none;
   color: light-dark(var(--c-gray), white);
-}
 
-.photo-nav a:hover { color: var(--c-accent); }
+  &:hover { color: var(--c-accent); }
+}
 #photo-prev { margin-left: auto; }
 #photo-counter, #photo-album-title { font-size: 0.875rem; color: var(--c-gray-light); }
 
@@ -1343,7 +1336,7 @@ article > footer {
   }
 
   #header {
-    padding: 0 calc((100% / 16) * 2 + var(--grid-margin));
+    padding: 0 22rem;
   }
 
   #main-content {
@@ -1351,7 +1344,7 @@ article > footer {
   }
 
   #footer {
-    grid-column: 3 / 15;
+    grid-column: 1 / -1;
   }
 }
 
@@ -1383,6 +1376,6 @@ article > footer {
   }
 
   #footer {
-    grid-column: 5 / 17;
+    grid-column: 1 / -1;
   }
 }
