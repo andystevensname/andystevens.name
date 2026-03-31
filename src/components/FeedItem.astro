@@ -21,8 +21,8 @@ const { type, url, date, title, summary, bodyHtml, quote, linkTo, photo, alt, ve
 
 <article class={`feed-item--${type} h-entry`} data-category={category ?? type}>
   <a href={url}><time datetime={date.toISOString()}>{formatDate(date)}</time></a>
-  <svg width="20" height="20" aria-hidden="true"><use href={`/icons.svg#icon-${type}`}/></svg>
   <div>
+    <svg width="20" height="20" aria-hidden="true"><use href={`/icons.svg#icon-${type}`}/></svg>
     {type === 'article' && (<>
       <p><a class="p-name u-url" href={url}>{title}</a></p>
       {quote && <p>{quote} <a href={url} aria-label={`Read ${title}`}><svg width="16" height="16" aria-hidden="true"><use href="/icons.svg#icon-readmore"/></svg></a></p>}
@@ -55,8 +55,8 @@ const { type, url, date, title, summary, bodyHtml, quote, linkTo, photo, alt, ve
       {venue && <p>{venue}</p>}
     </>)}
     {type === 'album' && (<>
-      {photo && <a href={url}><img class="u-photo" src={`${photo}?class=photo400`} srcset={`${photo}?class=photo200 200w, ${photo}?class=photo400 400w`} sizes="(min-width: 640px) 40rem, 100vw" alt={title ?? ''} loading="lazy" decoding="async" /></a>}
       <p><a href={url}>{title}</a></p>
+      {photo && <a href={url}><img class="u-photo" src={`${photo}?class=photo400`} srcset={`${photo}?class=photo200 200w, ${photo}?class=photo400 400w`} sizes="(min-width: 640px) 40rem, 100vw" alt={title ?? ''} loading="lazy" decoding="async" /></a>}
       {summary && <p>{summary}</p>}
     </>)}
   </div>

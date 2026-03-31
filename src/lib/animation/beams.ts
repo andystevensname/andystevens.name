@@ -29,7 +29,7 @@ export function createBeams(group: SVGGElement, height: number, width = 400) {
     };
   }
 
-  const topX = width * 0.5;
+  const topX = width * 0.66;
 
   function create() {
     const x1 = randomNumber(width, 0);
