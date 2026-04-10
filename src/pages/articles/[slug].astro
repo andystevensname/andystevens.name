@@ -7,7 +7,7 @@ import Webmentions from '../../components/Webmentions.astro';
 
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog');
+  const posts = await getCollection('articles');
   return posts.map((post) => ({
     params: { slug: post.id },
     props: { post },
@@ -16,7 +16,7 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
-const postUrl = new URL(`/blog/${post.id}/`, Astro.site).href;
+const postUrl = new URL(`/articles/${post.id}/`, Astro.site).href;
 
 const jsonLd = {
   '@context': 'https://schema.org',

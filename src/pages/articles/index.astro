@@ -1,0 +1,13 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import FeedList from '../../components/FeedList.astro';
+import { mapArticles, sortByDate } from '../../lib/feed';
+
+const posts = await getCollection('articles', ({ data }) => data.published !== false);
+const feed = sortByDate(mapArticles(posts));
+---
+
+<Layout title="Articles" description="Long-form articles, essays, and missives.">
+  <FeedList title="Articles" feed={feed} emptyMessage="No articles found." />
+</Layout>

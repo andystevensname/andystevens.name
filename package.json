@@ -10,7 +10,12 @@
   "dependencies": {
     "@astrojs/rss": "^4.0.16",
     "astro": "^5.0.0",
-    "marked": "^17.0.5"
+    "marked": "^17.0.5",
+    "poem-element": "^2.5.3",
+    "remark-directive": "^4.0.0",
+    "remark-poem-element": "^0.1.0",
+    "remark-project-meta-bar": "^0.1.0",
+    "unist-util-visit": "^5.1.0"
   },
   "devDependencies": {
     "prettier": "^3.8.1"

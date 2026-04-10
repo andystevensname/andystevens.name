@@ -3,8 +3,8 @@ import { glob } from 'astro/loaders';
 
 const syndication = z.array(z.string()).optional().default([]);
 
-const blog = defineCollection({
-  loader: glob({ pattern: '*.md', base: './src/content/blog' }),
+const articles = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/content/articles' }),
   schema: z.object({
     title: z.string(),
     description: z.string().optional(),
@@ -137,4 +137,25 @@ const albums = defineCollection({
   }),
 });
 
-export const collections = { blog, pages, bookmarks, likes, notes, photos, replies, writing, awards, albums };
+const code = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/content/code' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string().optional(),
+    projects: z.array(z.object({
+      project_name: z.string(),
+      code_urls: z.array(z.string()).optional().default([]),
+      cli: z.string().optional(),
+      docs: z.string().optional(),
+    })).optional().default([]),
+    language: z.string().optional(),
+    license: z.string().optional(),
+    date: z.coerce.date().optional(),
+    published: z.boolean().optional().default(true),
+    tags: z.array(z.string()).optional().default([]),
+    syndication,
+    slug: z.string().optional(),
+  }),
+});
+
+export const collections = { articles, pages, bookmarks, likes, notes, photos, replies, writing, awards, albums, code };

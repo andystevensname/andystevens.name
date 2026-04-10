@@ -3,8 +3,8 @@ import { getCollection } from 'astro:content';
 import type { APIContext } from 'astro';
 
 export async function GET(context: APIContext) {
-  const [posts, notes, bookmarks, likes, photos, replies, writing, awards] = await Promise.all([
-    getCollection('blog', ({ data }) => data.published !== false),
+  const [posts, notes, bookmarks, likes, photos, replies, writing, awards, code] = await Promise.all([
+    getCollection('articles', ({ data }) => data.published !== false),
     getCollection('notes', ({ data }) => data.published !== false),
     getCollection('bookmarks', ({ data }) => data.published !== false),
     getCollection('likes', ({ data }) => data.published !== false),
@@ -12,6 +12,7 @@ export async function GET(context: APIContext) {
     getCollection('replies', ({ data }) => data.published !== false),
     getCollection('writing', ({ data }) => data.published !== false),
     getCollection('awards', ({ data }) => data.published !== false),
+    getCollection('code', ({ data }) => data.published !== false),
   ]);
 
   const items = [
@@ -19,7 +20,7 @@ export async function GET(context: APIContext) {
       title: p.data.title,
       pubDate: p.data.date,
       description: p.data.description,
-      link: `/blog/${p.id}/`,
+      link: `/articles/${p.id}/`,
       categories: p.data.tags,
     })),
     ...notes.map((n) => ({
@@ -67,6 +68,13 @@ export async function GET(context: APIContext) {
       pubDate: a.data.date,
       description: a.data.issuer,
       link: `/awards/${a.id}/`,
+    })),
+    ...code.map((c) => ({
+      title: c.data.title,
+      pubDate: c.data.date,
+      description: c.data.description,
+      link: `/code/${c.id}/`,
+      categories: c.data.tags,
     })),
   ];
 

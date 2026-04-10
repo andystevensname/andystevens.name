@@ -2,10 +2,10 @@
 import Layout from '../layouts/Layout.astro';
 import FeedItem from '../components/FeedItem.astro';
 import { getCollection } from 'astro:content';
-import { mapBlogPosts, mapNotes, mapBookmarks, mapLikes, mapAlbums, mapReplies, mapWriting, mapAwards, sortByDate } from '../lib/feed';
+import { mapArticles, mapNotes, mapBookmarks, mapLikes, mapAlbums, mapReplies, mapWriting, mapAwards, mapCode, sortByDate } from '../lib/feed';
 
-const [posts, notes, bookmarks, likes, albums, replies, writing, awards] = await Promise.all([
-  getCollection('blog', ({ data }) => data.published !== false),
+const [posts, notes, bookmarks, likes, albums, replies, writing, awards, code] = await Promise.all([
+  getCollection('articles', ({ data }) => data.published !== false),
   getCollection('notes', ({ data }) => data.published !== false),
   getCollection('bookmarks', ({ data }) => data.published !== false),
   getCollection('likes', ({ data }) => data.published !== false),
@@ -13,10 +13,11 @@ const [posts, notes, bookmarks, likes, albums, replies, writing, awards] = await
   getCollection('replies', ({ data }) => data.published !== false),
   getCollection('writing', ({ data }) => data.published !== false),
   getCollection('awards', ({ data }) => data.published !== false),
+  getCollection('code', ({ data }) => data.published !== false),
 ]);
 
 const feed = sortByDate([
-  ...mapBlogPosts(posts),
+  ...mapArticles(posts),
   ...mapNotes(notes),
   ...mapBookmarks(bookmarks),
   ...mapLikes(likes),
@@ -24,6 +25,7 @@ const feed = sortByDate([
   ...mapReplies(replies),
   ...mapWriting(writing),
   ...mapAwards(awards),
+  ...mapCode(code),
 ]);
 
 const recent = feed.slice(0, 20);

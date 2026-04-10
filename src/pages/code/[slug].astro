@@ -1,0 +1,83 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import HEntryMeta from '../../components/HEntryMeta.astro';
+import PostMeta from '../../components/PostMeta.astro';
+import Webmentions from '../../components/Webmentions.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('code');
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const projectUrl = new URL(`/code/${entry.id}/`, Astro.site).href;
+const { projects = [], language, license } = entry.data;
+
+const primaryGithub = projects
+  .flatMap((p) => p.code_urls ?? [])
+  .find((u) => u.includes('github.com'));
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareSourceCode',
+  name: entry.data.title,
+  description: entry.data.description,
+  url: projectUrl,
+  ...(primaryGithub && { codeRepository: primaryGithub }),
+  ...(language && { programmingLanguage: language }),
+  ...(license && { license }),
+  author: {
+    '@type': 'Person',
+    name: 'Andy Stevens',
+    url: 'https://andystevens.name',
+  },
+};
+---
+
+<Layout
+  title={entry.data.title}
+  description={entry.data.description}
+  canonical={projectUrl}
+  ogType="article"
+  jsonLd={jsonLd}
+>
+  <article class="h-entry">
+    <h1 class="p-name">{entry.data.title}</h1>
+    <HEntryMeta url={projectUrl} date={entry.data.date} summary={entry.data.description} syndication={entry.data.syndication} />
+
+    <section class="e-content">
+      <Content />
+    </section>
+
+    <PostMeta post={entry} />
+    <Webmentions url={projectUrl} />
+  </article>
+</Layout>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    document.querySelectorAll<HTMLButtonElement>('.project-meta-bar-copy').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const text = btn.dataset.copy;
+        if (!text) return;
+        const status = btn.parentElement?.querySelector<HTMLElement>('[role="status"]');
+        try {
+          await navigator.clipboard.writeText(text);
+          btn.dataset.copied = '';
+          if (status) status.textContent = 'Copied to clipboard';
+          setTimeout(() => {
+            delete btn.dataset.copied;
+            if (status) status.textContent = '';
+          }, 1500);
+        } catch {
+          if (status) status.textContent = 'Copy failed';
+        }
+      });
+    });
+  });
+</script>

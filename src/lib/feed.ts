@@ -1,7 +1,7 @@
 import { marked } from 'marked';
 
 export type FeedItemData = {
-  type: 'article' | 'note' | 'bookmark' | 'like' | 'photo' | 'reply' | 'writing' | 'award' | 'album';
+  type: 'article' | 'note' | 'bookmark' | 'like' | 'photo' | 'reply' | 'writing' | 'award' | 'album' | 'code';
   url: string;
   date: Date;
   title?: string;
@@ -21,10 +21,10 @@ function renderBody(body: string | undefined): string | undefined {
   return marked.parse(body.trim(), { async: false }) as string;
 }
 
-export function mapBlogPosts(posts: any[]): FeedItemData[] {
+export function mapArticles(posts: any[]): FeedItemData[] {
   return posts.map((p) => ({
     type: 'article' as const,
-    url: `/blog/${p.id}/`,
+    url: `/articles/${p.id}/`,
     date: p.data.date ?? new Date(0),
     title: p.data.title,
     summary: p.data.description,
@@ -120,6 +120,17 @@ export function mapAlbums(albums: any[]): FeedItemData[] {
     summary: a.data.description,
     photo: a.data.cover,
     tags: a.data.tags ?? [],
+  }));
+}
+
+export function mapCode(projects: any[]): FeedItemData[] {
+  return projects.map((p) => ({
+    type: 'code' as const,
+    url: `/code/${p.id}/`,
+    date: p.data.date ?? new Date(0),
+    title: p.data.title,
+    summary: p.data.description,
+    tags: p.data.tags ?? [],
   }));
 }
 

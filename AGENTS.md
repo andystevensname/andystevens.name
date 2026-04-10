@@ -44,6 +44,7 @@ This site follows IndieWeb conventions:
 - **`astro:page-load`** event for re-binding DOM event listeners after view transitions
 - **CSS inlining** at build time (configured in `astro.config.mjs`)
 - **`is:inline`** scripts for anti-FOUC theme application before paint
+- **Remark plugins** (e.g. `remark-poem.mjs`) are loaded at startup. After changing a remark plugin, delete `.astro/data-store.json` and restart the dev server — Astro caches compiled markdown in this file and won't re-run plugins otherwise
 
 ## Fonts
 

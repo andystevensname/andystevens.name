@@ -15,6 +15,8 @@ Personal website for andystevens.name built with Astro 5 and deployed to Netlify
 
 No test or lint scripts are configured.
 
+**Remark plugin cache**: Astro caches compiled markdown in `.astro/data-store.json`. After changing a remark plugin, delete this file and restart the dev server to see changes.
+
 ## Architecture
 
 **Astro static site** with two content collections defined in `src/content/config.ts`:

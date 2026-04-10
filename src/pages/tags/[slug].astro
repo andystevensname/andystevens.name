@@ -2,11 +2,11 @@
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import FeedItem from '../../components/FeedItem.astro';
-import { mapBlogPosts, mapBookmarks, mapNotes, mapPhotos, mapReplies, mapWriting, sortByDate } from '../../lib/feed';
+import { mapArticles, mapBookmarks, mapNotes, mapPhotos, mapReplies, mapWriting, sortByDate } from '../../lib/feed';
 
 export async function getStaticPaths() {
   const [posts, bookmarks, notes, photos, replies, writing] = await Promise.all([
-    getCollection('blog', ({ data }) => data.published !== false),
+    getCollection('articles', ({ data }) => data.published !== false),
     getCollection('bookmarks', ({ data }) => data.published !== false),
     getCollection('notes', ({ data }) => data.published !== false),
     getCollection('photos', ({ data }) => data.published !== false),
@@ -15,7 +15,7 @@ export async function getStaticPaths() {
   ]);
 
   const feed = sortByDate([
-    ...mapBlogPosts(posts),
+    ...mapArticles(posts),
     ...mapBookmarks(bookmarks),
     ...mapNotes(notes),
     ...mapPhotos(photos),

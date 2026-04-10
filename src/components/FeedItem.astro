@@ -1,6 +1,6 @@
 ---
 interface Props {
-  type: 'article' | 'note' | 'bookmark' | 'like' | 'photo' | 'reply' | 'writing' | 'award' | 'album';
+  type: 'article' | 'note' | 'bookmark' | 'like' | 'photo' | 'reply' | 'writing' | 'award' | 'album' | 'code';
   url: string;
   date: Date;
   title?: string;
@@ -57,6 +57,10 @@ const { type, url, date, title, summary, bodyHtml, quote, linkTo, photo, alt, ve
     {type === 'album' && (<>
       <p><a href={url}>{title}</a></p>
       {photo && <a href={url}><img class="u-photo" src={`${photo}?class=photo400`} srcset={`${photo}?class=photo200 200w, ${photo}?class=photo400 400w`} sizes="(min-width: 640px) 40rem, 100vw" alt={title ?? ''} loading="lazy" decoding="async" /></a>}
+      {summary && <p>{summary}</p>}
+    </>)}
+    {type === 'code' && (<>
+      <p><a class="p-name u-url" href={url}>{title}</a></p>
       {summary && <p>{summary}</p>}
     </>)}
   </div>

@@ -1,0 +1,13 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import FeedList from '../../components/FeedList.astro';
+import { mapCode, sortByDate } from '../../lib/feed';
+
+const projects = await getCollection('code', ({ data }) => data.published !== false);
+const feed = sortByDate(mapCode(projects));
+---
+
+<Layout title="Code" description="Open source software projects.">
+  <FeedList title="Code" feed={feed} emptyMessage="No projects found." />
+</Layout>
