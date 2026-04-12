@@ -11,7 +11,7 @@ const isoDate = date?.toISOString() ?? '';
 ---
 
 <span class="h-entry-meta" style="display:none" aria-hidden="true">
-  <a class="u-url u-uid p-author h-card" href={url}>Andy Stevens</a>
+  <a rel="author" class="u-url u-uid p-author h-card" href={url}>Andy Stevens</a>
   {isoDate && <time class="dt-published" datetime={isoDate}>{isoDate}</time>}
   {summary && <data class="p-summary" value={summary}/>}
   {syndication.map((synUrl) => (
