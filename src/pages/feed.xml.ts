@@ -1,9 +1,21 @@
 import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';
 import type { APIContext } from 'astro';
+import {
+  mapArticles,
+  mapNotes,
+  mapBookmarks,
+  mapLikes,
+  mapPhotos,
+  mapReplies,
+  mapWriting,
+  mapAwards,
+  mapCode,
+  sortByDate,
+} from '../lib/feed';
 
 export async function GET(context: APIContext) {
-  const [posts, notes, bookmarks, likes, photos, replies, writing, awards, code] = await Promise.all([
+  const [articles, notes, bookmarks, likes, photos, replies, writing, awards, code] = await Promise.all([
     getCollection('articles', ({ data }) => data.published !== false),
     getCollection('notes', ({ data }) => data.published !== false),
     getCollection('bookmarks', ({ data }) => data.published !== false),
@@ -15,74 +27,24 @@ export async function GET(context: APIContext) {
     getCollection('code', ({ data }) => data.published !== false),
   ]);
 
-  const items = [
-    ...posts.map((p) => ({
-      title: p.data.title,
-      pubDate: p.data.date,
-      description: p.data.description,
-      link: `/articles/${p.id}/`,
-      categories: p.data.tags,
-    })),
-    ...notes.map((n) => ({
-      title: 'Note',
-      pubDate: n.data.date,
-      description: n.body?.slice(0, 200),
-      link: `/notes/${n.id}/`,
-      categories: n.data.tags,
-    })),
-    ...bookmarks.map((b) => ({
-      title: b.data.title ?? `Bookmark: ${b.data.bookmark_of}`,
-      pubDate: b.data.date,
-      description: b.body?.slice(0, 200),
-      link: `/bookmarks/${b.id}/`,
-      categories: b.data.tags,
-    })),
-    ...likes.map((l) => ({
-      title: `Liked ${l.data.like_of}`,
-      pubDate: l.data.date,
-      link: `/likes/${l.id}/`,
-    })),
-    ...photos.map((p) => ({
-      title: p.data.title ?? 'Photo',
-      pubDate: p.data.date,
-      description: p.data.alt,
-      link: `/photos/${p.id}/`,
-      categories: p.data.tags,
-    })),
-    ...replies.map((r) => ({
-      title: `Reply to ${r.data.in_reply_to}`,
-      pubDate: r.data.date,
-      description: r.body?.slice(0, 200),
-      link: `/replies/${r.id}/`,
-      categories: r.data.tags,
-    })),
-    ...writing.map((w) => ({
-      title: w.data.title,
-      pubDate: w.data.date,
-      description: `${w.data.category}${w.data.venue ? ` — ${w.data.venue}` : ''}`,
-      link: `/writing/${w.id}/`,
-      categories: w.data.tags,
-    })),
-    ...awards.map((a) => ({
-      title: a.data.title,
-      pubDate: a.data.date,
-      description: a.data.issuer,
-      link: `/awards/${a.id}/`,
-    })),
-    ...code.map((c) => ({
-      title: c.data.title,
-      pubDate: c.data.date,
-      description: c.data.description,
-      link: `/code/${c.id}/`,
-      categories: c.data.tags,
-    })),
-  ];
-
-  items.sort((a, b) => {
-    const aDate = a.pubDate?.getTime() ?? 0;
-    const bDate = b.pubDate?.getTime() ?? 0;
-    return bDate - aDate;
-  });
+  const items = sortByDate([
+    ...mapArticles(articles),
+    ...mapNotes(notes),
+    ...mapBookmarks(bookmarks),
+    ...mapLikes(likes),
+    ...mapPhotos(photos),
+    ...mapReplies(replies),
+    ...mapWriting(writing),
+    ...mapAwards(awards),
+    ...mapCode(code),
+  ]).map((item) => ({
+    title: item.title || item.type.charAt(0).toUpperCase() + item.type.slice(1),
+    pubDate: item.date,
+    description: item.summary || item.bodyHtml || '',
+    link: item.url,
+    categories: item.tags,
+    'content:encoded': item.bodyHtml || '',
+  }));
 
   return rss({
     title: 'Andy Stevens',
