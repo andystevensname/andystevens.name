@@ -1,7 +1,7 @@
 import { defineConfig } from 'astro/config';
-import remarkPoemElement from 'remark-poem-element';
+import remarkPoemElement from '@andystevensname/remark-poem-element';
 import remarkDirective from 'remark-directive';
-import remarkProjectMetaBar from 'remark-project-meta-bar';
+import remarkProjectMetaBar from '@andystevensname/remark-project-meta-bar';
 
 export default defineConfig({
   site: 'https://andystevens.name',

@@ -10,14 +10,14 @@ projects:
   - project_name: "poem-element"
     code_urls:
       - "https://github.com/andystevensname/poem-element"
-      - "https://www.npmjs.com/package/poem-element"
-    cli: "npm install poem-element"
+      - "https://www.npmjs.com/package/@andystevensname/poem-element"
+    cli: "npm install @andystevensname/poem-element"
     docs: "https://github.com/andystevensname/poem-element"
   - project_name: "remark-poem-element"
     code_urls:
       - "https://github.com/andystevensname/remark-poem-element"
-      - "https://www.npmjs.com/package/remark-poem-element"
-    cli: "npm install remark-poem-element"
+      - "https://www.npmjs.com/package/@andystevensname/remark-poem-element"
+    cli: "npm install @andystevensname/remark-poem-element"
     docs: "https://github.com/andystevensname/remark-poem-element"
 ---
 <aside>
