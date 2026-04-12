@@ -28,6 +28,7 @@ export function mapArticles(posts: any[]): FeedItemData[] {
     date: p.data.date ?? new Date(0),
     title: p.data.title,
     summary: p.data.description,
+    bodyHtml: renderBody(p.body),
     quote: p.data.quote,
     tags: p.data.tags ?? [],
   }));
