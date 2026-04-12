@@ -43,7 +43,7 @@ export async function GET(context: APIContext) {
     description: item.summary || item.bodyHtml || '',
     link: item.url,
     categories: item.tags,
-    'content:encoded': item.bodyHtml || '',
+    content: item.bodyHtml || '',
   }));
 
   return rss({
