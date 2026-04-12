@@ -19,6 +19,21 @@
     Cache-Control = "public, max-age=31536000, immutable"
 
 [[redirects]]
+  from = "/feed"
+  to = "/feed.xml"
+  status = 301
+
+[[redirects]]
+  from = "/index.xml"
+  to = "/feed.xml"
+  status = 301
+
+[[redirects]]
+  from = "/feed/index.xml"
+  to = "/feed.xml"
+  status = 301
+
+[[redirects]]
   from = "/blog/*"
   to = "/articles/:splat"
   status = 301
