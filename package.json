@@ -8,13 +8,13 @@
     "preview": "astro preview"
   },
   "dependencies": {
-    "@andystevensname/remark-poem-element": "^1.0.3",
+    "@andystevensname/remark-poem-element": "^1.1.1",
     "@astrojs/rss": "^4.0.16",
     "astro": "^5.0.0",
     "marked": "^17.0.5",
     "remark-directive": "^4.0.0",
     "unist-util-visit": "^5.1.0",
-    "@andystevensname/poem-element": "^1.1.1",
+    "@andystevensname/poem-element": "^1.0.3",
     "@andystevensname/remark-project-meta-bar": "^1.1.3"
   },
   "devDependencies": {
