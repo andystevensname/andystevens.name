@@ -923,6 +923,16 @@ article .e-content li ol {
   --project-meta-bar-font-size: .875rem;
 }
 
+/* === Meta === */
+
+
+:root {
+  --project-meta-bar-gap: .75rem;
+  --project-meta-bar-padding: .75rem 0;
+  --project-meta-bar-radius: 4px;
+  --project-meta-bar-font-size: .875rem;
+}
+
 .project-meta-bar {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -946,6 +956,13 @@ article .e-content li ol {
   padding: 0;
   display: block;
   grid-column: 3 / span 1;
+  align-self: center;
+}
+
+.project-meta-bar-cli-cell {
+  grid-column: 4 / span 3;
+  align-self: center;
+  margin-left: 0;
 }
 
 .project-meta-bar-link-list {
@@ -954,7 +971,7 @@ article .e-content li ol {
   align-items: center;
   align-self: center;
   list-style: none;
-  margin: 0;
+  margin: 0 !important;
   padding: 0;
 }
 
@@ -982,6 +999,7 @@ article .e-content li ol {
   margin-inline-start: auto;
   overflow: auto;
   grid-column: 4 / span 3;
+  margin-left: 0;
 }
 
 .project-meta-bar-cli {

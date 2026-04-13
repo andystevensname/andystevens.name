@@ -35,6 +35,9 @@ This site follows IndieWeb conventions:
 - **Post types**: article, note, bookmark (`u-bookmark-of`), like (`u-like-of`), photo (`u-photo`), reply (`u-in-reply-to`). Each has a content collection in `src/content/` and routes under `src/pages/`.
 - **Endpoints**: Micropub, authorization, and token endpoints via Indiekit at `ik.andystevens.name`. WebMention endpoint at `webmention.andystevens.name`.
 - **Bridgy**: Federation redirects for `.well-known` endpoints configured in `netlify.toml`.
+- **Webmention sending**: Triggered via Netlify `onSuccess` plugin (`netlify/plugins/send-webmentions`), which calls go-jamming via `PUT https://webmention.andystevens.name/webmention/andystevens.name/{GO_JAMMING_TOKEN}`. Go-jamming discovers the feed via `/feed` (redirects to `/feed.xml`). The RSS feed must include `content:encoded` (via the `content` field in `@astrojs/rss` items) for go-jamming to find outbound links.
+- **Bluesky syndication**: Triggered via Netlify `onSuccess` plugin (`netlify/plugins/post-to-bluesky`). Reads `feed.xml`, finds items published in the last 10 minutes, posts via AT Protocol. Requires `BLUESKY_HANDLE` and `BLUESKY_APP_PASSWORD` Netlify env vars.
+- **Indiekit server**: Running at `ik.andystevens.name` on a Linode VPS (`ssh indiekit`). Managed via PM2. Config in `~/indiekit/package.json`. Requires MongoDB running locally on the VPS — connection string set as `MONGODB_URL` in `~/indiekit/.env`. Article posts save to `src/content/articles/{slug}.md` with URL `articles/{slug}/`.
 
 ## Astro Features
 

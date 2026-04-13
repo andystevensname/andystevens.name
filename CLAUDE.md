@@ -31,7 +31,7 @@ No test or lint scripts are configured.
 
 **Animation**: Custom SVG animation system in `src/lib/animation/` (TypeScript modules, no third-party libraries). Used on the homepage via `Animation.astro`.
 
-**RSS**: Generated at `/feed.xml` via `src/pages/feed.xml.ts` using `@astrojs/rss`.
+**RSS**: Generated at `/feed.xml` via `src/pages/feed.xml.ts` using `@astrojs/rss`. Item mapping is in `src/lib/feed.ts`. Each post type has a `mapX()` function — all must set `bodyHtml: renderBody(body)` for outbound webmention sending to work. The feed uses `content` (not `'content:encoded'`) as the item field name for `@astrojs/rss`. Redirects from `/feed`, `/index.xml`, and `/feed/index.xml` to `/feed.xml` are in `netlify.toml` to support go-jamming's feed discovery.
 
 ## Deployment
 
