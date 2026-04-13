@@ -46,13 +46,13 @@ html.dark {
    ============================================ */
 
 html {
-  height: 100%;
   min-height: 100%;
   width: 100%;
+  position: relative;
 }
 
 body {
-  height: 100%;
+  position: relative;
   min-height: 100%;
   width: 100%;
   margin: 0;
@@ -74,11 +74,14 @@ body::before {
     radial-gradient(ellipse at 100% 100%, var(--vignette-color), transparent var(--vignette-start));
 }
 
-#content::after {
+body::after {
   content: '';
   position: absolute;
-  inset: 0;
-  z-index: 9999;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
   pointer-events: none;
   opacity: var(--noise-opacity);
   mix-blend-mode: soft-light;
@@ -1157,7 +1160,7 @@ article > footer {
 .feed-item--writing > div > svg { color: #00897B; }
 .feed-item--award > div > svg { color: #FFB300; }
 .feed-item--album > div > svg { color: #8E24AA; }
-.feed-item--code > div > svg { color: #546E7A; }
+.feed-item--code > div > svg { color: #00E676; }
 
 /* Content div spans all columns on mobile, timestamp drops below */
 [class*="feed-item--"] > div {
