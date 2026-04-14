@@ -457,7 +457,7 @@ h1 {
   padding: 0.25rem 0.5rem;
   text-wrap: balance;
   text-align: center;
-  transform: rotate(-1deg);
+  transform: rotate(0deg);
   justify-self: center;
   width: fit-content;
   --h1-highlight: linear-gradient(
@@ -487,6 +487,7 @@ h1::after {
   opacity: 0.5;
   clip-path: polygon(0% 8%, 98% 2%, 85% 92%, 3% 96%);
   z-index: -1;
+  transform: rotate(-2deg);
 }
 
 h1::after {
@@ -494,8 +495,8 @@ h1::after {
   filter: blur(8px);
 }
 
-/* Detail page type colors */
-.feed-item--article h1, article:has(.u-url[href*="/articles/"]) h1 { --h1-highlight: linear-gradient(
+/* === h1 type gradients === */
+h1.feed-item--article, article:has(.u-url[href*="/articles/"]) h1 { --h1-highlight: linear-gradient(
     130deg,
     hsl(340deg 82% 52%) 0%,
     hsl(350deg 81% 55%) 22%,
@@ -511,39 +512,7 @@ h1::after {
     hsl(97deg 49% 44%) 97%,
     hsl(122deg 39% 49%) 100%
   );}
-.feed-item--note h1, article:has(.u-url[href*="/notes/"]) h1 { --h1-highlight: linear-gradient(
-    130deg,
-    hsl(38deg 100% 50%) 0%,
-    hsl(29deg 100% 57%) 13%,
-    hsl(19deg 100% 62%) 25%,
-    hsl(7deg 100% 67%) 37%,
-    hsl(353deg 100% 68%) 48%,
-    hsl(341deg 100% 65%) 58%,
-    hsl(332deg 100% 64%) 68%,
-    hsl(324deg 100% 64%) 75%,
-    hsl(314deg 82% 62%) 82%,
-    hsl(294deg 66% 61%) 88%,
-    hsl(271deg 80% 67%) 93%,
-    hsl(245deg 92% 71%) 97%,
-    hsl(218deg 100% 58%) 100%
-  );}
-.feed-item--bookmark h1, article:has(.u-url[href*="/bookmarks/"]) h1 { --h1-highlight: linear-gradient(
-    130deg,
-    hsl(208deg 79% 51%) 0%,
-    hsl(226deg 75% 66%) 13%,
-    hsl(252deg 70% 70%) 25%,
-    hsl(279deg 63% 68%) 37%,
-    hsl(305deg 61% 65%) 48%,
-    hsl(323deg 91% 69%) 58%,
-    hsl(332deg 100% 70%) 68%,
-    hsl(342deg 100% 70%) 75%,
-    hsl(355deg 100% 72%) 82%,
-    hsl(11deg 100% 69%) 88%,
-    hsl(23deg 100% 64%) 93%,
-    hsl(33deg 100% 58%) 97%,
-    hsl(42deg 100% 50%) 100%
-  ); }
-.feed-item--photo h1, article:has(.u-url[href*="/photos/"]) h1 { --h1-highlight: linear-gradient(
+h1.feed-item--photo, article:has(.u-url[href*="/photos/"]) h1 { --h1-highlight: linear-gradient(
     130deg,
     hsl(287deg 65% 40%) 0%,
     hsl(256deg 53% 53%) 13%,
@@ -559,7 +528,7 @@ h1::after {
     hsl(154deg 65% 44%) 97%,
     hsl(123deg 38% 57%) 100%
   ); }
-.feed-item--album h1, article:has(.u-url[href*="/albums/"]) h1 { --h1-highlight: linear-gradient(
+h1.feed-item--album, article:has(.u-url[href*="/albums/"]) h1 { --h1-highlight: linear-gradient(
     130deg,
     hsl(287deg 65% 40%) 0%,
     hsl(256deg 53% 53%) 13%,
@@ -575,39 +544,7 @@ h1::after {
     hsl(154deg 65% 44%) 97%,
     hsl(123deg 38% 57%) 100%
   ); }
-.feed-item--reply h1, article:has(.u-url[href*="/replies/"]) h1 { --h1-highlight: linear-gradient(
-    130deg,
-    hsl(123deg 41% 45%) 0%,
-    hsl(96deg 50% 41%) 13%,
-    hsl(78deg 64% 36%) 25%,
-    hsl(64deg 83% 31%) 37%,
-    hsl(54deg 100% 30%) 48%,
-    hsl(46deg 100% 34%) 58%,
-    hsl(38deg 91% 39%) 68%,
-    hsl(29deg 76% 45%) 75%,
-    hsl(20deg 68% 51%) 82%,
-    hsl(10deg 74% 57%) 88%,
-    hsl(359deg 78% 61%) 93%,
-    hsl(349deg 82% 60%) 97%,
-    hsl(340deg 82% 59%) 100%
-  ); }
-.feed-item--like h1, article:has(.u-url[href*="/likes/"]) h1 { --h1-highlight: linear-gradient(
-    130deg,
-    hsl(1deg 77% 55%) 0%,
-    hsl(16deg 75% 49%) 13%,
-    hsl(29deg 95% 40%) 25%,
-    hsl(37deg 100% 36%) 37%,
-    hsl(45deg 100% 33%) 48%,
-    hsl(55deg 98% 29%) 58%,
-    hsl(67deg 65% 34%) 68%,
-    hsl(83deg 48% 40%) 75%,
-    hsl(106deg 35% 45%) 82%,
-    hsl(135deg 35% 46%) 88%,
-    hsl(154deg 47% 43%) 93%,
-    hsl(166deg 58% 41%) 97%,
-    hsl(174deg 63% 40%) 100%
-  ); }
-.feed-item--writing h1, article:has(.u-url[href*="/writing/"]) h1 { --h1-highlight: linear-gradient(
+h1.feed-item--writing, article:has(.u-url[href*="/writing/"]) h1 { --h1-highlight: linear-gradient(
     130deg,
     hsl(174deg 100% 27%) 0%,
     hsl(165deg 66% 33%) 13%,
@@ -623,7 +560,7 @@ h1::after {
     hsl(13deg 73% 56%) 97%,
     hsl(1deg 83% 63%) 100%
   ); }
-.feed-item--award h1, article:has(.u-url[href*="/awards/"]) h1 { --h1-highlight: linear-gradient(
+h1.feed-item--award, article:has(.u-url[href*="/awards/"]) h1 { --h1-highlight: linear-gradient(
     130deg,
     hsl(42deg 100% 50%) 0%,
     hsl(39deg 100% 52%) 13%,
@@ -640,7 +577,7 @@ h1::after {
     hsl(1deg 83% 63%) 100%
   );}
 
-.feed-item--code h1, article:has(.u-url[href*="/code/"]) h1 { --h1-highlight: linear-gradient(
+h1.feed-item--code, article:has(.u-url[href*="/code/"]) h1 { --h1-highlight: linear-gradient(
     130deg,
     hsl(199deg 18% 40%) 0%,
     hsl(195deg 22% 42%) 13%,
@@ -656,6 +593,36 @@ h1::after {
     hsl(82deg 36% 50%) 97%,
     hsl(62deg 44% 46%) 100%
   );}
+
+
+/* Commonplace gradient: used for notes, bookmarks, likes, replies, commonplace */
+h1.feed-item--note,
+h1.feed-item--bookmark,
+h1.feed-item--like,
+h1.feed-item--reply,
+h1.feed-item--commonplace,
+article:has(.u-url[href*="/notes/"]) h1,
+article:has(.u-url[href*="/bookmarks/"]) h1,
+article:has(.u-url[href*="/likes/"]) h1,
+article:has(.u-url[href*="/replies/"]) h1,
+article:has(.u-url[href*="/commonplace/"]) h1 {
+  --h1-highlight: linear-gradient(
+    130deg,
+    hsl(208deg 79% 51%) 0%,
+    hsl(226deg 75% 66%) 13%,
+    hsl(252deg 70% 70%) 25%,
+    hsl(279deg 63% 68%) 37%,
+    hsl(305deg 61% 65%) 48%,
+    hsl(323deg 91% 69%) 58%,
+    hsl(332deg 100% 70%) 68%,
+    hsl(342deg 100% 70%) 75%,
+    hsl(355deg 100% 72%) 82%,
+    hsl(11deg 100% 69%) 88%,
+    hsl(23deg 100% 64%) 93%,
+    hsl(33deg 100% 58%) 97%,
+    hsl(42deg 100% 50%) 100%
+  );
+}
 
 h2, h3, h4 {
   width: 100%;
@@ -1184,7 +1151,7 @@ article > footer {
   grid-template-columns: subgrid;
 }
 
-[class*="feed-item--"] {
+article[class*="feed-item--"] {
   grid-column: 1 / -1;
   display: grid;
   grid-template-columns: subgrid;
@@ -1194,7 +1161,7 @@ article > footer {
   border-bottom: 1px solid light-dark(var(--c-gray-lighter), white);
 }
 
-[class*="feed-item--"]:last-child {
+article[class*="feed-item--"]:last-child {
   border-bottom: 0;
   margin-bottom: 0;
   padding-bottom: 0;
@@ -1591,7 +1558,7 @@ article > footer {
   }
 
   /* Feed items capped at 6 columns for readable width */
-  [class*="feed-item--"] {
+  article[class*="feed-item--"] {
     grid-column: 1 / span 6;
   }
 
