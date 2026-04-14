@@ -18,10 +18,91 @@ const isoDate = post.data.date?.toISOString() ?? '';
 const tags = post.data.tags ?? [];
 ---
 
-<footer>
-  {dateStr && <time datetime={isoDate}>{dateStr}</time>}
-  {dateStr && tags.length > 0 && <span> &middot; </span>}
-  {tags.map((tag) => (
-    <a class="p-category" href={`/tags/${tag}/`}>#{tag} </a>
-  ))}
+<footer class="post-meta-footer">
+  <div class="post-meta-footer-row">
+    {dateStr && <time datetime={isoDate}>{dateStr}</time>}
+    {dateStr && tags.length > 0 && <span> &middot; </span>}
+    {tags.map((tag) => (
+      <a class="p-category" href={`/tags/${tag}/`}>#{tag} </a>
+    ))}
+  </div>
+  <button id="share-btn" type="button" title="Share this post" class="filter-btn share-btn">
+    <span>Share this post</span>
+    <svg class="share-icon icon" width="20" height="20" aria-hidden="true">
+      <use href="/icons.svg#icon-share-ios" />
+    </svg>
+  </button>
+  <dialog id="share-dialog">
+    <form method="dialog" style="margin:0;">
+      <label for="share-link-input" class="share-dialog-label">Share this link</label>
+      <input id="share-link-input" type="text" value="" readonly class="share-dialog-input" />
+      <div class="share-dialog-actions">
+        <button id="copy-link-btn" type="button" class="copy-link-btn">Copy Link</button>
+        <button id="close-share-dialog" type="submit" class="close-share-dialog-btn">Close</button>
+      </div>
+    </form>
+  </dialog>
+
+
+</script>
+
 </footer>
+<script type="module">
+  function setupShareButton() {
+    function getShareIconId() {
+      const ua = navigator.userAgent;
+      if (/iPad|iPhone|iPod/.test(ua)) {
+        return 'icon-share-ios';
+      }
+      if (/Android/.test(ua)) {
+        return 'icon-share-android';
+      }
+      return 'icon-share-ios'; // fallback to iOS style
+    }
+    const shareBtn = document.getElementById('share-btn');
+    const shareIcon = document.querySelector('.share-icon use');
+    if (shareIcon) {
+      const iconId = getShareIconId();
+      const iconRef = '/icons.svg#' + iconId;
+      shareIcon.setAttribute('href', iconRef);
+      shareIcon.setAttribute('xlink:href', iconRef);
+      if (iconId === 'icon-share-android') {
+        const btn = document.getElementById('share-btn');
+        if (btn) btn.title = 'Android Share';
+      }
+    }
+    const ua = navigator.userAgent;
+
+    const shareDialog = document.getElementById('share-dialog');
+    const shareInput = document.getElementById('share-link-input');
+    const copyBtn = document.getElementById('copy-link-btn');
+    if (shareBtn && navigator.share) {
+      shareBtn.addEventListener('click', () => {
+        navigator.share({
+          title: document.title,
+          url: window.location.href
+        });
+      });
+    } else if (shareBtn && shareDialog && shareInput && copyBtn) {
+      shareBtn.addEventListener('click', () => {
+        shareInput.value = window.location.href;
+        shareDialog.showModal();
+        shareInput.select();
+      });
+      copyBtn.addEventListener('click', () => {
+        shareInput.select();
+        document.execCommand('copy');
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => { copyBtn.textContent = 'Copy Link'; }, 1500);
+      });
+      // Enable closing dialog on backdrop click
+      shareDialog.addEventListener('click', (event) => {
+        if (event.target === shareDialog) {
+          shareDialog.close();
+        }
+      });
+    }
+  }
+  document.addEventListener('DOMContentLoaded', setupShareButton);
+  document.addEventListener('astro:page-load', setupShareButton);
+</script>

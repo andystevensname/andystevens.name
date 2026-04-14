@@ -22,10 +22,10 @@ const { type, url, date, title, summary, bodyHtml, quote, linkTo, photo, alt, ve
 <article class={`feed-item--${type} h-entry`} data-category={category ?? type}>
   <a href={url}><time datetime={date.toISOString()}>{formatDate(date)}</time></a>
   <div>
-    <svg width="20" height="20" aria-hidden="true"><use href={`/icons.svg#icon-${type}`}/></svg>
+    <svg class="icon" width="20" height="20" aria-hidden="true"><use href={`/icons.svg#icon-${type}`}/></svg>
     {type === 'article' && (<>
       <p><a class="p-name u-url" href={url}>{title}</a></p>
-      {quote && <p>{quote} <a href={url} aria-label={`Read ${title}`}><svg width="16" height="16" aria-hidden="true"><use href="/icons.svg#icon-readmore"/></svg></a></p>}
+      {quote && <p>{quote} <a href={url} aria-label={`Read ${title}`}><svg class="icon" width="20" height="20" aria-hidden="true"><use href="/icons.svg#icon-readmore"/></svg></a></p>}
     </>)}
     {type === 'note' && bodyHtml && (
       <div class="feed-note e-content" set:html={bodyHtml} />

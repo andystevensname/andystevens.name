@@ -1,3 +1,67 @@
+.share-icon {
+  margin-left: 0.25rem;
+}
+.post-meta-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.post-meta-footer-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+.share-dialog-label {
+  font-size: 1rem;
+  font-weight: 500;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.share-dialog-input {
+  font-size: 1rem;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  background: #f8f8f8;
+  color: #222;
+  margin-bottom: 1rem;
+}
+
+.share-dialog-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.copy-link-btn {
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  background: var(--c-accent, #0277BD);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.close-share-dialog-btn {
+  font-size: 0.9rem;
+  background: none;
+  color: #888;
+  border: none;
+  cursor: pointer;
+}
+.share-btn {
+  font-size: 1rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem 0.5rem 1rem;
+}
 @font-face {
   font-family: 'Instrument Serif';
   font-style: normal;
@@ -1143,10 +1207,24 @@ article > footer {
   line-height: 1.5;
 }
 
+
+/* Standard icon size for all UI SVGs */
+.icon,
+[class*="feed-item--"] > div > svg:first-child,
+.project-meta-bar svg,
+.share-icon {
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px;
+  min-height: 20px;
+  max-width: 20px;
+  max-height: 20px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
 /* Icon sits inline with content text */
 [class*="feed-item--"] > div > svg:first-child {
-  width: 1rem;
-  height: 1rem;
   float: left;
   margin: 0.25rem 0.5rem 0 0;
 }
