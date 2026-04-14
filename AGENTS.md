@@ -52,3 +52,13 @@ This site follows IndieWeb conventions:
 ## Fonts
 
 Self-hosted, subset woff2 files in `public/fonts/`. Fjalla One for UI, Instrument Serif for the site title. Both use `font-display: optional` to avoid layout shift.
+
+## Animation sidebar
+
+The custom SVG animation in `src/lib/animation/` sequences three phases (beams → bars → gears) over a 12500ms cycle. Opacity sequencing is handled by the Web Animations API on group elements with staggered delays, while per-element jitter/movement is driven by a `requestAnimationFrame` tick loop. Both systems live in `src/components/Animation.astro`.
+
+Two load-bearing details that fix Chrome/Firefox-specific bugs Safari happens to mask:
+
+1. **Hide delayed groups with inline opacity before animating them.** Set `poetryGroup.style.opacity = '0'` and `gadgetsGroup.style.opacity = '0'` before calling `.animate()`. The inner bar and gear elements have non-zero native opacity (0.75 and 0.7), so during the Web Animation's "before" phase with the default `fill: 'none'`, those native opacities leak through and bars/gears flash visible before their phase starts. Only shows on the first cycle because `iterations: Infinity` keeps the animation in "active" phase forever afterwards. During the before phase the inline style wins; during the active phase the animation's keyframed value wins.
+
+2. **Drive the JS tick by wall-clock time, not a per-rAF frame counter.** The tick computes `framePos` from `(now - cycleStart) % 12500`, not from a counter that increments once per `requestAnimationFrame` call. A naive frame counter assumes 60fps and completes a 750-frame cycle in 12.5s, but on a 120Hz display rAF fires twice as fast and the counter completes its cycle in ~6.25s, desyncing from the Web Animations. Symptoms of the drift: bars fade in and out but never jitter (JS poetry phase runs while bars are still invisible), beams freeze ~2s before their fade-out, and beams appear to vanish cycle-by-cycle because their per-cycle update windows fall outside the visible window. Safari's rAF appears to be throttled to 60Hz regardless of panel refresh rate, which is why it doesn't expose the bug.

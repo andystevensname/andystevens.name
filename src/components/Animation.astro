@@ -70,7 +70,8 @@ if (canvasContainer && gearsContainer) {
     let thingsGroup: SVGGElement;
     let poetryGroup: SVGGElement;
     let gadgetsGroup: SVGGElement;
-    let iframeCount = 0;
+    let cycleStart: number | null = null;
+    let lastFramePos = -1;
 
     function setup() {
       // Clear previous content
@@ -93,6 +94,14 @@ if (canvasContainer && gearsContainer) {
       gears = createGears(svg, gadgetsGroup, gearsContainer!, w);
 
       if (!reducedMotion) {
+        // Hide delayed phases before their Web Animations enter active phase.
+        // Inner elements have non-zero native opacity (bars 0.75, gears 0.7),
+        // so during the animation's "before" phase with fill:none they'd leak
+        // through. Explicit group opacity:0 keeps them hidden until the
+        // animation takes over.
+        poetryGroup.style.opacity = '0';
+        gadgetsGroup.style.opacity = '0';
+
         // Phase sequencing via Web Animations API (survives view transitions)
         const phaseKeyframes = [
           { opacity: 0, offset: 0 },
@@ -107,7 +116,10 @@ if (canvasContainer && gearsContainer) {
         gadgetsGroup.animate(phaseKeyframes, { ...phaseTiming, delay: 8330 });
       }
 
-      iframeCount = 0;
+      // Re-sync the wall-clock cycle on resize so the new layout's
+      // first tick starts at cycle position 0.
+      cycleStart = null;
+      lastFramePos = -1;
     }
 
     setup();
@@ -120,16 +132,33 @@ if (canvasContainer && gearsContainer) {
 
     if (reducedMotion) return;
 
-    // JS tick handles per-element randomized animations
-    // Phase fading/sequencing is handled by CSS @keyframes
-    // Gears rotate via SMIL
-    function tick() {
-      beams.animate(iframeCount, 0, 249);
-      poetry.animate(iframeCount, 250, 499);
-      gears.animate(iframeCount, 500, 749);
+    // JS tick handles per-element randomized animations (beam movement,
+    // bar vertex jitter). Phase opacity transitions are handled by the
+    // Web Animations API above; gears rotate via SMIL.
+    //
+    // Phase position is derived from wall-clock time, NOT from a
+    // per-rAF counter, so that the JS tick stays in lockstep with the
+    // Web Animations regardless of display refresh rate. On a 120Hz
+    // display, a naive frame counter would complete a 750-frame cycle
+    // in ~6.25s while the Web Animations take 12.5s, and the two clocks
+    // would drift continuously — bars would jitter while invisible and
+    // beams would freeze ~2s before their fade-out.
+    const cycleDuration = 12500;
+    const totalFrames = 750;
 
-      iframeCount++;
-      if (iframeCount === 750) iframeCount = 0;
+    function tick(now: number) {
+      if (cycleStart === null) cycleStart = now;
+      const elapsed = (now - cycleStart) % cycleDuration;
+      const framePos = Math.floor((elapsed / cycleDuration) * totalFrames);
+
+      // High-refresh displays fire rAF faster than framePos advances;
+      // skip duplicate calls so throttles inside animate() stay meaningful.
+      if (framePos !== lastFramePos) {
+        beams.animate(framePos, 0, 249);
+        poetry.animate(framePos, 250, 499);
+        gears.animate(framePos, 500, 749);
+        lastFramePos = framePos;
+      }
 
       requestAnimationFrame(tick);
     }
