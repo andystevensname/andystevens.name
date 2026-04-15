@@ -47,7 +47,7 @@ const tags = post.data.tags ?? [];
 </script>
 
 </footer>
-<script type="module">
+<script>
   function setupShareButton() {
     function getShareIconId() {
       const ua = navigator.userAgent;
@@ -71,38 +71,52 @@ const tags = post.data.tags ?? [];
         if (btn) btn.title = 'Android Share';
       }
     }
-    const ua = navigator.userAgent;
 
-    const shareDialog = document.getElementById('share-dialog');
-    const shareInput = document.getElementById('share-link-input');
+    const shareDialog = document.getElementById('share-dialog') as HTMLDialogElement | null;
+    const shareInput = document.getElementById('share-link-input') as HTMLInputElement | null;
     const copyBtn = document.getElementById('copy-link-btn');
     if (shareBtn && navigator.share) {
-      shareBtn.addEventListener('click', () => {
-        navigator.share({
-          title: document.title,
-          url: window.location.href
+      if (!shareBtn.dataset.shareBound) {
+        shareBtn.dataset.shareBound = 'true';
+        shareBtn.addEventListener('click', () => {
+          navigator.share({
+            title: document.title,
+            url: window.location.href
+          }).catch((err) => {
+            // AbortError is the normal "user cancelled" result.
+            // InvalidStateError means another share() is in flight.
+            // Neither is actionable — swallow silently.
+            if (err?.name !== 'AbortError' && err?.name !== 'InvalidStateError') {
+              console.error(err);
+            }
+          });
         });
-      });
+      }
     } else if (shareBtn && shareDialog && shareInput && copyBtn) {
-      shareBtn.addEventListener('click', () => {
-        shareInput.value = window.location.href;
-        shareDialog.showModal();
-        shareInput.select();
-      });
-      copyBtn.addEventListener('click', () => {
-        shareInput.select();
-        document.execCommand('copy');
-        copyBtn.textContent = 'Copied!';
-        setTimeout(() => { copyBtn.textContent = 'Copy Link'; }, 1500);
-      });
-      // Enable closing dialog on backdrop click
-      shareDialog.addEventListener('click', (event) => {
-        if (event.target === shareDialog) {
-          shareDialog.close();
-        }
-      });
+      if (!shareBtn.dataset.shareBound) {
+        shareBtn.dataset.shareBound = 'true';
+        shareBtn.addEventListener('click', () => {
+          shareInput.value = window.location.href;
+          shareDialog.showModal();
+          shareInput.select();
+        });
+        copyBtn.addEventListener('click', () => {
+          navigator.clipboard.writeText(shareInput.value).then(() => {
+            copyBtn.textContent = 'Copied!';
+            setTimeout(() => { copyBtn.textContent = 'Copy Link'; }, 1500);
+          }).catch(() => {
+            copyBtn.textContent = 'Copy failed';
+            setTimeout(() => { copyBtn.textContent = 'Copy Link'; }, 1500);
+          });
+        });
+        // Enable closing dialog on backdrop click
+        shareDialog.addEventListener('click', (event) => {
+          if (event.target === shareDialog) {
+            shareDialog.close();
+          }
+        });
+      }
     }
   }
-  document.addEventListener('DOMContentLoaded', setupShareButton);
   document.addEventListener('astro:page-load', setupShareButton);
 </script>
