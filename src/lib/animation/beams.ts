@@ -60,6 +60,11 @@ export function createBeams(group: SVGGElement, height: number, width = 400) {
         if (opacity <= 0) {
           opacity = 0;
           beam.controller = createController();
+          // Reset position too — otherwise x1 and x2 can drift and clamp
+          // to the same edge over multiple cycles, leaving the beam stuck
+          // as a zero-width line.
+          beam.x1 = randomNumber(width, 0);
+          beam.x2 = randomNumber(width, 0);
         }
         beam.el.setAttribute('opacity', String(opacity));
         beam.x1 = Math.max(0, Math.min(width, beam.x1 + c.travel));
