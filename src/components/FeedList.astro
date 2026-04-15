@@ -17,7 +17,7 @@ const { title, feed, emptyMessage = 'Nothing here yet.', class: h1Class = '' } =
   <span class="p-name" style="display:none" aria-hidden="true">Andy Stevens — {title}</span>
   <a class="p-author h-card" href="https://andystevens.name" style="display:none" aria-hidden="true" tabindex="-1">Andy Stevens</a>
   {feed.length > 0
-    ? feed.map((item, i) => <FeedItem {...item} eager={i < 4} priority={i === 0} />)
+    ? feed.map((item, i) => <FeedItem {...item} eager={i < 4} priority={i < 2} />)
     : <p>{emptyMessage}</p>
   }
 </section>
