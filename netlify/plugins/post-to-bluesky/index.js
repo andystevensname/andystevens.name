@@ -1,3 +1,5 @@
+import Parser from 'rss-parser';
+
 const BLUESKY_SERVICE = 'https://bsky.social';
 
 async function createSession(identifier, password) {
@@ -56,21 +58,6 @@ async function createPost(session, text, url) {
   return res.json();
 }
 
-function parseRssItems(xml) {
-  const items = [];
-  const itemRegex = /<item>([\s\S]*?)<\/item>/g;
-  let match;
-  while ((match = itemRegex.exec(xml)) !== null) {
-    const content = match[1];
-    const title = content.match(/<title><!\[CDATA\[(.*?)\]\]><\/title>/)?.[1]
-      || content.match(/<title>(.*?)<\/title>/)?.[1] || '';
-    const link = content.match(/<link>(.*?)<\/link>/)?.[1] || '';
-    const pubDate = content.match(/<pubDate>(.*?)<\/pubDate>/)?.[1] || '';
-    items.push({ title, link, pubDate: new Date(pubDate) });
-  }
-  return items;
-}
-
 export const onSuccess = async function () {
   const handle = process.env.BLUESKY_HANDLE;
   const password = process.env.BLUESKY_APP_PASSWORD;
@@ -81,14 +68,16 @@ export const onSuccess = async function () {
   }
 
   try {
-    // Fetch RSS feed
-    const feedRes = await fetch('https://andystevens.name/feed.xml');
-    if (!feedRes.ok) {
-      console.warn('Could not fetch RSS feed');
-      return;
-    }
-    const feedXml = await feedRes.text();
-    const items = parseRssItems(feedXml);
+    // Parse the site's RSS feed. rss-parser handles fetch + entity
+    // decoding + CDATA + namespace prefixes + the various RSS quirks
+    // that a regex extractor silently gets wrong.
+    const parser = new Parser();
+    const feed = await parser.parseURL('https://andystevens.name/feed.xml');
+    const items = feed.items.map((i) => ({
+      title: i.title || '',
+      link: i.link || '',
+      pubDate: new Date(i.pubDate || i.isoDate || 0),
+    }));
 
     if (items.length === 0) {
       console.log('No items in RSS feed');
