@@ -38,7 +38,7 @@ const { type, url, date, title, summary, bodyHtml, quote, linkTo, photo, alt, ve
       <p><a href={linkTo}>{linkTo}</a></p>
     )}
     {type === 'photo' && (<>
-      {photo && <a href={url}><img class="u-photo" src={`${photo}?class=photo400`} srcset={`${photo}?class=photo200 200w, ${photo}?class=photo400 400w`} sizes="(min-width: 640px) 40rem, 100vw" alt={alt ?? title ?? ''} loading="lazy" decoding="async" /></a>}
+      {photo && <a href={url}><img class="u-photo" src={`${photo}?class=photo400`} srcset={`${photo}?class=photo200 200w, ${photo}?class=photo400 400w`} sizes="(min-width: 640px) 40rem, 100vw" width="400" height="400" alt={alt ?? title ?? ''} loading="lazy" decoding="async" /></a>}
       {title && <p>{title}</p>}
     </>)}
     {type === 'reply' && (<>
@@ -56,7 +56,7 @@ const { type, url, date, title, summary, bodyHtml, quote, linkTo, photo, alt, ve
     </>)}
     {type === 'album' && (<>
       <p><a href={url}>{title}</a></p>
-      {photo && <a href={url}><img class="u-photo" src={`${photo}?class=photo400`} srcset={`${photo}?class=photo200 200w, ${photo}?class=photo400 400w`} sizes="(min-width: 640px) 40rem, 100vw" alt={title ?? ''} loading="lazy" decoding="async" /></a>}
+      {photo && <a href={url}><img class="u-photo" src={`${photo}?class=photo400`} srcset={`${photo}?class=photo200 200w, ${photo}?class=photo400 400w`} sizes="(min-width: 640px) 40rem, 100vw" width="400" height="400" alt={title ?? ''} loading="lazy" decoding="async" /></a>}
       {summary && <p>{summary}</p>}
     </>)}
     {type === 'code' && (<>

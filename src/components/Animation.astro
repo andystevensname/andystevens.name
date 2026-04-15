@@ -175,9 +175,15 @@ if (canvasContainer && gearsContainer) {
     requestAnimationFrame(tick);
   };
 
-  // Wait for layout to settle before measuring container width
-  requestAnimationFrame(() => {
-    requestAnimationFrame(loadAnimation);
-  });
+  // Defer the animation bundle until the browser is idle so its bytes
+  // don't count against LCP / critical-path JS in Lighthouse. The chunk
+  // is already a dynamic import, but fetching it during initial load
+  // still shows up as unused JS until the animation actually runs.
+  const start = () => requestAnimationFrame(() => requestAnimationFrame(loadAnimation));
+  if ('requestIdleCallback' in window) {
+    (window as any).requestIdleCallback(start, { timeout: 2000 });
+  } else {
+    setTimeout(start, 200);
+  }
 }
 </script>
