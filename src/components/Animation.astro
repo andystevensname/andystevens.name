@@ -74,6 +74,15 @@ if (canvasContainer && gearsContainer) {
     let lastFramePos = -1;
 
     function setup() {
+      // Cancel previous run's Web Animations and destroy controllers so
+      // their effect targets and captured closures become GC-eligible.
+      // Without this, resize events leak a set of Web Animations + their
+      // group element targets + child polygons on every invocation.
+      svg.getAnimations({ subtree: true }).forEach((a) => a.cancel());
+      beams?.destroy();
+      poetry?.destroy();
+      gears?.destroy();
+
       // Clear previous content
       while (svg.firstChild) svg.removeChild(svg.firstChild);
 
