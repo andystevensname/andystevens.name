@@ -10,6 +10,8 @@ export type FeedItemData = {
   quote?: string;
   linkTo?: string;
   photo?: string;
+  photoWidth?: number;
+  photoHeight?: number;
   alt?: string;
   venue?: string;
   category?: string;
@@ -72,6 +74,8 @@ export function mapPhotos(photos: any[]): FeedItemData[] {
     date: p.data.date ?? new Date(0),
     title: p.data.title,
     photo: Array.isArray(p.data.photo) ? p.data.photo[0] : p.data.photo,
+    photoWidth: p.data.width,
+    photoHeight: p.data.height,
     alt: p.data.alt,
     tags: p.data.tags ?? [],
   }));
@@ -112,16 +116,26 @@ export function mapAwards(awards: any[]): FeedItemData[] {
   }));
 }
 
-export function mapAlbums(albums: any[]): FeedItemData[] {
-  return albums.map((a) => ({
-    type: 'album' as const,
-    url: `/albums/${a.id}/`,
-    date: a.data.date ?? new Date(0),
-    title: a.data.title,
-    summary: a.data.description,
-    photo: a.data.cover,
-    tags: a.data.tags ?? [],
-  }));
+export function mapAlbums(albums: any[], photos: any[] = []): FeedItemData[] {
+  const dimsByCover = new Map<string, { width?: number; height?: number }>();
+  for (const p of photos) {
+    const src = Array.isArray(p.data.photo) ? p.data.photo[0] : p.data.photo;
+    if (src) dimsByCover.set(src, { width: p.data.width, height: p.data.height });
+  }
+  return albums.map((a) => {
+    const dims = a.data.cover ? dimsByCover.get(a.data.cover) : undefined;
+    return {
+      type: 'album' as const,
+      url: `/albums/${a.id}/`,
+      date: a.data.date ?? new Date(0),
+      title: a.data.title,
+      summary: a.data.description,
+      photo: a.data.cover,
+      photoWidth: dims?.width,
+      photoHeight: dims?.height,
+      tags: a.data.tags ?? [],
+    };
+  });
 }
 
 export function mapCode(projects: any[]): FeedItemData[] {

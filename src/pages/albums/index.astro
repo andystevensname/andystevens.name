@@ -4,8 +4,11 @@ import Layout from '../../layouts/Layout.astro';
 import FeedList from '../../components/FeedList.astro';
 import { mapAlbums, sortByDate } from '../../lib/feed';
 
-const albums = await getCollection('albums', ({ data }) => data.published !== false);
-const feed = sortByDate(mapAlbums(albums));
+const [albums, photos] = await Promise.all([
+  getCollection('albums', ({ data }) => data.published !== false),
+  getCollection('photos', ({ data }) => data.published !== false),
+]);
+const feed = sortByDate(mapAlbums(albums, photos));
 ---
 
 <Layout title="Albums" description="Photo albums.">

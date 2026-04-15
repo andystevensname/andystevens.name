@@ -4,12 +4,13 @@ import FeedItem from '../components/FeedItem.astro';
 import { getCollection } from 'astro:content';
 import { mapArticles, mapNotes, mapBookmarks, mapLikes, mapAlbums, mapReplies, mapWriting, mapAwards, mapCode, sortByDate } from '../lib/feed';
 
-const [posts, notes, bookmarks, likes, albums, replies, writing, awards, code] = await Promise.all([
+const [posts, notes, bookmarks, likes, albums, photos, replies, writing, awards, code] = await Promise.all([
   getCollection('articles', ({ data }) => data.published !== false),
   getCollection('notes', ({ data }) => data.published !== false),
   getCollection('bookmarks', ({ data }) => data.published !== false),
   getCollection('likes', ({ data }) => data.published !== false),
   getCollection('albums', ({ data }) => data.published !== false),
+  getCollection('photos', ({ data }) => data.published !== false),
   getCollection('replies', ({ data }) => data.published !== false),
   getCollection('writing', ({ data }) => data.published !== false),
   getCollection('awards', ({ data }) => data.published !== false),
@@ -21,7 +22,7 @@ const feed = sortByDate([
   ...mapNotes(notes),
   ...mapBookmarks(bookmarks),
   ...mapLikes(likes),
-  ...mapAlbums(albums),
+  ...mapAlbums(albums, photos),
   ...mapReplies(replies),
   ...mapWriting(writing),
   ...mapAwards(awards),
