@@ -15,13 +15,14 @@ interface Props {
   venue?: string;
   category?: string;
   eager?: boolean;
+  priority?: boolean;
 }
 
 import { formatDate } from '../lib/date';
 
-const { type, url, date, title, summary, bodyHtml, quote, linkTo, photo, photoWidth, photoHeight, alt, venue, category, eager } = Astro.props;
+const { type, url, date, title, summary, bodyHtml, quote, linkTo, photo, photoWidth, photoHeight, alt, venue, category, eager, priority } = Astro.props;
 const imgLoading = eager ? 'eager' : 'lazy';
-const imgFetchPriority = eager ? 'high' : undefined;
+const imgFetchPriority = priority ? 'high' : undefined;
 ---
 
 <article class={`feed-item--${type} h-entry`} data-category={category ?? type}>

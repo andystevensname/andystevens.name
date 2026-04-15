@@ -6,7 +6,7 @@ import { mapAlbums, sortByDate } from '../../lib/feed';
 
 const [albums, photos] = await Promise.all([
   getCollection('albums', ({ data }) => data.published !== false),
-  getCollection('photos', ({ data }) => data.published !== false),
+  getCollection('photos'),
 ]);
 const feed = sortByDate(mapAlbums(albums, photos));
 ---
