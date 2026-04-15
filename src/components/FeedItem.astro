@@ -14,11 +14,14 @@ interface Props {
   alt?: string;
   venue?: string;
   category?: string;
+  eager?: boolean;
 }
 
 import { formatDate } from '../lib/date';
 
-const { type, url, date, title, summary, bodyHtml, quote, linkTo, photo, photoWidth, photoHeight, alt, venue, category } = Astro.props;
+const { type, url, date, title, summary, bodyHtml, quote, linkTo, photo, photoWidth, photoHeight, alt, venue, category, eager } = Astro.props;
+const imgLoading = eager ? 'eager' : 'lazy';
+const imgFetchPriority = eager ? 'high' : undefined;
 ---
 
 <article class={`feed-item--${type} h-entry`} data-category={category ?? type}>
@@ -40,7 +43,7 @@ const { type, url, date, title, summary, bodyHtml, quote, linkTo, photo, photoWi
       <p><a href={linkTo}>{linkTo}</a></p>
     )}
     {type === 'photo' && (<>
-      {photo && <a href={url}><img class="u-photo" src={`${photo}?class=photo400`} srcset={`${photo}?class=photo200 200w, ${photo}?class=photo400 400w`} sizes="(min-width: 640px) 40rem, 100vw" width={photoWidth} height={photoHeight} alt={alt ?? title ?? ''} loading="lazy" decoding="async" /></a>}
+      {photo && <a href={url}><img class="u-photo" src={`${photo}?class=photo400`} srcset={`${photo}?class=photo200 200w, ${photo}?class=photo400 400w`} sizes="(min-width: 640px) 40rem, 100vw" width={photoWidth} height={photoHeight} alt={alt ?? title ?? ''} loading={imgLoading} fetchpriority={imgFetchPriority} decoding="async" /></a>}
       {title && <p>{title}</p>}
     </>)}
     {type === 'reply' && (<>
@@ -58,7 +61,7 @@ const { type, url, date, title, summary, bodyHtml, quote, linkTo, photo, photoWi
     </>)}
     {type === 'album' && (<>
       <p><a href={url}>{title}</a></p>
-      {photo && <a href={url}><img class="u-photo" src={`${photo}?class=photo400`} srcset={`${photo}?class=photo200 200w, ${photo}?class=photo400 400w`} sizes="(min-width: 640px) 40rem, 100vw" width={photoWidth} height={photoHeight} alt={title ?? ''} loading="lazy" decoding="async" /></a>}
+      {photo && <a href={url}><img class="u-photo" src={`${photo}?class=photo400`} srcset={`${photo}?class=photo200 200w, ${photo}?class=photo400 400w`} sizes="(min-width: 640px) 40rem, 100vw" width={photoWidth} height={photoHeight} alt={title ?? ''} loading={imgLoading} fetchpriority={imgFetchPriority} decoding="async" /></a>}
       {summary && <p>{summary}</p>}
     </>)}
     {type === 'code' && (<>
