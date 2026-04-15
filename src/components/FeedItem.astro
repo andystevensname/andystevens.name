@@ -44,7 +44,7 @@ const imgFetchPriority = priority ? 'high' : undefined;
       <p><a href={linkTo}>{linkTo}</a></p>
     )}
     {type === 'photo' && (<>
-      {photo && <a href={url}><img class="u-photo" src={`${photo}?class=photo400`} srcset={`${photo}?class=photo200 200w, ${photo}?class=photo400 400w`} sizes="(min-width: 640px) 40rem, 100vw" width={photoWidth} height={photoHeight} alt={alt ?? title ?? ''} loading={imgLoading} fetchpriority={imgFetchPriority} decoding="async" /></a>}
+      {photo && <a href={url}><img class="u-photo" src={`${photo}?class=photo400`} srcset={`${photo}?class=photo200 200w, ${photo}?class=photo400 400w, ${photo}?class=photo800 800w`} sizes="(min-width: 640px) 40rem, 100vw" width={photoWidth} height={photoHeight} alt={alt ?? title ?? ''} loading={imgLoading} fetchpriority={imgFetchPriority} decoding="async" /></a>}
       {title && <p>{title}</p>}
     </>)}
     {type === 'reply' && (<>
@@ -62,7 +62,7 @@ const imgFetchPriority = priority ? 'high' : undefined;
     </>)}
     {type === 'album' && (<>
       <p><a href={url}>{title}</a></p>
-      {photo && <a href={url}><img class="u-photo" src={`${photo}?class=photo400`} srcset={`${photo}?class=photo200 200w, ${photo}?class=photo400 400w`} sizes="(min-width: 640px) 40rem, 100vw" width={photoWidth} height={photoHeight} alt={title ?? ''} loading={imgLoading} fetchpriority={imgFetchPriority} decoding="async" /></a>}
+      {photo && <a href={url}><img class="u-photo" src={`${photo}?class=photo400`} srcset={`${photo}?class=photo200 200w, ${photo}?class=photo400 400w, ${photo}?class=photo800 800w`} sizes="(min-width: 640px) 40rem, 100vw" width={photoWidth} height={photoHeight} alt={title ?? ''} loading={imgLoading} fetchpriority={imgFetchPriority} decoding="async" /></a>}
       {summary && <p>{summary}</p>}
     </>)}
     {type === 'code' && (<>
