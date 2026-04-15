@@ -35,31 +35,43 @@ function isCurrent(href: string): boolean {
 
 
 <script>
+  // Abort controller pattern: all listeners attached inside the page-load
+  // handler live for exactly one navigation. At the top of each page-load
+  // we abort the previous controller (canceling all its listeners at
+  // once via the `signal` option) and create a fresh one. Without this,
+  // listeners on persistent targets (document, the persisted dialog)
+  // accumulate and fire multiple times after each navigation.
+  let navController: AbortController | null = null;
+
   document.addEventListener('astro:page-load', () => {
+    navController?.abort();
+    navController = new AbortController();
+    const { signal } = navController;
+
     const dialog = document.getElementById('nav-dialog') as HTMLDialogElement | null;
-    const closeBtn = document.getElementById('close-nav-btn');
-    const openBtn = document.getElementById('open-nav-btn');
+    const closeBtn = document.getElementById('close-nav-btn') as HTMLButtonElement | null;
+    const openBtn = document.getElementById('open-nav-btn') as HTMLButtonElement | null;
 
     // Open
     document.addEventListener('open-nav', () => {
       dialog?.showModal();
-    });
+    }, { signal });
 
     // Close button
     closeBtn?.addEventListener('click', () => {
       dialog?.close();
       openBtn?.focus();
-    });
+    }, { signal });
 
     // Close on nav link click
     dialog?.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => dialog?.close());
+      link.addEventListener('click', () => dialog?.close(), { signal });
     });
 
     // Close on backdrop click
     dialog?.addEventListener('click', (e) => {
       if (e.target === dialog) dialog.close();
-    });
+    }, { signal });
 
     // Swipe to open/close
     const EDGE_WIDTH = 30;
@@ -78,7 +90,7 @@ function isCurrent(href: string): boolean {
         startY = e.clientY;
         tracking = true;
       }
-    });
+    }, { signal });
 
     document.addEventListener('pointermove', (e) => {
       if (!tracking) return;
@@ -94,9 +106,9 @@ function isCurrent(href: string): boolean {
         openBtn?.focus();
         tracking = false;
       }
-    });
+    }, { signal });
 
-    document.addEventListener('pointerup', () => { tracking = false; });
-    document.addEventListener('pointercancel', () => { tracking = false; });
+    document.addEventListener('pointerup', () => { tracking = false; }, { signal });
+    document.addEventListener('pointercancel', () => { tracking = false; }, { signal });
   });
 </script>

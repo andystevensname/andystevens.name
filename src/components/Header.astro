@@ -38,8 +38,17 @@ function isCurrent(href: string): boolean {
 </header>
 
 <script>
+  // Abort previous page-load's listeners so they don't accumulate on
+  // window across navigations. See the equivalent pattern in
+  // Navigation.astro for the fuller explanation.
+  let headerController: AbortController | null = null;
+
   document.addEventListener('astro:page-load', () => {
-    const header = document.getElementById('header');
+    headerController?.abort();
+    headerController = new AbortController();
+    const { signal } = headerController;
+
+    const header = document.getElementById('header') as HTMLElement | null;
     let lastScroll = 0;
 
     window.addEventListener('scroll', () => {
@@ -53,10 +62,10 @@ function isCurrent(href: string): boolean {
         header?.removeAttribute('data-hidden');
       }
       lastScroll = currentScroll;
-    });
+    }, { signal });
 
     document.getElementById('open-nav-btn')?.addEventListener('click', () => {
       document.dispatchEvent(new CustomEvent('open-nav'));
-    });
+    }, { signal });
   });
 </script>
