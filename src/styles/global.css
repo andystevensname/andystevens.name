@@ -102,6 +102,7 @@ html {
   position: relative;
   font-size: 16px;
   line-height: 1.5;
+  background-color: var(--bg);
 }
 
 body {
@@ -298,7 +299,7 @@ h1.feed-item--album, article:has(.u-url[href*="/albums/"]) h1 { --h1-highlight: 
     hsl(154deg 65% 44%) 97%,
     hsl(123deg 38% 57%) 100%
   ); }
-h1.feed-item--writing, article:has(.u-url[href*="/writing/"]) h1 { --h1-highlight: linear-gradient(
+/* h1.feed-item--writing, article:has(.u-url[href*="/writing/"]) h1 { --h1-highlight: linear-gradient(
     130deg,
     hsl(174deg 100% 27%) 0%,
     hsl(165deg 66% 33%) 13%,
@@ -313,8 +314,8 @@ h1.feed-item--writing, article:has(.u-url[href*="/writing/"]) h1 { --h1-highligh
     hsl(24deg 67% 49%) 93%,
     hsl(13deg 73% 56%) 97%,
     hsl(1deg 83% 63%) 100%
-  ); }
-h1.feed-item--award, article:has(.u-url[href*="/awards/"]) h1 { --h1-highlight: linear-gradient(
+  ); }*/
+h1.feed-item--award, article:has(.u-url[href*="/awards/"]) h1, h1.feed-item--writing, article:has(.u-url[href*="/writing/"]) h1 { --h1-highlight: linear-gradient(
     130deg,
     hsl(42deg 100% 50%) 0%,
     hsl(39deg 100% 52%) 13%,
@@ -863,15 +864,59 @@ label[for="theme-toggle"] {
   justify-self: end;
   cursor: pointer;
   color: var(--text);
-  display: flex;
-  align-items: center;
+  position: relative;
+  width: 20px;
+  height: 20px;
 }
 
-/* Order matters: the :checked rules must come AFTER the base rules so they win the cascade. */
-label[for="theme-toggle"] svg:last-child { display: none; }
-label[for="theme-toggle"] svg:first-child { display: inline-flex; }
-#theme-toggle:checked ~ label[for="theme-toggle"] svg:last-child { display: inline-flex; }
-#theme-toggle:checked ~ label[for="theme-toggle"] svg:first-child { display: none; }
+.theme-icon {
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Static positions — apply on first paint and when not animating. */
+.theme-icon--sun { transform: translate(0, 0); opacity: 1; }
+.theme-icon--moon { transform: translate(-14px, 14px); opacity: 0; }
+html.dark .theme-icon--sun { transform: translate(-14px, 14px); opacity: 0; }
+html.dark .theme-icon--moon { transform: translate(0, 0); opacity: 1; }
+
+/* Rise from bottom-right, set to bottom-left. The midpoint hump
+   curves the path so it reads as an arc rather than a diagonal. */
+@keyframes theme-rise {
+  0%   { transform: translate(14px, 14px); opacity: 0; }
+  50%  { transform: translate(7px, -2px); opacity: 1; }
+  100% { transform: translate(0, 0); opacity: 1; }
+}
+@keyframes theme-set {
+  0%   { transform: translate(0, 0); opacity: 1; }
+  50%  { transform: translate(-7px, -2px); opacity: 1; }
+  100% { transform: translate(-14px, 14px); opacity: 0; }
+}
+
+/* Only animate during a user-triggered toggle; ThemeSwitcher adds
+   .theme-animating on syncTheme() and removes it when done. */
+.theme-animating .theme-icon--sun  { animation: theme-rise 550ms both ease-out; }
+.theme-animating .theme-icon--moon { animation: theme-set  550ms both ease-in; }
+html.dark.theme-animating .theme-icon--sun  { animation: theme-set  550ms both ease-in; }
+html.dark.theme-animating .theme-icon--moon { animation: theme-rise 550ms both ease-out; }
+
+/* Hold color-scheme in the OLD theme while icons animate, so every
+   light-dark() value stays put.  When .theme-animating drops at
+   ~600ms, color-scheme reverts to the real theme and all colors
+   snap together in one frame. */
+html.dark.theme-animating { color-scheme: light; }
+html.theme-animating:not(.dark) { color-scheme: dark; }
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-animating .theme-icon { animation: none; }
+  .theme-animating,
+  .theme-animating *,
+  .theme-animating *::before,
+  .theme-animating *::after { transition: none; }
+}
 
 /* --- Footer --- */
 
