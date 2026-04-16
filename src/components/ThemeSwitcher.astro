@@ -13,15 +13,10 @@
 
 <script>
   let animatingTimer: number | undefined;
+  let themeTimer: number | undefined;
 
-  function syncTheme(isDark: boolean, animate = false) {
-    const html = document.documentElement;
-    if (animate) {
-      html.classList.add('theme-animating');
-      clearTimeout(animatingTimer);
-      animatingTimer = window.setTimeout(() => html.classList.remove('theme-animating'), 600);
-    }
-    html.classList.toggle('dark', isDark);
+  function applyTheme(isDark: boolean) {
+    document.documentElement.classList.toggle('dark', isDark);
     const toggle = document.getElementById('theme-toggle') as HTMLInputElement | null;
     if (toggle) toggle.checked = isDark;
     const color = isDark ? '#212121' : '#ffffff';
@@ -29,6 +24,22 @@
       meta.setAttribute('content', color);
     });
     try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch (e) {}
+  }
+
+  function syncTheme(isDark: boolean, animate = false) {
+    const html = document.documentElement;
+    if (animate) {
+      const direction = isDark ? 'theme-to-dark' : 'theme-to-light';
+      html.classList.add('theme-animating', direction);
+      clearTimeout(animatingTimer);
+      clearTimeout(themeTimer);
+      themeTimer = window.setTimeout(() => applyTheme(isDark), 400);
+      animatingTimer = window.setTimeout(() => {
+        html.classList.remove('theme-animating', direction);
+      }, 850);
+      return;
+    }
+    applyTheme(isDark);
   }
 
   document.addEventListener('astro:page-load', () => {

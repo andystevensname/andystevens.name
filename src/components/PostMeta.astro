@@ -26,39 +26,27 @@ const tags = post.data.tags ?? [];
       <a class="p-category" href={`/tags/${tag}/`}>#{tag} </a>
     ))}
   </div>
-  <button id="share-btn" type="button" title="Share this post" class="filter-btn share-btn">
+  <button id="share-btn" type="button" title="Share this post" class="filter-btn share-btn" popovertarget="share-popover">
     <span>Share this post</span>
     <svg class="share-icon icon" width="20" height="20" aria-hidden="true">
       <use href="/icons.svg#icon-share-ios" />
     </svg>
   </button>
-  <dialog id="share-dialog">
-    <form method="dialog" style="margin:0;">
-      <label for="share-link-input" class="share-dialog-label">Share this link</label>
-      <input id="share-link-input" type="text" value="" readonly class="share-dialog-input" />
-      <div class="share-dialog-actions">
-        <button id="copy-link-btn" type="button" class="copy-link-btn">Copy Link</button>
-        <button id="close-share-dialog" type="submit" class="close-share-dialog-btn">Close</button>
-      </div>
-    </form>
-  </dialog>
-
-
-</script>
-
+  <div id="share-popover" popover class="share-popover">
+    <label for="share-link-input" class="share-dialog-label">Share this link</label>
+    <input id="share-link-input" type="text" value="" readonly class="share-dialog-input" />
+    <button id="copy-link-btn" type="button" class="copy-link-btn">Copy Link</button>
+  </div>
 </footer>
 <script>
   function setupShareButton() {
     function getShareIconId() {
       const ua = navigator.userAgent;
-      if (/iPad|iPhone|iPod/.test(ua)) {
-        return 'icon-share-ios';
-      }
-      if (/Android/.test(ua)) {
-        return 'icon-share-android';
-      }
-      return 'icon-share-ios'; // fallback to iOS style
+      if (/iPad|iPhone|iPod/.test(ua)) return 'icon-share-ios';
+      if (/Android/.test(ua)) return 'icon-share-android';
+      return 'icon-share-ios';
     }
+
     const shareBtn = document.getElementById('share-btn');
     const shareIcon = document.querySelector('.share-icon use');
     if (shareIcon) {
@@ -66,16 +54,18 @@ const tags = post.data.tags ?? [];
       const iconRef = '/icons.svg#' + iconId;
       shareIcon.setAttribute('href', iconRef);
       shareIcon.setAttribute('xlink:href', iconRef);
-      if (iconId === 'icon-share-android') {
-        const btn = document.getElementById('share-btn');
-        if (btn) btn.title = 'Android Share';
+      if (iconId === 'icon-share-android' && shareBtn) {
+        shareBtn.title = 'Android Share';
       }
     }
 
-    const shareDialog = document.getElementById('share-dialog') as HTMLDialogElement | null;
+    const sharePopover = document.getElementById('share-popover');
     const shareInput = document.getElementById('share-link-input') as HTMLInputElement | null;
     const copyBtn = document.getElementById('copy-link-btn');
+
     if (shareBtn && navigator.share) {
+      // Native share — override the popover toggle with share API
+      shareBtn.removeAttribute('popovertarget');
       if (!shareBtn.dataset.shareBound) {
         shareBtn.dataset.shareBound = 'true';
         shareBtn.addEventListener('click', () => {
@@ -83,23 +73,22 @@ const tags = post.data.tags ?? [];
             title: document.title,
             url: window.location.href
           }).catch((err) => {
-            // AbortError is the normal "user cancelled" result.
-            // InvalidStateError means another share() is in flight.
-            // Neither is actionable — swallow silently.
             if (err?.name !== 'AbortError' && err?.name !== 'InvalidStateError') {
               console.error(err);
             }
           });
         });
       }
-    } else if (shareBtn && shareDialog && shareInput && copyBtn) {
-      if (!shareBtn.dataset.shareBound) {
-        shareBtn.dataset.shareBound = 'true';
-        shareBtn.addEventListener('click', () => {
+    } else if (sharePopover && shareInput && copyBtn) {
+      // Popover fallback — populate URL when shown
+      sharePopover.addEventListener('toggle', (e) => {
+        if ((e as ToggleEvent).newState === 'open') {
           shareInput.value = window.location.href;
-          shareDialog.showModal();
           shareInput.select();
-        });
+        }
+      });
+      if (!copyBtn.dataset.shareBound) {
+        copyBtn.dataset.shareBound = 'true';
         copyBtn.addEventListener('click', () => {
           navigator.clipboard.writeText(shareInput.value).then(() => {
             copyBtn.textContent = 'Copied!';
@@ -108,12 +97,6 @@ const tags = post.data.tags ?? [];
             copyBtn.textContent = 'Copy failed';
             setTimeout(() => { copyBtn.textContent = 'Copy Link'; }, 1500);
           });
-        });
-        // Enable closing dialog on backdrop click
-        shareDialog.addEventListener('click', (event) => {
-          if (event.target === shareDialog) {
-            shareDialog.close();
-          }
         });
       }
     }

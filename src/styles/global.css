@@ -871,49 +871,45 @@ label[for="theme-toggle"] {
   height: 20px;
 }
 
-/* Semicircular arc from middle-right (0%) through top (50%) to
-   middle-left (100%).  Rise = first half, set = second half.
-   The apex at 50% is (10, 10) — the icon's natural centered
-   position in the 20×20 container. */
 .theme-icon {
   position: absolute;
   top: 0;
   left: 0;
   width: 20px;
   height: 20px;
-  offset-path: path('M 34 34 A 24 24 0 0 0 -14 34');
-  offset-rotate: 0deg;
-  offset-anchor: 50% 50%;
 }
 
 /* Static positions — no animation on first paint or navigation. */
-.theme-icon--sun  { offset-distance: 50%; opacity: 1; }
-.theme-icon--moon { offset-distance: 100%; opacity: 0; }
-html.dark .theme-icon--sun  { offset-distance: 100%; opacity: 0; }
-html.dark .theme-icon--moon { offset-distance: 50%; opacity: 1; }
+.theme-icon--sun  { transform: translateY(0); opacity: 1; }
+.theme-icon--moon { transform: translateY(20px); opacity: 0; }
+html.dark .theme-icon--sun  { transform: translateY(20px); opacity: 0; }
+html.dark .theme-icon--moon { transform: translateY(0); opacity: 1; }
 
-@keyframes theme-rise {
-  from { offset-distance: 0%;   opacity: 0; }
-  to   { offset-distance: 50%;  opacity: 1; }
-}
+/* Set: rise slightly, then drop and fade out. */
 @keyframes theme-set {
-  from { offset-distance: 50%;  opacity: 1; }
-  to   { offset-distance: 100%; opacity: 0; }
+  0%   { transform: translateY(0);    opacity: 1; }
+  25%  { transform: translateY(-6px); opacity: 1; }
+  100% { transform: translateY(20px); opacity: 0; }
 }
 
-/* Only animate during a user-triggered toggle; ThemeSwitcher adds
-   .theme-animating on syncTheme() and removes it when done. */
-.theme-animating .theme-icon--sun  { animation: theme-rise 550ms both ease-out; }
-.theme-animating .theme-icon--moon { animation: theme-set  550ms both ease-in; }
-html.dark.theme-animating .theme-icon--sun  { animation: theme-set  550ms both ease-in; }
-html.dark.theme-animating .theme-icon--moon { animation: theme-rise 550ms both ease-out; }
+/* Rise: enter from below, overshoot upward, settle into place. */
+@keyframes theme-rise {
+  0%   { transform: translateY(20px);  opacity: 0; }
+  60%  { transform: translateY(-8px);  opacity: 1; }
+  100% { transform: translateY(0);     opacity: 1; }
+}
 
-/* Hold color-scheme in the OLD theme while icons animate, so every
-   light-dark() value stays put.  When .theme-animating drops at
-   ~600ms, color-scheme reverts to the real theme and all colors
-   snap together in one frame. */
-html.dark.theme-animating { color-scheme: light; }
-html.theme-animating:not(.dark) { color-scheme: dark; }
+/* Phase 1: outgoing icon sets. Phase 2: .dark toggles (colors snap),
+   incoming icon rises.  Direction class (.theme-to-dark / .theme-to-light)
+   disambiguates which icon animates in each phase. */
+
+/* Going dark — sun sets while still light, moon rises once dark */
+.theme-to-dark .theme-icon--sun               { animation: theme-set  400ms both ease-in; }
+html.dark.theme-to-dark .theme-icon--moon      { animation: theme-rise 400ms both ease-out; }
+
+/* Going light — moon sets while still dark, sun rises once light */
+html.dark.theme-to-light .theme-icon--moon     { animation: theme-set  400ms both ease-in; }
+.theme-to-light:not(.dark) .theme-icon--sun    { animation: theme-rise 400ms both ease-out; }
 
 @media (prefers-reduced-motion: reduce) {
   .theme-animating .theme-icon { animation: none; }
@@ -1008,6 +1004,17 @@ html.theme-animating:not(.dark) { color-scheme: dark; }
   margin-left: 0.25rem;
 }
 
+.share-popover {
+  padding: 1rem;
+  border: var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--text);
+  width: 20rem;
+  max-width: calc(100vw - 2rem);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
 .share-dialog-label {
   font-size: 1rem;
   font-weight: 500;
@@ -1021,14 +1028,9 @@ html.theme-animating:not(.dark) { color-scheme: dark; }
   border: 1px solid #ccc;
   border-radius: var(--radius-sm);
   width: 100%;
-  background: #f8f8f8;
-  color: #222;
-  margin-bottom: 1rem;
-}
-
-.share-dialog-actions {
-  display: flex;
-  gap: 0.5rem;
+  background: light-dark(#f8f8f8, #333);
+  color: var(--text);
+  margin-bottom: 0.75rem;
 }
 
 .copy-link-btn {
@@ -1038,14 +1040,6 @@ html.theme-animating:not(.dark) { color-scheme: dark; }
   color: white;
   border: none;
   border-radius: var(--radius-sm);
-  cursor: pointer;
-}
-
-.close-share-dialog-btn {
-  font-size: 0.9rem;
-  background: none;
-  color: #888;
-  border: none;
   cursor: pointer;
 }
 
