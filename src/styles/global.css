@@ -110,6 +110,7 @@ body {
   min-height: 100%;
   width: 100%;
   margin: 0;
+  overflow-x: hidden;
   font-family: Helvetica, Arial, sans-serif;
   color: var(--text);
   background: var(--bg);
@@ -862,6 +863,7 @@ a[href="#main-content"]:focus {
 label[for="theme-toggle"] {
   grid-column: -1;
   justify-self: end;
+  align-self: center;
   cursor: pointer;
   color: var(--text);
   position: relative;
@@ -869,31 +871,34 @@ label[for="theme-toggle"] {
   height: 20px;
 }
 
+/* Semicircular arc from middle-right (0%) through top (50%) to
+   middle-left (100%).  Rise = first half, set = second half.
+   The apex at 50% is (10, 10) — the icon's natural centered
+   position in the 20×20 container. */
 .theme-icon {
   position: absolute;
-  inset: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  offset-path: path('M 34 34 A 24 24 0 0 0 -14 34');
+  offset-rotate: 0deg;
+  offset-anchor: 50% 50%;
 }
 
-/* Static positions — apply on first paint and when not animating. */
-.theme-icon--sun { transform: translate(0, 0); opacity: 1; }
-.theme-icon--moon { transform: translate(-14px, 14px); opacity: 0; }
-html.dark .theme-icon--sun { transform: translate(-14px, 14px); opacity: 0; }
-html.dark .theme-icon--moon { transform: translate(0, 0); opacity: 1; }
+/* Static positions — no animation on first paint or navigation. */
+.theme-icon--sun  { offset-distance: 50%; opacity: 1; }
+.theme-icon--moon { offset-distance: 100%; opacity: 0; }
+html.dark .theme-icon--sun  { offset-distance: 100%; opacity: 0; }
+html.dark .theme-icon--moon { offset-distance: 50%; opacity: 1; }
 
-/* Rise from bottom-right, set to bottom-left. The midpoint hump
-   curves the path so it reads as an arc rather than a diagonal. */
 @keyframes theme-rise {
-  0%   { transform: translate(14px, 14px); opacity: 0; }
-  50%  { transform: translate(7px, -2px); opacity: 1; }
-  100% { transform: translate(0, 0); opacity: 1; }
+  from { offset-distance: 0%;   opacity: 0; }
+  to   { offset-distance: 50%;  opacity: 1; }
 }
 @keyframes theme-set {
-  0%   { transform: translate(0, 0); opacity: 1; }
-  50%  { transform: translate(-7px, -2px); opacity: 1; }
-  100% { transform: translate(-14px, 14px); opacity: 0; }
+  from { offset-distance: 50%;  opacity: 1; }
+  to   { offset-distance: 100%; opacity: 0; }
 }
 
 /* Only animate during a user-triggered toggle; ThemeSwitcher adds
