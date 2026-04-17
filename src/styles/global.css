@@ -830,21 +830,7 @@ a[href="#main-content"]:focus {
   padding: 0 0.5rem;
 }
 
-#header-nav a:first-child::before {
-  content: '';
-  display: inline-block;
-  width: 1em;
-  height: 1em;
-  margin-right: 0.25rem;
-  vertical-align: -0.15em;
-  background-color: currentColor;
-  -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 8L11.7317 3.13416C11.9006 3.04971 12.0994 3.0497 12.2683 3.13416L22 8' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M20 11V19C20 20.1046 19.1046 21 18 21H6C4.89543 21 4 20.1046 4 19V11' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 8L11.7317 3.13416C11.9006 3.04971 12.0994 3.0497 12.2683 3.13416L22 8' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M20 11V19C20 20.1046 19.1046 21 18 21H6C4.89543 21 4 20.1046 4 19V11' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  -webkit-mask-size: contain;
-  mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-}
+
 
 #header-nav a:hover,
 #header-nav a[aria-current="page"] {
@@ -1015,14 +1001,14 @@ html.dark.theme-to-light .theme-icon--moon     { animation: theme-set  400ms bot
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-.share-dialog-label {
+.share-popover label {
   font-size: 1rem;
   font-weight: 500;
   display: block;
   margin-bottom: 0.5rem;
 }
 
-.share-dialog-input {
+.share-popover input {
   font-size: 1rem;
   padding: 0.5rem;
   border: 1px solid #ccc;
@@ -1033,7 +1019,7 @@ html.dark.theme-to-light .theme-icon--moon     { animation: theme-set  400ms bot
   margin-bottom: 0.75rem;
 }
 
-.copy-link-btn {
+.share-popover button {
   font-size: 1rem;
   padding: 0.5rem 1rem;
   background: var(--c-accent, #0277BD);
