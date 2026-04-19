@@ -12,12 +12,31 @@ interface Props {
   canonical?: string;
   ogType?: string;
   jsonLd?: Record<string, any>;
+  pageType?: string;
 }
 
-const { title, description, extraHead, canonical, ogType = 'website', jsonLd } = Astro.props;
+const { title, description, extraHead, canonical, ogType = 'website', jsonLd, pageType } = Astro.props;
 const pageTitle = title ? `${title} — Andy Stevens` : 'Andy Stevens';
 const canonicalUrl = canonical ?? new URL(Astro.url.pathname, Astro.site).href;
 const currentYear = new Date().getFullYear();
+
+function pageTypeFromPath(pathname: string): string | undefined {
+  if (pathname === '/') return 'home';
+  if (pathname.startsWith('/articles/')) return 'article';
+  if (pathname.startsWith('/photos/'))   return 'photo';
+  if (pathname.startsWith('/albums/'))   return 'album';
+  if (pathname.startsWith('/writing/'))  return 'writing';
+  if (pathname.startsWith('/awards/'))   return 'award';
+  if (pathname.startsWith('/code/'))     return 'code';
+  if (pathname.startsWith('/notes/'))    return 'note';
+  if (pathname.startsWith('/bookmarks/'))return 'bookmark';
+  if (pathname.startsWith('/likes/'))    return 'like';
+  if (pathname.startsWith('/replies/'))  return 'reply';
+  if (pathname.startsWith('/commonplace/')) return 'commonplace';
+  return undefined;
+}
+
+const resolvedPageType = pageType ?? pageTypeFromPath(Astro.url.pathname);
 
 const defaultJsonLd = {
   '@context': 'https://schema.org',
@@ -101,7 +120,7 @@ const structuredData = jsonLd ?? defaultJsonLd;
     <ClientRouter />
     <script>import '../lib/photo-nav';</script>
   </head>
-  <body>
+  <body data-page-type={resolvedPageType}>
     <a href="#main-content">Skip to content</a>
     <!-- Representative h-card (visually hidden, machine-readable) -->
     <div class="h-card" id="representative-hcard" aria-hidden="true">
@@ -114,7 +133,7 @@ const structuredData = jsonLd ?? defaultJsonLd;
       <Header />
       <Navigation />
       <main id="site-layout">
-        <div id="site-title" aria-hidden="true"><span>Andy</span> <span>Makes</span> <span>Things</span></div>
+        <!--  <div id="site-title" aria-hidden="true"><span>Andy</span> <span>Makes</span> <span>Things</span></div>-->
         <div id="site-sidebar" aria-hidden="true" transition:persist="sidebar">
           <Animation />
         </div>

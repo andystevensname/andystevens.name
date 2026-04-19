@@ -36,7 +36,7 @@ export function createBeams(group: SVGGElement, height: number, width = 400) {
     const x2 = randomNumber(width, 0);
     const el = svgEl<SVGPolygonElement>('polygon', {
       points: `${topX},0 ${x1},${height} ${x2},${height}`,
-      fill: '#FFEB3B',
+      class: 'anim-beam',
       stroke: 'none',
       opacity: '0',
     });

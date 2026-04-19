@@ -43,7 +43,7 @@ export function createPoetry(group: SVGGElement, width = 400) {
     const rotation = randomNumber(5, -5);
     const polyEl = svgEl<SVGPolygonElement>('polygon', {
       points: pointsStr(vertices),
-      fill: 'red',
+      class: 'anim-poetry',
       stroke: 'none',
       opacity: '0.75',
       transform: `translate(${tx}, ${ty}) rotate(${rotation})`,

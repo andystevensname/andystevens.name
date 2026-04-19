@@ -16,7 +16,6 @@ interface GearInfo {
 }
 
 export function createGears(canvas: SVGSVGElement, group: SVGGElement, gearsContainer: Element, width = 400) {
-  const colors = ['#D500F9', '#00B0FF', '#FF1744'];
   const teethCounts = [18, 36, 52];
   const gears: GearInfo[] = [];
   const pinionStep = 0.25;
@@ -64,18 +63,19 @@ export function createGears(canvas: SVGSVGElement, group: SVGGElement, gearsCont
 
     const assemblyEl = svgEl<SVGGElement>('g');
     const wrapEl = svgEl<SVGGElement>('g');
+    const gearClass = `anim-gear-${i + 1}`;
     const pathEl = document.createElementNS(SVG_NS, 'path') as SVGPathElement;
     pathEl.setAttribute('d', d);
+    pathEl.setAttribute('class', gearClass);
     pathEl.setAttribute('fill', 'transparent');
-    pathEl.setAttribute('stroke', colors[i]);
     pathEl.setAttribute('stroke-width', '5');
     pathEl.setAttribute('opacity', '0.7');
 
     const circleEl = svgEl<SVGCircleElement>('circle', {
       cx: '0', cy: '0',
       r: String((scaledWidth - 60) / 2),
+      class: gearClass,
       fill: 'transparent',
-      stroke: colors[i],
       'stroke-width': '15',
     });
 
