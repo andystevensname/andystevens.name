@@ -19,7 +19,7 @@ interface PoetryItem {
 
 export function createPoetry(group: SVGGElement, width = 400) {
   const items: PoetryItem[] = [];
-  const maxW = width - 40;
+  const maxW = width;
   const minW = width / 4;
   const line = { x: 20, y: -30, height: 40, minWidth: minW, maxWidth: maxW };
   const step = 60;
@@ -45,7 +45,7 @@ export function createPoetry(group: SVGGElement, width = 400) {
       points: pointsStr(vertices),
       class: 'anim-poetry',
       stroke: 'none',
-      opacity: '0.75',
+      opacity: String(randomNumber(75, 30) / 100),
       transform: `translate(${tx}, ${ty}) rotate(${rotation})`,
     });
     group.appendChild(polyEl);
