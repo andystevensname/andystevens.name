@@ -26,19 +26,137 @@
   --c-gray: #212121;
   --c-gray-light: #757575;
   --c-gray-lighter: #E0E0E0;
-  --c-accent: light-dark(#0277BD, #29B6F6);
-  --c-h1-text: light-dark(hsl(199deg 80% 25%), hsl(170deg 60% 82%));
-
   /* Semantic color pairs */
   --bg: light-dark(white, var(--c-gray));
   --border-subtle: 1px solid var(--c-gray-lighter);
 
-  /* Animation phase colors */
-  --c-anim-beam: #FFEB3B;
-  --c-anim-poetry: red;
-  --c-anim-gear-1: #D500F9;
-  --c-anim-gear-2: #00B0FF;
-  --c-anim-gear-3: #FF1744;
+  /* ---- Page-type palette tokens ---- */
+
+  /* Home */
+  --home-accent:    light-dark(hsl(190deg 100% 35%), hsl(190deg 100% 60%));
+  --home-text:      light-dark(hsl(199deg 80% 25%), hsl(170deg 60% 82%));
+  --home-gradient:  linear-gradient(35deg,
+    hsl(199deg 100% 50%) 0%, hsl(196deg 100% 50%) 12%, hsl(193deg 100% 50%) 22%,
+    hsl(190deg 100% 49%) 31%, hsl(185deg 100% 46%) 40%, hsl(178deg 100% 44%) 48%,
+    hsl(170deg 100% 45%) 55%, hsl(162deg 100% 46%) 63%, hsl(148deg 86% 56%) 70%,
+    hsl(114deg 83% 68%) 78%, hsl(86deg 86% 62%) 85%, hsl(68deg 86% 55%) 93%,
+    hsl(55deg 100% 50%) 100%);
+  --home-gradient-v: linear-gradient(to bottom,
+    hsl(199deg 100% 50%) 0%, hsl(196deg 100% 50%) 12%, hsl(193deg 100% 50%) 22%,
+    hsl(190deg 100% 49%) 31%, hsl(185deg 100% 46%) 40%, hsl(178deg 100% 44%) 48%,
+    hsl(170deg 100% 45%) 55%, hsl(162deg 100% 46%) 63%, hsl(148deg 86% 56%) 70%,
+    hsl(114deg 83% 68%) 78%, hsl(86deg 86% 62%) 85%, hsl(68deg 86% 55%) 93%,
+    hsl(55deg 100% 50%) 100%);
+  --home-beam:      hsl(55deg 100% 50%);
+  --home-poetry:    hsl(199deg 100% 50%);
+  --home-gear-1:    hsl(170deg 100% 45%);
+  --home-gear-2:    hsl(148deg 86% 56%);
+  --home-gear-3:    hsl(86deg 86% 62%);
+
+  /* Article */
+  --article-accent: light-dark(hsl(14deg 74% 42%), hsl(14deg 74% 62%));
+  --article-text:   light-dark(hsl(340deg 70% 30%), hsl(2deg 60% 80%));
+  --article-gradient: linear-gradient(130deg,
+    hsl(340deg 82% 52%) 0%, hsl(350deg 81% 55%) 22%, hsl(2deg 77% 57%) 39%,
+    hsl(14deg 74% 52%) 53%, hsl(24deg 80% 47%) 63%, hsl(33deg 100% 40%) 71%,
+    hsl(40deg 100% 37%) 78%, hsl(47deg 100% 34%) 83%, hsl(55deg 100% 31%) 87%,
+    hsl(66deg 92% 32%) 91%, hsl(79deg 64% 39%) 94%, hsl(97deg 49% 44%) 97%,
+    hsl(122deg 39% 49%) 100%);
+  --article-gradient-v: linear-gradient(to bottom,
+    hsl(340deg 82% 52%) 0%, hsl(350deg 81% 55%) 22%, hsl(2deg 77% 57%) 39%,
+    hsl(14deg 74% 52%) 53%, hsl(24deg 80% 47%) 63%, hsl(33deg 100% 40%) 71%,
+    hsl(40deg 100% 37%) 78%, hsl(47deg 100% 34%) 83%, hsl(55deg 100% 31%) 87%,
+    hsl(66deg 92% 32%) 91%, hsl(79deg 64% 39%) 94%, hsl(97deg 49% 44%) 97%,
+    hsl(122deg 39% 49%) 100%);
+  --article-beam:   hsl(40deg 100% 37%);
+  --article-poetry: hsl(2deg 77% 57%);
+  --article-gear-1: hsl(340deg 82% 52%);
+  --article-gear-2: hsl(33deg 100% 40%);
+  --article-gear-3: hsl(122deg 39% 49%);
+
+  /* Photo / Album */
+  --media-accent:   light-dark(hsl(207deg 100% 36%), hsl(207deg 100% 56%));
+  --media-text:     light-dark(hsl(260deg 50% 30%), hsl(207deg 60% 80%));
+  --media-gradient: linear-gradient(130deg,
+    hsl(287deg 65% 40%) 0%, hsl(256deg 53% 53%) 13%, hsl(217deg 86% 46%) 25%,
+    hsl(211deg 100% 45%) 37%, hsl(207deg 100% 46%) 48%, hsl(203deg 100% 45%) 58%,
+    hsl(199deg 100% 42%) 68%, hsl(192deg 100% 39%) 75%, hsl(184deg 100% 35%) 82%,
+    hsl(175deg 100% 34%) 88%, hsl(166deg 100% 35%) 93%, hsl(154deg 65% 44%) 97%,
+    hsl(123deg 38% 57%) 100%);
+  --media-gradient-v: linear-gradient(to bottom,
+    hsl(287deg 65% 40%) 0%, hsl(256deg 53% 53%) 13%, hsl(217deg 86% 46%) 25%,
+    hsl(211deg 100% 45%) 37%, hsl(207deg 100% 46%) 48%, hsl(203deg 100% 45%) 58%,
+    hsl(199deg 100% 42%) 68%, hsl(192deg 100% 39%) 75%, hsl(184deg 100% 35%) 82%,
+    hsl(175deg 100% 34%) 88%, hsl(166deg 100% 35%) 93%, hsl(154deg 65% 44%) 97%,
+    hsl(123deg 38% 57%) 100%);
+  --media-beam:     hsl(207deg 100% 46%);
+  --media-poetry:   hsl(287deg 65% 40%);
+  --media-gear-1:   hsl(217deg 86% 46%);
+  --media-gear-2:   hsl(184deg 100% 35%);
+  --media-gear-3:   hsl(123deg 38% 57%);
+
+  /* Award / Writing */
+  --writing-accent: light-dark(hsl(23deg 100% 45%), hsl(23deg 100% 62%));
+  --writing-text:   light-dark(hsl(30deg 80% 30%), hsl(42deg 70% 80%));
+  --writing-gradient: linear-gradient(130deg,
+    hsl(42deg 100% 50%) 0%, hsl(39deg 100% 52%) 13%, hsl(36deg 100% 54%) 25%,
+    hsl(33deg 100% 56%) 37%, hsl(30deg 100% 57%) 48%, hsl(26deg 100% 59%) 58%,
+    hsl(23deg 100% 60%) 68%, hsl(19deg 100% 61%) 75%, hsl(16deg 98% 62%) 82%,
+    hsl(13deg 95% 62%) 88%, hsl(9deg 92% 62%) 93%, hsl(5deg 88% 63%) 97%,
+    hsl(1deg 83% 63%) 100%);
+  --writing-gradient-v: linear-gradient(to bottom,
+    hsl(42deg 100% 50%) 0%, hsl(39deg 100% 52%) 13%, hsl(36deg 100% 54%) 25%,
+    hsl(33deg 100% 56%) 37%, hsl(30deg 100% 57%) 48%, hsl(26deg 100% 59%) 58%,
+    hsl(23deg 100% 60%) 68%, hsl(19deg 100% 61%) 75%, hsl(16deg 98% 62%) 82%,
+    hsl(13deg 95% 62%) 88%, hsl(9deg 92% 62%) 93%, hsl(5deg 88% 63%) 97%,
+    hsl(1deg 83% 63%) 100%);
+  --writing-beam:   hsl(42deg 100% 50%);
+  --writing-poetry: hsl(1deg 83% 63%);
+  --writing-gear-1: hsl(42deg 100% 50%);
+  --writing-gear-2: hsl(23deg 100% 60%);
+  --writing-gear-3: hsl(5deg 88% 63%);
+
+  /* Code */
+  --code-accent:    light-dark(hsl(178deg 38% 36%), hsl(178deg 38% 56%));
+  --code-text:      light-dark(hsl(199deg 20% 30%), hsl(178deg 30% 76%));
+  --code-gradient:  linear-gradient(130deg,
+    hsl(199deg 18% 40%) 0%, hsl(195deg 22% 42%) 13%, hsl(191deg 26% 44%) 25%,
+    hsl(187deg 30% 45%) 37%, hsl(183deg 34% 46%) 48%, hsl(178deg 38% 44%) 58%,
+    hsl(172deg 42% 42%) 68%, hsl(164deg 38% 44%) 75%, hsl(152deg 32% 48%) 82%,
+    hsl(134deg 28% 52%) 88%, hsl(108deg 30% 54%) 93%, hsl(82deg 36% 50%) 97%,
+    hsl(62deg 44% 46%) 100%);
+  --code-gradient-v: linear-gradient(to bottom,
+    hsl(199deg 18% 40%) 0%, hsl(195deg 22% 42%) 13%, hsl(191deg 26% 44%) 25%,
+    hsl(187deg 30% 45%) 37%, hsl(183deg 34% 46%) 48%, hsl(178deg 38% 44%) 58%,
+    hsl(172deg 42% 42%) 68%, hsl(164deg 38% 44%) 75%, hsl(152deg 32% 48%) 82%,
+    hsl(134deg 28% 52%) 88%, hsl(108deg 30% 54%) 93%, hsl(82deg 36% 50%) 97%,
+    hsl(62deg 44% 46%) 100%);
+  --code-beam:      hsl(62deg 44% 46%);
+  --code-poetry:    hsl(199deg 18% 40%);
+  --code-gear-1:    hsl(199deg 18% 40%);
+  --code-gear-2:    hsl(178deg 38% 44%);
+  --code-gear-3:    hsl(82deg 36% 50%);
+
+  /* Social (note, bookmark, like, reply, commonplace) */
+  --social-accent:  light-dark(hsl(305deg 61% 45%), hsl(305deg 61% 70%));
+  --social-text:    light-dark(hsl(280deg 50% 30%), hsl(305deg 50% 82%));
+  --social-gradient: linear-gradient(130deg,
+    hsl(208deg 79% 51%) 0%, hsl(226deg 75% 66%) 13%, hsl(252deg 70% 70%) 25%,
+    hsl(279deg 63% 68%) 37%, hsl(305deg 61% 65%) 48%, hsl(323deg 91% 69%) 58%,
+    hsl(332deg 100% 70%) 68%, hsl(342deg 100% 70%) 75%, hsl(355deg 100% 72%) 82%,
+    hsl(11deg 100% 69%) 88%, hsl(23deg 100% 64%) 93%, hsl(33deg 100% 58%) 97%,
+    hsl(42deg 100% 50%) 100%);
+  --social-gradient-v: linear-gradient(to bottom,
+    hsl(208deg 79% 51%) 0%, hsl(226deg 75% 66%) 13%, hsl(252deg 70% 70%) 25%,
+    hsl(279deg 63% 68%) 37%, hsl(305deg 61% 65%) 48%, hsl(323deg 91% 69%) 58%,
+    hsl(332deg 100% 70%) 68%, hsl(342deg 100% 70%) 75%, hsl(355deg 100% 72%) 82%,
+    hsl(11deg 100% 69%) 88%, hsl(23deg 100% 64%) 93%, hsl(33deg 100% 58%) 97%,
+    hsl(42deg 100% 50%) 100%);
+  --social-beam:    hsl(42deg 100% 50%);
+  --social-poetry:  hsl(323deg 91% 69%);
+  --social-gear-1:  hsl(208deg 79% 51%);
+  --social-gear-2:  hsl(279deg 63% 68%);
+  --social-gear-3:  hsl(33deg 100% 58%);
 
   /* Feed-item icon colors */
   --c-icon-like: #E53935;
@@ -50,6 +168,8 @@
   --c-icon-award: #FFB300;
   --c-icon-code: #00E676;
   --c-icon-media: #8E24AA;
+
+  --gradient-rainbow: linear-gradient(to bottom, #FFEB3B, #FF1744, #D500F9, #00B0FF) 1;
 
   /* Type scale (1rem base inherited from html) */
   --fs-sm: 0.875rem;
@@ -113,8 +233,16 @@ html {
 }
 
 body {
-  --text: var(--c-h1-text);
-  --border-strong: 1px solid var(--c-h1-text);
+  --c-accent: var(--home-accent);
+  --text: var(--home-text);
+  --gradient: var(--home-gradient);
+  --gradient-v: var(--home-gradient-v);
+  --border-strong: 1px solid var(--home-text);
+  --c-anim-beam: var(--home-beam);
+  --c-anim-poetry: var(--home-poetry);
+  --c-anim-gear-1: var(--home-gear-1);
+  --c-anim-gear-2: var(--home-gear-2);
+  --c-anim-gear-3: var(--home-gear-3);
   position: relative;
   min-height: 100%;
   width: 100%;
@@ -225,23 +353,7 @@ h1 {
   transform: rotate(0deg);
   justify-self: center;
   width: fit-content;
-  color: var(--c-h1-text);
-  --h1-highlight: linear-gradient(
-    35deg,
-    hsl(199deg 100% 50%) 0%,
-    hsl(196deg 100% 50%) 12%,
-    hsl(193deg 100% 50%) 22%,
-    hsl(190deg 100% 49%) 31%,
-    hsl(185deg 100% 46%) 40%,
-    hsl(178deg 100% 44%) 48%,
-    hsl(170deg 100% 45%) 55%,
-    hsl(162deg 100% 46%) 63%,
-    hsl(148deg 86% 56%) 70%,
-    hsl(114deg 83% 68%) 78%,
-    hsl(86deg 86% 62%) 85%,
-    hsl(68deg 86% 55%) 93%,
-    hsl(55deg 100% 50%) 100%
-  );
+  color: var(--text);
 }
 
 h1::before,
@@ -249,7 +361,7 @@ h1::after {
   content: '';
   position: absolute;
   inset: -0.25rem -0.5rem;
-  background: var(--h1-highlight);
+  background: var(--gradient);
   opacity: 0.5;
   clip-path: polygon(0% 8%, 98% 2%, 85% 92%, 3% 96%);
   z-index: var(--z-below);
@@ -261,134 +373,20 @@ h1::after {
   filter: blur(8px);
 }
 
-/* h1 per-type gradients */
-h1.feed-item--article, article:has(.u-url[href*="/articles/"]) h1 { --h1-highlight: linear-gradient(
-    130deg,
-    hsl(340deg 82% 52%) 0%,
-    hsl(350deg 81% 55%) 22%,
-    hsl(2deg 77% 57%) 39%,
-    hsl(14deg 74% 52%) 53%,
-    hsl(24deg 80% 47%) 63%,
-    hsl(33deg 100% 40%) 71%,
-    hsl(40deg 100% 37%) 78%,
-    hsl(47deg 100% 34%) 83%,
-    hsl(55deg 100% 31%) 87%,
-    hsl(66deg 92% 32%) 91%,
-    hsl(79deg 64% 39%) 94%,
-    hsl(97deg 49% 44%) 97%,
-    hsl(122deg 39% 49%) 100%
-  );}
-h1.feed-item--photo, article:has(.u-url[href*="/photos/"]) h1 { --h1-highlight: linear-gradient(
-    130deg,
-    hsl(287deg 65% 40%) 0%,
-    hsl(256deg 53% 53%) 13%,
-    hsl(217deg 86% 46%) 25%,
-    hsl(211deg 100% 45%) 37%,
-    hsl(207deg 100% 46%) 48%,
-    hsl(203deg 100% 45%) 58%,
-    hsl(199deg 100% 42%) 68%,
-    hsl(192deg 100% 39%) 75%,
-    hsl(184deg 100% 35%) 82%,
-    hsl(175deg 100% 34%) 88%,
-    hsl(166deg 100% 35%) 93%,
-    hsl(154deg 65% 44%) 97%,
-    hsl(123deg 38% 57%) 100%
-  ); }
-h1.feed-item--album, article:has(.u-url[href*="/albums/"]) h1 { --h1-highlight: linear-gradient(
-    130deg,
-    hsl(287deg 65% 40%) 0%,
-    hsl(256deg 53% 53%) 13%,
-    hsl(217deg 86% 46%) 25%,
-    hsl(211deg 100% 45%) 37%,
-    hsl(207deg 100% 46%) 48%,
-    hsl(203deg 100% 45%) 58%,
-    hsl(199deg 100% 42%) 68%,
-    hsl(192deg 100% 39%) 75%,
-    hsl(184deg 100% 35%) 82%,
-    hsl(175deg 100% 34%) 88%,
-    hsl(166deg 100% 35%) 93%,
-    hsl(154deg 65% 44%) 97%,
-    hsl(123deg 38% 57%) 100%
-  ); }
-/* h1.feed-item--writing, article:has(.u-url[href*="/writing/"]) h1 { --h1-highlight: linear-gradient(
-    130deg,
-    hsl(174deg 100% 27%) 0%,
-    hsl(165deg 66% 33%) 13%,
-    hsl(150deg 47% 37%) 25%,
-    hsl(128deg 33% 41%) 37%,
-    hsl(99deg 37% 40%) 48%,
-    hsl(79deg 47% 37%) 58%,
-    hsl(63deg 59% 33%) 68%,
-    hsl(51deg 73% 34%) 75%,
-    hsl(42deg 79% 37%) 82%,
-    hsl(33deg 75% 42%) 88%,
-    hsl(24deg 67% 49%) 93%,
-    hsl(13deg 73% 56%) 97%,
-    hsl(1deg 83% 63%) 100%
-  ); }*/
-h1.feed-item--award, article:has(.u-url[href*="/awards/"]) h1, h1.feed-item--writing, article:has(.u-url[href*="/writing/"]) h1 { --h1-highlight: linear-gradient(
-    130deg,
-    hsl(42deg 100% 50%) 0%,
-    hsl(39deg 100% 52%) 13%,
-    hsl(36deg 100% 54%) 25%,
-    hsl(33deg 100% 56%) 37%,
-    hsl(30deg 100% 57%) 48%,
-    hsl(26deg 100% 59%) 58%,
-    hsl(23deg 100% 60%) 68%,
-    hsl(19deg 100% 61%) 75%,
-    hsl(16deg 98% 62%) 82%,
-    hsl(13deg 95% 62%) 88%,
-    hsl(9deg 92% 62%) 93%,
-    hsl(5deg 88% 63%) 97%,
-    hsl(1deg 83% 63%) 100%
-  );}
-h1.feed-item--code, article:has(.u-url[href*="/code/"]) h1 { --h1-highlight: linear-gradient(
-    130deg,
-    hsl(199deg 18% 40%) 0%,
-    hsl(195deg 22% 42%) 13%,
-    hsl(191deg 26% 44%) 25%,
-    hsl(187deg 30% 45%) 37%,
-    hsl(183deg 34% 46%) 48%,
-    hsl(178deg 38% 44%) 58%,
-    hsl(172deg 42% 42%) 68%,
-    hsl(164deg 38% 44%) 75%,
-    hsl(152deg 32% 48%) 82%,
-    hsl(134deg 28% 52%) 88%,
-    hsl(108deg 30% 54%) 93%,
-    hsl(82deg 36% 50%) 97%,
-    hsl(62deg 44% 46%) 100%
-  );}
-
-/* Commonplace gradient: used for notes, bookmarks, likes, replies, commonplace.
-   Must come AFTER the per-type gradients above — later-wins cascade intentionally
-   overrides note/bookmark/like/reply with the shared gradient. */
+/* h1 per-type gradients — handled by --gradient via body[data-page-type].
+   Feed items on the homepage override --gradient locally since they each
+   have their own content type regardless of the page-level palette. */
+h1.feed-item--article  { --gradient: var(--article-gradient); }
+h1.feed-item--photo,
+h1.feed-item--album    { --gradient: var(--media-gradient); }
+h1.feed-item--award,
+h1.feed-item--writing  { --gradient: var(--writing-gradient); }
+h1.feed-item--code     { --gradient: var(--code-gradient); }
 h1.feed-item--note,
 h1.feed-item--bookmark,
 h1.feed-item--like,
 h1.feed-item--reply,
-h1.feed-item--commonplace,
-article:has(.u-url[href*="/notes/"]) h1,
-article:has(.u-url[href*="/bookmarks/"]) h1,
-article:has(.u-url[href*="/likes/"]) h1,
-article:has(.u-url[href*="/replies/"]) h1,
-article:has(.u-url[href*="/commonplace/"]) h1 {
-  --h1-highlight: linear-gradient(
-    130deg,
-    hsl(208deg 79% 51%) 0%,
-    hsl(226deg 75% 66%) 13%,
-    hsl(252deg 70% 70%) 25%,
-    hsl(279deg 63% 68%) 37%,
-    hsl(305deg 61% 65%) 48%,
-    hsl(323deg 91% 69%) 58%,
-    hsl(332deg 100% 70%) 68%,
-    hsl(342deg 100% 70%) 75%,
-    hsl(355deg 100% 72%) 82%,
-    hsl(11deg 100% 69%) 88%,
-    hsl(23deg 100% 64%) 93%,
-    hsl(33deg 100% 58%) 97%,
-    hsl(42deg 100% 50%) 100%
-  );
-}
+h1.feed-item--commonplace { --gradient: var(--social-gradient); }
 
 h2, h3, h4 {
   width: 100%;
@@ -451,7 +449,7 @@ ul li p:last-child {
 blockquote {
   width: 100%;
   border-left: 4px solid transparent;
-  border-image: linear-gradient(to bottom, #FFEB3B, #FF1744, #D500F9, #00B0FF) 1;
+  border-image: var(--gradient-v) 1;
   padding: 0 1rem;
   margin: 0 0 1rlh 0;
 }
@@ -538,7 +536,7 @@ html.dark .astro-code span {
 poem-element {
   margin: 0 0 1rlh;
   border-left: 4px solid transparent;
-  border-image: linear-gradient(to bottom, #FFEB3B, #FF1744, #D500F9, #00B0FF) 1;
+  border-image: var(--gradient-v) 1;
   padding-left: 1rem;
   --poem-line-number-font-size: .875em;
   --poem-line-number-color: var(--c-gray-light);
@@ -700,57 +698,72 @@ a[href="#main-content"]:focus {
 .anim-gear-2 { stroke: var(--c-anim-gear-2); }
 .anim-gear-3 { stroke: var(--c-anim-gear-3); }
 
-/* Per-page-type animation palettes — hues lifted from each page type's h1 gradient */
+/* Per-page-type palettes — map tokens to functional variables */
 body[data-page-type="home"] {
-  --c-accent:      light-dark(hsl(190deg 100% 35%), hsl(190deg 100% 60%));
-  --c-h1-text:     light-dark(hsl(199deg 80% 25%), hsl(170deg 60% 82%));
-  --c-anim-beam:   hsl(55deg 100% 50%);   /* yellow (gradient 100%) */
-  --c-anim-poetry: hsl(199deg 100% 50%);  /* blue (gradient 0%) */
-  --c-anim-gear-1: hsl(170deg 100% 45%);  /* teal (gradient 55%) */
-  --c-anim-gear-2: hsl(148deg 86% 56%);   /* green (gradient 70%) */
-  --c-anim-gear-3: hsl(86deg 86% 62%);    /* yellow-green (gradient 85%) */
+  --c-accent:      var(--home-accent);
+  --text:          var(--home-text);
+  --gradient:      var(--home-gradient);
+  --gradient-v:    var(--home-gradient-v);
+  --border-strong: 1px solid var(--home-text);
+  --c-anim-beam:   var(--home-beam);
+  --c-anim-poetry: var(--home-poetry);
+  --c-anim-gear-1: var(--home-gear-1);
+  --c-anim-gear-2: var(--home-gear-2);
+  --c-anim-gear-3: var(--home-gear-3);
 }
 
 body[data-page-type="article"] {
-  --c-accent:      light-dark(hsl(14deg 74% 42%), hsl(14deg 74% 62%));
-  --c-h1-text:     light-dark(hsl(340deg 70% 30%), hsl(2deg 60% 80%));
-  --c-anim-beam:   hsl(40deg 100% 37%);
-  --c-anim-poetry: hsl(2deg 77% 57%);
-  --c-anim-gear-1: hsl(340deg 82% 52%);
-  --c-anim-gear-2: hsl(33deg 100% 40%);
-  --c-anim-gear-3: hsl(122deg 39% 49%);
+  --c-accent:      var(--article-accent);
+  --text:          var(--article-text);
+  --gradient:      var(--article-gradient);
+  --gradient-v:    var(--article-gradient-v);
+  --border-strong: 1px solid var(--article-text);
+  --c-anim-beam:   var(--article-beam);
+  --c-anim-poetry: var(--article-poetry);
+  --c-anim-gear-1: var(--article-gear-1);
+  --c-anim-gear-2: var(--article-gear-2);
+  --c-anim-gear-3: var(--article-gear-3);
 }
 
 body[data-page-type="photo"],
 body[data-page-type="album"] {
-  --c-accent:      light-dark(hsl(207deg 100% 36%), hsl(207deg 100% 56%));
-  --c-h1-text:     light-dark(hsl(260deg 50% 30%), hsl(207deg 60% 80%));
-  --c-anim-beam:   hsl(207deg 100% 46%);
-  --c-anim-poetry: hsl(287deg 65% 40%);
-  --c-anim-gear-1: hsl(217deg 86% 46%);
-  --c-anim-gear-2: hsl(184deg 100% 35%);
-  --c-anim-gear-3: hsl(123deg 38% 57%);
+  --c-accent:      var(--media-accent);
+  --text:          var(--media-text);
+  --gradient:      var(--media-gradient);
+  --gradient-v:    var(--media-gradient-v);
+  --border-strong: 1px solid var(--media-text);
+  --c-anim-beam:   var(--media-beam);
+  --c-anim-poetry: var(--media-poetry);
+  --c-anim-gear-1: var(--media-gear-1);
+  --c-anim-gear-2: var(--media-gear-2);
+  --c-anim-gear-3: var(--media-gear-3);
 }
 
 body[data-page-type="award"],
 body[data-page-type="writing"] {
-  --c-accent:      light-dark(hsl(23deg 100% 45%), hsl(23deg 100% 62%));
-  --c-h1-text:     light-dark(hsl(30deg 80% 30%), hsl(42deg 70% 80%));
-  --c-anim-beam:   hsl(42deg 100% 50%);
-  --c-anim-poetry: hsl(1deg 83% 63%);
-  --c-anim-gear-1: hsl(42deg 100% 50%);
-  --c-anim-gear-2: hsl(23deg 100% 60%);
-  --c-anim-gear-3: hsl(5deg 88% 63%);
+  --c-accent:      var(--writing-accent);
+  --text:          var(--writing-text);
+  --gradient:      var(--writing-gradient);
+  --gradient-v:    var(--writing-gradient-v);
+  --border-strong: 1px solid var(--writing-text);
+  --c-anim-beam:   var(--writing-beam);
+  --c-anim-poetry: var(--writing-poetry);
+  --c-anim-gear-1: var(--writing-gear-1);
+  --c-anim-gear-2: var(--writing-gear-2);
+  --c-anim-gear-3: var(--writing-gear-3);
 }
 
 body[data-page-type="code"] {
-  --c-accent:      light-dark(hsl(178deg 38% 36%), hsl(178deg 38% 56%));
-  --c-h1-text:     light-dark(hsl(199deg 20% 30%), hsl(178deg 30% 76%));
-  --c-anim-beam:   hsl(62deg 44% 46%);
-  --c-anim-poetry: hsl(199deg 18% 40%);
-  --c-anim-gear-1: hsl(199deg 18% 40%);
-  --c-anim-gear-2: hsl(178deg 38% 44%);
-  --c-anim-gear-3: hsl(82deg 36% 50%);
+  --c-accent:      var(--code-accent);
+  --text:          var(--code-text);
+  --gradient:      var(--code-gradient);
+  --gradient-v:    var(--code-gradient-v);
+  --border-strong: 1px solid var(--code-text);
+  --c-anim-beam:   var(--code-beam);
+  --c-anim-poetry: var(--code-poetry);
+  --c-anim-gear-1: var(--code-gear-1);
+  --c-anim-gear-2: var(--code-gear-2);
+  --c-anim-gear-3: var(--code-gear-3);
 }
 
 body[data-page-type="note"],
@@ -758,13 +771,16 @@ body[data-page-type="bookmark"],
 body[data-page-type="like"],
 body[data-page-type="reply"],
 body[data-page-type="commonplace"] {
-  --c-accent:      light-dark(hsl(305deg 61% 45%), hsl(305deg 61% 70%));
-  --c-h1-text:     light-dark(hsl(280deg 50% 30%), hsl(305deg 50% 82%));
-  --c-anim-beam:   hsl(42deg 100% 50%);
-  --c-anim-poetry: hsl(323deg 91% 69%);
-  --c-anim-gear-1: hsl(208deg 79% 51%);
-  --c-anim-gear-2: hsl(279deg 63% 68%);
-  --c-anim-gear-3: hsl(33deg 100% 58%);
+  --c-accent:      var(--social-accent);
+  --text:          var(--social-text);
+  --gradient:      var(--social-gradient);
+  --gradient-v:    var(--social-gradient-v);
+  --border-strong: 1px solid var(--social-text);
+  --c-anim-beam:   var(--social-beam);
+  --c-anim-poetry: var(--social-poetry);
+  --c-anim-gear-1: var(--social-gear-1);
+  --c-anim-gear-2: var(--social-gear-2);
+  --c-anim-gear-3: var(--social-gear-3);
 }
 
 #site-title {
