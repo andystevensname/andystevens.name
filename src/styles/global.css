@@ -30,9 +30,7 @@
   --c-h1-text: light-dark(hsl(199deg 80% 25%), hsl(170deg 60% 82%));
 
   /* Semantic color pairs */
-  --text: var(--c-h1-text);
   --bg: light-dark(white, var(--c-gray));
-  --border-strong: 1px solid light-dark(var(--c-gray), white);
   --border-subtle: 1px solid var(--c-gray-lighter);
 
   /* Animation phase colors */
@@ -115,6 +113,8 @@ html {
 }
 
 body {
+  --text: var(--c-h1-text);
+  --border-strong: 1px solid var(--c-h1-text);
   position: relative;
   min-height: 100%;
   width: 100%;
@@ -1010,8 +1010,6 @@ html.dark.theme-to-light .theme-icon--moon     { animation: theme-set  400ms bot
   border-top: var(--border-subtle);
   font-size: var(--fs-sm);
   line-height: 3.4285;
-  padding: 0 var(--grid-margin);
-  margin: 0 calc(-1 * var(--grid-margin));
   position: relative;
   z-index: var(--z-footer);
 }
@@ -1674,7 +1672,10 @@ article[class*="feed-item--"]:last-child {
   }
 
   /* Text content fills the content area but is capped at a readable line length */
-  article > h1,
+  article > h1 {
+    grid-column: 1 / span 4;
+  }
+
   article > p,
   article > footer,
   article > .e-content,
@@ -1712,4 +1713,52 @@ article[class*="feed-item--"]:last-child {
   #site-title { grid-column: 1 / span 2; }
   #main-content { grid-column: 3 / -1; }
   label[for="theme-toggle"] { grid-column: 6; }
+}
+
+/* ============================================
+   DESKTOP (min-width: 1456px) — 9+ cols, vertical nav in col 3
+   ============================================ */
+
+@media (min-width: 1456px) {
+  #content {
+    grid-template-rows: 1fr var(--footer-height);
+  }
+
+  #header {
+    grid-column: 2 / span 2;
+    grid-row: 1;
+    position: sticky;
+    top: 0;
+    height: 100dvh;
+    border-bottom: none;
+    background: none;
+    grid-template-columns: subgrid;
+    grid-template-rows: auto;
+    align-items: start;
+    align-content: start;
+    padding-top: 2rem;
+  }
+
+  #header[data-hidden] {
+    transform: none;
+  }
+
+  #site-layout {
+    grid-row: 1;
+  }
+
+  #header-nav {
+    grid-column: 2;
+    flex-direction: column;
+    align-items: start;
+  }
+
+  label[for="theme-toggle"] {
+    position: fixed;
+    top: var(--grid-margin);
+    right: var(--grid-margin);
+    z-index: var(--z-header);
+  }
+
+  #main-content { grid-column: 4 / -1; }
 }
