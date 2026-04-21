@@ -21,4 +21,9 @@ export default defineConfig({
       },
     },
   },
+  vite: {
+    server: {
+      allowedHosts: ['.ngrok-free.app', '.ngrok-free.dev', 'andystevens.name', 'localhost'],
+    }
+  }
 });

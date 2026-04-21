@@ -27,13 +27,13 @@ const tags = post.data.tags ?? [];
     ))}
   </div>
   <button id="share-btn" type="button" title="Share this post" class="filter-btn share-btn" popovertarget="share-popover">
-    <span>Share this post</span>
+    <span>Share</span>
     <svg class="share-icon icon" width="20" height="20" aria-hidden="true">
       <use href="/icons.svg#icon-share-ios" />
     </svg>
   </button>
   <div id="share-popover" popover class="share-popover">
-    <label for="share-link-input">Share this link</label>
+    <label for="share-link-input">Share</label>
     <input id="share-link-input" type="text" value="" readonly />
     <button id="copy-link-btn" type="button">Copy Link</button>
   </div>
@@ -51,9 +51,12 @@ const tags = post.data.tags ?? [];
     const shareIcon = document.querySelector('.share-icon use');
     if (shareIcon) {
       const iconId = getShareIconId();
-      const iconRef = '/icons.svg#' + iconId;
-      shareIcon.setAttribute('href', iconRef);
-      shareIcon.setAttribute('xlink:href', iconRef);
+      // Only re-set href when the declarative default ('icon-share-ios')
+      // isn't right — WebKit invalidates <use> shadow content if you
+      // setAttribute on it unnecessarily, leaving an empty render on iOS.
+      if (iconId !== 'icon-share-ios') {
+        shareIcon.setAttribute('href', '/icons.svg#' + iconId);
+      }
       if (iconId === 'icon-share-android' && shareBtn) {
         shareBtn.title = 'Android Share';
       }
