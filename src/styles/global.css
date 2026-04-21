@@ -8,6 +8,12 @@
   font-weight: 400;
   font-display: swap;
   src: url('/fonts/BebasNeue-Regular.woff2') format('woff2');
+  /* Force ascent = cap-height so line-box top aligns with character top.
+     72% is Bebas Neue's approx cap-height; descent fills the remainder
+     to 100%; zero line-gap removes font-provided external leading. */
+  ascent-override: 72%;
+  descent-override: 28%;
+  line-gap-override: 0%;
 }
 
 /* ============================================
@@ -1699,11 +1705,12 @@ article[class*="feed-item--"]:last-child {
     z-index: var(--z-item);
     font-size: clamp(4rem, 7vw, 6rem);
     line-height: 0.9;
-    padding: calc(1.25rem + clamp(2.5rem, 5vw, 4rem) * 0.1) var(--grid-margin) 0 0;
+    /* Aligns cap-top with .intro h1. 1.25rem = main-content padding (1rem)
+       + h1 padding (0.25rem). 0.05 * (h1-size + site-title-size) cancels
+       the half-leading from h1's line-height 1.1 and site-title's 0.9. */
+    padding: calc(1.25rem + 0.05 * (clamp(2.5rem, 5vw, 4rem) + clamp(4rem, 7vw, 6rem))) var(--grid-margin) 0 0;
     text-align: right;
     pointer-events: none;
-    text-box-trim: trim-start;
-    text-box-edge: cap;
   }
 
   #site-title span {
