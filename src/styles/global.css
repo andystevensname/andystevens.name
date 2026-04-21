@@ -3,11 +3,11 @@
    ============================================ */
 
 @font-face {
-  font-family: 'Instrument Serif';
+  font-family: 'Bebas Neue';
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url('/fonts/InstrumentSerif.woff2') format('woff2');
+  src: url('/fonts/BebasNeue-Regular.woff2') format('woff2');
 }
 
 /* ============================================
@@ -219,6 +219,11 @@ html.dark {
   --noise-opacity: 0.5;
 }
 
+::selection {
+  background: var(--text);
+  color: var(--bg);
+}
+
 /* ============================================
    ROOT ELEMENTS
    ============================================ */
@@ -345,7 +350,10 @@ article > footer {
    ============================================ */
 
 h1 {
-  font-weight: bold;
+  font-family: 'Bebas Neue', sans-serif;
+  font-weight: 400;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  line-height: 1.1;
   margin: 0 0 1rem 0;
   padding: 0.25rem 0.5rem;
   text-wrap: balance;
@@ -408,7 +416,6 @@ p {
 }
 
 .intro h1 {
-  font-size: clamp(2.5rem, 5vw, 4rem);
   margin-right: 0.5rem;
   vertical-align: baseline;
 }
@@ -785,7 +792,7 @@ body[data-page-type="commonplace"] {
 
 #site-title {
   display: none;
-  font-family: 'Instrument Serif', serif;
+  font-family: 'Bebas Neue', sans-serif;
   font-size: 3rem;
   font-weight: 400;
   line-height: 1;
@@ -1139,13 +1146,17 @@ html.dark.theme-to-light .theme-icon--moon     { animation: theme-set  400ms bot
   cursor: pointer;
 }
 
-.share-btn {
+button.share-btn {
   font-size: 1rem;
   font-weight: 500;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1.25rem 0.5rem 1rem;
+  background: var(--gradient);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
 }
 
 .post-meta-footer {
@@ -1171,7 +1182,7 @@ html.dark.theme-to-light .theme-icon--moon     { animation: theme-set  400ms bot
   font-weight: bold;
   text-decoration: none;
   color: var(--text);
-  font-family: 'Instrument Serif', serif;
+  font-family: 'Bebas Neue', sans-serif;
   font-size: var(--fs-lg);
 }
 

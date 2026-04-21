@@ -6,13 +6,23 @@ slug: about
 
 ## The Basics
 
-I'm Andy Stevens is a technical writer, poet, and geek. I hold a B.A. in Creative Writing from Eckerd College in St. Petersburg, FL, and an M.F.A in Creative Writing from University of Tampa.
+I'm Andy Stevens, a technical and creative writer, a hobbyist developer, an aspiring designer, a neophyte cook, and in all things, a gleeful tinkerer. I've been creating websites since I downloaded an HTML handbook from Standford's servers in 1997, and I started writing as a blogging endeavor in 2001. With that said, I try not to spend all of my time online, but who among us can claim such a thing?
 
-My poetry and writing have been published (some) places, but the internet being what it is, not all of it still exists. I'm currently working on my first book-length collection of poems. If you're a friend or family member, or an editor, and would like an advanced copy of the collection-in-progress, please reach out.
+## What is this place?
+See *[digital garden](https://maggieappleton.com/garden-history)*, *[commonplace book](https://www.nytimes.com/2022/03/22/magazine/commonplace-books-recommendation.html)*, *public facing sandbox*, *blog*, *photo album*, *[code repository](https://github.com/resources/articles/what-are-code-repositories)*, etc.
+
+## Ars Mea / Poetica / Technica
+
+Spiritually, I love the form of things and the shaping part of the creative process. I love the way constraint burgeons creativity. Additions are necessary in finding solutions, but bring a sharp knife to pare back, and then pare back. In poetry I lean towards formalism and traditional verse; in design I love minimalism with bright characterful delights; in coding and data I love standards, portability, and reusability. From my perspective, the act of learning, of pulling apart, of undoing to understand, is a boundless endeavor full of diversion and returnal. But creating? Even in it's most basic context, order is a jagged, necessary complication that, if loved, only leads to frictionless uncomplication.
+
+## In the Public
+
+My poetry and writing have been published (some) places, but the internet being what it is, not all of it still exists online. Sorry for any broken links you find here, I'll try to keep on top of things. Art is funny in that, if you want to publish it somewhere important, you can't share it before it's published. So if you want to read some of my poems, and I certainly hope you do, contact me and I'll forward you a packet.
+
 
 ## Social Media
 
-I can be found on the following platforms:
+I'm not really a social media person. I'm syndicating this site a few places, but no hot takes (I promise). I can be found on the following platforms:
 
 - GitHub: [andystevensname](https://github.com/andystevensname)
 - Bluesky: [@andystevens.name](https://bsky.app/profile/andystevens.name)
