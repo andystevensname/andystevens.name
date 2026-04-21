@@ -1,7 +1,7 @@
 ---
 title: Kitchen Sink
 date: 2026-03-20
-published: true
+published: false
 tags: ['test', 'typography']
 description: "A test post containing every common Markdown element for styling purposes."
 quote: "This is a test post used to preview and refine the typographic styles across the site. It contains every common element you'd find in a real article."
