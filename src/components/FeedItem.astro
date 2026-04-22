@@ -25,7 +25,7 @@ const imgLoading = eager ? 'eager' : 'lazy';
 const imgFetchPriority = priority ? 'high' : undefined;
 ---
 
-<article class={`feed-item--${type} h-entry`} data-category={category ?? type}>
+<article class="h-entry" data-type={type} data-category={category ?? type}>
   <a href={url}><time datetime={date.toISOString()}>{formatDate(date)}</time></a>
   <div>
     <div class="feed-icon"><svg class="icon" width="20" height="20" aria-hidden="true"><use href={`/icons.svg#icon-${type}`}/></svg></div>

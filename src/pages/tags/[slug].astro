@@ -42,7 +42,7 @@ const { tag, items } = Astro.props;
   description={`All content tagged with ${tag}`}
 >
   <h1>#{tag}</h1>
-  <section class="recent-feed">
+  <section class="feed">
     {items.length > 0
       ? items.map((item) => <FeedItem {...item} />)
       : <p>Nothing found.</p>

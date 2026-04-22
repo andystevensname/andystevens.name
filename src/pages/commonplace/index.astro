@@ -23,7 +23,7 @@ const feed = sortByDate([
   title="Commonplace"
   description="Notes, bookmarks, likes, and replies collected from around the web."
 >
-  <h1 class="feed-item--commonplace">Commonplace</h1>
+  <h1 data-type="commonplace">Commonplace</h1>
 
   <div class="filter-container">
     <nav class="filter-bar" aria-label="Filter by type">
@@ -39,7 +39,7 @@ const feed = sortByDate([
       <label for="filter-reply" class="filter-btn">Replies</label>
     </nav>
 
-    <section class="recent-feed h-feed" id="commonplace-feed" aria-live="polite">
+    <section class="feed h-feed" id="commonplace-feed" aria-live="polite">
       <span class="p-name" style="display:none" aria-hidden="true">Andy Stevens — Commonplace</span>
       <a class="p-author h-card" href="https://andystevens.name" style="display:none" aria-hidden="true">Andy Stevens</a>
       {feed.length > 0

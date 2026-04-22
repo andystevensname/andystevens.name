@@ -268,7 +268,7 @@ main {
 }
 
 /* Subgrid participants — inherit column tracks from the parent grid */
-:is(article, #header, #photo-viewer, .recent-feed, .filter-container, .album-grid) {
+:is(article, #header, #photo-viewer, .feed, .filter-container, .album-grid) {
   display: grid;
   grid-template-columns: subgrid;
 }
@@ -357,17 +357,17 @@ h1 {
 /* h1 per-type gradients — handled by --gradient via body[data-page-type].
    Feed items on the homepage override --gradient locally since they each
    have their own content type regardless of the page-level palette. */
-h1.feed-item--article  { --gradient: var(--article-gradient); }
-h1.feed-item--photo,
-h1.feed-item--album    { --gradient: var(--media-gradient); }
-h1.feed-item--award,
-h1.feed-item--writing  { --gradient: var(--writing-gradient); }
-h1.feed-item--code     { --gradient: var(--code-gradient); }
-h1.feed-item--note,
-h1.feed-item--bookmark,
-h1.feed-item--like,
-h1.feed-item--reply,
-h1.feed-item--commonplace { --gradient: var(--social-gradient); }
+h1[data-type="article"]  { --gradient: var(--article-gradient); }
+h1[data-type="photo"],
+h1[data-type="album"]    { --gradient: var(--media-gradient); }
+h1[data-type="award"],
+h1[data-type="writing"]  { --gradient: var(--writing-gradient); }
+h1[data-type="code"]     { --gradient: var(--code-gradient); }
+h1[data-type="note"],
+h1[data-type="bookmark"],
+h1[data-type="like"],
+h1[data-type="reply"],
+h1[data-type="commonplace"] { --gradient: var(--social-gradient); }
 
 h2, h3, h4 {
   width: 100%;
@@ -601,8 +601,8 @@ a[href="#main-content"]:focus {
 }
 
 /* UI links: nav dialog */
-#nav-dialog a,
-#nav-dialog a:visited {
+#header-nav-dialog a,
+#header-nav-dialog a:visited {
   color: var(--text);
   text-decoration: none;
 }
@@ -614,21 +614,21 @@ a[href="#main-content"]:focus {
 }
 
 /* Timestamp links (feed items) */
-[class*="feed-item--"] > a:first-child,
-[class*="feed-item--"] > a:first-child:visited {
+[data-type] > a:first-child,
+[data-type] > a:first-child:visited {
   color: var(--c-gray-light);
   text-decoration: none;
 }
 
-[class*="feed-item--"] > a:first-child:hover,
-[class*="feed-item--"] > a:first-child:active {
+[data-type] > a:first-child:hover,
+[data-type] > a:first-child:active {
   color: var(--c-accent);
   text-decoration: none;
 }
 
 /* External link indicator */
 .e-content a[href^="http"]:not([href*="andystevens.name"]):not(.project-meta-bar-link)::after,
-[class*="feed-item--"] > div a[href^="http"]:not([href*="andystevens.name"])::after {
+[data-type] > div a[href^="http"]:not([href*="andystevens.name"])::after {
   content: '';
   display: inline-block;
   width: 0.75em;
@@ -828,7 +828,7 @@ body[data-page-type="commonplace"] {
   }
 }
 
-#open-nav-btn {
+#header-nav-dialog-open {
   grid-column: 1;
   cursor: pointer;
   color: var(--text);
@@ -841,7 +841,7 @@ body[data-page-type="commonplace"] {
 
 /* --- Navigation: mobile dialog --- */
 
-#nav-dialog {
+#header-nav-dialog {
   width: 15rem;
   height: 100%;
   max-height: 100%;
@@ -855,32 +855,32 @@ body[data-page-type="commonplace"] {
   transition: transform 300ms ease, display 300ms ease allow-discrete;
 }
 
-#nav-dialog[open] {
+#header-nav-dialog[open] {
   transform: translateX(0);
 }
 
 @starting-style {
-  #nav-dialog[open] {
+  #header-nav-dialog[open] {
     transform: translateX(-100%);
   }
 }
 
-#nav-dialog::backdrop {
+#header-nav-dialog::backdrop {
   background: rgba(0, 0, 0, 0);
   transition: background 300ms ease, display 300ms ease allow-discrete;
 }
 
-#nav-dialog[open]::backdrop {
+#header-nav-dialog[open]::backdrop {
   background: rgba(0, 0, 0, 0.3);
 }
 
 @starting-style {
-  #nav-dialog[open]::backdrop {
+  #header-nav-dialog[open]::backdrop {
     background: rgba(0, 0, 0, 0);
   }
 }
 
-#close-nav-btn {
+#header-nav-dialog-close {
   cursor: pointer;
   color: var(--text);
   margin: 12px 16px 8px;
@@ -889,14 +889,14 @@ body[data-page-type="commonplace"] {
   padding: 0;
 }
 
-#nav-dialog ul {
+#header-nav-dialog ul {
   width: 100%;
   list-style: none;
   padding: 0 1rem;
   margin: 0;
 }
 
-#nav-dialog ul li {
+#header-nav-dialog ul li {
   padding: 0;
   margin: 0;
   width: 100%;
@@ -905,11 +905,11 @@ body[data-page-type="commonplace"] {
   line-height: 3;
 }
 
-#nav-dialog ul li:first-child {
+#header-nav-dialog ul li:first-child {
   border-top: none;
 }
 
-#nav-dialog ul li a {
+#header-nav-dialog ul li a {
   width: 100%;
   display: block;
   text-decoration: none;
@@ -1185,7 +1185,7 @@ button.share-btn {
 
 /* --- Feed --- */
 
-article[class*="feed-item--"] {
+article[data-type] {
   grid-column: 1 / -1;
   align-items: start;
   padding: 0 0 1rem 0;
@@ -1199,13 +1199,13 @@ article[class*="feed-item--"] {
   }
 }
 
-[class*="feed-item--"] p {
+[data-type] p {
   margin: 0;
   padding: 0;
 }
 
 /* Feed icon wrapper sized to line-height so the svg stays small and centers on the first line */
-[class*="feed-item--"] .feed-icon {
+[data-type] .feed-icon {
   float: left;
   height: 1.5rem;
   display: flex;
@@ -1214,34 +1214,34 @@ article[class*="feed-item--"] {
   box-sizing: border-box;
 }
 
-.feed-item--like     { --c-icon: #E53935; }
-.feed-item--bookmark { --c-icon: #1E88E5; }
-.feed-item--note     { --c-icon: #FFA000; }
-.feed-item--reply    { --c-icon: #43A047; }
-.feed-item--article  { --c-icon: #E91E63; }
-.feed-item--writing  { --c-icon: #00897B; }
-.feed-item--award    { --c-icon: #FFB300; }
-.feed-item--code     { --c-icon: #00E676; }
-.feed-item--photo,
-.feed-item--album    { --c-icon: #8E24AA; }
-[class*="feed-item--"] .feed-icon svg { color: var(--c-icon); }
+[data-type="like"]     { --c-icon: #E53935; }
+[data-type="bookmark"] { --c-icon: #1E88E5; }
+[data-type="note"]     { --c-icon: #FFA000; }
+[data-type="reply"]    { --c-icon: #43A047; }
+[data-type="article"]  { --c-icon: #E91E63; }
+[data-type="writing"]  { --c-icon: #00897B; }
+[data-type="award"]    { --c-icon: #FFB300; }
+[data-type="code"]     { --c-icon: #00E676; }
+[data-type="photo"],
+[data-type="album"]    { --c-icon: #8E24AA; }
+[data-type] .feed-icon svg { color: var(--c-icon); }
 
 /* Content div spans all columns on mobile, timestamp drops below */
-[class*="feed-item--"] > div {
+[data-type] > div {
   grid-column: 1 / -1;
   min-width: 0;
 }
 
-[class*="feed-item--"] > div img {
+[data-type] > div img {
   width: 100%;
   height: auto;
 }
 
-[class*="feed-item--"] > div blockquote {
+[data-type] > div blockquote {
   margin: 0.5rem 0;
 }
 
-[class*="feed-item--"] > a:first-child {
+[data-type] > a:first-child {
   grid-column: 1 / -1;
   order: 3;
 }
@@ -1287,18 +1287,18 @@ article[class*="feed-item--"] {
   grid-column: 1 / -1;
 }
 
-.filter-container:has(#filter-all:checked) [class*="feed-item--"] { display: grid; }
+.filter-container:has(#filter-all:checked) [data-type] { display: grid; }
 
 /* Hide non-matching items when a specific filter is checked */
-.filter-container:has(#filter-note:checked) [class*="feed-item--"]:not([data-category="note"]),
-.filter-container:has(#filter-bookmark:checked) [class*="feed-item--"]:not([data-category="bookmark"]),
-.filter-container:has(#filter-like:checked) [class*="feed-item--"]:not([data-category="like"]),
-.filter-container:has(#filter-reply:checked) [class*="feed-item--"]:not([data-category="reply"]),
-.filter-container:has(#filter-poetry:checked) [class*="feed-item--"]:not([data-category="poetry"]),
-.filter-container:has(#filter-non-fiction:checked) [class*="feed-item--"]:not([data-category="non-fiction"]),
-.filter-container:has(#filter-fiction:checked) [class*="feed-item--"]:not([data-category="fiction"]),
-.filter-container:has(#filter-documentation:checked) [class*="feed-item--"]:not([data-category="documentation"]),
-.filter-container:has(#filter-award:checked) [class*="feed-item--"]:not([data-category="award"]) {
+.filter-container:has(#filter-note:checked) [data-type]:not([data-category="note"]),
+.filter-container:has(#filter-bookmark:checked) [data-type]:not([data-category="bookmark"]),
+.filter-container:has(#filter-like:checked) [data-type]:not([data-category="like"]),
+.filter-container:has(#filter-reply:checked) [data-type]:not([data-category="reply"]),
+.filter-container:has(#filter-poetry:checked) [data-type]:not([data-category="poetry"]),
+.filter-container:has(#filter-non-fiction:checked) [data-type]:not([data-category="non-fiction"]),
+.filter-container:has(#filter-fiction:checked) [data-type]:not([data-category="fiction"]),
+.filter-container:has(#filter-documentation:checked) [data-type]:not([data-category="documentation"]),
+.filter-container:has(#filter-award:checked) [data-type]:not([data-category="award"]) {
   display: none;
 }
 
@@ -1603,7 +1603,7 @@ article[class*="feed-item--"] {
   }
 
   .title-text-mobile { display: none; }
-  #open-nav-btn { display: none; }
+  #header-nav-dialog-open { display: none; }
 
   h1 {
     text-align: left;
@@ -1681,12 +1681,12 @@ article[class*="feed-item--"] {
   }
 
   /* Feed items capped to 4 content columns regardless of viewport */
-  article[class*="feed-item--"] {
+  article[data-type] {
     grid-column: 1 / span 4;
   }
 
-  [class*="feed-item--"] > div,
-  [class*="feed-item--"] > a:first-child {
+  [data-type] > div,
+  [data-type] > a:first-child {
     grid-column: 1 / -1;
   }
 }

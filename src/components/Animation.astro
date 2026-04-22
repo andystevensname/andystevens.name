@@ -19,7 +19,7 @@
       </path>
     </svg>
   </div>
-  <div id="canvas-container"></div>
+  <div id="animation-canvas"></div>
 </div>
 
 <style>
@@ -33,7 +33,7 @@
   display: none;
 }
 
-#canvas-container {
+#animation-canvas {
   width: 100%;
   height: 100%;
   position: relative;
@@ -44,10 +44,10 @@
 </style>
 
 <script>
-const canvasContainer = document.getElementById('canvas-container');
+const animationCanvas = document.getElementById('animation-canvas');
 const gearsContainer = document.getElementById('gears');
 
-if (canvasContainer && gearsContainer) {
+if (animationCanvas && gearsContainer) {
   const loadAnimation = async () => {
     const { svgEl, SVG_NS, createBeams, createPoetry, createGears } =
       await import('../lib/animation/index.js');
@@ -60,7 +60,7 @@ if (canvasContainer && gearsContainer) {
     svg.style.top = '0';
     svg.style.left = '0';
     svg.style.overflow = 'visible';
-    canvasContainer.appendChild(svg);
+    animationCanvas.appendChild(svg);
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -87,8 +87,8 @@ if (canvasContainer && gearsContainer) {
       // Clear previous content
       while (svg.firstChild) svg.removeChild(svg.firstChild);
 
-      const w = canvasContainer!.clientWidth;
-      const h = canvasContainer!.clientHeight;
+      const w = animationCanvas!.clientWidth;
+      const h = animationCanvas!.clientHeight;
       svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
 
       background = svgEl<SVGGElement>('g');

@@ -38,7 +38,7 @@ const recent = feed.slice(0, 20);
   <section class="intro">
     <h1>Recent</h1>
   </section>
-  <section class="recent-feed h-feed">
+  <section class="feed h-feed">
     <span class="p-name" style="display:none" aria-hidden="true">Andy Stevens</span>
     <a class="p-author h-card" href="https://andystevens.name" style="display:none" aria-hidden="true">Andy Stevens</a>
     {recent.map((item) => <FeedItem {...item} />)}

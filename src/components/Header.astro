@@ -21,7 +21,7 @@ function isCurrent(href: string): boolean {
 
 <header id="header">
   <!-- Mobile: hamburger -->
-  <button id="open-nav-btn" aria-label="Open navigation" aria-expanded="false" aria-controls="nav-dialog">
+  <button id="header-nav-dialog-open" aria-label="Open navigation" aria-expanded="false" aria-controls="header-nav-dialog">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5H21"/><path d="M3 12H21"/><path d="M3 19H21"/></svg>
   </button>
 
@@ -64,8 +64,8 @@ function isCurrent(href: string): boolean {
       lastScroll = currentScroll;
     }, { signal });
 
-    document.getElementById('open-nav-btn')?.addEventListener('click', () => {
-      document.dispatchEvent(new CustomEvent('open-nav'));
+    document.getElementById('header-nav-dialog-open')?.addEventListener('click', () => {
+      document.dispatchEvent(new CustomEvent('open-header-nav'));
     }, { signal });
   });
 </script>

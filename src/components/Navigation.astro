@@ -18,9 +18,9 @@ function isCurrent(href: string): boolean {
 ---
 
 <!-- Mobile: dialog-based slide-in nav -->
-<dialog id="nav-dialog" aria-label="Main navigation">
+<dialog id="header-nav-dialog" aria-label="Main navigation">
   <nav>
-    <button id="close-nav-btn" aria-label="Close navigation">
+    <button id="header-nav-dialog-close" aria-label="Close navigation">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6.758 17.243L12 12M17.243 6.757L12 12M12 12L6.758 6.757M12 12L17.243 17.243"/></svg>
     </button>
     <ul>
@@ -48,12 +48,12 @@ function isCurrent(href: string): boolean {
     navController = new AbortController();
     const { signal } = navController;
 
-    const dialog = document.getElementById('nav-dialog') as HTMLDialogElement | null;
-    const closeBtn = document.getElementById('close-nav-btn') as HTMLButtonElement | null;
-    const openBtn = document.getElementById('open-nav-btn') as HTMLButtonElement | null;
+    const dialog = document.getElementById('header-nav-dialog') as HTMLDialogElement | null;
+    const closeBtn = document.getElementById('header-nav-dialog-close') as HTMLButtonElement | null;
+    const openBtn = document.getElementById('header-nav-dialog-open') as HTMLButtonElement | null;
 
     // Open
-    document.addEventListener('open-nav', () => {
+    document.addEventListener('open-header-nav', () => {
       dialog?.showModal();
     }, { signal });
 

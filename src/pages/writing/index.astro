@@ -18,7 +18,7 @@ const categories = [...new Set(writing.map((w) => w.data.category))].sort();
 ---
 
 <Layout title="Writing" description="Publications, writing, and awards.">
-  <h1 class="feed-item--writing">Writing</h1>
+  <h1 data-type="writing">Writing</h1>
 
   <div class="filter-container">
     <nav class="filter-bar" aria-label="Filter by category">
@@ -34,7 +34,7 @@ const categories = [...new Set(writing.map((w) => w.data.category))].sort();
       <label for="filter-award" class="filter-btn">Awards</label>
     </nav>
 
-    <section class="recent-feed" id="writing-feed" aria-live="polite">
+    <section class="feed" id="writing-feed" aria-live="polite">
       {feed.length > 0
         ? feed.map((item) => <FeedItem {...item} />)
         : <p>Nothing here yet.</p>

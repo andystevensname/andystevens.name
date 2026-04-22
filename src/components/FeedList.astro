@@ -6,14 +6,14 @@ interface Props {
   title: string;
   feed: FeedItemData[];
   emptyMessage?: string;
-  class?: string;
+  type?: FeedItemData['type'];
 }
 
-const { title, feed, emptyMessage = 'Nothing here yet.', class: h1Class = '' } = Astro.props;
+const { title, feed, emptyMessage = 'Nothing here yet.', type } = Astro.props;
 ---
 
-<h1 class={h1Class}>{title}</h1>
-<section class="recent-feed h-feed">
+<h1 data-type={type}>{title}</h1>
+<section class="feed h-feed">
   <span class="p-name" style="display:none" aria-hidden="true">Andy Stevens — {title}</span>
   <a class="p-author h-card" href="https://andystevens.name" style="display:none" aria-hidden="true" tabindex="-1">Andy Stevens</a>
   {feed.length > 0
