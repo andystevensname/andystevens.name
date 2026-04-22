@@ -32,11 +32,11 @@ const tags = post.data.tags ?? [];
       <use href="/icons.svg#icon-share-ios" />
     </svg>
   </button>
-  <div id="share-popover" popover class="share-popover">
-    <label for="share-link-input">Share</label>
+  <section id="share-popover" popover class="share-popover" aria-labelledby="share-popover-label">
+    <label id="share-popover-label" for="share-link-input">Share</label>
     <input id="share-link-input" type="text" value="" readonly />
     <button id="copy-link-btn" type="button">Copy Link</button>
-  </div>
+  </section>
 </footer>
 <script>
   function setupShareButton() {

@@ -129,25 +129,21 @@ const structuredData = jsonLd ?? defaultJsonLd;
       <a class="u-url" href="https://github.com/andystevensname" rel="me" tabindex="-1">GitHub</a>
       <a class="u-url" href="https://bsky.app/profile/andystevens.name" rel="me" tabindex="-1">Bluesky</a>
     </div>
-    <div id="content">
-      <Header />
-      <Navigation />
-      <main id="site-layout">
-        <div id="site-title" aria-hidden="true"><span>Andy</span> <span>Makes</span> <span>Things</span></div>
-        <div id="site-sidebar" aria-hidden="true" transition:persist="sidebar">
-          <Animation />
-        </div>
-        <section id="main-content">
-          <slot />
-        </section>
-      </main>
-      <footer id="footer">
-        &copy; 2021&ndash;{currentYear} Andy Stevens
-        <span aria-hidden="true">&middot;</span>
-        <a rel="me" href="https://github.com/andystevensname">GitHub</a>
-        <span aria-hidden="true">&middot;</span>
-        <a rel="me" href="https://bsky.app/profile/andystevens.name">Bluesky</a>
-      </footer>
-    </div>
+    <Header />
+    <Navigation />
+    <main id="site-layout">
+      <div id="site-title" aria-hidden="true"><span>Andy</span> <span>Makes</span> <span>Things</span></div>
+      <div id="site-sidebar" aria-hidden="true" transition:persist="sidebar">
+        <Animation />
+      </div>
+      <section id="main-content">
+        <slot />
+      </section>
+    </main>
+    <footer id="footer">
+      <span>&copy; 2021&ndash;{currentYear} Andy Stevens</span>
+      <a rel="me" href="https://github.com/andystevensname">GitHub</a>
+      <a rel="me" href="https://bsky.app/profile/andystevens.name">Bluesky</a>
+    </footer>
   </body>
 </html>
