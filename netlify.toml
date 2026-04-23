@@ -43,12 +43,60 @@
   to = "/articles/"
   status = 301
 
+  # Route the pretty URLs ActivityPub expects to our functions.
+# Netlify Functions v2 supports config exports for routing, but explicit
+# redirects in netlify.toml are the most portable approach and work with
+# any Astro adapter setup.
+
 [[redirects]]
-  from = "/.well-known/host-meta*"
-  to = "https://fed.brid.gy/.well-known/host-meta:splat"
-  status = 302
-  
+  from = "/.well-known/webfinger"
+  to = "/.netlify/functions/webfinger"
+  status = 200
+  force = true
+
 [[redirects]]
-  from = "/.well-known/webfinger*"
-  to = "https://fed.brid.gy/.well-known/webfinger"
-  status = 302
+  from = "/.well-known/nodeinfo"
+  to = "/.netlify/functions/nodeinfo"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/ap/actor"
+  to = "/.netlify/functions/actor"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/ap/inbox"
+  to = "/.netlify/functions/inbox"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/ap/outbox"
+  to = "/.netlify/functions/outbox"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/ap/followers"
+  to = "/.netlify/functions/followers"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/ap/notes/:slug"
+  to = "/.netlify/functions/note?slug=:slug"
+  status = 200
+  force = true
+
+# Deliver endpoint, protected by shared secret header
+[[redirects]]
+  from = "/api/deliver"
+  to = "/.netlify/functions/deliver"
+  status = 200
+  force = true
+
+[functions]
+  # Node 20+ gives us the modern Web Crypto API we use for signatures
+  node_bundler = "esbuild"
