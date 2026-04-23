@@ -12,6 +12,7 @@
     "@andystevensname/remark-poem-element": "^1.1.1",
     "@andystevensname/remark-project-meta-bar": "^1.1.3",
     "@astrojs/rss": "^4.0.16",
+    "@netlify/blobs": "^10.7.4",
     "astro": "^5.0.0",
     "marked": "^17.0.5",
     "remark-directive": "^4.0.0",
