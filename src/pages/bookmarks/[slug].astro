@@ -4,6 +4,7 @@ import Layout from '../../layouts/Layout.astro';
 import HEntryMeta from '../../components/HEntryMeta.astro';
 import PostMeta from '../../components/PostMeta.astro';
 import Webmentions from '../../components/Webmentions.astro';
+import { apAlternateLink } from '../../lib/ap-link.mjs';
 
 export async function getStaticPaths() {
   const bookmarks = await getCollection('bookmarks');
@@ -16,12 +17,14 @@ export async function getStaticPaths() {
 const { bookmark } = Astro.props;
 const { Content } = await render(bookmark);
 const bookmarkUrl = new URL(`/bookmarks/${bookmark.id}/`, Astro.site).href;
+const apLink = apAlternateLink('bookmarks', bookmark, Astro.site);
 ---
 
 <Layout
   title={bookmark.data.title ?? 'Bookmark'}
   description={`Bookmark of ${bookmark.data.bookmark_of}`}
   canonical={bookmarkUrl}
+  extraHead={apLink}
 >
   <article class="h-entry">
     {bookmark.data.title && <h1 class="p-name">{bookmark.data.title}</h1>}

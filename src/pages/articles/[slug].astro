@@ -4,6 +4,7 @@ import Layout from '../../layouts/Layout.astro';
 import HEntryMeta from '../../components/HEntryMeta.astro';
 import PostMeta from '../../components/PostMeta.astro';
 import Webmentions from '../../components/Webmentions.astro';
+import { apAlternateLink } from '../../lib/ap-link.mjs';
 
 
 export async function getStaticPaths() {
@@ -17,6 +18,7 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await render(post);
 const postUrl = new URL(`/articles/${post.id}/`, Astro.site).href;
+const apLink = apAlternateLink('articles', post, Astro.site);
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -45,6 +47,7 @@ const jsonLd = {
   canonical={postUrl}
   ogType="article"
   jsonLd={jsonLd}
+  extraHead={apLink}
 >
   <article class="h-entry">
     <h1 class="p-name">{post.data.title}</h1>

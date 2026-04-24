@@ -4,6 +4,7 @@ import Layout from '../../layouts/Layout.astro';
 import HEntryMeta from '../../components/HEntryMeta.astro';
 import PostMeta from '../../components/PostMeta.astro';
 import Webmentions from '../../components/Webmentions.astro';
+import { apAlternateLink } from '../../lib/ap-link.mjs';
 
 export async function getStaticPaths() {
   const albums = await getCollection('albums');
@@ -16,6 +17,7 @@ export async function getStaticPaths() {
 const { album } = Astro.props;
 const { Content } = await render(album);
 const albumUrl = new URL(`/albums/${album.id}/`, Astro.site).href;
+const apLink = apAlternateLink('albums', album, Astro.site);
 
 // Get all photos that belong to this album
 const allPhotos = await getCollection('photos', ({ data }) => {
@@ -34,6 +36,7 @@ allPhotos.sort((a, b) => {
   title={album.data.title}
   description={album.data.description ?? `Photo album: ${album.data.title}`}
   canonical={albumUrl}
+  extraHead={apLink}
 >
   <article class="h-entry">
     <h1 class="p-name">{album.data.title}</h1>

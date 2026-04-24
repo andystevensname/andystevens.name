@@ -4,6 +4,7 @@ import Layout from '../../layouts/Layout.astro';
 import HEntryMeta from '../../components/HEntryMeta.astro';
 import PostMeta from '../../components/PostMeta.astro';
 import Webmentions from '../../components/Webmentions.astro';
+import { apAlternateLink } from '../../lib/ap-link.mjs';
 
 export async function getStaticPaths() {
   const notes = await getCollection('notes');
@@ -16,12 +17,14 @@ export async function getStaticPaths() {
 const { note } = Astro.props;
 const { Content } = await render(note);
 const noteUrl = new URL(`/notes/${note.id}/`, Astro.site).href;
+const apLink = apAlternateLink('notes', note, Astro.site);
 ---
 
 <Layout
   title="Note"
   description="A short note."
   canonical={noteUrl}
+  extraHead={apLink}
 >
   <article class="h-entry">
     <HEntryMeta url={noteUrl} date={note.data.date} syndication={note.data.syndication} />

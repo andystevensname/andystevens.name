@@ -4,6 +4,7 @@ import Layout from '../../layouts/Layout.astro';
 import HEntryMeta from '../../components/HEntryMeta.astro';
 import PostMeta from '../../components/PostMeta.astro';
 import Webmentions from '../../components/Webmentions.astro';
+import { apAlternateLink } from '../../lib/ap-link.mjs';
 
 export async function getStaticPaths() {
   const likes = await getCollection('likes');
@@ -16,12 +17,14 @@ export async function getStaticPaths() {
 const { like } = Astro.props;
 const { Content } = await render(like);
 const likeUrl = new URL(`/likes/${like.id}/`, Astro.site).href;
+const apLink = apAlternateLink('likes', like, Astro.site);
 ---
 
 <Layout
   title="Like"
   description={`Liked ${like.data.like_of}`}
   canonical={likeUrl}
+  extraHead={apLink}
 >
   <article class="h-entry">
     <HEntryMeta url={likeUrl} date={like.data.date} syndication={like.data.syndication} />

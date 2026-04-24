@@ -4,6 +4,7 @@ import Layout from '../../layouts/Layout.astro';
 import HEntryMeta from '../../components/HEntryMeta.astro';
 import PostMeta from '../../components/PostMeta.astro';
 import Webmentions from '../../components/Webmentions.astro';
+import { apAlternateLink } from '../../lib/ap-link.mjs';
 
 export async function getStaticPaths() {
   const replies = await getCollection('replies');
@@ -16,12 +17,14 @@ export async function getStaticPaths() {
 const { reply } = Astro.props;
 const { Content } = await render(reply);
 const replyUrl = new URL(`/replies/${reply.id}/`, Astro.site).href;
+const apLink = apAlternateLink('replies', reply, Astro.site);
 ---
 
 <Layout
   title="Reply"
   description={`Reply to ${reply.data.in_reply_to}`}
   canonical={replyUrl}
+  extraHead={apLink}
 >
   <article class="h-entry">
     <HEntryMeta url={replyUrl} date={reply.data.date} syndication={reply.data.syndication} />

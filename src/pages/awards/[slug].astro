@@ -4,6 +4,7 @@ import Layout from '../../layouts/Layout.astro';
 import HEntryMeta from '../../components/HEntryMeta.astro';
 import PostMeta from '../../components/PostMeta.astro';
 import Webmentions from '../../components/Webmentions.astro';
+import { apAlternateLink } from '../../lib/ap-link.mjs';
 
 export async function getStaticPaths() {
   const awards = await getCollection('awards');
@@ -16,12 +17,14 @@ export async function getStaticPaths() {
 const { award } = Astro.props;
 const { Content } = await render(award);
 const awardUrl = new URL(`/awards/${award.id}/`, Astro.site).href;
+const apLink = apAlternateLink('awards', award, Astro.site);
 ---
 
 <Layout
   title={award.data.title}
   description={`${award.data.title}${award.data.issuer ? ` from ${award.data.issuer}` : ''}`}
   canonical={awardUrl}
+  extraHead={apLink}
 >
   <article class="h-entry">
     <h1 class="p-name">{award.data.title}</h1>

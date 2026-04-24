@@ -5,6 +5,7 @@ import HEntryMeta from '../../components/HEntryMeta.astro';
 import Webmentions from '../../components/Webmentions.astro';
 import PhotoNav from '../../components/PhotoNav.astro';
 import { formatDate } from '../../lib/date';
+import { apAlternateLink } from '../../lib/ap-link.mjs';
 
 export async function getStaticPaths() {
   const photos = await getCollection('photos');
@@ -17,6 +18,7 @@ export async function getStaticPaths() {
 const { photo } = Astro.props;
 const { Content } = await render(photo);
 const photoUrl = new URL(`/photos/${photo.id}/`, Astro.site).href;
+const apLink = apAlternateLink('photos', photo, Astro.site);
 const photoSrcs = Array.isArray(photo.data.photo) ? photo.data.photo : [photo.data.photo];
 const dateStr = photo.data.date ? formatDate(new Date(photo.data.date)) : '';
 const isoDate = photo.data.date?.toISOString() ?? '';
@@ -27,6 +29,7 @@ const tags = photo.data.tags ?? [];
   title={photo.data.title ?? 'Photo'}
   description={photo.data.alt ?? 'A photo post'}
   canonical={photoUrl}
+  extraHead={apLink}
 >
   <article class="h-entry">
     {photo.data.title && <h1 class="p-name sr-only">{photo.data.title}</h1>}
