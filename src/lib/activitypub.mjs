@@ -1,5 +1,4 @@
-// Builders for the JSON shapes Mastodon expects.
-// Keep these pure - they take data, return objects.
+// Builders for the JSON shapes Mastodon expects. Multi-collection aware.
 
 const CONTEXT = [
   'https://www.w3.org/ns/activitystreams',
@@ -43,7 +42,6 @@ export function buildActor() {
     inbox: c.inboxUrl,
     outbox: c.outboxUrl,
     followers: c.followersUrl,
-    // Mastodon likes seeing this even if we don't process outgoing follows
     following: `${c.base}/ap/following`,
     icon: c.iconUrl
       ? { type: 'Image', mediaType: 'image/jpeg', url: c.iconUrl }
@@ -53,7 +51,6 @@ export function buildActor() {
       owner: c.actorUrl,
       publicKeyPem: c.publicKey,
     },
-    // Mastodon-flavored extras that improve discovery
     manuallyApprovesFollowers: false,
     discoverable: true,
     indexable: true,
@@ -78,60 +75,6 @@ export function buildWebFinger(resource) {
   };
 }
 
-/**
- * Build a Note (or Article) for a blog post.
- * @param {object} post - { slug, title, html, published, url }
- */
-export function buildNote(post) {
-  const c = config();
-  const id = `${c.base}/ap/notes/${post.slug}`;
-  // Use Note for microblog-style posts, Article for full blog posts.
-  // Mastodon renders both; Article gets a "read more" treatment on long content.
-  const type = post.title ? 'Article' : 'Note';
-  return {
-    '@context': CONTEXT,
-    id,
-    type,
-    attributedTo: c.actorUrl,
-    to: ['https://www.w3.org/ns/activitystreams#Public'],
-    cc: [c.followersUrl],
-    published: post.published,
-    url: post.url,
-    name: post.title,
-    content: post.html,
-    mediaType: 'text/html',
-    source: post.markdown
-      ? { content: post.markdown, mediaType: 'text/markdown' }
-      : undefined,
-    attachment: [],
-    tag: (post.tags || []).map((t) => ({
-      type: 'Hashtag',
-      name: `#${t}`,
-      href: `${c.base}/tags/${t}`,
-    })),
-  };
-}
-
-/**
- * Wrap a Note in a Create activity for delivery.
- */
-export function buildCreateActivity(note) {
-  const c = config();
-  return {
-    '@context': CONTEXT,
-    id: `${note.id}/activity`,
-    type: 'Create',
-    actor: c.actorUrl,
-    published: note.published,
-    to: note.to,
-    cc: note.cc,
-    object: note,
-  };
-}
-
-/**
- * Build an Accept response to a Follow request.
- */
 export function buildAcceptActivity(followActivity) {
   const c = config();
   return {
@@ -141,4 +84,119 @@ export function buildAcceptActivity(followActivity) {
     actor: c.actorUrl,
     object: followActivity,
   };
+}
+
+// The AP object id points at /ap/objects/:collection/:slug — a Netlify
+// function that returns AP JSON. The web URL points at the HTML page. They
+// must be distinct because static HTML can't do content negotiation.
+export function buildFromManifestItem(item) {
+  const c = config();
+
+  if (item.apType === 'Like') {
+    return { object: null, activity: null, likeTarget: item.likeTarget };
+  }
+
+  const objectId = `${c.base}/ap/objects/${item.collection}/${item.slug}`;
+
+  const object = {
+    '@context': CONTEXT,
+    id: objectId,
+    type: item.apType,
+    attributedTo: c.actorUrl,
+    to: ['https://www.w3.org/ns/activitystreams#Public'],
+    cc: [c.followersUrl],
+    published: item.published,
+    url: item.url,
+    content: buildContent(item),
+    mediaType: 'text/html',
+    attachment: buildAttachments(item),
+    tag: buildTags(item, c),
+  };
+
+  if (item.title) object.name = item.title;
+  if (item.summary) object.summary = item.summary;
+  if (item.markdown) {
+    object.source = { content: item.markdown, mediaType: 'text/markdown' };
+  }
+  if (item.inReplyTo) object.inReplyTo = item.inReplyTo;
+
+  const activity = {
+    '@context': CONTEXT,
+    id: `${objectId}/activity`,
+    type: 'Create',
+    actor: c.actorUrl,
+    published: item.published,
+    to: object.to,
+    cc: object.cc,
+    object,
+  };
+
+  return { object, activity };
+}
+
+export function buildLikeActivity(item, targetId) {
+  const c = config();
+  return {
+    '@context': CONTEXT,
+    id: `${c.base}/ap/objects/likes/${item.slug}/activity`,
+    type: 'Like',
+    actor: c.actorUrl,
+    object: targetId,
+    published: item.published,
+  };
+}
+
+function buildContent(item) {
+  // For items with an external link (bookmarks, writing), append it to the
+  // rendered body unless it's already in there.
+  if (item.externalLink && !(item.html || '').includes(item.externalLink)) {
+    const linkHtml = `<p><a href="${escapeHtml(item.externalLink)}">${escapeHtml(item.externalLink)}</a></p>`;
+    return (item.html || '') + linkHtml;
+  }
+  return item.html || '';
+}
+
+function buildAttachments(item) {
+  if (!item.images || !item.images.length) return [];
+  const c = config();
+  return item.images.map((img) => {
+    const url = img.startsWith('http') ? img : `${c.base}${img}`;
+    return {
+      type: 'Image',
+      mediaType: guessMediaType(url),
+      url,
+      // Mastodon uses `name` as alt text.
+      name: item.summary || item.title || '',
+    };
+  });
+}
+
+function buildTags(item, c) {
+  return (item.tags || []).map((t) => ({
+    type: 'Hashtag',
+    name: `#${t}`,
+    href: `${c.base}/tags/${t}`,
+  }));
+}
+
+function guessMediaType(url) {
+  const ext = url.toLowerCase().split('.').pop();
+  return (
+    {
+      jpg: 'image/jpeg',
+      jpeg: 'image/jpeg',
+      png: 'image/png',
+      gif: 'image/gif',
+      webp: 'image/webp',
+      avif: 'image/avif',
+    }[ext] || 'image/jpeg'
+  );
+}
+
+function escapeHtml(s) {
+  return s
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;');
 }

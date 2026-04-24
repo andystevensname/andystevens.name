@@ -97,6 +97,20 @@
   status = 200
   force = true
 
+[[redirects]]
+  from = "/ap/objects/:collection/:slug"
+  to = "/.netlify/functions/note?slug=:slug&collection=:collection"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/nodeinfo/2.0"
+  to = "/.netlify/functions/nodeinfo"
+  status = 200
+  force = true
+
 [functions]
   # Node 20+ gives us the modern Web Crypto API we use for signatures
   node_bundler = "esbuild"
+  # Bundle the manifest so functions can read it at runtime
+  included_files = ["data/posts.json"]

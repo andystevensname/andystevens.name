@@ -118,6 +118,7 @@ const awards = defineCollection({
     issuer: z.string().optional(),
     date: z.coerce.date().optional(),
     published: z.boolean().optional().default(true),
+    syndication,
     slug: z.string().optional(),
   }),
 });
