@@ -8,8 +8,25 @@ import { dirname, join } from 'node:path';
 
 export default async (request) => {
   const url = new URL(request.url);
-  const slug = url.searchParams.get('slug');
-  const collection = url.searchParams.get('collection');
+
+  // Accept both path-based routing (/ap/objects/:collection/:slug or
+  // /ap/notes/:slug, legacy) and query-string form (?slug=&collection=),
+  // since Netlify's placeholder substitution into `to` query strings has
+  // proven unreliable in practice.
+  let slug = url.searchParams.get('slug');
+  let collection = url.searchParams.get('collection');
+
+  if (!slug) {
+    const objects = url.pathname.match(/^\/ap\/objects\/([^/]+)\/([^/]+)\/?$/);
+    const legacy = url.pathname.match(/^\/ap\/notes\/([^/]+)\/?$/);
+    if (objects) {
+      collection = objects[1];
+      slug = objects[2];
+    } else if (legacy) {
+      slug = legacy[1];
+    }
+  }
+
   if (!slug) return new Response('missing slug', { status: 400 });
 
   let posts = [];
