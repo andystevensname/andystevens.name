@@ -5,7 +5,8 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build && node scripts/copy-manifest.mjs",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "install:clean": "rm -rf node_modules/@andystevensname && npm install && npm link @andystevensname/poem-element @andystevensname/remark-poem-element @andystevensname/remark-project-meta-bar"
   },
   "dependencies": {
     "@andystevensname/poem-element": "^1.0.3",
