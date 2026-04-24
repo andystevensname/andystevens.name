@@ -5,6 +5,20 @@ const CONTEXT = [
   'https://w3id.org/security/v1',
 ];
 
+// PEM keys pasted into Netlify's env-var UI commonly arrive with literal
+// "\n" sequences instead of real newlines, or with leading whitespace on
+// each line. Both break `createSign`/`createVerify` silently — signatures
+// are produced but fail to verify remotely. Normalize once, here.
+function normalizePem(pem) {
+  if (!pem) return pem;
+  return pem
+    .replace(/\\n/g, '\n')
+    .split('\n')
+    .map((line) => line.trim())
+    .filter((line, i, arr) => line || (i > 0 && i < arr.length - 1))
+    .join('\n');
+}
+
 export function config() {
   const domain = process.env.AP_DOMAIN;
   const username = process.env.AP_USERNAME;
@@ -24,8 +38,8 @@ export function config() {
     displayName: process.env.AP_DISPLAY_NAME || username,
     summary: process.env.AP_SUMMARY || '',
     iconUrl: process.env.AP_ICON_URL,
-    publicKey: process.env.AP_PUBLIC_KEY,
-    privateKey: process.env.AP_PRIVATE_KEY,
+    publicKey: normalizePem(process.env.AP_PUBLIC_KEY),
+    privateKey: normalizePem(process.env.AP_PRIVATE_KEY),
   };
 }
 

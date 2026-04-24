@@ -98,7 +98,11 @@ export default async (request) => {
         keyId: c.keyId,
       });
       const res = await fetch(inbox, { method: 'POST', headers, body });
-      return { inbox, status: res.status };
+      const responseBody = await res.text().catch(() => '');
+      if (res.status >= 300) {
+        console.warn(`deliver ${inbox} → ${res.status}: ${responseBody.slice(0, 500)}`);
+      }
+      return { inbox, status: res.status, body: responseBody.slice(0, 500) };
     })
   );
 
@@ -106,6 +110,10 @@ export default async (request) => {
     (r) => r.status === 'fulfilled' && r.value.status < 300
   ).length;
   const failed = results.length - succeeded;
+
+  const failures = results
+    .map((r) => (r.status === 'fulfilled' ? r.value : { error: String(r.reason) }))
+    .filter((r) => r.error || r.status >= 300);
 
   return new Response(
     JSON.stringify({
@@ -115,6 +123,7 @@ export default async (request) => {
       delivered: succeeded,
       failed,
       total: results.length,
+      failures,
     }),
     { headers: { 'Content-Type': 'application/json' } }
   );
