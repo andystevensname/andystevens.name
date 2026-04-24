@@ -66,10 +66,13 @@ function parseGeo(geo) {
 
 function escapeYaml(str) {
   if (!str) return '""';
-  if (str.includes('"') || str.includes(':') || str.includes('#') || str.includes('\n')) {
-    return `"${str.replace(/"/g, '\\"')}"`;
-  }
-  return `"${str}"`;
+  const escaped = str
+    .replace(/\\/g, '\\\\')
+    .replace(/"/g, '\\"')
+    .replace(/\n/g, '\\n')
+    .replace(/\r/g, '\\r')
+    .replace(/\t/g, '\\t');
+  return `"${escaped}"`;
 }
 
 async function main() {
