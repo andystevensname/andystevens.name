@@ -16,6 +16,22 @@
   line-gap-override: 0%;
 }
 
+/* Cross-platform fallback used until Bebas Neue loads. We map system
+   condensed faces under one family name and force the same metric
+   overrides as Bebas Neue, so the swap-in happens without layout shift.
+   `size-adjust: 95%` is hand-tuned to roughly match Bebas's glyph height
+   across the listed faces; nudge if you see a visible jump on swap. */
+@font-face {
+  font-family: 'Bebas Fallback';
+  src: local('Impact'), local('Helvetica Neue Condensed Bold'),
+       local('HelveticaNeue-CondensedBold'), local('Roboto Condensed'),
+       local('Arial Narrow Bold'), local('Arial Narrow');
+  size-adjust: 95%;
+  ascent-override: 72%;
+  descent-override: 28%;
+  line-gap-override: 0%;
+}
+
 /* ============================================
    RESET
    ============================================ */
@@ -244,7 +260,7 @@ body::before {
 
 body::after {
   content: '';
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: var(--z-below);
   pointer-events: none;
@@ -253,6 +269,11 @@ body::after {
   -webkit-mask-image: linear-gradient(to bottom, transparent, black);
   mask-image: linear-gradient(to bottom, transparent, black);
   opacity: 0.4;
+  min-height: 100%;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
 }
 
 html::after {
@@ -333,7 +354,7 @@ article {
    ============================================ */
 
 h1 {
-  font-family: 'Bebas Neue', sans-serif;
+  font-family: 'Bebas Neue', 'Bebas Fallback', sans-serif;
   font-weight: 400;
   font-size: clamp(2.5rem, 5vw, 4rem);
   line-height: 1.1;
@@ -396,16 +417,6 @@ p {
   width: 100%;
   padding: 0;
   margin: 0 0 1rlh 0;
-}
-
-.intro h1 {
-  margin-right: 0.5rem;
-  vertical-align: baseline;
-}
-
-.intro p {
-  display: inline;
-  font-size: var(--fs-md);
 }
 
 ul {
@@ -637,8 +648,8 @@ a[href="#main-content"]:focus {
 }
 
 /* External link indicator */
-.e-content a[href^="http"]:not([href*="andystevens.name"]):not(.project-meta-bar-link)::after,
-[data-type] > div a[href^="http"]:not([href*="andystevens.name"])::after {
+.e-content a[href^="http"]:not([href^="https://andystevens.name"]):not([href^="http://andystevens.name"]):not([href^="https://media.andystevens.name"]):not([href^="http://media.andystevens.name"]):not(.project-meta-bar-link)::after,
+[data-type] > div a[href^="http"]:not([href^="https://andystevens.name"]):not([href^="http://andystevens.name"]):not([href^="https://media.andystevens.name"]):not([href^="http://media.andystevens.name"])::after {
   content: '';
   display: inline-block;
   width: 0.75em;
@@ -777,7 +788,7 @@ body[data-page-type="commonplace"] {
 
 #site-title {
   display: none;
-  font-family: 'Bebas Neue', sans-serif;
+  font-family: 'Bebas Neue', 'Bebas Fallback', sans-serif;
   font-size: 3rem;
   font-weight: 400;
   line-height: 1;
@@ -1155,7 +1166,7 @@ button.share-btn {
   justify-self: center;
   text-decoration: none;
   color: var(--text);
-  font-family: 'Bebas Neue', sans-serif;
+  font-family: 'Bebas Neue', 'Bebas Fallback', sans-serif;
   font-size: var(--fs-banner);
   line-height: 3.25rem;
 }
@@ -1235,7 +1246,7 @@ article[data-type] {
 }
 
 [data-type] > div blockquote {
-  margin: 0.5rem 0;
+  margin: 0 0 0.5rem 0;
 }
 
 [data-type] > a:first-child {
@@ -1386,7 +1397,7 @@ article[data-type] {
 /* --- Webmentions --- */
 
 .webmentions {
-  margin: 1rlh 0;
+  margin: 0 0 1rlh 0;
   padding: 1rlh 0 0;
   border-top: var(--border-subtle);
 }
@@ -1638,10 +1649,10 @@ article[data-type] {
     z-index: var(--z-item);
     font-size: clamp(4rem, 7vw, 6rem);
     line-height: 0.9;
-    /* Aligns cap-top with .intro h1. 1.25rem = main-content padding (1rem)
+    /* Aligns cap-top with the page h1. 1.75rem = main-content padding (1.5rem)
        + h1 padding (0.25rem). 0.05 * (h1-size + site-title-size) cancels
        the half-leading from h1's line-height 1.1 and site-title's 0.9. */
-    padding: calc(1.25rem + 0.05 * (clamp(2.5rem, 5vw, 4rem) + clamp(4rem, 7vw, 6rem))) var(--grid-margin) 0 0;
+    padding: calc(1.75rem + 0.05 * (clamp(2.5rem, 5vw, 4rem) + clamp(4rem, 7vw, 6rem))) var(--grid-margin) 0 0;
     text-align: right;
     pointer-events: none;
   }
@@ -1653,7 +1664,7 @@ article[data-type] {
   #main-content {
     grid-column: 2 / -1;
     grid-template-columns: subgrid;
-    padding: 1rem 0;
+    padding: 1.5rem 0 1rem 0;
   }
 
   /* Text content fills the content area but is capped at a readable line length */

@@ -15,17 +15,18 @@ See *[digital garden](https://maggieappleton.com/garden-history)*, *[commonplace
 
 Spiritually, I love the form of things and the shaping part of the creative process. I love the way constraint burgeons creativity. Additions are necessary in finding solutions, but bring a sharp knife to pare back, and then pare back. In poetry I lean towards formalism and traditional verse; in design I love minimalism with bright characterful delights; in coding and data I love standards, portability, and reusability. From my perspective, the act of learning, of pulling apart, of undoing to understand, is a boundless endeavor full of diversion and returnal. But creating? Even in it's most basic context, order is a jagged, necessary complication that, if loved, only leads to frictionless uncomplication.
 
-## In the Public
+## A Note on Publications
 
 My poetry and writing have been published (some) places, but the internet being what it is, not all of it still exists online. Sorry for any broken links you find here, I'll try to keep on top of things. Art is funny in that, if you want to publish it somewhere important, you can't share it before it's published. So if you want to read some of my poems, and I certainly hope you do, contact me and I'll forward you a packet.
 
 
 ## Social Media
 
-I'm not really a social media person. I'm syndicating this site a few places, but no hot takes (I promise). I can be found on the following platforms:
+I'm not really a social media person. This website is ActivityPub enabled, so if you'd like to follow me on your favorite fediverse platform, you can do that. No hot takes, I promse.
 
-- GitHub: [andystevensname](https://github.com/andystevensname)
+- Fediverse: @andy@andystevens.name
 - Bluesky: [@andystevens.name](https://bsky.app/profile/andystevens.name)
+- GitHub: [andystevensname](https://github.com/andystevensname)
 
 ## Colophon
 
