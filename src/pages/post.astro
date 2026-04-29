@@ -3,6 +3,12 @@
 // Authentication and submission wired up in subsequent steps; this is
 // just the form scaffold with query-param prefill and type switching.
 import '../styles/global.css';
+
+// Bookmarklet: opens this same page in a popup with the current page's
+// URL, title, and any selected text prefilled as query params. Built as
+// a single line so it survives copy-paste into a browser's bookmark URL
+// field unchanged.
+const BOOKMARKLET = `javascript:(function(){var u=encodeURIComponent(location.href),t=encodeURIComponent(document.title),s=encodeURIComponent(window.getSelection().toString());window.open('https://andystevens.name/post/?url='+u+'&title='+t+'&selection='+s,'andypost','width=560,height=720');})();`;
 ---
 
 <!doctype html>
@@ -99,6 +105,16 @@ import '../styles/global.css';
           <button type="submit">Post</button>
         </div>
       </form>
+
+      <details id="bookmarklet-info">
+        <summary>Bookmarklet</summary>
+        <p>Drag this link to your bookmarks bar:</p>
+        <p><a class="bookmarklet" href={BOOKMARKLET}>Post to Andy</a></p>
+        <p class="hint">
+          Click it from any page to open this form in a popup with the page’s
+          URL, title, and any selected text prefilled.
+        </p>
+      </details>
     </main>
 
     <script>
@@ -520,6 +536,38 @@ import '../styles/global.css';
         border-radius: var(--radius-sm);
         color: var(--text);
         cursor: pointer;
+      }
+
+      #bookmarklet-info {
+        margin-top: 2rem;
+        padding-top: 1rem;
+        border-top: var(--border-subtle);
+        font-size: var(--fs-sm);
+      }
+
+      #bookmarklet-info summary {
+        cursor: pointer;
+        font-weight: 500;
+      }
+
+      #bookmarklet-info p {
+        margin: 0.5rem 0;
+      }
+
+      a.bookmarklet {
+        display: inline-block;
+        font-size: 1rem;
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+        background: var(--gradient);
+        color: white;
+        text-decoration: none;
+        border-radius: var(--radius-sm);
+        cursor: grab;
+      }
+
+      #bookmarklet-info .hint {
+        color: var(--c-gray-light);
       }
 
       #sign-in-btn,
