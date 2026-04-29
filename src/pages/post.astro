@@ -12,6 +12,12 @@ import '../styles/global.css';
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex" />
     <title>New post — Andy Stevens</title>
+
+    <!-- IndieAuth: register localhost as a permitted redirect_uri so the
+         dev server can use the production client_id without IndieKit
+         trying to fetch a non-public localhost URL. -->
+    <link rel="redirect_uri" href="http://localhost:4321/post/" />
+    <link rel="redirect_uri" href="http://127.0.0.1:4321/post/" />
   </head>
   <body class="post-page">
     <main>
@@ -120,6 +126,74 @@ import '../styles/global.css';
       signInBtn.addEventListener('click', () => { startAuth(); });
       retryBtn.addEventListener('click', () => { startAuth(); });
 
+      // ---- Syndication targets ----
+      // Fetched from Micropub ?q=syndicate-to once we have a token, then
+      // cached in localStorage for 24h to avoid a round-trip on every load.
+      // The cache survives stale 24h gracefully — fresh fetch refreshes it.
+      const MICROPUB_ENDPOINT = 'https://ik.andystevens.name/micropub';
+      const SYND_CACHE_KEY = 'syndication-targets-cache';
+      const SYND_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
+
+      type SyndicationTarget = { uid: string; name: string };
+      type SyndCache = { targets: SyndicationTarget[]; expires: number };
+
+      async function loadSyndicationTargets(accessToken: string): Promise<SyndicationTarget[]> {
+        // Cache hit?
+        try {
+          const raw = localStorage.getItem(SYND_CACHE_KEY);
+          if (raw) {
+            const cache = JSON.parse(raw) as SyndCache;
+            if (cache.expires > Date.now()) return cache.targets;
+          }
+        } catch { /* fall through to network */ }
+
+        try {
+          const res = await fetch(`${MICROPUB_ENDPOINT}?q=syndicate-to`, {
+            headers: { 'Authorization': `Bearer ${accessToken}`, 'Accept': 'application/json' },
+          });
+          if (!res.ok) throw new Error(`syndicate-to query failed: ${res.status}`);
+          const data = await res.json() as { 'syndicate-to'?: SyndicationTarget[] };
+          const targets = data['syndicate-to'] ?? [];
+          try {
+            localStorage.setItem(SYND_CACHE_KEY, JSON.stringify({
+              targets, expires: Date.now() + SYND_CACHE_TTL_MS,
+            } satisfies SyndCache));
+          } catch { /* quota — non-fatal */ }
+          return targets;
+        } catch (err) {
+          // Network or auth failure: fall back to stale cache if any, else empty.
+          try {
+            const raw = localStorage.getItem(SYND_CACHE_KEY);
+            if (raw) return (JSON.parse(raw) as SyndCache).targets;
+          } catch { /* nothing useful in cache either */ }
+          console.warn('Could not load syndication targets:', err);
+          return [];
+        }
+      }
+
+      function renderSyndicationTargets(targets: SyndicationTarget[]): void {
+        const fieldset = document.getElementById('syndication-targets')!;
+        if (targets.length === 0) {
+          fieldset.hidden = true;
+          return;
+        }
+        const legend = fieldset.querySelector('legend');
+        fieldset.innerHTML = '';
+        if (legend) fieldset.appendChild(legend);
+
+        for (const target of targets) {
+          const label = document.createElement('label');
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.name = 'mp-syndicate-to';
+          checkbox.value = target.uid;
+          label.appendChild(checkbox);
+          label.appendChild(document.createTextNode(' ' + target.name));
+          fieldset.appendChild(label);
+        }
+        fieldset.hidden = false;
+      }
+
       // ---- Run auth check ----
       // Either we have a stored token, we just came back from the
       // authorization endpoint with ?code=&state=, or we need to start
@@ -128,6 +202,9 @@ import '../styles/global.css';
         const token = await ensureToken();
         if (token) {
           showAuthPanel(null); // reveal the form
+          // Kick off syndication target loading in parallel; don't block the
+          // form on it.
+          loadSyndicationTargets(token.access_token).then(renderSyndicationTargets);
         } else {
           showAuthPanel(promptPanel);
         }
@@ -216,7 +293,8 @@ import '../styles/global.css';
         padding: 0 0.25rem;
       }
 
-      .post-type label {
+      .post-type label,
+      #syndication-targets label {
         display: inline-flex;
         align-items: center;
         gap: 0.25rem;
