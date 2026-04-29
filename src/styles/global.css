@@ -1030,7 +1030,7 @@ html.dark.theme-to-light .theme-icon--moon     { animation: theme-set  400ms bot
   position: relative;
   z-index: var(--z-footer);
 
-  > * + *::before { content: " · "; }
+  > *:not(div) + *:not(div)::before { content: " · "; }
 }
 
 /* --- Photo viewer --- */
@@ -1093,49 +1093,143 @@ html.dark.theme-to-light .theme-icon--moon     { animation: theme-set  400ms bot
    COMPONENTS (classes)
    ============================================ */
 
+/* --- Popovers (popover attribute, role=dialog) --- */
+
+/* Drawer at mobile: slide up from the bottom of the viewport. */
+.popover-card {
+  inset: auto 0 0 0;
+  width: 100%;
+  max-width: none;
+  max-height: 80vh;
+  margin: 0;
+  padding: 1rem var(--grid-margin);
+  border: none;
+  border-top: var(--border-strong);
+  border-radius: 0;
+  background: var(--bg);
+  color: var(--text);
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(100%);
+  transition: transform 300ms ease, display 300ms ease allow-discrete;
+  overflow-y: auto;
+}
+
+.popover-card:popover-open {
+  transform: translateY(0);
+}
+
+@starting-style {
+  .popover-card:popover-open {
+    transform: translateY(100%);
+  }
+}
+
+.popover-card::backdrop {
+  background: rgba(0, 0, 0, 0);
+  transition: background 300ms ease, display 300ms ease allow-discrete;
+}
+
+.popover-card:popover-open::backdrop {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+@starting-style {
+  .popover-card:popover-open::backdrop {
+    background: rgba(0, 0, 0, 0);
+  }
+}
+
+/* Tablet+: switch from bottom drawer to centered modal. */
+@media (min-width: 816px) {
+  .popover-card {
+    inset: 0;
+    margin: auto;
+    width: 32rem;
+    max-width: calc(100vw - 2rem);
+    max-height: calc(100vh - 4rem);
+    padding: 1rem;
+    border: var(--border-strong);
+    border-radius: 1rem;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+    transform: scale(0.95);
+    opacity: 0;
+    transition: transform 200ms ease, opacity 200ms ease, display 200ms ease allow-discrete;
+  }
+
+  .popover-card:popover-open {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  @starting-style {
+    .popover-card:popover-open {
+      transform: scale(0.95);
+      opacity: 0;
+    }
+  }
+}
+
+/* Form layout inside a popover: heading/description take a full row,
+   then label, input, and an actions row flow horizontally. */
+.popover-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+}
+
+.popover-form p {
+  flex-basis: 100%;
+  margin: 0 0 0.25rem;
+  line-height: 1.4;
+  font-size: var(--fs-sm);
+}
+
+.popover-form label {
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.popover-form input {
+  font-size: 1rem;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: var(--radius-sm);
+  background: light-dark(#f8f8f8, #333);
+  color: var(--text);
+  flex: 1 1 12rem;
+  min-width: 0;
+  margin: 0;
+}
+
+.popover-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+.popover-actions button {
+  font-size: 1rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem 0.5rem 1rem;
+  background: var(--gradient);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
 /* --- Share / post-meta --- */
 
 .share-icon {
   margin-left: 0.25rem;
-}
-
-.share-popover {
-  padding: 1rem;
-  border: var(--border-strong);
-  border-radius: var(--radius-sm);
-  background: var(--bg);
-  color: var(--text);
-  width: 20rem;
-  max-width: calc(100vw - 2rem);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-
-  label {
-    font-size: 1rem;
-    font-weight: 500;
-    display: block;
-    margin-bottom: 0.5rem;
-  }
-
-  input {
-    font-size: 1rem;
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: var(--radius-sm);
-    width: 100%;
-    background: light-dark(#f8f8f8, #333);
-    color: var(--text);
-    margin-bottom: 0.75rem;
-  }
-
-  button {
-    font-size: 1rem;
-    padding: 0.5rem 1rem;
-    background: var(--c-accent, #0277BD);
-    color: white;
-    border: none;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-  }
 }
 
 button.share-btn {

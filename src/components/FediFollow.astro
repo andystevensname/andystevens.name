@@ -1,0 +1,129 @@
+---
+const HANDLE = 'andy@andystevens.name';
+const PROFILE_URL = 'https://andystevens.name';
+---
+
+<a
+  class="fedi-follow"
+  href={PROFILE_URL}
+  rel="me"
+  data-fedi-handle={HANDLE}
+><span aria-hidden="true">⁂</span> Fediverse</a>
+
+<div id="fedi-follow-dialog" class="popover-card" popover role="dialog" aria-label="Follow on the Fediverse">
+  <form id="fedi-follow-form" class="popover-form">
+    <p>
+      This site is federated at <strong>@andy@andystevens.name</strong>. Enter your Fediverse instance or handle below to read and follow.
+    </p>
+    <label for="fedi-follow-instance">Your server</label>
+    <input
+      id="fedi-follow-instance"
+      name="instance"
+      type="text"
+      placeholder="e.g. mastodon.social"
+      autocomplete="off"
+      autocapitalize="off"
+      autocorrect="off"
+      spellcheck="false"
+      required
+    />
+    <div class="popover-actions">
+      <button type="submit">Continue</button>
+    </div>
+  </form>
+</div>
+
+<script>
+  const HANDLE = 'andy@andystevens.name';
+  const STORAGE_KEY = 'fedi-instance';
+
+  // Accept anything from "mastodon.social" to "https://mastodon.social/@user"
+  // to "@user@mastodon.social" — extract just the host.
+  function normalizeInstance(input: string): string {
+    let s = input.trim().replace(/^https?:\/\//, '').replace(/\/+$/, '');
+    if (s.startsWith('@')) {
+      const parts = s.slice(1).split('@');
+      if (parts.length === 2) s = parts[1];
+    }
+    if (s.includes('/')) s = s.split('/')[0];
+    return s;
+  }
+
+  function buildFollowUrl(instance: string): string {
+    return `https://${instance}/@${HANDLE}`;
+  }
+
+  let controller: AbortController | null = null;
+
+  document.addEventListener('astro:page-load', () => {
+    controller?.abort();
+    controller = new AbortController();
+    const { signal } = controller;
+
+    const dialog = document.getElementById('fedi-follow-dialog');
+    const form = document.getElementById('fedi-follow-form') as HTMLFormElement | null;
+    const input = document.getElementById('fedi-follow-instance') as HTMLInputElement | null;
+
+    if (!dialog || !form || !input) return;
+
+    document.querySelectorAll<HTMLAnchorElement>('a.fedi-follow').forEach((link) => {
+      link.addEventListener('click', (e) => {
+        // Modifier-clicks fall through to the noscript profile URL.
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        e.preventDefault();
+
+        // Returning visitors with a saved instance skip both attempts.
+        const saved = (() => {
+          try { return localStorage.getItem(STORAGE_KEY); } catch { return null; }
+        })();
+        if (saved) {
+          window.location.href = buildFollowUrl(saved);
+          return;
+        }
+
+        // First-timers: try the RFC 7565 acct: URI in case the visitor
+        // has a Fediverse client registered as a protocol handler. We
+        // use an iframe so unhandled schemes fail silently (Safari
+        // surfaces an "address is invalid" alert if you navigate the
+        // main window to an unknown scheme; an iframe load failure
+        // produces no UI). If the OS hands off to an app, blur or
+        // visibilitychange fires and we cancel the dialog fallback.
+        // Otherwise (the common case) we show the dialog.
+        let handled = false;
+        const onLeave = () => { handled = true; };
+        window.addEventListener('blur', onLeave, { once: true });
+        document.addEventListener('visibilitychange', onLeave, { once: true });
+
+        const iframe = document.createElement('iframe');
+        iframe.setAttribute('aria-hidden', 'true');
+        iframe.style.cssText = 'position:absolute;width:0;height:0;border:0;visibility:hidden;';
+        iframe.src = `acct:${HANDLE}`;
+        document.body.appendChild(iframe);
+
+        setTimeout(() => {
+          iframe.remove();
+          window.removeEventListener('blur', onLeave);
+          document.removeEventListener('visibilitychange', onLeave);
+          if (!handled) {
+            dialog.showPopover();
+            input.focus();
+          }
+        }, 500);
+      }, { signal });
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const instance = normalizeInstance(input.value);
+      if (!instance) return;
+      try { localStorage.setItem(STORAGE_KEY, instance); } catch {}
+      window.location.href = buildFollowUrl(instance);
+    }, { signal });
+  });
+</script>
+
+<style>
+  .fedi-follow {
+    cursor: pointer;
+  }
+</style>

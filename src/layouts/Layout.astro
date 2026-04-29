@@ -3,6 +3,7 @@ import { ClientRouter } from 'astro:transitions';
 import Header from '../components/Header.astro';
 import Navigation from '../components/Navigation.astro';
 import Animation from '../components/Animation.astro';
+import FediFollow from '../components/FediFollow.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -143,6 +144,7 @@ const structuredData = jsonLd ?? defaultJsonLd;
     <footer id="footer">
       <span>&copy; 2021&ndash;{currentYear} Andy Stevens</span>
       <a rel="me" href="https://github.com/andystevensname">GitHub</a>
+      <FediFollow />
       <a rel="me" href="https://bsky.app/profile/andystevens.name">Bluesky</a>
     </footer>
   </body>

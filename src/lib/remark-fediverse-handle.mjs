@@ -3,14 +3,17 @@
 // `<a href="mailto:...">`. That's wrong for fediverse handles, which share
 // the syntactic shape but are preceded by an extra `@` (`@user@domain.tld`).
 //
-// This plugin runs after gfm and undoes any mailto autolink whose preceding
+// This plugin runs after gfm and rewrites any mailto autolink whose preceding
 // text node ends with `@` — that combination is the unambiguous signature of
 // a fediverse handle and never matches a real email mention in body text.
 //
-// Result: `@andy@andystevens.name` renders as plain text instead of a
-// clickable mailto: link.
+// Result: `@andy@andystevens.name` renders as a `<a class="fedi-follow">`
+// link, so the FediFollow component's click handler intercepts it and shows
+// the same drawer/modal flow used by the footer link.
 
 import { visit } from 'unist-util-visit';
+
+const PROFILE_URL = 'https://andystevens.name';
 
 export default function remarkFediverseHandle() {
   return (tree) => {
@@ -26,8 +29,17 @@ export default function remarkFediverseHandle() {
 
       prev.value = prev.value.slice(0, -1);
       parent.children.splice(index, 1, {
-        type: 'text',
-        value: '@' + linkText,
+        type: 'link',
+        url: PROFILE_URL,
+        title: null,
+        data: {
+          hProperties: {
+            className: ['fedi-follow'],
+            rel: 'me',
+            'data-fedi-handle': linkText,
+          },
+        },
+        children: [{ type: 'text', value: '@' + linkText }],
       });
     });
   };

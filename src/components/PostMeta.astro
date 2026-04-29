@@ -26,20 +26,31 @@ const tags = post.data.tags ?? [];
       <a class="p-category" href={`/tags/${tag}/`}>#{tag} </a>
     ))}
   </div>
-  <button id="share-btn" type="button" title="Share this post" class="filter-btn share-btn" popovertarget="share-popover">
+  <button id="share-btn" type="button" title="Share this post" class="filter-btn share-btn">
     <span>Share</span>
     <svg class="share-icon icon" width="20" height="20" aria-hidden="true">
       <use href="/icons.svg#icon-share-ios" />
     </svg>
   </button>
-  <section id="share-popover" popover class="share-popover" aria-labelledby="share-popover-label">
-    <label id="share-popover-label" for="share-link-input">Share</label>
-    <input id="share-link-input" type="text" value="" readonly />
-    <button id="copy-link-btn" type="button">Copy Link</button>
-  </section>
+  <div id="share-dialog" class="popover-card" popover role="dialog" aria-label="Share this post">
+    <form class="popover-form">
+      <p>Copy the link below to share this page.</p>
+      <label for="share-link-input">Link</label>
+      <input id="share-link-input" type="text" value="" readonly />
+      <div class="popover-actions">
+        <button id="copy-link-btn" type="button">Copy Link</button>
+      </div>
+    </form>
+  </div>
 </footer>
 <script>
+  let shareController: AbortController | null = null;
+
   function setupShareButton() {
+    shareController?.abort();
+    shareController = new AbortController();
+    const { signal } = shareController;
+
     function getShareIconId() {
       const ua = navigator.userAgent;
       if (/iPad|iPhone|iPod/.test(ua)) return 'icon-share-ios';
@@ -62,47 +73,43 @@ const tags = post.data.tags ?? [];
       }
     }
 
-    const sharePopover = document.getElementById('share-popover');
+    const dialog = document.getElementById('share-dialog');
     const shareInput = document.getElementById('share-link-input') as HTMLInputElement | null;
     const copyBtn = document.getElementById('copy-link-btn');
 
-    if (shareBtn && navigator.share) {
-      // Native share — override the popover toggle with share API
-      shareBtn.removeAttribute('popovertarget');
-      if (!shareBtn.dataset.shareBound) {
-        shareBtn.dataset.shareBound = 'true';
-        shareBtn.addEventListener('click', () => {
-          navigator.share({
-            title: document.title,
-            url: window.location.href
-          }).catch((err) => {
-            if (err?.name !== 'AbortError' && err?.name !== 'InvalidStateError') {
-              console.error(err);
-            }
-          });
+    if (!shareBtn) return;
+
+    if (navigator.share) {
+      // Native share — bypass the dialog entirely
+      shareBtn.addEventListener('click', () => {
+        navigator.share({
+          title: document.title,
+          url: window.location.href,
+        }).catch((err) => {
+          if (err?.name !== 'AbortError' && err?.name !== 'InvalidStateError') {
+            console.error(err);
+          }
         });
-      }
-    } else if (sharePopover && shareInput && copyBtn) {
-      // Popover fallback — populate URL when shown
-      sharePopover.addEventListener('toggle', (e) => {
-        if ((e as ToggleEvent).newState === 'open') {
-          shareInput.value = window.location.href;
-          shareInput.select();
-        }
-      });
-      if (!copyBtn.dataset.shareBound) {
-        copyBtn.dataset.shareBound = 'true';
-        copyBtn.addEventListener('click', () => {
-          navigator.clipboard.writeText(shareInput.value).then(() => {
-            copyBtn.textContent = 'Copied!';
-            setTimeout(() => { copyBtn.textContent = 'Copy Link'; }, 1500);
-          }).catch(() => {
-            copyBtn.textContent = 'Copy failed';
-            setTimeout(() => { copyBtn.textContent = 'Copy Link'; }, 1500);
-          });
+      }, { signal });
+    } else if (dialog && shareInput && copyBtn) {
+      // Popover fallback
+      shareBtn.addEventListener('click', () => {
+        shareInput.value = window.location.href;
+        dialog.showPopover();
+        shareInput.select();
+      }, { signal });
+
+      copyBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(shareInput.value).then(() => {
+          copyBtn.textContent = 'Copied!';
+          setTimeout(() => { copyBtn.textContent = 'Copy Link'; }, 1500);
+        }).catch(() => {
+          copyBtn.textContent = 'Copy failed';
+          setTimeout(() => { copyBtn.textContent = 'Copy Link'; }, 1500);
         });
-      }
+      }, { signal });
     }
   }
   document.addEventListener('astro:page-load', setupShareButton);
 </script>
+
