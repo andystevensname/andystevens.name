@@ -32,23 +32,13 @@ export interface StoredToken {
 }
 
 function clientUrls(): { client_id: string; redirect_uri: string } {
-  const origin = window.location.origin;
-  const isLocalhost =
-    origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:');
-
-  // Localhost dev: IndieKit can't fetch a localhost client_id to verify
-  // it, so it errors with "fetch failed". Use the production URL as
-  // client_id (publicly fetchable) but keep redirect_uri on localhost.
-  // The production /post/ page declares a <link rel="redirect_uri">
-  // for the localhost URL so IndieKit accepts the cross-origin pair.
-  if (isLocalhost) {
-    return {
-      client_id: 'https://andystevens.name/post/',
-      redirect_uri: `${origin}/post/`,
-    };
-  }
-
-  const base = `${origin}/post/`;
+  // Note: IndieKit currently rejects auth requests where client_id and
+  // redirect_uri have different hosts, even with <link rel="redirect_uri">
+  // declared on the client_id page (its validateRedirect implementation
+  // has a @todo for the spec-correct check). So localhost dev of the
+  // IndieAuth flow isn't possible without tunneling — test against
+  // the production deploy instead.
+  const base = `${window.location.origin}/post/`;
   return { client_id: base, redirect_uri: base };
 }
 
