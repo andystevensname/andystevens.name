@@ -7,16 +7,13 @@
 // federation sources, unpublished, or missing the 'activitypub' syndication
 // token), which makes it safe to pass unconditionally into Layout.extraHead.
 
-import { sources, SYNDICATION_TOKEN } from './ap-sources.mjs';
+import { sources, SYNDICATION_TOKEN, wantsSyndication } from './ap-sources.mjs';
 
 export function apAlternateLink(collection, entry, site) {
   const source = sources.find((s) => s.collection === collection);
   if (!source) return '';
   if (entry.data.published === false) return '';
-  const syndication = entry.data.syndication;
-  if (!Array.isArray(syndication) || !syndication.includes(SYNDICATION_TOKEN)) {
-    return '';
-  }
+  if (!wantsSyndication(entry.data.syndication, SYNDICATION_TOKEN)) return '';
   const slug = entry.data.slug || entry.id.replace(/\.[^.]+$/, '');
   const href = new URL(`/ap/objects/${collection}/${slug}`, site).href;
   return `<link rel="alternate" type="application/activity+json" href="${href}">`;

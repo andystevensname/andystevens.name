@@ -11,7 +11,7 @@
 import type { APIRoute } from 'astro';
 import { getCollection, render } from 'astro:content';
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
-import { sources, SYNDICATION_TOKEN } from '../lib/ap-sources.mjs';
+import { sources, SYNDICATION_TOKEN, wantsSyndication } from '../lib/ap-sources.mjs';
 
 const DOMAIN = import.meta.env.AP_DOMAIN || process.env.AP_DOMAIN;
 
@@ -35,13 +35,7 @@ export const GET: APIRoute = async () => {
     for (const entry of entries) {
       if (entry.data.published === false) continue;
 
-      const syndication = entry.data.syndication;
-      if (
-        !Array.isArray(syndication) ||
-        !syndication.includes(SYNDICATION_TOKEN)
-      ) {
-        continue;
-      }
+      if (!wantsSyndication(entry.data.syndication, SYNDICATION_TOKEN)) continue;
 
       const date = entry.data.date;
       if (!date) continue;

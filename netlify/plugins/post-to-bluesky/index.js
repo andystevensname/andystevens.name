@@ -1,6 +1,38 @@
+import { readFile } from 'node:fs/promises';
+import yaml from 'js-yaml';
 import Parser from 'rss-parser';
+import { wantsSyndication, BLUESKY_TOKEN } from '../../../src/lib/ap-sources.mjs';
 
 const BLUESKY_SERVICE = 'https://bsky.social';
+
+// Map a public post URL (e.g. https://site/notes/helloactivitypub/) back to
+// its source markdown path (src/content/notes/helloactivitypub.md). The
+// site URL structure mirrors src/content/<collection>/<slug>, so the first
+// two path segments are all we need.
+function sourcePathForUrl(url) {
+  try {
+    const { pathname } = new URL(url);
+    const parts = pathname.replace(/^\/+|\/+$/g, '').split('/');
+    if (parts.length < 2) return null;
+    const [collection, slug] = parts;
+    return `src/content/${collection}/${slug}.md`;
+  } catch {
+    return null;
+  }
+}
+
+// Read the YAML frontmatter from a markdown file and return its parsed object,
+// or null if the file is missing or the frontmatter block can't be located.
+async function readFrontmatter(path) {
+  try {
+    const text = await readFile(path, 'utf8');
+    const match = text.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+    if (!match) return null;
+    return yaml.load(match[1]);
+  } catch {
+    return null;
+  }
+}
 
 async function createSession(identifier, password) {
   const res = await fetch(`${BLUESKY_SERVICE}/xrpc/com.atproto.server.createSession`, {
@@ -86,10 +118,32 @@ export const onSuccess = async function () {
 
     // Only post items from the last 10 minutes (to catch just-deployed content)
     const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
-    const newItems = items.filter(item => item.pubDate > tenMinutesAgo);
+    const recentItems = items.filter(item => item.pubDate > tenMinutesAgo);
+
+    if (recentItems.length === 0) {
+      console.log('No new items to post to Bluesky');
+      return;
+    }
+
+    // Gate on each item's `syndication` frontmatter. Posts opt in via
+    // `syndication: [bluesky]` (or `[all]`); anything else is skipped.
+    const newItems = [];
+    for (const item of recentItems) {
+      const sourcePath = sourcePathForUrl(item.link);
+      if (!sourcePath) {
+        console.log(`Skipping ${item.link}: could not resolve source path`);
+        continue;
+      }
+      const frontmatter = await readFrontmatter(sourcePath);
+      if (!wantsSyndication(frontmatter?.syndication, BLUESKY_TOKEN)) {
+        console.log(`Skipping ${item.link}: no Bluesky syndication intent`);
+        continue;
+      }
+      newItems.push(item);
+    }
 
     if (newItems.length === 0) {
-      console.log('No new items to post to Bluesky');
+      console.log('No new items opted into Bluesky syndication');
       return;
     }
 

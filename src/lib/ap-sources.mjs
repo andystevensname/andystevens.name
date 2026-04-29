@@ -9,6 +9,18 @@
 //   - any future federation tooling that wants to know what's federatable
 
 export const SYNDICATION_TOKEN = 'activitypub';
+export const BLUESKY_TOKEN = 'bluesky';
+// `all` is a wildcard token: any post tagged with it should syndicate to
+// every platform, equivalent to listing each individual token.
+export const ALL_TOKEN = 'all';
+
+// Returns true if `frontmatterArray` opts the post into syndication for
+// `targetToken`. Accepts either an explicit token match or the `all` wildcard.
+// Use this from any gate that decides whether to syndicate a post.
+export function wantsSyndication(frontmatterArray, targetToken) {
+  if (!Array.isArray(frontmatterArray)) return false;
+  return frontmatterArray.includes(targetToken) || frontmatterArray.includes(ALL_TOKEN);
+}
 
 export const sources = [
   { collection: 'articles', path: '/articles', type: 'Article' },
