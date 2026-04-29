@@ -1,0 +1,309 @@
+---
+// Stripped-down posting interface. No Layout wrapper — popup-friendly.
+// Authentication and submission wired up in subsequent steps; this is
+// just the form scaffold with query-param prefill and type switching.
+import '../styles/global.css';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>New post — Andy Stevens</title>
+  </head>
+  <body class="post-page">
+    <main>
+      <h1>New post</h1>
+
+      <section id="auth-checking" aria-live="polite">
+        <p>Checking authorization…</p>
+      </section>
+
+      <section id="auth-prompt" hidden>
+        <p>You need to authorize this device to post.</p>
+        <button type="button" id="sign-in-btn">Sign in with IndieAuth</button>
+      </section>
+
+      <section id="auth-error" hidden role="alert">
+        <p class="error-message" id="auth-error-message"></p>
+        <button type="button" id="auth-retry-btn">Try again</button>
+      </section>
+
+      <noscript>
+        <p>This page requires JavaScript to authenticate and submit posts.</p>
+      </noscript>
+
+      <form id="post-form" autocomplete="off" hidden>
+        <fieldset class="post-type">
+          <legend>Type</legend>
+          <label><input type="radio" name="post-type" value="bookmark" checked /> Bookmark</label>
+          <label><input type="radio" name="post-type" value="like" /> Like</label>
+          <label><input type="radio" name="post-type" value="reply" /> Reply</label>
+        </fieldset>
+
+        <!-- Type-specific URL field. Label and input id swap based on type. -->
+        <div class="field">
+          <label for="target-url" id="target-url-label">URL to bookmark</label>
+          <input id="target-url" name="target-url" type="url" required />
+        </div>
+
+        <div class="field" data-show-for="bookmark reply">
+          <label for="post-name">Title <span class="optional">(optional)</span></label>
+          <input id="post-name" name="name" type="text" />
+        </div>
+
+        <div class="field" data-show-for="bookmark reply">
+          <label for="post-content">
+            <span data-content-label-for="bookmark">Commentary <span class="optional">(optional)</span></span>
+            <span data-content-label-for="reply">Reply</span>
+          </label>
+          <textarea id="post-content" name="content" rows="5"></textarea>
+        </div>
+
+        <div class="field">
+          <label for="post-summary">Summary <span class="optional">(optional)</span></label>
+          <input id="post-summary" name="summary" type="text" />
+        </div>
+
+        <div class="field">
+          <label for="post-tags">Tags <span class="optional">(comma-separated)</span></label>
+          <input id="post-tags" name="tags" type="text" placeholder="indieweb, poetry" />
+        </div>
+
+        <div class="field">
+          <label for="post-slug">Slug <span class="optional">(optional)</span></label>
+          <input id="post-slug" name="mp-slug" type="text" />
+        </div>
+
+        <div class="field">
+          <label for="post-published">Published</label>
+          <input id="post-published" name="published" type="datetime-local" required />
+        </div>
+
+        <fieldset class="field" id="syndication-targets" hidden>
+          <legend>Syndicate to</legend>
+          <!-- Populated dynamically from Micropub ?q=syndicate-to -->
+        </fieldset>
+
+        <div class="actions">
+          <button type="submit">Post</button>
+        </div>
+      </form>
+    </main>
+
+    <script>
+      import { ensureToken, startAuth } from '../lib/indieauth';
+
+      // ---- Element references ----
+      const form = document.getElementById('post-form') as HTMLFormElement;
+      const targetUrl = document.getElementById('target-url') as HTMLInputElement;
+      const nameInput = document.getElementById('post-name') as HTMLInputElement;
+      const contentInput = document.getElementById('post-content') as HTMLTextAreaElement;
+      const publishedInput = document.getElementById('post-published') as HTMLInputElement;
+
+      const checkingPanel = document.getElementById('auth-checking')!;
+      const promptPanel = document.getElementById('auth-prompt')!;
+      const errorPanel = document.getElementById('auth-error')!;
+      const errorMessage = document.getElementById('auth-error-message')!;
+      const signInBtn = document.getElementById('sign-in-btn')!;
+      const retryBtn = document.getElementById('auth-retry-btn')!;
+
+      // ---- Auth UI helpers ----
+      const authPanels = [checkingPanel, promptPanel, errorPanel];
+      function showAuthPanel(visible: HTMLElement | null) {
+        for (const el of authPanels) el.hidden = el !== visible;
+        form.hidden = visible !== null;
+      }
+
+      signInBtn.addEventListener('click', () => { startAuth(); });
+      retryBtn.addEventListener('click', () => { startAuth(); });
+
+      // ---- Run auth check ----
+      // Either we have a stored token, we just came back from the
+      // authorization endpoint with ?code=&state=, or we need to start
+      // the flow. ensureToken() handles the first two cases.
+      try {
+        const token = await ensureToken();
+        if (token) {
+          showAuthPanel(null); // reveal the form
+        } else {
+          showAuthPanel(promptPanel);
+        }
+      } catch (err) {
+        errorMessage.textContent = err instanceof Error ? err.message : String(err);
+        showAuthPanel(errorPanel);
+      }
+
+      // ---- Prefill from query params: ?url=&title=&selection= ----
+      // ensureToken() has already restored them following any callback round-trip.
+      const params = new URLSearchParams(window.location.search);
+      targetUrl.value = params.get('url') ?? '';
+      nameInput.value = params.get('title') ?? '';
+      contentInput.value = params.get('selection') ?? '';
+
+      // Auto-fill the published timestamp to now, formatted for datetime-local.
+      // Slice strips milliseconds and timezone since the input doesn't accept them;
+      // we'll convert back to ISO 8601 (with TZ) on submit.
+      const now = new Date();
+      const tzOffsetMs = now.getTimezoneOffset() * 60 * 1000;
+      publishedInput.value = new Date(now.getTime() - tzOffsetMs).toISOString().slice(0, 16);
+
+      // Type switching: show fields based on data-show-for attribute,
+      // swap the URL field label, and toggle the content label variants.
+      const typeLabels: Record<string, string> = {
+        bookmark: 'URL to bookmark',
+        like: 'URL to like',
+        reply: 'URL you’re replying to',
+      };
+      const targetLabel = document.getElementById('target-url-label')!;
+
+      function applyType(type: string) {
+        targetLabel.textContent = typeLabels[type] ?? 'URL';
+
+        document.querySelectorAll<HTMLElement>('[data-show-for]').forEach((el) => {
+          const allowed = el.dataset.showFor!.split(' ');
+          el.hidden = !allowed.includes(type);
+        });
+
+        document.querySelectorAll<HTMLElement>('[data-content-label-for]').forEach((el) => {
+          el.hidden = el.dataset.contentLabelFor !== type;
+        });
+
+        // Reply requires content; bookmark and like don't.
+        contentInput.required = type === 'reply';
+      }
+
+      form.addEventListener('change', (e) => {
+        const t = e.target as HTMLInputElement;
+        if (t.name === 'post-type') applyType(t.value);
+      });
+
+      applyType('bookmark');
+
+      // Submit: not wired up yet — placeholder for the next step.
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        console.log('TODO: submit Micropub request');
+      });
+    </script>
+
+    <style>
+      .post-page {
+        max-width: 32rem;
+        margin: 0 auto;
+        padding: 1rem;
+        font-family: Helvetica, Arial, sans-serif;
+        color: var(--text);
+        background: var(--bg);
+      }
+
+      h1 {
+        font-size: var(--fs-lg);
+        margin: 0 0 1rem;
+      }
+
+      fieldset {
+        border: var(--border-subtle);
+        border-radius: var(--radius-sm);
+        padding: 0.5rem 0.75rem;
+        margin: 0 0 0.75rem;
+      }
+
+      legend {
+        font-size: var(--fs-sm);
+        padding: 0 0.25rem;
+      }
+
+      .post-type label {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        margin-right: 0.75rem;
+        font-size: 1rem;
+      }
+
+      .field {
+        margin: 0 0 0.75rem;
+      }
+
+      .field > label {
+        display: block;
+        font-size: 1rem;
+        font-weight: 500;
+        margin-bottom: 0.25rem;
+      }
+
+      .field input[type="text"],
+      .field input[type="url"],
+      .field input[type="datetime-local"],
+      .field textarea {
+        width: 100%;
+        font: inherit;
+        font-size: 1rem;
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: var(--radius-sm);
+        background: light-dark(#f8f8f8, #333);
+        color: var(--text);
+      }
+
+      .field textarea {
+        resize: vertical;
+        min-height: 6rem;
+      }
+
+      .optional {
+        font-weight: 400;
+        color: var(--c-gray-light);
+        font-size: var(--fs-sm);
+      }
+
+      [hidden] {
+        display: none;
+      }
+
+      #auth-checking,
+      #auth-prompt,
+      #auth-error {
+        margin: 0 0 1rem;
+      }
+
+      #auth-error .error-message {
+        color: light-dark(#b3261e, #f2b8b5);
+        margin: 0 0 0.5rem;
+      }
+
+      #sign-in-btn,
+      #auth-retry-btn {
+        font: inherit;
+        font-size: 1rem;
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+        background: var(--gradient);
+        color: white;
+        border: none;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+      }
+
+      .actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 1rem;
+      }
+
+      .actions button {
+        font-size: 1rem;
+        font-weight: 500;
+        padding: 0.5rem 1.25rem 0.5rem 1rem;
+        background: var(--gradient);
+        color: white;
+        border: none;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+      }
+    </style>
+  </body>
+</html>

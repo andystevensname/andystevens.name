@@ -159,7 +159,8 @@
   --gradient-rainbow: linear-gradient(to bottom, #FFEB3B, #FF1744, #D500F9, #00B0FF) 1;
 
   /* Fluid scale: interpolates from 320px to 1456px viewport. Above 1456px
-     the desktop topology takes over and tokens hold at their max. */
+     the desktop topology takes over and tokens hold at their max. 
+     https://utopia.fyi */
 
   /* Type scale (1rem base inherited from html) */
   --fs-sm:         clamp(0.875rem, 0.83rem + 0.22vw, 1rem);
