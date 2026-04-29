@@ -35,7 +35,15 @@ import '../styles/global.css';
         <p>This page requires JavaScript to authenticate and submit posts.</p>
       </noscript>
 
+      <section id="post-success" hidden role="status" aria-live="polite">
+        <p>Posted! It’ll be live once Netlify finishes rebuilding (usually under a minute).</p>
+        <p><a id="post-success-link" target="_blank" rel="noopener">View post</a></p>
+        <button type="button" id="post-another-btn">Post another</button>
+      </section>
+
       <form id="post-form" autocomplete="off" hidden>
+        <p id="post-form-error" class="error-message" hidden role="alert"></p>
+
         <fieldset class="post-type">
           <legend>Type</legend>
           <label><input type="radio" name="post-type" value="bookmark" checked /> Bookmark</label>
@@ -94,7 +102,7 @@ import '../styles/global.css';
     </main>
 
     <script>
-      import { ensureToken, startAuth } from '../lib/indieauth';
+      import { ensureToken, startAuth, getToken, clearToken } from '../lib/indieauth';
 
       // ---- Element references ----
       const form = document.getElementById('post-form') as HTMLFormElement;
@@ -109,12 +117,18 @@ import '../styles/global.css';
       const errorMessage = document.getElementById('auth-error-message')!;
       const signInBtn = document.getElementById('sign-in-btn')!;
       const retryBtn = document.getElementById('auth-retry-btn')!;
+      const successPanel = document.getElementById('post-success')!;
+      const successLink = document.getElementById('post-success-link') as HTMLAnchorElement;
+      const postAnotherBtn = document.getElementById('post-another-btn')!;
+      const formError = document.getElementById('post-form-error')!;
+      const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
 
-      // ---- Auth UI helpers ----
-      const authPanels = [checkingPanel, promptPanel, errorPanel];
-      function showAuthPanel(visible: HTMLElement | null) {
-        for (const el of authPanels) el.hidden = el !== visible;
-        form.hidden = visible !== null;
+      // ---- Panel state ----
+      // Exactly one of these is visible at a time: checking, prompt, error,
+      // form, or success.
+      const allPanels = [checkingPanel, promptPanel, errorPanel, form, successPanel];
+      function showPanel(visible: HTMLElement) {
+        for (const el of allPanels) el.hidden = el !== visible;
       }
 
       signInBtn.addEventListener('click', () => { startAuth(); });
@@ -195,16 +209,16 @@ import '../styles/global.css';
       try {
         const token = await ensureToken();
         if (token) {
-          showAuthPanel(null); // reveal the form
+          showPanel(form);
           // Kick off syndication target loading in parallel; don't block the
           // form on it.
           loadSyndicationTargets(token.access_token).then(renderSyndicationTargets);
         } else {
-          showAuthPanel(promptPanel);
+          showPanel(promptPanel);
         }
       } catch (err) {
         errorMessage.textContent = err instanceof Error ? err.message : String(err);
-        showAuthPanel(errorPanel);
+        showPanel(errorPanel);
       }
 
       // ---- Prefill from query params: ?url=&title=&selection= ----
@@ -253,10 +267,150 @@ import '../styles/global.css';
 
       applyType('bookmark');
 
-      // Submit: not wired up yet — placeholder for the next step.
-      form.addEventListener('submit', (e) => {
+      // ---- Submission ----
+      function showFormError(msg: string) {
+        formError.textContent = msg;
+        formError.hidden = false;
+        // Scroll the error into view in case the form is long.
+        formError.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
+
+      function clearFormError() {
+        formError.textContent = '';
+        formError.hidden = true;
+      }
+
+      function getCurrentType(): 'bookmark' | 'like' | 'reply' {
+        const checked = form.querySelector<HTMLInputElement>('input[name="post-type"]:checked');
+        return (checked?.value ?? 'bookmark') as 'bookmark' | 'like' | 'reply';
+      }
+
+      function setOptional(body: URLSearchParams, key: string, value: FormDataEntryValue | null) {
+        if (typeof value !== 'string') return;
+        const trimmed = value.trim();
+        if (trimmed) body.set(key, trimmed);
+      }
+
+      function buildBody(): URLSearchParams {
+        const fd = new FormData(form);
+        const body = new URLSearchParams();
+        body.set('h', 'entry');
+
+        const type = getCurrentType();
+        const url = String(fd.get('target-url') ?? '').trim();
+        if (type === 'bookmark') body.set('bookmark-of', url);
+        else if (type === 'like') body.set('like-of', url);
+        else if (type === 'reply') body.set('in-reply-to', url);
+
+        setOptional(body, 'name', fd.get('name'));
+        setOptional(body, 'content', fd.get('content'));
+        setOptional(body, 'summary', fd.get('summary'));
+        setOptional(body, 'mp-slug', fd.get('mp-slug'));
+
+        // Tags: comma-separated → repeated category[]
+        const tagsRaw = String(fd.get('tags') ?? '').trim();
+        if (tagsRaw) {
+          for (const tag of tagsRaw.split(',').map((t) => t.trim()).filter(Boolean)) {
+            body.append('category[]', tag);
+          }
+        }
+
+        // Syndication targets
+        for (const target of fd.getAll('mp-syndicate-to')) {
+          if (typeof target === 'string') body.append('mp-syndicate-to[]', target);
+        }
+
+        // Published: datetime-local → ISO 8601 with timezone
+        const publishedLocal = String(fd.get('published') ?? '');
+        if (publishedLocal) {
+          // new Date('YYYY-MM-DDTHH:MM') is interpreted as local time;
+          // toISOString() emits UTC with a trailing Z. Round-trips cleanly.
+          body.set('published', new Date(publishedLocal).toISOString());
+        }
+
+        return body;
+      }
+
+      form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        console.log('TODO: submit Micropub request');
+        clearFormError();
+
+        const token = getToken();
+        if (!token) {
+          // Lost the token between page load and submit somehow — push them
+          // back to the sign-in flow.
+          showPanel(promptPanel);
+          return;
+        }
+
+        submitBtn.disabled = true;
+        const originalLabel = submitBtn.textContent;
+        submitBtn.textContent = 'Posting…';
+
+        try {
+          const res = await fetch('https://ik.andystevens.name/micropub', {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${token.access_token}`,
+              'Content-Type': 'application/x-www-form-urlencoded',
+              Accept: 'application/json',
+            },
+            body: buildBody().toString(),
+          });
+
+          if (res.status === 201 || res.status === 202) {
+            const location = res.headers.get('Location');
+            if (location) {
+              successLink.href = location;
+              successLink.textContent = location;
+            } else {
+              // Server didn't return a Location — fall back to a generic link.
+              successLink.href = 'https://andystevens.name/';
+              successLink.textContent = 'andystevens.name';
+            }
+            showPanel(successPanel);
+            return;
+          }
+
+          if (res.status === 401 || res.status === 403) {
+            // Token rejected — clear it and bounce back to sign-in.
+            clearToken();
+            errorMessage.textContent = 'Token rejected. Please sign in again.';
+            showPanel(errorPanel);
+            return;
+          }
+
+          // Try to surface the server's error description.
+          let detail = `${res.status} ${res.statusText}`;
+          try {
+            const json = await res.clone().json() as { error_description?: string; error?: string };
+            if (json.error_description) detail = json.error_description;
+            else if (json.error) detail = json.error;
+          } catch {
+            const text = await res.text().catch(() => '');
+            if (text) detail = text.slice(0, 300);
+          }
+          showFormError(`Submission failed: ${detail}`);
+        } catch (err) {
+          showFormError(`Network error: ${err instanceof Error ? err.message : String(err)}`);
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalLabel;
+        }
+      });
+
+      // ---- "Post another" — reset and show the form again ----
+      postAnotherBtn.addEventListener('click', () => {
+        form.reset();
+        // Reset doesn't run our type-switching logic — apply manually.
+        applyType('bookmark');
+        // Re-fill the published timestamp.
+        const fresh = new Date();
+        publishedInput.value = new Date(
+          fresh.getTime() - fresh.getTimezoneOffset() * 60 * 1000,
+        ).toISOString().slice(0, 16);
+        clearFormError();
+        showPanel(form);
       });
     </script>
 
@@ -342,9 +496,30 @@ import '../styles/global.css';
         margin: 0 0 1rem;
       }
 
-      #auth-error .error-message {
+      .error-message {
         color: light-dark(#b3261e, #f2b8b5);
         margin: 0 0 0.5rem;
+      }
+
+      #post-success {
+        padding: 1rem;
+        border: var(--border-subtle);
+        border-radius: var(--radius-sm);
+      }
+
+      #post-success p {
+        margin: 0 0 0.75rem;
+      }
+
+      #post-another-btn {
+        font: inherit;
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
+        background: none;
+        border: 1px solid var(--c-gray-lighter);
+        border-radius: var(--radius-sm);
+        color: var(--text);
+        cursor: pointer;
       }
 
       #sign-in-btn,
