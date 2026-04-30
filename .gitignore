@@ -22,3 +22,6 @@ data
 # Misc
 report.json
 .claude
+
+# Local Netlify folder
+.netlify

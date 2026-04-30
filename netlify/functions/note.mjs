@@ -1,4 +1,5 @@
 import { buildFromManifestItem } from '../../src/lib/activitypub.mjs';
+import { federatable } from '../../src/lib/post-sources.mjs';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
@@ -42,6 +43,7 @@ export default async (request) => {
     (p) => p.slug === slug && (!collection || p.collection === collection)
   );
   if (!post) return new Response('not found', { status: 404 });
+  if (!federatable(post)) return new Response('not found', { status: 404 });
 
   if (post.apType === 'Like') {
     return new Response('likes are not standalone objects', { status: 404 });

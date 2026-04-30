@@ -5,6 +5,7 @@ import {
   buildFromManifestItem,
   buildLikeActivity,
 } from '../../src/lib/activitypub.mjs';
+import { federatable } from '../../src/lib/post-sources.mjs';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
@@ -41,6 +42,11 @@ export default async (request) => {
   );
   if (!item) {
     return new Response('post not found in manifest', { status: 404 });
+  }
+  if (!federatable(item)) {
+    return new Response('post is not opted into ActivityPub syndication', {
+      status: 422,
+    });
   }
 
   // Build the activity appropriate to the item's AP type

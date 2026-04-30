@@ -17,7 +17,6 @@
     "astro": "^6.1.9",
     "marked": "^17.0.5",
     "remark-directive": "^4.0.0",
-    "rss-parser": "^3.13.0",
     "unist-util-visit": "^5.1.0"
   },
   "devDependencies": {

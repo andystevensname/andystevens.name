@@ -1,14 +1,24 @@
-// ActivityPub federation sources: each entry maps a content collection to
-// an AP object type and the field names in that collection's frontmatter.
+// Post manifest sources: each entry maps a content collection to the
+// fields the build-time manifest needs to record. The manifest at
+// data/posts.json is the single source of truth for "what got published
+// in this build" — every syndication target reads it.
 //
-// Opt-in is per-post via `syndication: ['activitypub']` (IndieWeb POSSE
-// convention, matching the Bluesky plugin's gate).
+// Opt-in is per-post via the `syndication` frontmatter array (IndieWeb
+// POSSE convention). The manifest itself doesn't filter by token; each
+// consumer decides what tokens it cares about.
+//
+// The `type`, `targetField`, `imageField`, `linkField`, and
+// `inReplyToField` keys are AP-specific and describe how a collection
+// would map to ActivityPub. Other syndication targets (e.g. Bluesky)
+// don't need them — they read flat fields off the manifest entry.
 //
 // Used by:
-//   - src/pages/ap-manifest.json.ts  (generates the manifest at build time)
-//   - any future federation tooling that wants to know what's federatable
+//   - src/pages/post-manifest.json.ts (generates the manifest at build time)
+//   - src/lib/ap-link.mjs             (decides whether to render the AP <link>)
+//   - netlify/functions/*.mjs         (AP runtime — filter via `federatable`)
+//   - netlify/plugins/post-to-bluesky (filters via BLUESKY_TOKEN)
 
-export const SYNDICATION_TOKEN = 'activitypub';
+export const ACTIVITYPUB_TOKEN = 'activitypub';
 export const BLUESKY_TOKEN = 'bluesky';
 // `all` is a wildcard token: any post tagged with it should syndicate to
 // every platform, equivalent to listing each individual token.
@@ -21,6 +31,11 @@ export function wantsSyndication(frontmatterArray, targetToken) {
   if (!Array.isArray(frontmatterArray)) return false;
   return frontmatterArray.includes(targetToken) || frontmatterArray.includes(ALL_TOKEN);
 }
+
+// Convenience predicate for AP-side code that wants to filter the manifest
+// down to federatable items. Saves every call site repeating the token.
+export const federatable = (post) =>
+  wantsSyndication(post.syndication, ACTIVITYPUB_TOKEN);
 
 export const sources = [
   { collection: 'articles', path: '/articles', type: 'Article' },

@@ -1,38 +1,7 @@
 import { readFile } from 'node:fs/promises';
-import yaml from 'js-yaml';
-import Parser from 'rss-parser';
-import { wantsSyndication, BLUESKY_TOKEN } from '../../../src/lib/ap-sources.mjs';
+import { wantsSyndication, BLUESKY_TOKEN } from '../../../src/lib/post-sources.mjs';
 
 const BLUESKY_SERVICE = 'https://bsky.social';
-
-// Map a public post URL (e.g. https://site/notes/helloactivitypub/) back to
-// its source markdown path (src/content/notes/helloactivitypub.md). The
-// site URL structure mirrors src/content/<collection>/<slug>, so the first
-// two path segments are all we need.
-function sourcePathForUrl(url) {
-  try {
-    const { pathname } = new URL(url);
-    const parts = pathname.replace(/^\/+|\/+$/g, '').split('/');
-    if (parts.length < 2) return null;
-    const [collection, slug] = parts;
-    return `src/content/${collection}/${slug}.md`;
-  } catch {
-    return null;
-  }
-}
-
-// Read the YAML frontmatter from a markdown file and return its parsed object,
-// or null if the file is missing or the frontmatter block can't be located.
-async function readFrontmatter(path) {
-  try {
-    const text = await readFile(path, 'utf8');
-    const match = text.match(/^---\r?\n([\s\S]*?)\r?\n---/);
-    if (!match) return null;
-    return yaml.load(match[1]);
-  } catch {
-    return null;
-  }
-}
 
 async function createSession(identifier, password) {
   const res = await fetch(`${BLUESKY_SERVICE}/xrpc/com.atproto.server.createSession`, {
@@ -99,64 +68,37 @@ export const onSuccess = async function () {
     return;
   }
 
+  let posts;
   try {
-    // Parse the site's RSS feed. rss-parser handles fetch + entity
-    // decoding + CDATA + namespace prefixes + the various RSS quirks
-    // that a regex extractor silently gets wrong.
-    const parser = new Parser();
-    const feed = await parser.parseURL('https://andystevens.name/feed.xml');
-    const items = feed.items.map((i) => ({
-      title: i.title || '',
-      link: i.link || '',
-      pubDate: new Date(i.pubDate || i.isoDate || 0),
-    }));
+    posts = JSON.parse(await readFile('data/posts.json', 'utf8'));
+  } catch (e) {
+    console.warn('Bluesky: no post manifest found, skipping:', e.message);
+    return;
+  }
 
-    if (items.length === 0) {
-      console.log('No items in RSS feed');
-      return;
-    }
+  // "New" = published within the last 10 minutes of this build, matching
+  // the prior RSS-based behavior (catches just-deployed content while
+  // skipping older posts that happen to opt into Bluesky after the fact).
+  const cutoff = Date.now() - 10 * 60 * 1000;
+  const candidates = posts.filter((p) => {
+    if (p.apType === 'Like') return false;
+    if (new Date(p.published).getTime() < cutoff) return false;
+    return wantsSyndication(p.syndication, BLUESKY_TOKEN);
+  });
 
-    // Only post items from the last 10 minutes (to catch just-deployed content)
-    const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
-    const recentItems = items.filter(item => item.pubDate > tenMinutesAgo);
+  if (candidates.length === 0) {
+    console.log('No new items opted into Bluesky syndication');
+    return;
+  }
 
-    if (recentItems.length === 0) {
-      console.log('No new items to post to Bluesky');
-      return;
-    }
-
-    // Gate on each item's `syndication` frontmatter. Posts opt in via
-    // `syndication: [bluesky]` (or `[all]`); anything else is skipped.
-    const newItems = [];
-    for (const item of recentItems) {
-      const sourcePath = sourcePathForUrl(item.link);
-      if (!sourcePath) {
-        console.log(`Skipping ${item.link}: could not resolve source path`);
-        continue;
-      }
-      const frontmatter = await readFrontmatter(sourcePath);
-      if (!wantsSyndication(frontmatter?.syndication, BLUESKY_TOKEN)) {
-        console.log(`Skipping ${item.link}: no Bluesky syndication intent`);
-        continue;
-      }
-      newItems.push(item);
-    }
-
-    if (newItems.length === 0) {
-      console.log('No new items opted into Bluesky syndication');
-      return;
-    }
-
+  try {
     const session = await createSession(handle, password);
     console.log(`Authenticated as ${session.handle}`);
 
-    for (const item of newItems) {
-      const text = item.title
-        ? `${item.title}\n\n${item.link}`
-        : item.link;
-
-      const result = await createPost(session, text, item.link);
-      console.log(`Posted to Bluesky: ${item.title || item.link} (${result.uri})`);
+    for (const post of candidates) {
+      const text = post.title ? `${post.title}\n\n${post.url}` : post.url;
+      const result = await createPost(session, text, post.url);
+      console.log(`Posted to Bluesky: ${post.title || post.url} (${result.uri})`);
     }
   } catch (e) {
     console.warn('Bluesky posting error:', e.message);

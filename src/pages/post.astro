@@ -263,11 +263,10 @@ const BOOKMARKLET = `javascript:(function(){var u=encodeURIComponent(location.hr
         }
 
         // Syndication targets — persisted as the post's `syndication`
-        // frontmatter array. The 'activitypub' token is checked by
-        // src/lib/ap-link.mjs and src/pages/ap-manifest.json.ts to gate
-        // federation; 'bluesky' is reserved for an analogous gate on the
-        // post-to-bluesky Netlify plugin (currently it syndicates all
-        // feed items unconditionally — gate to be added separately).
+        // frontmatter array. The post manifest at data/posts.json carries
+        // this array through; consumers gate on it via wantsSyndication()
+        // in src/lib/post-sources.mjs (e.g. 'activitypub' for federation,
+        // 'bluesky' for the post-to-bluesky build plugin).
         for (const target of fd.getAll('syndication')) {
           if (typeof target === 'string') body.append('syndication[]', target);
         }

@@ -1,4 +1,5 @@
 import { config, buildFromManifestItem } from '../../src/lib/activitypub.mjs';
+import { federatable } from '../../src/lib/post-sources.mjs';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
@@ -15,8 +16,10 @@ export default async (request) => {
     console.warn('no posts manifest found:', e.message);
   }
 
-  // Likes aren't owned objects — skip them in the outbox.
+  // Likes aren't owned objects — skip them in the outbox. Posts that
+  // didn't opt into ActivityPub aren't federated either.
   const items = posts
+    .filter(federatable)
     .filter((p) => p.apType !== 'Like')
     .map((post) => buildFromManifestItem(post).activity)
     .filter(Boolean);

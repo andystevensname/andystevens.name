@@ -1,17 +1,19 @@
 // Build-time endpoint. Astro renders this during `astro build` to produce
-// dist/ap-manifest.json. scripts/copy-manifest.mjs then moves it into
-// data/posts.json (where the Netlify functions read it) and deletes the
-// public copy.
+// dist/post-manifest.json. scripts/copy-manifest.mjs then moves it into
+// data/posts.json (where the Netlify functions and build plugins read it)
+// and deletes the public copy.
 //
-// This is the federation manifest: a flat list of every post that opted
-// into ActivityPub via `syndication: ['activitypub']`, with rendered HTML
-// included so the inbox, outbox, and deliver functions don't need to walk
-// the content collection at runtime.
+// This is the post manifest: a flat list of every published post across
+// the federation source collections, with rendered HTML included so
+// runtime consumers don't need to walk the content collection. The
+// manifest does NOT filter by syndication token — each entry carries
+// its `syndication` array, and consumers (AP runtime, Bluesky plugin,
+// etc.) filter for the tokens they care about.
 
 import type { APIRoute } from 'astro';
 import { getCollection, render } from 'astro:content';
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
-import { sources, SYNDICATION_TOKEN, wantsSyndication } from '../lib/ap-sources.mjs';
+import { sources } from '../lib/post-sources.mjs';
 
 const DOMAIN = import.meta.env.AP_DOMAIN || process.env.AP_DOMAIN;
 
@@ -35,8 +37,6 @@ export const GET: APIRoute = async () => {
     for (const entry of entries) {
       if (entry.data.published === false) continue;
 
-      if (!wantsSyndication(entry.data.syndication, SYNDICATION_TOKEN)) continue;
-
       const date = entry.data.date;
       if (!date) continue;
 
@@ -59,7 +59,7 @@ async function buildItem(entry: any, src: any, container: any) {
     html = await container.renderToString(Content);
   } catch (e: any) {
     console.warn(
-      `[ap-manifest] render failed for ${src.collection}/${entry.id}:`,
+      `[post-manifest] render failed for ${src.collection}/${entry.id}:`,
       e?.message
     );
   }
@@ -81,6 +81,7 @@ async function buildItem(entry: any, src: any, container: any) {
     title: entry.data.title || '',
     summary: entry.data[src.summaryField ?? 'description'] || '',
     tags: entry.data.tags || [],
+    syndication: entry.data.syndication || [],
     html,
     markdown: entry.body ?? '',
   };
@@ -89,7 +90,7 @@ async function buildItem(entry: any, src: any, container: any) {
     const target = entry.data[src.targetField];
     if (!target) {
       console.warn(
-        `[ap-manifest] ${src.collection}/${entry.id} is Like but missing ${src.targetField}`
+        `[post-manifest] ${src.collection}/${entry.id} is Like but missing ${src.targetField}`
       );
       return null;
     }
