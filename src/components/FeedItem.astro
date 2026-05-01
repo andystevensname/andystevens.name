@@ -34,11 +34,11 @@ const imgFetchPriority = priority ? 'high' : undefined;
       {quote && <p>{quote} <a href={url} aria-label={`Read ${title}`}><svg class="icon" width="20" height="20" aria-hidden="true"><use href="/icons.svg#icon-readmore"/></svg></a></p>}
     </>)}
     {type === 'note' && bodyHtml && (
-      <div class="feed-note e-content" set:html={bodyHtml} />
+      <div class="e-content post-body" set:html={bodyHtml} />
     )}
     {type === 'bookmark' && (<>
       <p><a href={linkTo}>{title ?? linkTo}</a></p>
-      {bodyHtml && <div class="e-content" set:html={bodyHtml} />}
+      {bodyHtml && <div class="e-content post-body" set:html={bodyHtml} />}
     </>)}
     {type === 'like' && (
       <p><a href={linkTo}>{linkTo}</a></p>
@@ -49,12 +49,12 @@ const imgFetchPriority = priority ? 'high' : undefined;
     </>)}
     {type === 'reply' && (<>
       <p>Replied to <a href={linkTo}>{linkTo}</a></p>
-      {bodyHtml && <div class="e-content" set:html={bodyHtml} />}
+      {bodyHtml && <div class="e-content post-body" set:html={bodyHtml} />}
     </>)}
     {type === 'writing' && (<>
       <p>{linkTo ? <a href={linkTo}>{title}</a> : title}</p>
       {(venue || category) && <p>{[venue, category ? category.charAt(0).toUpperCase() + category.slice(1) : ''].filter(Boolean).join(' — ')}</p>}
-      {bodyHtml && <div class="e-content" set:html={bodyHtml} />}
+      {bodyHtml && <div class="e-content post-body" set:html={bodyHtml} />}
     </>)}
     {type === 'award' && (<>
       <p>{title}</p>

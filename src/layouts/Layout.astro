@@ -124,7 +124,7 @@ const structuredData = jsonLd ?? defaultJsonLd;
   <body data-page-type={resolvedPageType}>
     <a href="#main-content">Skip to content</a>
     <!-- Representative h-card (visually hidden, machine-readable) -->
-    <div class="h-card" id="representative-hcard" aria-hidden="true">
+    <div class="h-card sr-only" aria-hidden="true">
       <a class="p-name u-url u-uid" href="https://andystevens.name" rel="me" tabindex="-1">Andy Stevens</a>
       <span class="p-note">Poet, technical writer, and web tinkerer.</span>
       <a class="u-url" href="https://github.com/andystevensname" rel="me" tabindex="-1">GitHub</a>
@@ -143,9 +143,23 @@ const structuredData = jsonLd ?? defaultJsonLd;
     </main>
     <footer id="footer">
       <span>&copy; 2021&ndash;{currentYear} Andy Stevens</span>
-      <a rel="me" href="https://github.com/andystevensname">GitHub</a>
-      <FediFollow />
-      <a rel="me" href="https://bsky.app/profile/andystevens.name">Bluesky</a>
+      <div class="social-links">
+        <a rel="me" href="https://github.com/andystevensname">
+          <svg width="1em" height="1em" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M14.3333 19V17.137C14.3583 16.8275 14.3154 16.5163 14.2073 16.2242C14.0993 15.9321 13.9286 15.6657 13.7067 15.4428C15.8 15.2156 18 14.4431 18 10.8989C17.9998 9.99256 17.6418 9.12101 17 8.46461C17.3039 7.67171 17.2824 6.79528 16.94 6.01739C16.94 6.01739 16.1533 5.7902 14.3333 6.97811C12.8053 6.57488 11.1947 6.57488 9.66666 6.97811C7.84666 5.7902 7.05999 6.01739 7.05999 6.01739C6.71757 6.79528 6.69609 7.67171 6.99999 8.46461C6.35341 9.12588 5.99501 10.0053 5.99999 10.9183C5.99999 14.4366 8.19999 15.2091 10.2933 15.4622C10.074 15.6829 9.90483 15.9461 9.79686 16.2347C9.68889 16.5232 9.64453 16.8306 9.66666 17.137V19" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9.66667 17.7018C7.66667 18.3335 6 17.7018 5 15.7544" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="label">GitHub</span>
+        </a>
+        <FediFollow />
+        <a rel="me" href="https://bsky.app/profile/andystevens.name">
+          <svg width="1em" height="1em" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.297 5.568-.628 6.383-3.364.246-.828.624-5.79.624-6.478 0-.69-.139-1.861-.902-2.206-.659-.298-1.664-.62-4.3 1.24C16.046 4.748 13.087 8.687 12 10.8Z"/>
+          </svg>
+          <span class="label">Bluesky</span>
+        </a>
+      </div>
     </footer>
   </body>
 </html>
