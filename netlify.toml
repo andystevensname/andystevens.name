@@ -6,10 +6,10 @@
   package = "./netlify/plugins/send-webmentions"
 
 [[plugins]]
-  package = "./netlify/plugins/post-to-bluesky"
+  package = "./netlify/plugins/deliver-to-bluesky"
 
 [[plugins]]
-  package = "./netlify/plugins/deliver-activitypub"
+  package = "./netlify/plugins/deliver-to-activitypub"
 
 [[headers]]
   for = "/fonts/*"

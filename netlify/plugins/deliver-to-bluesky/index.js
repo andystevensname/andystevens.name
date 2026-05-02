@@ -79,7 +79,7 @@ export const onSuccess = async function () {
   // "New" = published within the last 10 minutes of this build, matching
   // the prior RSS-based behavior (catches just-deployed content while
   // skipping older posts that happen to opt into Bluesky after the fact).
-  const cutoff = Date.now() - 10 * 60 * 1000;
+  const cutoff = Date.now() - 60 * 60 * 1000;
   const candidates = posts.filter((p) => {
     if (p.apType === 'Like') return false;
     if (new Date(p.published).getTime() < cutoff) return false;

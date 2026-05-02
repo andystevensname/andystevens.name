@@ -18,7 +18,7 @@ export const onSuccess = async function () {
     return;
   }
 
-  const cutoff = Date.now() - 10 * 60 * 1000;
+  const cutoff = Date.now() - 60 * 60 * 1000;
   const candidates = posts.filter((p) => {
     if (new Date(p.published).getTime() < cutoff) return false;
     return federatable(p);
