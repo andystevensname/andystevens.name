@@ -63,6 +63,8 @@ export function mapLikes(likes: any[]): FeedItemData[] {
     type: 'like' as const,
     url: `/likes/${l.id}/`,
     date: l.data.date ?? new Date(0),
+    title: l.data.title,
+    summary: l.data.summary,
     linkTo: l.data.like_of,
   }));
 }

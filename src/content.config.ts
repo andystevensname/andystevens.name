@@ -43,6 +43,8 @@ const likes = defineCollection({
   loader: glob({ pattern: '*.md', base: './src/content/likes' }),
   schema: z.object({
     like_of: z.string(),
+    title: z.string().optional(),
+    summary: z.string().optional(),
     date: z.coerce.date().optional(),
     published: z.boolean().optional().default(true),
     syndication,
