@@ -8,6 +8,9 @@
 [[plugins]]
   package = "./netlify/plugins/post-to-bluesky"
 
+[[plugins]]
+  package = "./netlify/plugins/deliver-activitypub"
+
 [[headers]]
   for = "/fonts/*"
   [headers.values]
