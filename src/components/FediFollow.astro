@@ -8,12 +8,24 @@ const PROFILE_URL = 'https://andystevens.name';
   href={PROFILE_URL}
   rel="me"
   data-fedi-handle={HANDLE}
-><span aria-hidden="true">⁂</span><span class="label">Fediverse</span></a>
+><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M4.63495 14.4151L5.67396 12.2121C5.80734 11.9293 6.19266 11.9293 6.32604 12.2121L7.36505 14.4151L9.68859 14.7706C9.98671 14.8162 10.1055 15.1997 9.8897 15.4198L8.2087 17.1334L8.60542 19.5543C8.65636 19.8652 8.34456 20.1022 8.07781 19.9554L6 18.8118L3.92219 19.9554C3.65544 20.1022 3.34363 19.8652 3.39458 19.5543L3.7913 17.1334L2.1103 15.4198C1.89447 15.1997 2.01329 14.8162 2.31141 14.7706L4.63495 14.4151Z" fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/><path d="M16.6349 14.4151L17.674 12.2121C17.8073 11.9293 18.1927 11.9293 18.326 12.2121L19.3651 14.4151L21.6886 14.7706C21.9867 14.8162 22.1055 15.1997 21.8897 15.4198L20.2087 17.1334L20.6054 19.5543C20.6564 19.8652 20.3446 20.1022 20.0778 19.9554L18 18.8118L15.9222 19.9554C15.6554 20.1022 15.3436 19.8652 15.3946 19.5543L15.7913 17.1334L14.1103 15.4198C13.8945 15.1997 14.0133 14.8162 14.3114 14.7706L16.6349 14.4151Z" fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.6349 5.41515L11.674 3.21211C11.8073 2.9293 12.1927 2.9293 12.326 3.21211L13.3651 5.41515L15.6886 5.7706C15.9867 5.8162 16.1055 6.19974 15.8897 6.41976L14.2087 8.13337L14.6054 10.5543C14.6564 10.8652 14.3446 11.1022 14.0778 10.9554L12 9.81178L9.92219 10.9554C9.65544 11.1022 9.34363 10.8652 9.39458 10.5543L9.7913 8.13337L8.1103 6.41976C7.89447 6.19974 8.01329 5.8162 8.31141 5.7706L10.6349 5.41515Z" fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="label">Fediverse</span></a>
 
 <div id="fedi-follow-dialog" class="popover-card" popover role="dialog" aria-label="Follow on the Fediverse">
   <form id="fedi-follow-form" class="popover-form">
+    <div class="fedi-handle-copy">
+      <input
+        id="fedi-handle"
+        type="text"
+        value="@andy@andystevens.name"
+        readonly
+        aria-label="Fediverse handle"
+      />
+      <button type="button" id="fedi-handle-copy-btn" aria-label="Copy handle">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </button>
+    </div>
     <p>
-      This site is federated at <strong>@andy@andystevens.name</strong>. Enter your Fediverse instance or handle below to read and follow.
+      This site is federated with ActivityPub. Enter your Fediverse instance or handle below to read and follow.
     </p>
     <label for="fedi-follow-instance">Your server</label>
     <input
@@ -112,6 +124,14 @@ const PROFILE_URL = 'https://andystevens.name';
       }, { signal });
     });
 
+    document.getElementById('fedi-handle-copy-btn')?.addEventListener('click', () => {
+      navigator.clipboard.writeText('@andy@andystevens.name').then(() => {
+        const btn = document.getElementById('fedi-handle-copy-btn');
+        btn?.setAttribute('data-copied', '');
+        setTimeout(() => btn?.removeAttribute('data-copied'), 1500);
+      });
+    }, { signal });
+
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       const instance = normalizeInstance(input.value);
@@ -125,5 +145,43 @@ const PROFILE_URL = 'https://andystevens.name';
 <style>
   .fedi-follow {
     cursor: pointer;
+  }
+
+  .fedi-handle-copy {
+    flex-basis: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 0 0.25rem;
+  }
+
+  .fedi-handle-copy input {
+    flex: 1;
+    min-width: 0;
+    font-size: 1rem;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: var(--radius-sm);
+    background: light-dark(#f8f8f8, #333);
+    color: var(--text);
+    cursor: text;
+    user-select: all;
+    margin: 0;
+  }
+
+  .fedi-handle-copy button {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: var(--c-gray-light);
+    display: flex;
+    align-items: center;
+  }
+
+  .fedi-handle-copy button:hover,
+  .fedi-handle-copy button[data-copied] {
+    color: var(--c-accent);
   }
 </style>

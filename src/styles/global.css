@@ -255,9 +255,9 @@ body::before {
   z-index: var(--z-below);
   pointer-events: none;
   background: linear-gradient(
-    to top left,
-    color-mix(in oklch, var(--c-accent) 15%, transparent) 0%,
-    transparent 60%
+    160deg,
+    transparent 40%,
+    color-mix(in oklch, var(--c-accent) 15%, transparent) 100%
   );
 }
 
