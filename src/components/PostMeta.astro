@@ -33,12 +33,14 @@ const tags = post.data.tags ?? [];
     </svg>
   </button>
   <div id="share-dialog" class="popover-card" popover role="dialog" aria-label="Share this post">
+    <div class="popover-handle" aria-hidden="true"></div>
     <form class="popover-form">
       <p>Copy the link below to share this page.</p>
-      <label for="share-link-input">Link</label>
-      <input id="share-link-input" type="text" value="" readonly />
-      <div class="popover-actions">
-        <button id="copy-link-btn" type="button">Copy Link</button>
+      <div class="share-link-copy">
+        <input id="share-link-input" type="text" value="" readonly aria-label="Page link" />
+        <button id="copy-link-btn" type="button" aria-label="Copy link">
+          <svg width="20" height="20" aria-hidden="true"><use href="/icons.svg#icon-copy"/></svg>
+        </button>
       </div>
     </form>
   </div>
@@ -101,11 +103,8 @@ const tags = post.data.tags ?? [];
 
       copyBtn.addEventListener('click', () => {
         navigator.clipboard.writeText(shareInput.value).then(() => {
-          copyBtn.textContent = 'Copied!';
-          setTimeout(() => { copyBtn.textContent = 'Copy Link'; }, 1500);
-        }).catch(() => {
-          copyBtn.textContent = 'Copy failed';
-          setTimeout(() => { copyBtn.textContent = 'Copy Link'; }, 1500);
+          copyBtn.setAttribute('data-copied', '');
+          setTimeout(() => copyBtn.removeAttribute('data-copied'), 1500);
         });
       }, { signal });
     }

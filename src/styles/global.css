@@ -214,6 +214,11 @@ html.dark {
   color: var(--bg);
 }
 
+:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 2px;
+}
+
 /* ============================================
    ROOT ELEMENTS
    ============================================ */
@@ -225,6 +230,7 @@ html {
   font-size: 16px;
   line-height: 1.5;
   background-color: var(--bg);
+  overscroll-behavior: none;
 }
 
 body {
@@ -259,6 +265,7 @@ body::before {
     transparent 40%,
     color-mix(in oklch, var(--c-accent) 15%, transparent) 100%
   );
+  mix-blend-mode: soft-light;
 }
 
 html::after {
@@ -1113,6 +1120,33 @@ html.dark.theme-to-light .theme-icon--moon     { animation: theme-set  400ms bot
   border: 0;
 }
 
+/* --- Pull-to-refresh --- */
+
+html::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 50%;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--c-accent);
+  border-top-color: transparent;
+  opacity: var(--pull-progress, 0);
+  scale: var(--pull-progress, 0);
+  translate: -50% calc((var(--pull-progress, 0) - 1) * 3rem);
+  z-index: var(--z-header);
+  pointer-events: none;
+}
+
+html.refreshing::before {
+  animation: ptr-spin 600ms linear infinite;
+}
+
+@keyframes ptr-spin {
+  to { rotate: 360deg; }
+}
+
 /* ============================================
    COMPONENTS (classes)
    ============================================ */
@@ -1124,18 +1158,43 @@ html.dark.theme-to-light .theme-icon--moon     { animation: theme-set  400ms bot
   inset: auto 0 0 0;
   width: 100%;
   max-width: none;
-  max-height: 80vh;
+  height: 50vh;
   margin: 0;
-  padding: 1rem var(--grid-margin);
+  padding: 0 var(--grid-margin) 1rem;
   border: none;
   border-top: var(--border-strong);
-  border-radius: 0;
+  border-radius: 0.75rem 0.75rem 0 0;
   background: var(--bg);
   color: var(--text);
   box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.15);
   transform: translateY(100%);
   transition: transform 300ms ease, display 300ms ease allow-discrete;
   overflow-y: auto;
+}
+
+.popover-handle {
+  display: flex;
+  justify-content: center;
+  padding: 0.5rem 0;
+  touch-action: none;
+  cursor: grab;
+}
+
+.popover-handle::after {
+  content: '';
+  width: 2.25rem;
+  height: 5px;
+  border-radius: 2px;
+  background: currentColor;
+  opacity: 0.3;
+}
+
+.popover-card[data-dragging] {
+  transition: none;
+}
+
+.popover-card[data-dragging]::backdrop {
+  transition: none;
 }
 
 .popover-card:popover-open {
@@ -1178,6 +1237,10 @@ html.dark.theme-to-light .theme-icon--moon     { animation: theme-set  400ms bot
     transform: scale(0.95);
     opacity: 0;
     transition: transform 200ms ease, opacity 200ms ease, display 200ms ease allow-discrete;
+  }
+
+  .popover-handle {
+    display: none;
   }
 
   .popover-card:popover-open {
@@ -1248,6 +1311,43 @@ html.dark.theme-to-light .theme-icon--moon     { animation: theme-set  400ms bot
   border: none;
   border-radius: var(--radius-sm);
   cursor: pointer;
+}
+
+.share-link-copy {
+  flex-basis: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.share-link-copy input {
+  flex: 1;
+  min-width: 0;
+  font-size: 1rem;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: var(--radius-sm);
+  background: light-dark(#f8f8f8, #333);
+  color: var(--text);
+  cursor: text;
+  user-select: all;
+  margin: 0;
+}
+
+.share-link-copy button {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--c-gray-light);
+  display: flex;
+  align-items: center;
+}
+
+.share-link-copy button:hover,
+.share-link-copy button[data-copied] {
+  color: var(--c-accent);
 }
 
 /* --- Share / post-meta --- */
@@ -1368,6 +1468,7 @@ article[data-type] {
 [data-type] > div img {
   width: 100%;
   height: auto;
+  margin: 0.5rem 0;
 }
 
 [data-type] > div blockquote {

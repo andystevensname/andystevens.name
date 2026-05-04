@@ -120,6 +120,8 @@ const structuredData = jsonLd ?? defaultJsonLd;
     {extraHead && <Fragment set:html={extraHead} />}
     <ClientRouter />
     <script>import '../lib/photo-nav';</script>
+    <script>import '../lib/popover-swipe';</script>
+    <script>import '../lib/pull-to-refresh';</script>
   </head>
   <body data-page-type={resolvedPageType}>
     <a href="#main-content">Skip to content</a>
