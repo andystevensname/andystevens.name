@@ -1122,24 +1122,43 @@ html.dark.theme-to-light .theme-icon--moon     { animation: theme-set  400ms bot
 
 /* --- Pull-to-refresh --- */
 
-html::before {
-  content: '';
+@property --ptr-pull {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0px;
+}
+
+body {
+  translate: 0 var(--ptr-pull);
+  transition: translate 300ms ease;
+}
+
+html.ptr-active body {
+  transition: none;
+}
+
+#ptr-indicator {
   position: fixed;
-  top: 0;
+  top: 0.75rem;
   left: 50%;
+  translate: -50% calc(-1 * var(--ptr-pull));
   width: 2rem;
   height: 2rem;
   border-radius: var(--radius-pill);
   border: 2px solid var(--c-accent);
   border-top-color: transparent;
-  opacity: var(--pull-progress, 0);
-  scale: var(--pull-progress, 0);
-  translate: -50% calc((var(--pull-progress, 0) - 1) * 3rem);
+  opacity: calc(var(--ptr-pull) / 80px);
+  rotate: calc(var(--ptr-pull) / 80px * 270deg);
   z-index: var(--z-header);
   pointer-events: none;
+  transition: translate 300ms ease, opacity 300ms ease, rotate 300ms ease;
 }
 
-html.refreshing::before {
+html.ptr-active #ptr-indicator {
+  transition: none;
+}
+
+html.ptr-refreshing #ptr-indicator {
   animation: ptr-spin 600ms linear infinite;
 }
 

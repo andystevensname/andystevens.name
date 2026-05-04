@@ -1,41 +1,33 @@
-// Pull-to-refresh: touch gesture at top of page triggers reload.
-// Visual indicator via --pull-progress custom property on <html>,
-// styled by html::before in CSS. Zero DOM elements added.
+// Pull-to-refresh: sets --ptr-pull on <html>. CSS does the rest.
 
-const THRESHOLD = 80;
+let y = 0, active = false;
+const h = document.documentElement;
 
-let startY = 0;
-let pulling = false;
-const html = document.documentElement;
+const set = (px: number) => h.style.setProperty('--ptr-pull', `${px}px`);
+const clear = () => { h.style.removeProperty('--ptr-pull'); h.classList.remove('ptr-active'); };
 
-function reset() {
-  pulling = false;
-  html.style.removeProperty('--pull-progress');
-}
+const release = () => {
+  if (!active) return;
+  active = false;
+  h.classList.remove('ptr-active');
+  if (parseFloat(getComputedStyle(h).getPropertyValue('--ptr-pull')) >= 80) {
+    h.classList.add('ptr-refreshing');
+    location.reload();
+  } else clear();
+};
 
-document.addEventListener('touchstart', (e) => {
-  if (window.scrollY === 0 && e.touches.length === 1) {
-    startY = e.touches[0].clientY;
-    pulling = true;
-  }
+document.addEventListener('touchstart', e => {
+  if (scrollY < 1 && e.touches.length === 1) { y = e.touches[0].clientY; active = true; h.classList.add('ptr-active'); }
 }, { passive: true });
 
-document.addEventListener('touchmove', (e) => {
-  if (!pulling) return;
-  if (window.scrollY > 0) { reset(); return; }
-  const dy = (e.touches[0].clientY - startY) * 0.5;
-  if (dy < 0) { reset(); return; }
-  html.style.setProperty('--pull-progress', String(Math.min(dy / THRESHOLD, 1.5)));
-}, { passive: true });
+document.addEventListener('touchmove', e => {
+  if (!active) return;
+  if (scrollY > 1) { release(); return; }
+  const d = (e.touches[0].clientY - y) * .4;
+  if (d < 0) { release(); return; }
+  e.preventDefault();
+  set(Math.min(d, 120));
+}, { passive: false });
 
-document.addEventListener('touchend', () => {
-  if (pulling && parseFloat(html.style.getPropertyValue('--pull-progress') || '0') >= 1) {
-    html.style.setProperty('--pull-progress', '1');
-    html.classList.add('refreshing');
-    window.location.reload();
-  } else {
-    reset();
-  }
-});
-
-document.addEventListener('touchcancel', reset);
+document.addEventListener('touchend', release);
+document.addEventListener('touchcancel', release);

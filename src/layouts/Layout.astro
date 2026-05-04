@@ -124,6 +124,7 @@ const structuredData = jsonLd ?? defaultJsonLd;
     <script>import '../lib/pull-to-refresh';</script>
   </head>
   <body data-page-type={resolvedPageType}>
+    <div id="ptr-indicator" aria-hidden="true"></div>
     <a href="#main-content">Skip to content</a>
     <!-- Representative h-card (visually hidden, machine-readable) -->
     <div class="h-card sr-only" aria-hidden="true">
