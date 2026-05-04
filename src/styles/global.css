@@ -270,7 +270,7 @@ body::before {
 
 html::after {
   content: '';
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: var(--z-noise);
   pointer-events: none;
@@ -670,7 +670,7 @@ body {
   grid-template-rows: auto auto minmax(var(--footer-height), auto);
   column-gap: var(--grid-gutter);
   justify-content: center;
-  padding: 0 var(--grid-margin);
+  padding: env(safe-area-inset-top) max(var(--grid-margin), env(safe-area-inset-right)) 0 max(var(--grid-margin), env(safe-area-inset-left));
   min-height: 100dvh;
   position: relative;
   isolation: isolate;
@@ -1128,13 +1128,18 @@ html.dark.theme-to-light .theme-icon--moon     { animation: theme-set  400ms bot
   initial-value: 0px;
 }
 
-body {
-  translate: 0 var(--ptr-pull);
-  transition: translate 300ms ease;
+@property --ptr-progress {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
 }
 
-html.ptr-active body {
-  transition: none;
+html:is(.ptr-active, .ptr-releasing, .ptr-refreshing) body {
+  translate: 0 var(--ptr-pull);
+}
+
+html.ptr-releasing body {
+  transition: translate 300ms ease;
 }
 
 #ptr-indicator {
@@ -1147,15 +1152,14 @@ html.ptr-active body {
   border-radius: var(--radius-pill);
   border: 2px solid var(--c-accent);
   border-top-color: transparent;
-  opacity: calc(var(--ptr-pull) / 80px);
-  rotate: calc(var(--ptr-pull) / 80px * 270deg);
+  opacity: var(--ptr-progress);
+  rotate: calc(var(--ptr-progress) * 270deg);
   z-index: var(--z-header);
   pointer-events: none;
-  transition: translate 300ms ease, opacity 300ms ease, rotate 300ms ease;
 }
 
-html.ptr-active #ptr-indicator {
-  transition: none;
+html.ptr-releasing #ptr-indicator {
+  transition: translate 300ms ease, opacity 300ms ease, rotate 300ms ease;
 }
 
 html.ptr-refreshing #ptr-indicator {

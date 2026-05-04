@@ -1,19 +1,29 @@
-// Pull-to-refresh: sets --ptr-pull on <html>. CSS does the rest.
+// Pull-to-refresh: sets --ptr-pull and --ptr-progress on <html>. CSS does the rest.
 
 let y = 0, active = false;
 const h = document.documentElement;
 
-const set = (px: number) => h.style.setProperty('--ptr-pull', `${px}px`);
-const clear = () => { h.style.removeProperty('--ptr-pull'); h.classList.remove('ptr-active'); };
+const set = (px: number) => {
+  h.style.setProperty('--ptr-pull', `${px}px`);
+  h.style.setProperty('--ptr-progress', String(Math.min(px / 80, 1.5)));
+};
+
+const clear = () => {
+  h.style.removeProperty('--ptr-pull');
+  h.style.removeProperty('--ptr-progress');
+};
 
 const release = () => {
   if (!active) return;
   active = false;
-  h.classList.remove('ptr-active');
-  if (parseFloat(getComputedStyle(h).getPropertyValue('--ptr-pull')) >= 80) {
+  if (parseFloat(getComputedStyle(h).getPropertyValue('--ptr-progress')) >= 1) {
     h.classList.add('ptr-refreshing');
     location.reload();
-  } else clear();
+  } else {
+    h.classList.replace('ptr-active', 'ptr-releasing');
+    set(0);
+    setTimeout(() => { h.classList.remove('ptr-releasing'); clear(); }, 300);
+  }
 };
 
 document.addEventListener('touchstart', e => {
