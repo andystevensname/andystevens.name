@@ -51,19 +51,21 @@ export default async (request) => {
 
   // Build the activity appropriate to the item's AP type
   let activity;
+  let isLikeFallback = false;
   if (item.apType === 'Like') {
     const targetId = await resolveToActivityPubId(item.likeTarget);
-    if (!targetId) {
-      return new Response(
-        JSON.stringify({
-          error: 'like target not resolvable to ActivityPub',
-          target: item.likeTarget,
-          hint: 'This URL does not appear to be a fediverse post. Likes can only federate to fediverse targets.',
-        }),
-        { status: 422, headers: { 'Content-Type': 'application/json' } }
-      );
+    if (targetId) {
+      activity = buildLikeActivity(item, targetId);
+    } else {
+      // Target isn't an AP object — fall back to a Note announcing the like
+      isLikeFallback = true;
+      const fallbackItem = {
+        ...item,
+        apType: 'Note',
+        html: `<p>Liked: <a href="${item.likeTarget}">${item.likeTarget}</a></p>${item.html || ''}`,
+      };
+      activity = buildFromManifestItem(fallbackItem).activity;
     }
-    activity = buildLikeActivity(item, targetId);
   } else {
     activity = buildFromManifestItem(item).activity;
   }
@@ -74,10 +76,10 @@ export default async (request) => {
     });
   }
 
-  // Delivery targets: Creates fan out to all followers (dedup by sharedInbox).
-  // Likes go only to the target author's inbox.
+  // Delivery targets: Creates and like fallbacks fan out to all followers
+  // (dedup by sharedInbox). Native AP likes go to the target author's inbox.
   let targetInboxes;
-  if (item.apType === 'Like') {
+  if (item.apType === 'Like' && !isLikeFallback) {
     const authorInbox = await resolveAuthorInbox(item.likeTarget);
     if (!authorInbox) {
       return new Response('could not resolve target author inbox', {

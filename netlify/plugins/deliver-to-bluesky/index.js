@@ -81,7 +81,6 @@ export const onSuccess = async function () {
   // skipping older posts that happen to opt into Bluesky after the fact).
   const cutoff = Date.now() - 60 * 60 * 1000;
   const candidates = posts.filter((p) => {
-    if (p.apType === 'Like') return false;
     if (new Date(p.published).getTime() < cutoff) return false;
     return wantsSyndication(p.syndication, BLUESKY_TOKEN);
   });
@@ -96,8 +95,15 @@ export const onSuccess = async function () {
     console.log(`Authenticated as ${session.handle}`);
 
     for (const post of candidates) {
-      const text = post.title ? `${post.title}\n\n${post.url}` : post.url;
-      const result = await createPost(session, text, post.url);
+      let text, linkUrl;
+      if (post.apType === 'Like') {
+        text = `Liked: ${post.likeTarget}`;
+        linkUrl = post.likeTarget;
+      } else {
+        text = post.title ? `${post.title}\n\n${post.url}` : post.url;
+        linkUrl = post.url;
+      }
+      const result = await createPost(session, text, linkUrl);
       console.log(`Posted to Bluesky: ${post.title || post.url} (${result.uri})`);
     }
   } catch (e) {
