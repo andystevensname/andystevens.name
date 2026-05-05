@@ -266,7 +266,6 @@ body::before {
     transparent 40%,
     color-mix(in oklch, var(--c-accent) 15%, transparent) 100%
   );
-  mix-blend-mode: soft-light;
 }
 
 html::after {
