@@ -233,6 +233,17 @@ html {
   overscroll-behavior: none;
 }
 
+html::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: env(safe-area-inset-top, 0px);
+  background-color: var(--bg);
+  z-index: var(--z-header);
+}
+
 body {
   --c-accent: var(--home-accent);
   --text: var(--home-text);
@@ -825,18 +836,8 @@ body[data-page-type="commonplace"] {
 
   > * { grid-row: 1; }
 
-  &::before {
-    content: '';
-    position: absolute;
-    bottom: 100%;
-    left: calc(-1 * var(--grid-margin));
-    right: calc(-1 * var(--grid-margin));
-    height: env(safe-area-inset-top, 0px);
-    background: inherit;
-  }
-
   &[data-hidden] {
-    transform: translateY(calc(-1 * var(--header-height) - env(safe-area-inset-top, 0px)));
+    transform: translateY(calc(-1 * var(--header-height)));
   }
 }
 
