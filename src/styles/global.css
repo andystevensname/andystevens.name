@@ -249,7 +249,7 @@ body {
   width: 100%;
   margin: 0;
   overflow-x: hidden;
-  font-family: Helvetica, Arial, sans-serif;
+  font-family: system-ui, sans-serif;
   color: var(--text);
   background: var(--bg);
 }
@@ -940,6 +940,7 @@ body[data-page-type="commonplace"] {
     text-decoration: none;
     color: var(--text);
     font-size: var(--fs-sm);
+    text-transform: uppercase;
     padding: 0 0.5rem;
 
     &:hover,
@@ -1878,7 +1879,7 @@ article[data-type] {
     /* Aligns cap-top with the page h1. 1.75rem = main-content padding (1.5rem)
        + h1 padding (0.25rem). 0.05 * (h1-size + site-title-size) cancels
        the half-leading from h1's line-height 1.1 and site-title's 0.9. */
-    padding: calc(1.75rem + 0.05 * (var(--fs-h1) + var(--fs-site-title))) var(--grid-margin) 0 0;
+    padding: calc(1.75rem + 0.05 * (var(--fs-h1) + var(--fs-site-title))) 0 0 0;
     text-align: right;
     pointer-events: none;
   }
@@ -1951,6 +1952,8 @@ article[data-type] {
     align-items: start;
     align-content: start;
     padding-top: 2rem;
+
+    &::after { display: none; }
   }
 
   #header[data-hidden] {
@@ -1965,6 +1968,10 @@ article[data-type] {
     grid-column: 2;
     flex-direction: column;
     align-items: start;
+  }
+
+  #header-nav a {
+    text-transform: none;
   }
 
   label[for="theme-toggle"] {
