@@ -1,43 +1,42 @@
-// Pull-to-refresh: sets --ptr-pull and --ptr-progress on <html>. CSS does the rest.
+// Pull-to-refresh: morphs SVG #ptr-shape with a traveling bulge.
 
+const THRESHOLD = 150, R = 18, N = 36;
 let y = 0, active = false;
-const h = document.documentElement;
 
-const set = (px: number) => {
-  h.style.setProperty('--ptr-pull', `${px}px`);
-  h.style.setProperty('--ptr-progress', String(Math.min(px / 80, 1.5)));
-};
-
-const clear = () => {
-  h.style.removeProperty('--ptr-pull');
-  h.style.removeProperty('--ptr-progress');
-};
-
-const release = () => {
-  if (!active) return;
-  active = false;
-  if (parseFloat(getComputedStyle(h).getPropertyValue('--ptr-progress')) >= 1) {
-    h.classList.add('ptr-refreshing');
-    location.reload();
-  } else {
-    h.classList.replace('ptr-active', 'ptr-releasing');
-    set(0);
-    setTimeout(() => { h.classList.remove('ptr-releasing'); clear(); }, 300);
+function buildPath(p: number): string {
+  const ba = p * Math.PI * 2 - Math.PI / 2;
+  let d = '';
+  for (let i = 0; i <= N; i++) {
+    const a = (i / N) * Math.PI * 2 - Math.PI / 2;
+    const diff = Math.atan2(Math.sin(a - ba), Math.cos(a - ba));
+    const r = R + Math.exp(-diff * diff * 6) * 4;
+    d += `${i ? 'L' : 'M'}${(20 + r * Math.cos(a)).toFixed(2)} ${(20 + r * Math.sin(a)).toFixed(2)}`;
   }
-};
+  return d + 'Z';
+}
+
+function update(p: number) {
+  const s = document.getElementById('ptr-shape') as SVGPathElement | null;
+  if (!s) return;
+  s.setAttribute('d', buildPath(p));
+  s.style.fillOpacity = String(p);
+  s.style.opacity = p > 0.05 ? '1' : '0';
+}
 
 document.addEventListener('touchstart', e => {
-  if (scrollY < 1 && e.touches.length === 1) { y = e.touches[0].clientY; active = true; h.classList.add('ptr-active'); }
+  if (scrollY < 1 && e.touches.length === 1) { y = e.touches[0].clientY; active = true; }
 }, { passive: true });
 
 document.addEventListener('touchmove', e => {
   if (!active) return;
-  if (scrollY > 1) { release(); return; }
-  const d = (e.touches[0].clientY - y) * .4;
-  if (d < 0) { release(); return; }
-  e.preventDefault();
-  set(Math.min(d, 120));
-}, { passive: false });
+  if (scrollY > 1 || e.touches[0].clientY - y < 0) { active = false; update(0); return; }
+  update(Math.min((e.touches[0].clientY - y) / THRESHOLD, 1));
+}, { passive: true });
 
-document.addEventListener('touchend', release);
-document.addEventListener('touchcancel', release);
+document.addEventListener('touchend', e => {
+  if (active && scrollY < 1 && e.changedTouches[0].clientY - y > THRESHOLD) {
+    document.documentElement.classList.add('ptr-refreshing');
+    location.reload();
+  } else update(0);
+  active = false;
+});

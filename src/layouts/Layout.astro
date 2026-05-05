@@ -124,7 +124,15 @@ const structuredData = jsonLd ?? defaultJsonLd;
     <script>import '../lib/pull-to-refresh';</script>
   </head>
   <body data-page-type={resolvedPageType}>
-    <div id="ptr-indicator" aria-hidden="true"></div>
+    <svg id="ptr-indicator" viewBox="-2 -2 44 44" aria-hidden="true">
+      <defs>
+        <linearGradient id="ptr-gradient" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="var(--c-accent)"/>
+          <stop offset="100%" stop-color="var(--text)"/>
+        </linearGradient>
+      </defs>
+      <path id="ptr-shape" d="M20 2 A18 18 0 1 1 19.99 2 Z" fill="url(#ptr-gradient)" fill-opacity="0" stroke="currentColor" stroke-width="2" style="opacity:0"/>
+    </svg>
     <a href="#main-content">Skip to content</a>
     <!-- Representative h-card (visually hidden, machine-readable) -->
     <div class="h-card sr-only" aria-hidden="true">

@@ -230,7 +230,6 @@ html {
   font-size: 16px;
   line-height: 1.5;
   background-color: var(--bg);
-  overscroll-behavior: none;
 }
 
 
@@ -1133,50 +1132,28 @@ html.dark.theme-to-light .theme-icon--moon     { animation: theme-set  400ms bot
   border: 0;
 }
 
-/* --- Pull-to-refresh --- */
-
-@property --ptr-pull {
-  syntax: '<length>';
-  inherits: true;
-  initial-value: 0px;
-}
-
-@property --ptr-progress {
-  syntax: '<number>';
-  inherits: true;
-  initial-value: 0;
-}
-
-html:is(.ptr-active, .ptr-releasing, .ptr-refreshing) body {
-  translate: 0 var(--ptr-pull);
-}
-
-html.ptr-releasing body {
-  transition: translate 300ms ease;
-}
+/* --- Pull-to-refresh indicator --- */
 
 #ptr-indicator {
   position: fixed;
   top: 0.75rem;
   left: 50%;
-  translate: -50% calc(-1 * var(--ptr-pull));
+  translate: -50% 0;
   width: 2rem;
   height: 2rem;
-  border-radius: var(--radius-pill);
-  border: 2px solid var(--c-accent);
-  border-top-color: transparent;
-  opacity: var(--ptr-progress);
-  rotate: calc(var(--ptr-progress) * 270deg);
   z-index: var(--z-header);
   pointer-events: none;
-}
-
-html.ptr-releasing #ptr-indicator {
-  transition: translate 300ms ease, opacity 300ms ease, rotate 300ms ease;
+  color: var(--c-accent);
+  overflow: visible;
 }
 
 html.ptr-refreshing #ptr-indicator {
-  animation: ptr-spin 600ms linear infinite;
+  animation: ptr-spin 800ms linear infinite;
+}
+
+html.ptr-refreshing #ptr-shape {
+  opacity: 1;
+  fill-opacity: 1;
 }
 
 @keyframes ptr-spin {
