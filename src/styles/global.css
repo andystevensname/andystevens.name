@@ -813,7 +813,7 @@ body[data-page-type="commonplace"] {
 
 #header {
   position: sticky;
-  top: 0;
+  top: env(safe-area-inset-top, 0px);
   z-index: var(--z-header);
   height: var(--header-height);
   grid-column: 1 / -1;
@@ -825,8 +825,18 @@ body[data-page-type="commonplace"] {
 
   > * { grid-row: 1; }
 
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: calc(-1 * var(--grid-margin));
+    right: calc(-1 * var(--grid-margin));
+    height: env(safe-area-inset-top, 0px);
+    background: inherit;
+  }
+
   &[data-hidden] {
-    transform: translateY(calc(-1 * var(--header-height)));
+    transform: translateY(calc(-1 * var(--header-height) - env(safe-area-inset-top, 0px)));
   }
 }
 
