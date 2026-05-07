@@ -16,20 +16,9 @@ document.addEventListener('astro:page-load', async () => {
     if (textContent && textContent.scrollHeight > caption.clientHeight) {
       toggle.style.display = '';
 
-      const collapsedHeight = caption.clientHeight;
-
       function toggleCaption() {
         caption!.toggleAttribute('data-expanded');
         const expanded = caption!.hasAttribute('data-expanded');
-        if (expanded) {
-          caption!.style.height = 'auto';
-          const expandedHeight = Math.min(caption!.scrollHeight, window.innerHeight * 0.33);
-          caption!.style.height = expandedHeight + 'px';
-          caption!.style.top = -(expandedHeight - collapsedHeight) + 'px';
-        } else {
-          caption!.style.height = '';
-          caption!.style.top = '';
-        }
         toggle!.setAttribute('aria-label', expanded ? 'Collapse caption' : 'Expand caption');
       }
 
@@ -100,7 +89,7 @@ document.addEventListener('astro:page-load', async () => {
   prevLink.href = `/photos/${photos[prevIdx]}/?album=${albumSlug}`;
   nextLink.href = `/photos/${photos[nextIdx]}/?album=${albumSlug}`;
   counter.textContent = `${idx + 1} / ${photos.length}`;
-  nav.style.display = '';
+  nav.style.visibility = '';
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowLeft') prevLink.click();
