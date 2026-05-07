@@ -1130,6 +1130,24 @@ html.dark.theme-to-light .theme-icon--moon     { animation: theme-set  400ms bot
   object-position: center;
 }
 
+@media (min-width: 816px) {
+  #photo-viewer {
+    container-type: size;
+    grid-template-rows: auto auto;
+    align-content: start;
+  }
+
+  #photo-viewer img {
+    position: static;
+    inset: auto;
+    width: 100%;
+    height: auto;
+    max-height: calc(100cqh - 4rem);
+    object-fit: contain;
+    object-position: top;
+  }
+}
+
 #photo-viewer .photo-caption {
   grid-row: 2;
   grid-column: 1;
@@ -1591,6 +1609,10 @@ article[data-type] {
   min-height: calc(1.5lh + 1rem);
 }
 
+@media (min-width: 816px) {
+  .photo-caption > div { background: transparent; }
+}
+
 .photo-caption-text { flex: 1; min-width: 0; }
 
 .photo-caption-text > span:not(.photo-meta) {
@@ -2001,21 +2023,4 @@ article[data-type] {
   }
 
   #main-content { grid-column: 4 / span 4; }
-
-  #photo-viewer {
-    container-type: size;
-    grid-template-rows: auto auto;
-    align-content: center;
-  }
-
-  #photo-viewer img {
-    position: static;
-    inset: auto;
-    width: 100%;
-    height: auto;
-    max-height: calc(100cqh - 4rem);
-    object-fit: contain;
-  }
-
-  .photo-caption > div { background: transparent; }
 }
