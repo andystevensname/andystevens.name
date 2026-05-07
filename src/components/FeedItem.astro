@@ -19,6 +19,7 @@ interface Props {
 }
 
 import { formatDate } from '../lib/date';
+import iconsUrl from '../assets/icons.svg?url';
 
 const { type, url, date, title, summary, bodyHtml, quote, linkTo, photo, photoWidth, photoHeight, alt, venue, category, eager, priority } = Astro.props;
 const imgLoading = eager ? 'eager' : 'lazy';
@@ -28,10 +29,10 @@ const imgFetchPriority = priority ? 'high' : undefined;
 <article class="h-entry" data-type={type} data-category={category ?? type}>
   <a href={url}><time datetime={date.toISOString()}>{formatDate(date)}</time></a>
   <div>
-    <div class="feed-icon"><svg class="icon" width="20" height="20" aria-hidden="true"><use href={`/icons.svg#icon-${type}`}/></svg></div>
+    <div class="feed-icon"><svg class="icon" width="20" height="20" aria-hidden="true"><use href={`${iconsUrl}#icon-${type}`}/></svg></div>
     {type === 'article' && (<>
       <p><a class="p-name u-url" href={url}>{title}</a></p>
-      {quote && <p>{quote} <a href={url} aria-label={`Read ${title}`}><svg class="icon" width="20" height="20" aria-hidden="true"><use href="/icons.svg#icon-readmore"/></svg></a></p>}
+      {quote && <p>{quote} <a href={url} aria-label={`Read ${title}`}><svg class="icon" width="20" height="20" aria-hidden="true"><use href={`${iconsUrl}#icon-readmore`}/></svg></a></p>}
     </>)}
     {type === 'note' && bodyHtml && (
       <div class="e-content post-body" set:html={bodyHtml} />

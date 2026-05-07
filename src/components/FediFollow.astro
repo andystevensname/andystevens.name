@@ -1,4 +1,6 @@
 ---
+import iconsUrl from '../assets/icons.svg?url';
+
 const HANDLE = 'andy@andystevens.name';
 const PROFILE_URL = 'https://andystevens.name';
 ---
@@ -8,7 +10,7 @@ const PROFILE_URL = 'https://andystevens.name';
   href={PROFILE_URL}
   rel="me"
   data-fedi-handle={HANDLE}
-><svg width="1em" height="1em" aria-hidden="true" focusable="false"><use href="/icons.svg#icon-fediverse"/></svg><span class="label">Fediverse</span></a>
+><svg width="1em" height="1em" aria-hidden="true" focusable="false"><use href={`${iconsUrl}#icon-fediverse`}/></svg><span class="label">Fediverse</span></a>
 
 <div id="fedi-follow-dialog" class="popover-card" popover role="dialog" aria-label="Follow on the Fediverse">
   <div class="popover-handle" aria-hidden="true"></div>
@@ -22,7 +24,7 @@ const PROFILE_URL = 'https://andystevens.name';
         aria-label="Fediverse handle"
       />
       <button type="button" id="fedi-handle-copy-btn" aria-label="Copy handle">
-        <svg width="20" height="20" aria-hidden="true"><use href="/icons.svg#icon-copy"/></svg>
+        <svg width="20" height="20" aria-hidden="true"><use href={`${iconsUrl}#icon-copy`}/></svg>
       </button>
     </div>
     <p>

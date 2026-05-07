@@ -1,8 +1,17 @@
 const VERSION = 'v1';
 const CACHE = `andystevens-${VERSION}`;
+const OFFLINE_URL = '/offline';
+const PRECACHE = [
+  OFFLINE_URL,
+  '/fonts/BebasNeue-Regular.woff2',
+];
 
-self.addEventListener('install', () => {
-  self.skipWaiting();
+self.addEventListener('install', (event) => {
+  event.waitUntil((async () => {
+    const cache = await caches.open(CACHE);
+    await cache.addAll(PRECACHE);
+    self.skipWaiting();
+  })());
 });
 
 self.addEventListener('activate', (event) => {
@@ -26,20 +35,19 @@ self.addEventListener('fetch', (event) => {
 
   if (request.mode === 'navigate') {
     event.respondWith((async () => {
+      const cache = await caches.open(CACHE);
       try {
         const preload = await event.preloadResponse;
         if (preload) {
-          const cache = await caches.open(CACHE);
           cache.put(request, preload.clone());
           return preload;
         }
         const network = await fetch(request);
-        const cache = await caches.open(CACHE);
         cache.put(request, network.clone());
         return network;
       } catch {
-        const cached = await caches.match(request);
-        return cached || Response.error();
+        const cached = await cache.match(request);
+        return cached || (await cache.match(OFFLINE_URL)) || Response.error();
       }
     })());
     return;

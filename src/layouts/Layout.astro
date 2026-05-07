@@ -4,6 +4,7 @@ import Header from '../components/Header.astro';
 import Navigation from '../components/Navigation.astro';
 import Animation from '../components/Animation.astro';
 import FediFollow from '../components/FediFollow.astro';
+import iconsUrl from '../assets/icons.svg?url';
 import '../styles/global.css';
 
 interface Props {
@@ -117,6 +118,13 @@ const structuredData = jsonLd ?? defaultJsonLd;
       })();
     </script>
     <link rel="preload" as="font" href="/fonts/BebasNeue-Regular.woff2" type="font/woff2" crossorigin="" />
+    <script is:inline>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('/sw.js').catch(function () {});
+        });
+      }
+    </script>
     {extraHead && <Fragment set:html={extraHead} />}
     <ClientRouter />
     <script>import '../lib/photo-nav';</script>
@@ -156,16 +164,16 @@ const structuredData = jsonLd ?? defaultJsonLd;
       <span>&copy; 2021&ndash;{currentYear} Andy Stevens</span>
       <div class="social-links">
         <a rel="me" href="https://github.com/andystevensname">
-          <svg width="1em" height="1em" aria-hidden="true" focusable="false"><use href="/icons.svg#icon-github"/></svg>
+          <svg width="1em" height="1em" aria-hidden="true" focusable="false"><use href={`${iconsUrl}#icon-github`}/></svg>
           <span class="label">GitHub</span>
         </a>
         <FediFollow />
         <a rel="me" href="https://bsky.app/profile/andystevens.name">
-          <svg width="1em" height="1em" aria-hidden="true" focusable="false"><use href="/icons.svg#icon-bluesky"/></svg>
+          <svg width="1em" height="1em" aria-hidden="true" focusable="false"><use href={`${iconsUrl}#icon-bluesky`}/></svg>
           <span class="label">Bluesky</span>
         </a>
         <a href="/feed.xml">
-          <svg width="1em" height="1em" aria-hidden="true" focusable="false"><use href="/icons.svg#icon-rss"/></svg>
+          <svg width="1em" height="1em" aria-hidden="true" focusable="false"><use href={`${iconsUrl}#icon-rss`}/></svg>
           <span class="label">RSS</span>
         </a>
       </div>

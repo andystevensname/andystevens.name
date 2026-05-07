@@ -1,4 +1,6 @@
 ---
+import iconsUrl from '../assets/icons.svg?url';
+
 const currentPath = Astro.url.pathname;
 
 const links = [
@@ -21,7 +23,7 @@ function isCurrent(href: string): boolean {
 <dialog id="header-nav-dialog" aria-label="Main navigation">
   <nav>
     <button id="header-nav-dialog-close" aria-label="Close navigation">
-      <svg width="20" height="20" aria-hidden="true"><use href="/icons.svg#icon-close"/></svg>
+      <svg width="20" height="20" aria-hidden="true"><use href={`${iconsUrl}#icon-close`}/></svg>
     </button>
     <ul>
       {links.map(({ href, label }) => (

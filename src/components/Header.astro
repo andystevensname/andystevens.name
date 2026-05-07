@@ -1,5 +1,6 @@
 ---
 import ThemeSwitcher from './ThemeSwitcher.astro';
+import iconsUrl from '../assets/icons.svg?url';
 
 const currentPath = Astro.url.pathname;
 
@@ -22,7 +23,7 @@ function isCurrent(href: string): boolean {
 <header id="header">
   <!-- Mobile: hamburger -->
   <button id="header-nav-dialog-open" aria-label="Open navigation" aria-expanded="false" aria-controls="header-nav-dialog">
-    <svg width="20" height="20" aria-hidden="true"><use href="/icons.svg#icon-menu"/></svg>
+    <svg width="20" height="20" aria-hidden="true"><use href={`${iconsUrl}#icon-menu`}/></svg>
   </button>
 
   <!-- Desktop: inline nav -->

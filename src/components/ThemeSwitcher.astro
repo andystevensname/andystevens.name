@@ -1,13 +1,14 @@
 ---
+import iconsUrl from '../assets/icons.svg?url';
 ---
 
 <input type="checkbox" id="theme-toggle" aria-label="Toggle dark mode" />
 <label for="theme-toggle">
   <span class="theme-icon theme-icon--moon">
-    <svg width="20" height="20" aria-hidden="true"><use href="/icons.svg#icon-moon"/></svg>
+    <svg width="20" height="20" aria-hidden="true"><use href={`${iconsUrl}#icon-moon`}/></svg>
   </span>
   <span class="theme-icon theme-icon--sun">
-    <svg width="20" height="20" aria-hidden="true"><use href="/icons.svg#icon-sun"/></svg>
+    <svg width="20" height="20" aria-hidden="true"><use href={`${iconsUrl}#icon-sun`}/></svg>
   </span>
 </label>
 

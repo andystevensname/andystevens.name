@@ -1,17 +1,18 @@
 ---
+import iconsUrl from '../assets/icons.svg?url';
 ---
 
 <nav class="photo-nav" id="photo-nav" aria-label="Photo navigation" style="visibility:hidden">
   <a id="photo-album" aria-label="Back to album">
-    <svg width="24" height="24" aria-hidden="true" focusable="false"><use href="/icons.svg#icon-pages"/></svg>
+    <svg width="24" height="24" aria-hidden="true" focusable="false"><use href={`${iconsUrl}#icon-pages`}/></svg>
     <span id="photo-album-title"></span>
   </a>
   <a id="photo-prev" aria-label="Previous photo">
-    <svg width="24" height="24" aria-hidden="true" focusable="false"><use href="/icons.svg#icon-arrow-left"/></svg>
+    <svg width="24" height="24" aria-hidden="true" focusable="false"><use href={`${iconsUrl}#icon-arrow-left`}/></svg>
   </a>
   <span id="photo-counter"></span>
   <a id="photo-next" aria-label="Next photo">
-    <svg width="24" height="24" aria-hidden="true" focusable="false"><use href="/icons.svg#icon-arrow-right"/></svg>
+    <svg width="24" height="24" aria-hidden="true" focusable="false"><use href={`${iconsUrl}#icon-arrow-right`}/></svg>
   </a>
 </nav>
 
