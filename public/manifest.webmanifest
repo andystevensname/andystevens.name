@@ -1,7 +1,7 @@
 {
   "name": "Andy Stevens",
   "short_name": "Andy Stevens",
-  "start_url": "/",
+  "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#212121",
@@ -16,5 +16,9 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ]
+  ],
+  "dir": "ltr",
+  "scope": "https://andstevens.name",
+  "lang": "en",
+  "orientation": "portrait"
 }
