@@ -20,5 +20,7 @@
   "dir": "ltr",
   "scope": "https://andystevens.name",
   "lang": "en",
-  "orientation": "portrait"
+  "orientation": "portrait",
+  "id": "/",
+  "description": "Personal website of Andy Stevens."
 }
