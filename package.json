@@ -6,6 +6,7 @@
     "start": "astro dev",
     "build": "astro build && node scripts/copy-manifest.mjs",
     "build:icons": "node scripts/build-icons.mjs",
+    "vapid": "node scripts/generate-vapid.mjs",
     "preview": "astro preview",
     "install:clean": "rm -rf node_modules/@andystevensname && npm install && npm link @andystevensname/poem-element @andystevensname/remark-poem-element @andystevensname/remark-project-meta-bar"
   },
@@ -17,8 +18,10 @@
     "@netlify/blobs": "^10.7.4",
     "astro": "^6.1.9",
     "marked": "^17.0.5",
+    "netlify-cli": "^26.0.1",
     "remark-directive": "^4.0.0",
-    "unist-util-visit": "^5.1.0"
+    "unist-util-visit": "^5.1.0",
+    "web-push": "^3.6.7"
   },
   "devDependencies": {
     "@resvg/resvg-js": "^2.6.2",

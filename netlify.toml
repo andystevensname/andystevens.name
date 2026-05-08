@@ -11,6 +11,9 @@
 [[plugins]]
   package = "./netlify/plugins/deliver-to-activitypub"
 
+[[plugins]]
+  package = "./netlify/plugins/send-push-notifications"
+
 [[headers]]
   for = "/fonts/*"
   [headers.values]

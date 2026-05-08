@@ -1,5 +1,6 @@
 ---
 import ThemeSwitcher from './ThemeSwitcher.astro';
+import Preferences from './Preferences.astro';
 import iconsUrl from '../assets/icons.svg?url';
 
 const currentPath = Astro.url.pathname;
@@ -33,7 +34,10 @@ function isCurrent(href: string): boolean {
     ))}
   </nav>
 
-  <ThemeSwitcher />
+  <div class="header-controls">
+    <Preferences />
+    <ThemeSwitcher />
+  </div>
 
   <a href="/" class="title-text-mobile">Andy Makes Things</a>
 </header>

@@ -82,6 +82,7 @@ async function buildItem(entry: any, src: any, container: any) {
     summary: entry.data[src.summaryField ?? 'description'] || '',
     tags: entry.data.tags || [],
     syndication: entry.data.syndication || [],
+    notify: entry.data.notify !== false,
     html,
     markdown: entry.body ?? '',
   };
