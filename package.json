@@ -5,6 +5,7 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build && node scripts/copy-manifest.mjs",
+    "build:icons": "node scripts/build-icons.mjs",
     "preview": "astro preview",
     "install:clean": "rm -rf node_modules/@andystevensname && npm install && npm link @andystevensname/poem-element @andystevensname/remark-poem-element @andystevensname/remark-project-meta-bar"
   },
@@ -20,6 +21,8 @@
     "unist-util-visit": "^5.1.0"
   },
   "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
+    "fontkit": "^2.0.4",
     "prettier": "^3.8.1"
   }
 }
