@@ -75,22 +75,31 @@ function isCurrent(href: string): boolean {
       if (e.target === dialog) dialog.close();
     }, { signal });
 
-    // Swipe to open/close
+    // Swipe to open/close. Edge + dx are mirrored under RTL so the
+    // gesture always originates from the inline-start edge (the same
+    // edge the drawer slides in from).
     const EDGE_WIDTH = 30;
     const SWIPE_THRESHOLD = 50;
     let startX = 0;
     let startY = 0;
     let tracking = false;
 
+    const isRtl = () => getComputedStyle(document.documentElement).direction === 'rtl';
+
     document.addEventListener('pointerdown', (e) => {
       if (dialog?.open) {
         startX = e.clientX;
         startY = e.clientY;
         tracking = true;
-      } else if (e.clientX < EDGE_WIDTH && e.pointerType === 'touch') {
-        startX = e.clientX;
-        startY = e.clientY;
-        tracking = true;
+      } else if (e.pointerType === 'touch') {
+        const fromInlineStartEdge = isRtl()
+          ? e.clientX > window.innerWidth - EDGE_WIDTH
+          : e.clientX < EDGE_WIDTH;
+        if (fromInlineStartEdge) {
+          startX = e.clientX;
+          startY = e.clientY;
+          tracking = true;
+        }
       }
     }, { signal });
 
@@ -100,10 +109,14 @@ function isCurrent(href: string): boolean {
       const dy = Math.abs(e.clientY - startY);
       if (dy > Math.abs(dx)) { tracking = false; return; }
 
-      if (!dialog?.open && dx > SWIPE_THRESHOLD) {
+      // Convert physical-x delta to inline-axis delta: positive = moving
+      // toward inline-end (away from start edge); negative = back toward start.
+      const inlineDx = isRtl() ? -dx : dx;
+
+      if (!dialog?.open && inlineDx > SWIPE_THRESHOLD) {
         dialog?.showModal();
         tracking = false;
-      } else if (dialog?.open && dx < -SWIPE_THRESHOLD) {
+      } else if (dialog?.open && inlineDx < -SWIPE_THRESHOLD) {
         dialog?.close();
         openBtn?.focus();
         tracking = false;

@@ -27,7 +27,7 @@ const apLink = apAlternateLink('writing', item, Astro.site);
   extraHead={apLink}
 >
   <article class="h-entry">
-    <h1 class="p-name">{item.data.title}</h1>
+    <h1 class="p-name" dir="auto">{item.data.title}</h1>
     <HEntryMeta url={itemUrl} date={item.data.date} syndication={item.data.syndication} />
 
     <p>
@@ -35,7 +35,7 @@ const apLink = apAlternateLink('writing', item, Astro.site);
       {item.data.url && <> — <a href={item.data.url}>View publication</a></>}
     </p>
 
-    <section class="e-content post-body">
+    <section class="e-content post-body" dir="auto">
       <Content />
     </section>
 

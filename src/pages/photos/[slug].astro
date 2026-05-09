@@ -32,7 +32,7 @@ const tags = photo.data.tags ?? [];
   extraHead={apLink}
 >
   <article class="h-entry">
-    {photo.data.title && <h1 class="p-name sr-only">{photo.data.title}</h1>}
+    {photo.data.title && <h1 class="p-name sr-only" dir="auto">{photo.data.title}</h1>}
     <HEntryMeta url={photoUrl} date={photo.data.date} syndication={photo.data.syndication} />
 
     <PhotoNav />
@@ -43,7 +43,7 @@ const tags = photo.data.tags ?? [];
       <figcaption class="photo-caption">
         <div>
           <div class="photo-caption-text">
-            {photo.data.title && <span class="p-name">{photo.data.title}</span>}
+            {photo.data.title && <span class="p-name" dir="auto">{photo.data.title}</span>}
             <span class="photo-meta">
               {dateStr && <time datetime={isoDate}>{dateStr}</time>}
               {dateStr && tags.length > 0 && <span> &middot; </span>}
@@ -59,7 +59,7 @@ const tags = photo.data.tags ?? [];
       </figcaption>
     </figure>
 
-    <section class="e-content post-body">
+    <section class="e-content post-body" dir="auto">
       <Content />
     </section>
     <Webmentions url={photoUrl} />

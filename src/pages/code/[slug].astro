@@ -47,10 +47,10 @@ const jsonLd = {
   jsonLd={jsonLd}
 >
   <article class="h-entry">
-    <h1 class="p-name">{entry.data.title}</h1>
+    <h1 class="p-name" dir="auto">{entry.data.title}</h1>
     <HEntryMeta url={projectUrl} date={entry.data.date} summary={entry.data.description} syndication={entry.data.syndication} />
 
-    <section class="e-content post-body">
+    <section class="e-content post-body" dir="auto">
       <Content />
     </section>
 

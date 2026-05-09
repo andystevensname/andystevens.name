@@ -27,12 +27,12 @@ const apLink = apAlternateLink('bookmarks', bookmark, Astro.site);
   extraHead={apLink}
 >
   <article class="h-entry">
-    {bookmark.data.title && <h1 class="p-name">{bookmark.data.title}</h1>}
+    {bookmark.data.title && <h1 class="p-name" dir="auto">{bookmark.data.title}</h1>}
     <HEntryMeta url={bookmarkUrl} date={bookmark.data.date} syndication={bookmark.data.syndication} />
 
     <p>Bookmarked: <a class="u-bookmark-of" href={bookmark.data.bookmark_of}>{bookmark.data.bookmark_of}</a></p>
 
-    <section class="e-content post-body">
+    <section class="e-content post-body" dir="auto">
       <Content />
     </section>
 
