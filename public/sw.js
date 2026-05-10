@@ -1,4 +1,4 @@
-const VERSION = 'v2';
+const VERSION = 'v3';
 const CACHE = `andystevens-${VERSION}`;
 const OFFLINE_URL = '/offline';
 const PRECACHE = [
@@ -39,12 +39,35 @@ self.addEventListener('push', (event) => {
     badge: '/icon-192.png',
     tag: data.tag || 'new-post',
     data: { url: data.url || '/' },
+    // Chromium-only; ignored on Safari/Firefox.
+    actions: [{ action: 'unsubscribe', title: 'Mute' }],
   };
   event.waitUntil(self.registration.showNotification(title, options));
 });
 
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
+
+  if (event.action === 'unsubscribe') {
+    event.waitUntil((async () => {
+      const sub = await self.registration.pushManager.getSubscription();
+      if (!sub) return;
+      try {
+        await fetch('/.netlify/functions/push-unsubscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ endpoint: sub.endpoint }),
+        });
+      } catch {
+        // Server unreachable — drop the local subscription anyway so the
+        // user stops getting pushes; the server-side prune happens later
+        // when the next push lands a 410.
+      }
+      await sub.unsubscribe();
+    })());
+    return;
+  }
+
   const target = new URL(event.notification.data?.url || '/', self.location.origin).href;
   event.waitUntil((async () => {
     const all = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
