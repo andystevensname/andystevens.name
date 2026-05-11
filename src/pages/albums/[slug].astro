@@ -39,12 +39,12 @@ allPhotos.sort((a, b) => {
   extraHead={apLink}
 >
   <article class="h-entry">
-    <h1 class="p-name">{album.data.title}</h1>
+    <h1 class="p-name" dir="auto">{album.data.title}</h1>
     <HEntryMeta url={albumUrl} date={album.data.date} syndication={album.data.syndication} />
 
-    {album.data.description && <p class="p-summary">{album.data.description}</p>}
+    {album.data.description && <p class="p-summary" dir="auto">{album.data.description}</p>}
 
-    <section class="e-content post-body">
+    <section class="e-content post-body" dir="auto">
       <Content />
     </section>
 

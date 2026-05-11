@@ -19,8 +19,8 @@ const { Content } = await render(page);
   description={page.data.description}
 >
   <article>
-    <h1>{page.data.title}</h1>
-    <section class="e-content post-body">
+    <h1 dir="auto">{page.data.title}</h1>
+    <section class="e-content post-body" dir="auto">
       <Content />
     </section>
   </article>

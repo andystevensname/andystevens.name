@@ -103,6 +103,16 @@ const BOOKMARKLET = `javascript:(function(){var u=encodeURIComponent(location.hr
           <label><input type="checkbox" name="syndication" value="bluesky" /> Bluesky</label>
         </fieldset>
 
+        <div class="field field-notify">
+          <label for="post-notify">Notify subscribers</label>
+          <span class="prefs-toggle">
+            <input type="checkbox" id="post-notify" name="notify" checked />
+            <span class="prefs-toggle-track" aria-hidden="true">
+              <span class="prefs-toggle-thumb"></span>
+            </span>
+          </span>
+        </div>
+
         <div class="actions">
           <button type="submit">Post</button>
         </div>
@@ -271,6 +281,14 @@ const BOOKMARKLET = `javascript:(function(){var u=encodeURIComponent(location.hr
           if (typeof target === 'string') body.append('syndication[]', target);
         }
 
+        // Notify: only send when the author opted out. `notify` defaults
+        // to true in the content schema, so an absent field means "send a
+        // push." Sending notify=false writes that into frontmatter.
+        const notifyEl = form.querySelector<HTMLInputElement>('#post-notify');
+        if (notifyEl && !notifyEl.checked) {
+          body.set('notify', 'false');
+        }
+
         // Published: datetime-local → ISO 8601 with timezone
         const publishedLocal = String(fd.get('published') ?? '');
         if (publishedLocal) {
@@ -367,12 +385,24 @@ const BOOKMARKLET = `javascript:(function(){var u=encodeURIComponent(location.hr
 
     <style>
       .post-page {
+        --gradient: var(--home-gradient);
         max-width: 32rem;
         margin: 0 auto;
         padding: 1rem;
         font-family: Helvetica, Arial, sans-serif;
         color: var(--text);
         background: var(--bg);
+      }
+
+      .field-notify {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+
+      .field-notify label {
+        margin: 0;
       }
 
       h1 {

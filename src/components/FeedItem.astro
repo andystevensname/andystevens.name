@@ -31,45 +31,45 @@ const imgFetchPriority = priority ? 'high' : undefined;
   <div>
     <div class="feed-icon"><svg class="icon" width="20" height="20" aria-hidden="true"><use href={`${iconsUrl}#icon-${type}`}/></svg></div>
     {type === 'article' && (<>
-      <p><a class="p-name u-url" href={url}>{title}</a></p>
-      {quote && <p>{quote} <a href={url} aria-label={`Read ${title}`}><svg class="icon" width="20" height="20" aria-hidden="true"><use href={`${iconsUrl}#icon-readmore`}/></svg></a></p>}
+      <p dir="auto"><a class="p-name u-url" href={url}>{title}</a></p>
+      {quote && <p dir="auto">{quote} <a href={url} aria-label={`Read ${title}`}><svg class="icon" width="20" height="20" aria-hidden="true"><use href={`${iconsUrl}#icon-readmore`}/></svg></a></p>}
     </>)}
     {type === 'note' && bodyHtml && (
-      <div class="e-content post-body" set:html={bodyHtml} />
+      <div class="e-content post-body" dir="auto" set:html={bodyHtml} />
     )}
     {type === 'bookmark' && (<>
       <p><a href={linkTo}>{title ?? linkTo}</a></p>
-      {bodyHtml && <div class="e-content post-body" set:html={bodyHtml} />}
+      {bodyHtml && <div class="e-content post-body" dir="auto" set:html={bodyHtml} />}
     </>)}
     {type === 'like' && (<>
       <p><a href={linkTo}>{title ?? linkTo}</a></p>
-      {summary && <p>{summary}</p>}
+      {summary && <p dir="auto">{summary}</p>}
     </>)}
     {type === 'photo' && (<>
       {photo && <a href={url}><img class="u-photo" src={`${photo}?class=photo400`} srcset={`${photo}?class=photo200 200w, ${photo}?class=photo400 400w, ${photo}?class=photo800 800w, ${photo}?class=photo1600 1600w`} sizes="(min-width: 640px) 40rem, 100vw" width={photoWidth} height={photoHeight} alt={alt ?? title ?? ''} loading={imgLoading} fetchpriority={imgFetchPriority} decoding="async" /></a>}
-      {title && <p>{title}</p>}
+      {title && <p dir="auto">{title}</p>}
     </>)}
     {type === 'reply' && (<>
       <p>Replied to <a href={linkTo}>{linkTo}</a></p>
-      {bodyHtml && <div class="e-content post-body" set:html={bodyHtml} />}
+      {bodyHtml && <div class="e-content post-body" dir="auto" set:html={bodyHtml} />}
     </>)}
     {type === 'writing' && (<>
-      <p>{linkTo ? <a href={linkTo}>{title}</a> : title}</p>
+      <p dir="auto">{linkTo ? <a href={linkTo}>{title}</a> : title}</p>
       {(venue || category) && <p>{[venue, category ? category.charAt(0).toUpperCase() + category.slice(1) : ''].filter(Boolean).join(' — ')}</p>}
-      {bodyHtml && <div class="e-content post-body" set:html={bodyHtml} />}
+      {bodyHtml && <div class="e-content post-body" dir="auto" set:html={bodyHtml} />}
     </>)}
     {type === 'award' && (<>
-      <p>{title}</p>
+      <p dir="auto">{title}</p>
       {venue && <p>{venue}</p>}
     </>)}
     {type === 'album' && (<>
-      <p><a href={url}>{title}</a></p>
+      <p dir="auto"><a href={url}>{title}</a></p>
       {photo && <a href={url}><img class="u-photo" src={`${photo}?class=photo400`} srcset={`${photo}?class=photo200 200w, ${photo}?class=photo400 400w, ${photo}?class=photo800 800w, ${photo}?class=photo1600 1600w`} sizes="(min-width: 640px) 40rem, 100vw" width={photoWidth} height={photoHeight} alt={title ?? ''} loading={imgLoading} fetchpriority={imgFetchPriority} decoding="async" /></a>}
-      {summary && <p>{summary}</p>}
+      {summary && <p dir="auto">{summary}</p>}
     </>)}
     {type === 'code' && (<>
-      <p><a class="p-name u-url" href={url}>{title}</a></p>
-      {summary && <p>{summary}</p>}
+      <p dir="auto"><a class="p-name u-url" href={url}>{title}</a></p>
+      {summary && <p dir="auto">{summary}</p>}
     </>)}
   </div>
 </article>

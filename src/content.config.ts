@@ -2,6 +2,7 @@ import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
 const syndication = z.array(z.string()).optional().default([]);
+const notify = z.boolean().optional().default(true);
 
 const articles = defineCollection({
   loader: glob({ pattern: '*.md', base: './src/content/articles' }),
@@ -13,6 +14,7 @@ const articles = defineCollection({
     published: z.boolean().optional().default(true),
     tags: z.array(z.string()).optional().default([]),
     syndication,
+    notify,
     slug: z.string().optional(),
   }),
 });
@@ -35,6 +37,7 @@ const bookmarks = defineCollection({
     published: z.boolean().optional().default(true),
     tags: z.array(z.string()).optional().default([]),
     syndication,
+    notify,
     slug: z.string().optional(),
   }),
 });
@@ -48,6 +51,7 @@ const likes = defineCollection({
     date: z.coerce.date().optional(),
     published: z.boolean().optional().default(true),
     syndication,
+    notify,
     slug: z.string().optional(),
   }),
 });
@@ -59,6 +63,7 @@ const notes = defineCollection({
     published: z.boolean().optional().default(true),
     tags: z.array(z.string()).optional().default([]),
     syndication,
+    notify,
     slug: z.string().optional(),
   }),
 });
@@ -82,6 +87,7 @@ const photos = defineCollection({
     height: z.number().optional(),
     flickr_url: z.string().optional(),
     syndication,
+    notify,
     slug: z.string().optional(),
   }),
 });
@@ -94,6 +100,7 @@ const replies = defineCollection({
     published: z.boolean().optional().default(true),
     tags: z.array(z.string()).optional().default([]),
     syndication,
+    notify,
     slug: z.string().optional(),
   }),
 });
@@ -109,6 +116,7 @@ const writing = defineCollection({
     published: z.boolean().optional().default(true),
     tags: z.array(z.string()).optional().default([]),
     syndication,
+    notify,
     slug: z.string().optional(),
   }),
 });
@@ -121,6 +129,7 @@ const awards = defineCollection({
     date: z.coerce.date().optional(),
     published: z.boolean().optional().default(true),
     syndication,
+    notify,
     slug: z.string().optional(),
   }),
 });
@@ -136,6 +145,7 @@ const albums = defineCollection({
     tags: z.array(z.string()).optional().default([]),
     flickr_url: z.string().optional(),
     syndication,
+    notify,
     slug: z.string().optional(),
   }),
 });
@@ -157,6 +167,7 @@ const code = defineCollection({
     published: z.boolean().optional().default(true),
     tags: z.array(z.string()).optional().default([]),
     syndication,
+    notify,
     slug: z.string().optional(),
   }),
 });
