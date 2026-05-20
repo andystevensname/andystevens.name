@@ -190,6 +190,9 @@
   --grid-gutter: clamp(0.5rem, 0.28rem + 1.10vw, 1.5rem);
   --grid-margin: clamp(1rem, 0.78rem + 1.10vw, 2rem);
   --content-max-width: 118rem;
+  /* Vertical offset from the top of #site-layout to the first row of
+     content (page h1 / site title). Shared so both columns stay aligned. */
+  --content-top: 1rem;
   --photo-caption-height: 4rem;
 
   /* Film grain */
@@ -230,6 +233,24 @@ html {
   font-size: 16px;
   line-height: 1.5;
   background-color: var(--bg);
+  interpolate-size: allow-keywords;
+}
+
+/* Responsive media defaults — keep images/video from blowing out their
+   container and preserve aspect ratio. SVG is excluded so inline icons
+   keep their default inline behavior. */
+img, picture, video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Form controls inherit typography rather than falling back to the
+   browser's small sans-serif default. UA margins also zeroed. */
+:where(input, button, textarea, select) {
+  font: inherit;
+  color: inherit;
+  margin: 0;
 }
 
 
@@ -301,17 +322,11 @@ article {
 
   > * { grid-column: 1 / -1; }
 
-  img {
-    max-width: 100%;
-    height: auto;
-
-    &[loading="lazy"] {
-      background: light-dark(var(--c-gray-lighter), #333);
-    }
+  img[loading="lazy"] {
+    background: light-dark(var(--c-gray-lighter), #333);
   }
 
   figure:not(#photo-viewer) {
-    margin: 0 0 1rlh 0;
     padding: 0;
     width: fit-content;
   }
@@ -325,11 +340,6 @@ article {
       text-indent: -1rem;
       list-style-position: inside;
     }
-
-    li ul,
-    li ol {
-      margin-block-end: 0;
-    }
   }
 
   > footer {
@@ -342,6 +352,38 @@ article {
 }
 
 /* ============================================
+   FLOW
+   ============================================ */
+
+/* Zero UA default block margins on prose elements; the owl below
+   re-establishes rhythm. */
+:where(h1, h2, h3, h4, p, ul, ol, blockquote, pre, hr, table, figure, poem-element) {
+  margin-block: 0;
+}
+
+/* Owl primitive. Children space themselves from above; --flow-space
+   lets individual elements declare their own rhythm needs. */
+#main-content > article > * + *,
+.post-body > * + *,
+.feed > * + * {
+  margin-block-start: var(--flow-space, 1rlh);
+}
+
+/* Tighter coupling between the post title and what follows it. */
+#main-content > article > .post-body {
+  margin-block-start: 1rem;
+}
+
+/* When there's no visible title (e.g. notes), .post-body sits at the
+   top of the article. HEntryMeta is display:none but still counts as
+   the first DOM child for adjacent-sibling selectors. The margin nudges
+   the body cap-top down to where the h1 cap-top would land on titled
+   pages, compensating for the line-height-1.1 / 1.5 half-leading gap. */
+#main-content > article > .h-entry-meta:first-child + .post-body {
+  margin-block-start: calc(0.05 * var(--fs-h1));
+}
+
+/* ============================================
    TYPOGRAPHY
    ============================================ */
 
@@ -350,7 +392,7 @@ h1 {
   font-weight: 400;
   font-size: var(--fs-h1);
   line-height: 1.1;
-  margin: 0 0 1rem 0;
+  margin-block-end: 1rem;
   padding: 0.25rem 0.5rem;
   text-wrap: balance;
   text-align: center;
@@ -395,7 +437,6 @@ h1[data-type="commonplace"] { --gradient: var(--social-gradient); }
 h2, h3, h4 {
   width: 100%;
   padding: 0;
-  margin: 0 0 1rlh 0;
   font-weight: bold;
   text-wrap: balance;
 }
@@ -408,7 +449,7 @@ p {
   display: block;
   width: 100%;
   padding: 0;
-  margin: 0 0 1rlh 0;
+  text-wrap: pretty;
 }
 
 ul {
@@ -416,7 +457,6 @@ ul {
   width: 100%;
   list-style: square outside;
   padding: 0 0 0 1rem;
-  margin: 0 0 1rlh 0;
 }
 
 ol {
@@ -424,7 +464,6 @@ ol {
   width: 100%;
   list-style: decimal outside;
   padding: 0 0 0 1rem;
-  margin: 0 0 1rlh 0;
 }
 
 ol li p,
@@ -434,31 +473,11 @@ ul li p {
   text-indent: 0;
 }
 
-ol li p:last-child,
-ul li p:last-child {
-  margin-block-end: 0;
-}
-
 blockquote {
   width: 100%;
   border-inline-start: 4px solid transparent;
   border-image: var(--gradient-v) 1;
   padding: 0 1rem;
-  margin: 0 0 1rlh 0;
-}
-
-blockquote p:last-child {
-  margin-block-end: 0;
-}
-
-blockquote ul,
-blockquote ol {
-  margin-block-start: 0;
-}
-
-blockquote ul:last-child,
-blockquote ol:last-child {
-  margin-block-end: 0;
 }
 
 blockquote > h2,
@@ -473,23 +492,9 @@ code, kbd, samp, pre, tt, var {
   font-family: var(--monospace-font);
 }
 
-textarea {
-  font-family: inherit;
-}
-
-:not(pre) > code {
-  display: inline;
-  margin: 0;
-}
-
-p code {
-  margin-block-end: 0;
-}
-
 pre {
   width: 100%;
   overflow-x: auto;
-  margin: 0 0 1rlh 0;
   padding: 0;
 }
 
@@ -500,7 +505,6 @@ pre:has(code) {
 }
 
 pre code {
-  margin: 0;
   background: none;
   border: none;
   counter-reset: line;
@@ -527,7 +531,6 @@ html.dark .astro-code span {
 }
 
 poem-element {
-  margin: 0 0 1rlh;
   border-inline-start: 4px solid transparent;
   border-image: var(--gradient-v) 1;
   padding-inline-start: 1rem;
@@ -546,14 +549,12 @@ poem-element [slot="author"] {
 }
 
 hr {
-  margin: 0 0 1rlh 0;
   padding: 0;
   border: none;
   border-block-start: var(--border-strong);
 }
 
 table {
-  margin: 0 0 1rlh 0;
   border-collapse: collapse;
   font-variant-numeric: lining-nums tabular-nums;
 }
@@ -802,7 +803,7 @@ body[data-page-type="commonplace"] {
   grid-template-columns: subgrid;
   column-gap: var(--grid-gutter);
   align-content: start;
-  padding: 1rem 0;
+  padding: var(--content-top) 0 1rem 0;
 }
 
 #main-content > * {
@@ -1467,7 +1468,6 @@ html.ptr-refreshing #ptr-shape {
   color: var(--text);
   flex: 1 1 12rem;
   min-width: 0;
-  margin: 0;
 }
 
 .popover-actions {
@@ -1509,7 +1509,6 @@ html.ptr-refreshing #ptr-shape {
   color: var(--text);
   cursor: text;
   user-select: all;
-  margin: 0;
 }
 
 .share-link-copy button {
@@ -1616,6 +1615,7 @@ article[data-type] {
   padding: 0;
 }
 
+
 /* Feed icon wrapper sized to line-height so the svg stays small and centers on the first line */
 [data-type] .feed-icon {
   float: inline-start;
@@ -1646,7 +1646,6 @@ article[data-type] {
 
 [data-type] > div img {
   width: 100%;
-  height: auto;
   margin: 0.5rem 0;
 }
 
@@ -1808,7 +1807,6 @@ article[data-type] {
   width: 100%;
   height: 10rem;
   object-fit: cover;
-  display: block;
 }
 
 /* --- Webmentions --- */
@@ -2005,6 +2003,10 @@ article[data-type] {
    ============================================ */
 
 @media (min-width: 816px) {
+  :root {
+    --content-top: 1.5rem;
+  }
+
   #site-layout {
     overflow: visible;
   }
@@ -2048,10 +2050,10 @@ article[data-type] {
     z-index: var(--z-item);
     font-size: var(--fs-site-title);
     line-height: 0.9;
-    /* Aligns cap-top with the page h1. 1.75rem = main-content padding (1.5rem)
-       + h1 padding (0.25rem). 0.05 * (h1-size + site-title-size) cancels
-       the half-leading from h1's line-height 1.1 and site-title's 0.9. */
-    padding: calc(1.75rem + 0.05 * (var(--fs-h1) + var(--fs-site-title))) 0 0 0;
+    /* Cap-top alignment with page h1: shared --content-top, plus h1's
+       internal padding (0.25rem), plus a half-leading correction for
+       the line-height mismatch (h1: 1.1, site-title: 0.9). */
+    padding: calc(var(--content-top) + 0.25rem + 0.05 * (var(--fs-h1) + var(--fs-site-title))) 0 0 0;
     text-align: end;
     pointer-events: none;
   }
@@ -2062,7 +2064,6 @@ article[data-type] {
 
   #main-content {
     grid-column: 3 / span 6;
-    padding: 1.5rem 0 1rem 0;
   }
 
   article > h1 {
