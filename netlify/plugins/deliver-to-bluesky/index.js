@@ -1,5 +1,5 @@
-import { readFile } from 'node:fs/promises';
 import { wantsSyndication, BLUESKY_TOKEN } from '../../../src/lib/post-sources.mjs';
+import { loadManifest } from '../../../src/lib/manifest.mjs';
 
 const BLUESKY_SERVICE = 'https://bsky.social';
 
@@ -16,9 +16,10 @@ async function createSession(identifier, password) {
 }
 
 async function createPost(session, text, url) {
-  // Detect the URL in the text and create a facet for it
-  const urlStart = text.indexOf(url);
-  const urlEnd = urlStart + new TextEncoder().encode(url).length;
+  // Detect the URL in the text and build a byte-offset facet for it.
+  const enc = new TextEncoder();
+  const byteStart = enc.encode(text.slice(0, text.indexOf(url))).length;
+  const byteEnd = byteStart + enc.encode(url).length;
 
   const record = {
     $type: 'app.bsky.feed.post',
@@ -26,10 +27,7 @@ async function createPost(session, text, url) {
     createdAt: new Date().toISOString(),
     facets: [
       {
-        index: {
-          byteStart: new TextEncoder().encode(text.slice(0, urlStart)).length,
-          byteEnd: new TextEncoder().encode(text.slice(0, urlStart)).length + new TextEncoder().encode(url).length,
-        },
+        index: { byteStart, byteEnd },
         features: [
           {
             $type: 'app.bsky.richtext.facet#link',
@@ -70,15 +68,15 @@ export const onSuccess = async function () {
 
   let posts;
   try {
-    posts = JSON.parse(await readFile('data/posts.json', 'utf8'));
+    posts = await loadManifest();
   } catch (e) {
     console.warn('Bluesky: no post manifest found, skipping:', e.message);
     return;
   }
 
-  // "New" = published within the last 10 minutes of this build, matching
-  // the prior RSS-based behavior (catches just-deployed content while
-  // skipping older posts that happen to opt into Bluesky after the fact).
+  // "New" = published within the last hour of this build — catches
+  // just-deployed content while skipping older posts that happen to
+  // opt into Bluesky syndication after the fact.
   const cutoff = Date.now() - 60 * 60 * 1000;
   const candidates = posts.filter((p) => {
     if (new Date(p.published).getTime() < cutoff) return false;

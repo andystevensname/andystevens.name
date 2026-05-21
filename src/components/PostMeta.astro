@@ -48,14 +48,10 @@ const tags = post.data.tags ?? [];
 </footer>
 <script>
   import iconsUrl from '../assets/icons.svg?url';
+  import { onPageLoad } from '../lib/page-load.js';
+  import { copyToClipboard } from '../lib/clipboard.js';
 
-  let shareController: AbortController | null = null;
-
-  function setupShareButton() {
-    shareController?.abort();
-    shareController = new AbortController();
-    const { signal } = shareController;
-
+  function setupShareButton(signal: AbortSignal) {
     function getShareIconId() {
       const ua = navigator.userAgent;
       if (/iPad|iPhone|iPod/.test(ua)) return 'icon-share-ios';
@@ -105,13 +101,10 @@ const tags = post.data.tags ?? [];
       }, { signal });
 
       copyBtn.addEventListener('click', () => {
-        navigator.clipboard.writeText(shareInput.value).then(() => {
-          copyBtn.setAttribute('data-copied', '');
-          setTimeout(() => copyBtn.removeAttribute('data-copied'), 1500);
-        });
+        copyToClipboard(copyBtn, shareInput.value);
       }, { signal });
     }
   }
-  document.addEventListener('astro:page-load', setupShareButton);
+  onPageLoad(setupShareButton);
 </script>
 

@@ -40,8 +40,7 @@ function slugify(text) {
     .replace(/^-|-$/g, '');
 }
 
-function findPhotoFile(id, name) {
-  const slug = slugify(name);
+function findPhotoFile(id) {
   for (const dir of PHOTO_DIRS) {
     try {
       const files = execSync(`ls "${dir}"`, { encoding: 'utf-8' }).split('\n');
@@ -105,7 +104,7 @@ async function main() {
       const photoUrl = `${BUCKET_URL}/${remotePath}`;
 
       // Find local photo file
-      const localFile = findPhotoFile(id, data.name || id);
+      const localFile = findPhotoFile(id);
       if (!localFile) {
         console.warn(`  SKIP: No photo file found for ${id} (${data.name})`);
         skipped++;

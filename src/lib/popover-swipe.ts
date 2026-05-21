@@ -2,13 +2,9 @@
 // Tracks pointer drag on the handle, translates the sheet, and snaps
 // open or closed on release based on distance and velocity.
 
-let controller: AbortController | null = null;
+import { onPageLoad } from './page-load.js';
 
-document.addEventListener('astro:page-load', () => {
-  controller?.abort();
-  controller = new AbortController();
-  const { signal } = controller;
-
+onPageLoad((signal) => {
   document.querySelectorAll<HTMLElement>('.popover-handle').forEach((handle) => {
     const card = handle.closest<HTMLElement>('.popover-card');
     if (!card) return;

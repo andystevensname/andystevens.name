@@ -60,24 +60,21 @@ const jsonLd = {
 </Layout>
 
 <script>
-  document.addEventListener('astro:page-load', () => {
+  import { onPageLoad } from '../../lib/page-load.js';
+  import { copyToClipboard } from '../../lib/clipboard.js';
+
+  onPageLoad((signal) => {
     document.querySelectorAll<HTMLButtonElement>('.project-meta-bar-copy').forEach((btn) => {
       btn.addEventListener('click', async () => {
         const text = btn.dataset.copy;
         if (!text) return;
         const status = btn.parentElement?.querySelector<HTMLElement>('[role="status"]');
-        try {
-          await navigator.clipboard.writeText(text);
-          btn.dataset.copied = '';
-          if (status) status.textContent = 'Copied to clipboard';
-          setTimeout(() => {
-            delete btn.dataset.copied;
-            if (status) status.textContent = '';
-          }, 1500);
-        } catch {
-          if (status) status.textContent = 'Copy failed';
+        const ok = await copyToClipboard(btn, text);
+        if (status) {
+          status.textContent = ok ? 'Copied to clipboard' : 'Copy failed';
+          if (ok) setTimeout(() => { status.textContent = ''; }, 1500);
         }
-      });
+      }, { signal });
     });
   });
 </script>

@@ -26,7 +26,7 @@ export const GET: APIRoute = async () => {
   const manifest: any[] = [];
 
   for (const src of sources) {
-    let entries;
+    let entries: any[];
     try {
       entries = await getCollection(src.collection as any);
     } catch {

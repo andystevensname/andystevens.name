@@ -1,3 +1,4 @@
+import type { CollectionEntry } from 'astro:content';
 import { marked } from 'marked';
 
 export type FeedItemData = {
@@ -23,102 +24,97 @@ function renderBody(body: string | undefined): string | undefined {
   return marked.parse(body.trim(), { async: false }) as string;
 }
 
-export function mapArticles(posts: any[]): FeedItemData[] {
-  return posts.map((p) => ({
-    type: 'article' as const,
-    url: `/articles/${p.id}/`,
-    date: p.data.date ?? new Date(0),
+// Builds the fields every feed item shares; `extra` supplies the
+// type-specific ones.
+function feedItem(
+  type: FeedItemData['type'],
+  path: string,
+  entry: { id: string; data: { date?: Date } },
+  extra: Partial<FeedItemData>,
+): FeedItemData {
+  return {
+    type,
+    url: `${path}/${entry.id}/`,
+    date: entry.data.date ?? new Date(0),
+    ...extra,
+  };
+}
+
+export function mapArticles(posts: CollectionEntry<'articles'>[]): FeedItemData[] {
+  return posts.map((p) => feedItem('article', '/articles', p, {
     title: p.data.title,
     summary: p.data.description,
     bodyHtml: renderBody(p.body),
     quote: p.data.quote,
-    tags: p.data.tags ?? [],
+    tags: p.data.tags,
   }));
 }
 
-export function mapNotes(notes: any[]): FeedItemData[] {
-  return notes.map((n) => ({
-    type: 'note' as const,
-    url: `/notes/${n.id}/`,
-    date: n.data.date ?? new Date(0),
+export function mapNotes(notes: CollectionEntry<'notes'>[]): FeedItemData[] {
+  return notes.map((n) => feedItem('note', '/notes', n, {
     bodyHtml: renderBody(n.body),
-    tags: n.data.tags ?? [],
+    tags: n.data.tags,
   }));
 }
 
-export function mapBookmarks(bookmarks: any[]): FeedItemData[] {
-  return bookmarks.map((b) => ({
-    type: 'bookmark' as const,
-    url: `/bookmarks/${b.id}/`,
-    date: b.data.date ?? new Date(0),
+export function mapBookmarks(bookmarks: CollectionEntry<'bookmarks'>[]): FeedItemData[] {
+  return bookmarks.map((b) => feedItem('bookmark', '/bookmarks', b, {
     title: b.data.title,
     linkTo: b.data.bookmark_of,
     bodyHtml: renderBody(b.body),
-    tags: b.data.tags ?? [],
+    tags: b.data.tags,
   }));
 }
 
-export function mapLikes(likes: any[]): FeedItemData[] {
-  return likes.map((l) => ({
-    type: 'like' as const,
-    url: `/likes/${l.id}/`,
-    date: l.data.date ?? new Date(0),
+export function mapLikes(likes: CollectionEntry<'likes'>[]): FeedItemData[] {
+  return likes.map((l) => feedItem('like', '/likes', l, {
     title: l.data.title,
     summary: l.data.summary,
     linkTo: l.data.like_of,
   }));
 }
 
-export function mapPhotos(photos: any[]): FeedItemData[] {
-  return photos.map((p) => ({
-    type: 'photo' as const,
-    url: `/photos/${p.id}/`,
-    date: p.data.date ?? new Date(0),
+export function mapPhotos(photos: CollectionEntry<'photos'>[]): FeedItemData[] {
+  return photos.map((p) => feedItem('photo', '/photos', p, {
     title: p.data.title,
     photo: Array.isArray(p.data.photo) ? p.data.photo[0] : p.data.photo,
     photoWidth: p.data.width,
     photoHeight: p.data.height,
     alt: p.data.alt,
-    tags: p.data.tags ?? [],
+    tags: p.data.tags,
   }));
 }
 
-export function mapReplies(replies: any[]): FeedItemData[] {
-  return replies.map((r) => ({
-    type: 'reply' as const,
-    url: `/replies/${r.id}/`,
-    date: r.data.date ?? new Date(0),
+export function mapReplies(replies: CollectionEntry<'replies'>[]): FeedItemData[] {
+  return replies.map((r) => feedItem('reply', '/replies', r, {
     linkTo: r.data.in_reply_to,
     bodyHtml: renderBody(r.body),
-    tags: r.data.tags ?? [],
+    tags: r.data.tags,
   }));
 }
 
-export function mapWriting(writing: any[]): FeedItemData[] {
-  return writing.map((w) => ({
-    type: 'writing' as const,
-    url: `/writing/${w.id}/`,
-    date: w.data.date ?? new Date(0),
+export function mapWriting(writing: CollectionEntry<'writing'>[]): FeedItemData[] {
+  return writing.map((w) => feedItem('writing', '/writing', w, {
     title: w.data.title,
     linkTo: w.data.url,
     venue: w.data.venue,
     category: w.data.category,
     bodyHtml: renderBody(w.body),
-    tags: w.data.tags ?? [],
+    tags: w.data.tags,
   }));
 }
 
-export function mapAwards(awards: any[]): FeedItemData[] {
-  return awards.map((a) => ({
-    type: 'award' as const,
-    url: `/awards/${a.id}/`,
-    date: a.data.date ?? new Date(0),
+export function mapAwards(awards: CollectionEntry<'awards'>[]): FeedItemData[] {
+  return awards.map((a) => feedItem('award', '/awards', a, {
     title: a.data.title,
     venue: a.data.issuer,
   }));
 }
 
-export function mapAlbums(albums: any[], photos: any[] = []): FeedItemData[] {
+export function mapAlbums(
+  albums: CollectionEntry<'albums'>[],
+  photos: CollectionEntry<'photos'>[] = [],
+): FeedItemData[] {
   const dimsByCover = new Map<string, { width?: number; height?: number }>();
   for (const p of photos) {
     const src = Array.isArray(p.data.photo) ? p.data.photo[0] : p.data.photo;
@@ -126,28 +122,22 @@ export function mapAlbums(albums: any[], photos: any[] = []): FeedItemData[] {
   }
   return albums.map((a) => {
     const dims = a.data.cover ? dimsByCover.get(a.data.cover) : undefined;
-    return {
-      type: 'album' as const,
-      url: `/albums/${a.id}/`,
-      date: a.data.date ?? new Date(0),
+    return feedItem('album', '/albums', a, {
       title: a.data.title,
       summary: a.data.description,
       photo: a.data.cover,
       photoWidth: dims?.width,
       photoHeight: dims?.height,
-      tags: a.data.tags ?? [],
-    };
+      tags: a.data.tags,
+    });
   });
 }
 
-export function mapCode(projects: any[]): FeedItemData[] {
-  return projects.map((p) => ({
-    type: 'code' as const,
-    url: `/code/${p.id}/`,
-    date: p.data.date ?? new Date(0),
+export function mapCode(projects: CollectionEntry<'code'>[]): FeedItemData[] {
+  return projects.map((p) => feedItem('code', '/code', p, {
     title: p.data.title,
     summary: p.data.description,
-    tags: p.data.tags ?? [],
+    tags: p.data.tags,
   }));
 }
 

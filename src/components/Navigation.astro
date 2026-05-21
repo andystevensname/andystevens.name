@@ -37,19 +37,9 @@ function isCurrent(href: string): boolean {
 
 
 <script>
-  // Abort controller pattern: all listeners attached inside the page-load
-  // handler live for exactly one navigation. At the top of each page-load
-  // we abort the previous controller (canceling all its listeners at
-  // once via the `signal` option) and create a fresh one. Without this,
-  // listeners on persistent targets (document, the persisted dialog)
-  // accumulate and fire multiple times after each navigation.
-  let navController: AbortController | null = null;
+  import { onPageLoad } from '../lib/page-load.js';
 
-  document.addEventListener('astro:page-load', () => {
-    navController?.abort();
-    navController = new AbortController();
-    const { signal } = navController;
-
+  onPageLoad((signal) => {
     const dialog = document.getElementById('header-nav-dialog') as HTMLDialogElement | null;
     const closeBtn = document.getElementById('header-nav-dialog-close') as HTMLButtonElement | null;
     const openBtn = document.getElementById('header-nav-dialog-open') as HTMLButtonElement | null;

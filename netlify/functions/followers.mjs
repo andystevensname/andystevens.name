@@ -1,7 +1,7 @@
 import { listFollowers } from '../../src/lib/storage.mjs';
 import { config } from '../../src/lib/activitypub.mjs';
 
-export default async (request) => {
+export default async () => {
   const c = config();
   const followers = await listFollowers();
 

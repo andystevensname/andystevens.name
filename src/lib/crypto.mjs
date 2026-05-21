@@ -6,6 +6,7 @@
 // What we verify on inbound: same, by fetching the sender's public key.
 
 import { createSign, createVerify, createHash } from 'node:crypto';
+import { fetchAP } from './activitypub.mjs';
 
 /**
  * Sign an outgoing POST (for delivering activities to follower inboxes).
@@ -81,9 +82,7 @@ export async function verifyRequest(request, rawBody) {
   const actorUrl = parts.keyId.split('#')[0];
   let actor;
   try {
-    const res = await fetch(actorUrl, {
-      headers: { Accept: 'application/activity+json' },
-    });
+    const res = await fetchAP(actorUrl);
     if (!res.ok) {
       return { valid: false, reason: `actor fetch ${res.status}` };
     }

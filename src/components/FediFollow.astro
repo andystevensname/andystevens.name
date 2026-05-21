@@ -49,6 +49,9 @@ const PROFILE_URL = 'https://andystevens.name';
 </div>
 
 <script>
+  import { onPageLoad } from '../lib/page-load.js';
+  import { copyToClipboard } from '../lib/clipboard.js';
+
   const HANDLE = 'andy@andystevens.name';
   const STORAGE_KEY = 'fedi-instance';
 
@@ -68,13 +71,7 @@ const PROFILE_URL = 'https://andystevens.name';
     return `https://${instance}/@${HANDLE}`;
   }
 
-  let controller: AbortController | null = null;
-
-  document.addEventListener('astro:page-load', () => {
-    controller?.abort();
-    controller = new AbortController();
-    const { signal } = controller;
-
+  onPageLoad((signal) => {
     const dialog = document.getElementById('fedi-follow-dialog');
     const form = document.getElementById('fedi-follow-form') as HTMLFormElement | null;
     const input = document.getElementById('fedi-follow-instance') as HTMLInputElement | null;
@@ -127,12 +124,8 @@ const PROFILE_URL = 'https://andystevens.name';
       }, { signal });
     });
 
-    document.getElementById('fedi-handle-copy-btn')?.addEventListener('click', () => {
-      navigator.clipboard.writeText('@andy@andystevens.name').then(() => {
-        const btn = document.getElementById('fedi-handle-copy-btn');
-        btn?.setAttribute('data-copied', '');
-        setTimeout(() => btn?.removeAttribute('data-copied'), 1500);
-      });
+    document.getElementById('fedi-handle-copy-btn')?.addEventListener('click', (e) => {
+      copyToClipboard(e.currentTarget as HTMLElement, '@andy@andystevens.name');
     }, { signal });
 
     form.addEventListener('submit', (e) => {

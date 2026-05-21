@@ -4,9 +4,9 @@
 //
 // Auth: shared secret in Authorization header, matching PUSH_FANOUT_SECRET.
 
-import { readFile } from 'node:fs/promises';
 import { configureVapid, sendForPosts } from '../../src/lib/push-send.mjs';
 import { getLastPushed, setLastPushed } from '../../src/lib/storage.mjs';
+import { loadManifest } from '../../src/lib/manifest.mjs';
 
 function maxByPublished(posts) {
   return posts.reduce((m, p) => {
@@ -28,7 +28,7 @@ export default async (request) => {
 
   let posts;
   try {
-    posts = JSON.parse(await readFile('data/posts.json', 'utf8'));
+    posts = await loadManifest();
   } catch (e) {
     return new Response(`no manifest: ${e.message}`, { status: 500 });
   }

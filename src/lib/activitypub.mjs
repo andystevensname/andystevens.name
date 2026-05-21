@@ -19,14 +19,20 @@ function normalizePem(pem) {
     .join('\n');
 }
 
+// Env vars are immutable per process, so the assembled config (including
+// the relatively costly PEM normalization) is computed once and cached.
+let cachedConfig;
+
 export function config() {
+  if (cachedConfig) return cachedConfig;
+
   const domain = process.env.AP_DOMAIN;
   const username = process.env.AP_USERNAME;
   if (!domain || !username) {
     throw new Error('AP_DOMAIN and AP_USERNAME env vars are required');
   }
   const base = `https://${domain}`;
-  return {
+  cachedConfig = {
     domain,
     username,
     base,
@@ -41,6 +47,13 @@ export function config() {
     publicKey: normalizePem(process.env.AP_PUBLIC_KEY),
     privateKey: normalizePem(process.env.AP_PRIVATE_KEY),
   };
+  return cachedConfig;
+}
+
+// Fetches a remote ActivityPub object or actor, requesting the AP JSON
+// representation. Returns the raw Response — callers check status/type.
+export function fetchAP(url) {
+  return fetch(url, { headers: { Accept: 'application/activity+json' } });
 }
 
 export function buildActor() {

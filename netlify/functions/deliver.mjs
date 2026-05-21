@@ -4,11 +4,10 @@ import {
   config,
   buildFromManifestItem,
   buildLikeActivity,
+  fetchAP,
 } from '../../src/lib/activitypub.mjs';
 import { federatable } from '../../src/lib/post-sources.mjs';
-import { readFile } from 'node:fs/promises';
-import { fileURLToPath } from 'node:url';
-import { dirname, join } from 'node:path';
+import { loadManifest } from '../../src/lib/manifest.mjs';
 
 // POST /api/deliver
 // Headers: Authorization: Bearer <AP_DELIVER_SECRET>
@@ -32,10 +31,7 @@ export default async (request) => {
   if (!slug) return new Response('missing slug', { status: 400 });
 
   const c = config();
-  const here = dirname(fileURLToPath(import.meta.url));
-  const posts = JSON.parse(
-    await readFile(join(here, '..', '..', 'data', 'posts.json'), 'utf8')
-  );
+  const posts = await loadManifest();
 
   const item = posts.find(
     (p) => p.slug === slug && (!collection || p.collection === collection)
@@ -140,10 +136,7 @@ export default async (request) => {
 // Given an external URL, try to resolve it to an ActivityPub object ID.
 async function resolveToActivityPubId(url) {
   try {
-    const apRes = await fetch(url, {
-      headers: { Accept: 'application/activity+json' },
-      redirect: 'follow',
-    });
+    const apRes = await fetchAP(url);
     if (apRes.ok) {
       const ct = apRes.headers.get('content-type') || '';
       if (ct.includes('activity+json') || ct.includes('ld+json')) {
@@ -172,9 +165,7 @@ async function resolveAuthorInbox(url) {
   if (!apId) return null;
 
   try {
-    const res = await fetch(apId, {
-      headers: { Accept: 'application/activity+json' },
-    });
+    const res = await fetchAP(apId);
     if (!res.ok) return null;
     const obj = await res.json();
 
@@ -186,9 +177,7 @@ async function resolveAuthorInbox(url) {
           : obj.attributedTo?.id;
     if (!actorUrl) return null;
 
-    const actorRes = await fetch(actorUrl, {
-      headers: { Accept: 'application/activity+json' },
-    });
+    const actorRes = await fetchAP(actorUrl);
     if (!actorRes.ok) return null;
     const actor = await actorRes.json();
     return actor.endpoints?.sharedInbox || actor.inbox || null;

@@ -34,8 +34,9 @@ export async function fetchWebmentions(): Promise<Webmention[]> {
       return cachedMentions;
     }
     const data = await res.json();
-    cachedMentions = data.json ?? data ?? [];
-    return cachedMentions;
+    const mentions: Webmention[] = data.json ?? data ?? [];
+    cachedMentions = mentions;
+    return mentions;
   } catch (e) {
     console.warn('Webmention fetch error:', e);
     cachedMentions = [];

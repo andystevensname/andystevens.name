@@ -1,17 +1,13 @@
 import { config, buildFromManifestItem } from '../../src/lib/activitypub.mjs';
 import { federatable } from '../../src/lib/post-sources.mjs';
-import { readFile } from 'node:fs/promises';
-import { fileURLToPath } from 'node:url';
-import { dirname, join } from 'node:path';
+import { loadManifest } from '../../src/lib/manifest.mjs';
 
-export default async (request) => {
+export default async () => {
   const c = config();
 
   let posts = [];
   try {
-    const here = dirname(fileURLToPath(import.meta.url));
-    const manifestPath = join(here, '..', '..', 'data', 'posts.json');
-    posts = JSON.parse(await readFile(manifestPath, 'utf8'));
+    posts = await loadManifest();
   } catch (e) {
     console.warn('no posts manifest found:', e.message);
   }

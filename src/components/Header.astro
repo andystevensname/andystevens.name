@@ -43,16 +43,9 @@ function isCurrent(href: string): boolean {
 </header>
 
 <script>
-  // Abort previous page-load's listeners so they don't accumulate on
-  // window across navigations. See the equivalent pattern in
-  // Navigation.astro for the fuller explanation.
-  let headerController: AbortController | null = null;
+  import { onPageLoad } from '../lib/page-load.js';
 
-  document.addEventListener('astro:page-load', () => {
-    headerController?.abort();
-    headerController = new AbortController();
-    const { signal } = headerController;
-
+  onPageLoad((signal) => {
     const header = document.getElementById('header') as HTMLElement | null;
     let lastScroll = 0;
 

@@ -13,6 +13,8 @@ import iconsUrl from '../assets/icons.svg?url';
 </label>
 
 <script>
+  import { onPageLoad } from '../lib/page-load.js';
+
   let animatingTimer: number | undefined;
   let themeTimer: number | undefined;
 
@@ -43,7 +45,7 @@ import iconsUrl from '../assets/icons.svg?url';
     applyTheme(isDark);
   }
 
-  document.addEventListener('astro:page-load', () => {
+  onPageLoad((signal) => {
     // Re-apply saved theme after client-side navigation (no animation)
     const saved = localStorage.getItem('theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -52,7 +54,7 @@ import iconsUrl from '../assets/icons.svg?url';
 
     document.getElementById('theme-toggle')?.addEventListener('change', (e) => {
       syncTheme((e.target as HTMLInputElement).checked, true);
-    });
+    }, { signal });
   });
 
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {

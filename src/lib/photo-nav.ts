@@ -1,13 +1,8 @@
-// Abort previous page-load's listeners (especially the keydown listener
-// on document, which otherwise accumulates across photo-page navigations
-// and fires N clicks per arrow-key press).
-let photoNavController: AbortController | null = null;
+// Caption drawer + album swipe/keyboard navigation on photo pages.
 
-document.addEventListener('astro:page-load', async () => {
-  photoNavController?.abort();
-  photoNavController = new AbortController();
-  const { signal } = photoNavController;
+import { onPageLoad } from './page-load.js';
 
+onPageLoad(async (signal) => {
   // Caption drawer (runs on all photo pages)
   const caption = document.querySelector('.photo-caption') as HTMLElement | null;
   const toggle = document.querySelector('.photo-caption-toggle') as HTMLButtonElement | null;

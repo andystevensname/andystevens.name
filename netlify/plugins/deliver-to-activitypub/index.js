@@ -1,5 +1,5 @@
-import { readFile } from 'node:fs/promises';
 import { federatable } from '../../../src/lib/post-sources.mjs';
+import { loadManifest } from '../../../src/lib/manifest.mjs';
 
 export const onSuccess = async function () {
   const deliverSecret = process.env.AP_DELIVER_SECRET;
@@ -12,7 +12,7 @@ export const onSuccess = async function () {
 
   let posts;
   try {
-    posts = JSON.parse(await readFile('data/posts.json', 'utf8'));
+    posts = await loadManifest();
   } catch (e) {
     console.warn('ActivityPub: no post manifest found, skipping:', e.message);
     return;

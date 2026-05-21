@@ -8,6 +8,7 @@ import {
 import {
   buildAcceptActivity,
   config,
+  fetchAP,
 } from '../../src/lib/activitypub.mjs';
 
 export default async (request) => {
@@ -105,9 +106,7 @@ async function handleUndo(activity) {
 
 async function fetchActor(url) {
   try {
-    const res = await fetch(url, {
-      headers: { Accept: 'application/activity+json' },
-    });
+    const res = await fetchAP(url);
     if (!res.ok) return null;
     return await res.json();
   } catch (e) {

@@ -1,8 +1,6 @@
 import { buildFromManifestItem } from '../../src/lib/activitypub.mjs';
 import { federatable } from '../../src/lib/post-sources.mjs';
-import { readFile } from 'node:fs/promises';
-import { fileURLToPath } from 'node:url';
-import { dirname, join } from 'node:path';
+import { loadManifest } from '../../src/lib/manifest.mjs';
 
 // Serves the AP object for /ap/objects/:collection/:slug. Also handles the
 // legacy /ap/notes/:slug path (single-slug lookup).
@@ -32,9 +30,7 @@ export default async (request) => {
 
   let posts = [];
   try {
-    const here = dirname(fileURLToPath(import.meta.url));
-    const manifestPath = join(here, '..', '..', 'data', 'posts.json');
-    posts = JSON.parse(await readFile(manifestPath, 'utf8'));
+    posts = await loadManifest();
   } catch {
     return new Response('no posts', { status: 404 });
   }

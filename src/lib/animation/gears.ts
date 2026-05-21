@@ -1,4 +1,4 @@
-import { svgEl, SVG_NS } from './svg.js';
+import { svgEl } from './svg.js';
 
 interface GearInfo {
   assemblyEl: SVGGElement;
@@ -18,13 +18,10 @@ interface GearInfo {
 export function createGears(canvas: SVGSVGElement, group: SVGGElement, gearsContainer: Element, width = 400) {
   const teethCounts = [18, 36, 52];
   const gears: GearInfo[] = [];
-  const pinionStep = 0.25;
   let scaleRatio: number | undefined;
 
   function measurePath(d: string) {
-    const tmp = document.createElementNS(SVG_NS, 'path') as SVGPathElement;
-    tmp.setAttribute('d', d);
-    tmp.setAttribute('visibility', 'hidden');
+    const tmp = svgEl<SVGPathElement>('path', { d, visibility: 'hidden' });
     canvas.appendChild(tmp);
     const box = tmp.getBBox();
     canvas.removeChild(tmp);
@@ -40,14 +37,15 @@ export function createGears(canvas: SVGSVGElement, group: SVGGElement, gearsCont
   }
 
   function addSmilRotation(gear: GearInfo, direction: number, durationSeconds: number) {
-    const animate = document.createElementNS(SVG_NS, 'animateTransform') as SVGElement;
-    animate.setAttribute('attributeName', 'transform');
-    animate.setAttribute('type', 'rotate');
-    animate.setAttribute('from', `0`);
-    animate.setAttribute('to', `${direction * 360}`);
-    animate.setAttribute('dur', `${durationSeconds}s`);
-    animate.setAttribute('repeatCount', 'indefinite');
-    animate.setAttribute('additive', 'sum');
+    const animate = svgEl<SVGElement>('animateTransform', {
+      attributeName: 'transform',
+      type: 'rotate',
+      from: 0,
+      to: direction * 360,
+      dur: `${durationSeconds}s`,
+      repeatCount: 'indefinite',
+      additive: 'sum',
+    });
     gear.wrapEl.appendChild(animate);
   }
 
@@ -64,12 +62,13 @@ export function createGears(canvas: SVGSVGElement, group: SVGGElement, gearsCont
     const assemblyEl = svgEl<SVGGElement>('g');
     const wrapEl = svgEl<SVGGElement>('g');
     const gearClass = `anim-gear-${i + 1}`;
-    const pathEl = document.createElementNS(SVG_NS, 'path') as SVGPathElement;
-    pathEl.setAttribute('d', d);
-    pathEl.setAttribute('class', gearClass);
-    pathEl.setAttribute('fill', 'transparent');
-    pathEl.setAttribute('stroke-width', '5');
-    pathEl.setAttribute('opacity', '0.7');
+    const pathEl = svgEl<SVGPathElement>('path', {
+      d,
+      class: gearClass,
+      fill: 'transparent',
+      'stroke-width': 5,
+      opacity: 0.7,
+    });
 
     const circleEl = svgEl<SVGCircleElement>('circle', {
       cx: '0', cy: '0',

@@ -1,6 +1,6 @@
 import { buildActor } from '../../src/lib/activitypub.mjs';
 
-export default async (request) => {
+export default async () => {
   const actor = buildActor();
   return new Response(JSON.stringify(actor), {
     status: 200,
