@@ -292,7 +292,6 @@ html::after {
   content: '';
   position: absolute;
   inset: 0;
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0, black 4rem);
   mask-image: linear-gradient(to bottom, transparent 0, black 4rem);
   z-index: var(--z-noise);
   pointer-events: none;
@@ -355,10 +354,11 @@ article {
    FLOW
    ============================================ */
 
-/* Zero UA default block margins on prose elements; the owl below
-   re-establishes rhythm. */
+/* Zero UA default margins on prose elements; the owl below re-establishes
+   block rhythm. Full `margin` (not just margin-block) because blockquote
+   and figure carry UA margin-inline: 40px. */
 :where(h1, h2, h3, h4, p, ul, ol, blockquote, pre, hr, table, figure, poem-element) {
-  margin-block: 0;
+  margin: 0;
 }
 
 /* Owl primitive. Children space themselves from above; --flow-space
@@ -650,11 +650,8 @@ a[href="#main-content"]:focus {
   margin-inline-start: 0.15em;
   vertical-align: baseline;
   background-color: currentColor;
-  -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M9.17137 14.8284L14.8282 9.17152M14.8282 9.17152H9.87848M14.8282 9.17152V14.1213' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M21 3.6V20.4C21 20.7314 20.7314 21 20.4 21H3.6C3.26863 21 3 20.7314 3 20.4V3.6C3 3.26863 3.26863 3 3.6 3H20.4C20.7314 3 21 3.26863 21 3.6Z' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M9.17137 14.8284L14.8282 9.17152M14.8282 9.17152H9.87848M14.8282 9.17152V14.1213' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M21 3.6V20.4C21 20.7314 20.7314 21 20.4 21H3.6C3.26863 21 3 20.7314 3 20.4V3.6C3 3.26863 3.26863 3 3.6 3H20.4C20.7314 3 21 3.26863 21 3.6Z' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  -webkit-mask-size: contain;
   mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
 }
 
@@ -696,20 +693,9 @@ body {
 .anim-gear-2 { stroke: var(--c-anim-gear-2); }
 .anim-gear-3 { stroke: var(--c-anim-gear-3); }
 
-/* Per-page-type palettes — map tokens to functional variables */
-body[data-page-type="home"] {
-  --c-accent:      var(--home-accent);
-  --text:          var(--home-text);
-  --gradient:      var(--home-gradient);
-  --gradient-v:    var(--home-gradient-v);
-  --border-strong: 1px solid var(--home-text);
-  --c-anim-beam:   var(--home-beam);
-  --c-anim-poetry: var(--home-poetry);
-  --c-anim-gear-1: var(--home-gear-1);
-  --c-anim-gear-2: var(--home-gear-2);
-  --c-anim-gear-3: var(--home-gear-3);
-}
-
+/* Per-page-type palettes — map tokens to functional variables. The `body`
+   rule above already defaults to the home palette, so there's no separate
+   home block here. */
 body[data-page-type="article"] {
   --c-accent:      var(--article-accent);
   --text:          var(--article-text);
@@ -787,7 +773,6 @@ body[data-page-type="commonplace"] {
   font-size: 3rem;
   font-weight: 400;
   line-height: 1;
-  /*letter-spacing: -0.03em;*/
   margin: 0;
   padding: 4rem 0 0;
   text-align: center;
@@ -959,7 +944,8 @@ body[data-page-type="commonplace"] {
 /* --- Theme switcher --- */
 
 #theme-toggle,
-.filter-input {
+.filter-input,
+.prefs-toggle input {
   position: absolute;
   opacity: 0;
   pointer-events: none;
@@ -1053,12 +1039,6 @@ label[for="theme-toggle"] {
   position: relative;
   flex-shrink: 0;
   cursor: pointer;
-}
-
-.prefs-toggle input {
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
 }
 
 .prefs-toggle input:disabled ~ .prefs-toggle-track {
@@ -1183,21 +1163,8 @@ html.dark.theme-to-light .theme-icon--moon     { animation: theme-set  400ms bot
   vertical-align: -0.15em;
 }
 
-/* Mobile: hide social-link labels but keep them in the accessibility tree.
-   `position: absolute` takes them out of flex layout, so the inline-flex
-   gap collapses cleanly around the icon. */
-#footer .social-links .label {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
+/* Mobile: social-link labels are visually hidden via .sr-only (its
+   selector list includes this one); desktop reveals them. */
 @media (min-width: 816px) {
   #footer .social-links .label {
     position: static;
@@ -1286,7 +1253,8 @@ html.dark.theme-to-light .theme-icon--moon     { animation: theme-set  400ms bot
 #photo-prev { margin-inline-start: auto; }
 #photo-counter, #photo-album-title { font-size: var(--fs-sm); color: var(--c-gray-light); }
 
-.sr-only {
+.sr-only,
+#footer .social-links .label {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -1477,7 +1445,8 @@ html.ptr-refreshing #ptr-shape {
   margin-inline-start: auto;
 }
 
-.popover-actions button {
+.popover-actions button,
+button.share-btn {
   font-size: 1rem;
   font-weight: 500;
   display: inline-flex;
@@ -1533,19 +1502,6 @@ html.ptr-refreshing #ptr-shape {
   margin-inline-start: 0.25rem;
 }
 
-button.share-btn {
-  font-size: 1rem;
-  font-weight: 500;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1.25rem 0.5rem 1rem;
-  background: var(--gradient);
-  color: white;
-  border: none;
-  border-radius: var(--radius-sm);
-}
-
 .post-meta-footer {
   display: flex;
   justify-content: space-between;
@@ -1576,16 +1532,9 @@ button.share-btn {
 
 /* --- Icons --- */
 
-.icon::before {
-  content: "#";
-  font-size: 1rem;
-}
-
 .icon,
 .project-meta-bar svg,
 .share-icon {
-  width: 20px !important;
-  height: 20px !important;
   min-width: 20px;
   min-height: 20px;
   max-width: 20px;
@@ -1614,7 +1563,6 @@ article[data-type] {
   margin: 0;
   padding: 0;
 }
-
 
 /* Feed icon wrapper sized to line-height so the svg stays small and centers on the first line */
 [data-type] .feed-icon {
@@ -1713,7 +1661,6 @@ article[data-type] {
 .filter-container:has(#filter-reply:checked) [data-type]:not([data-category="reply"]),
 .filter-container:has(#filter-poetry:checked) [data-type]:not([data-category="poetry"]),
 .filter-container:has(#filter-non-fiction:checked) [data-type]:not([data-category="non-fiction"]),
-.filter-container:has(#filter-fiction:checked) [data-type]:not([data-category="fiction"]),
 .filter-container:has(#filter-documentation:checked) [data-type]:not([data-category="documentation"]),
 .filter-container:has(#filter-award:checked) [data-type]:not([data-category="award"]) {
   display: none;
@@ -1923,7 +1870,7 @@ article[data-type] {
   align-items: center;
   align-self: center;
   list-style: none;
-  margin: 0 !important;
+  margin: 0;
   padding: 0;
 }
 
@@ -1948,7 +1895,6 @@ article[data-type] {
   border: 1px solid var(--c-accent);
   border-radius: var(--project-meta-bar-radius);
   padding: .25rem .5rem;
-  margin-inline-start: auto;
   overflow: auto;
   grid-column: 4 / span 3;
   margin-inline-start: 0;
