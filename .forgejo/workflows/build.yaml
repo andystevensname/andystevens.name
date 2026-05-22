@@ -1,4 +1,4 @@
-name: Build
+name: Build and Deploy
 
 on:
   push:
@@ -10,6 +10,15 @@ jobs:
     runs-on: docker
     container:
       image: node:22-bookworm
+    env:
+      NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+      NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+      AP_DOMAIN: ${{ secrets.AP_DOMAIN }}
+      AP_DELIVER_SECRET: ${{ secrets.AP_DELIVER_SECRET }}
+      PUSH_FANOUT_SECRET: ${{ secrets.PUSH_FANOUT_SECRET }}
+      GO_JAMMING_TOKEN: ${{ secrets.GO_JAMMING_TOKEN }}
+      BLUESKY_HANDLE: ${{ secrets.BLUESKY_HANDLE }}
+      BLUESKY_APP_PASSWORD: ${{ secrets.BLUESKY_APP_PASSWORD }}
     steps:
       - uses: actions/checkout@v4
 
@@ -19,9 +28,25 @@ jobs:
       - name: Build site
         run: npm run build
 
-      - name: Report build output
-        run: |
-          echo "dist/ size:"
-          du -sh dist
-          echo "top-level entries:"
-          ls dist
+      - name: Deploy to Netlify
+        run: npx --yes netlify-cli@latest deploy --prod --dir=dist --site=$NETLIFY_SITE_ID --auth=$NETLIFY_AUTH_TOKEN
+
+      - name: Send webmentions
+        if: success()
+        continue-on-error: true
+        run: node scripts/send-webmentions.mjs
+
+      - name: Deliver to Bluesky
+        if: success()
+        continue-on-error: true
+        run: node scripts/deliver-to-bluesky.mjs
+
+      - name: Deliver to ActivityPub
+        if: success()
+        continue-on-error: true
+        run: node scripts/deliver-to-activitypub.mjs
+
+      - name: Send push notifications
+        if: success()
+        continue-on-error: true
+        run: node scripts/send-push-notifications.mjs

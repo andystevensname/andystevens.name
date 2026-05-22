@@ -2,18 +2,6 @@
   command = "npm run build"
   publish = "dist"
 
-[[plugins]]
-  package = "./netlify/plugins/send-webmentions"
-
-[[plugins]]
-  package = "./netlify/plugins/deliver-to-bluesky"
-
-[[plugins]]
-  package = "./netlify/plugins/deliver-to-activitypub"
-
-[[plugins]]
-  package = "./netlify/plugins/send-push-notifications"
-
 [[headers]]
   for = "/fonts/*"
   [headers.values]
