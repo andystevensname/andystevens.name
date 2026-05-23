@@ -17,14 +17,20 @@ jobs:
       # access — reuse the write token here.
       BUNNY_STORAGE_ACCESS_KEY: ${{ secrets.BUNNY_S3_WRITE_TOKEN }}
       BUNNY_STORAGE_REGION: ${{ vars.BUNNY_STORAGE_REGION }}
-      # Post-deploy triggers still hit Netlify Functions during Stage A.
+      # Post-deploy outbound triggers, all runner-side.
       AP_DOMAIN: ${{ secrets.AP_DOMAIN }}
       AP_DELIVER_SECRET: ${{ secrets.AP_DELIVER_SECRET }}
-      PUSH_FANOUT_SECRET: ${{ secrets.PUSH_FANOUT_SECRET }}
       GO_JAMMING_TOKEN: ${{ secrets.GO_JAMMING_TOKEN }}
       BLUESKY_HANDLE: ${{ secrets.BLUESKY_HANDLE }}
       BLUESKY_APP_PASSWORD: ${{ secrets.BLUESKY_APP_PASSWORD }}
-      # Inlined into the Astro build via the envPrefix config in astro.config.mjs.
+      # Push fanout runs in the runner now (web-push doesn't bundle for
+      # Bunny's edge runtime); needs libsql access + full VAPID keypair.
+      BUNNY_DATABASE_URL: ${{ secrets.BUNNY_DATABASE_URL }}
+      BUNNY_DATABASE_WRITE_TOKEN: ${{ secrets.BUNNY_DATABASE_WRITE_TOKEN }}
+      VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
+      VAPID_SUBJECT: ${{ secrets.VAPID_SUBJECT }}
+      # Inlined into the Astro build via the envPrefix config in astro.config.mjs;
+      # also used by push-send.mjs at runtime.
       VAPID_PUBLIC_KEY: ${{ secrets.VAPID_PUBLIC_KEY }}
       # Bunny Edge Script deploy.
       BUNNY_API_KEY: ${{ secrets.BUNNY_API_KEY }}

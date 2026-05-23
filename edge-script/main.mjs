@@ -17,7 +17,6 @@ import outbox from './handlers/outbox.mjs';
 import followers from './handlers/followers.mjs';
 import note from './handlers/note.mjs';
 import deliver from './handlers/deliver.mjs';
-import pushFanout from './handlers/push-fanout.mjs';
 import pushSubscribe from './handlers/push-subscribe.mjs';
 import pushUnsubscribe from './handlers/push-unsubscribe.mjs';
 
@@ -31,7 +30,6 @@ function route(pathname) {
   if (pathname === '/ap/outbox') return outbox;
   if (pathname === '/ap/followers') return followers;
   if (pathname === '/api/deliver') return deliver;
-  if (pathname === '/api/push/fanout') return pushFanout;
   if (pathname === '/api/push/subscribe') return pushSubscribe;
   if (pathname === '/api/push/unsubscribe') return pushUnsubscribe;
   // Object lookup (slug, plus legacy /ap/notes/:slug)
