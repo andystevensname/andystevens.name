@@ -1,28 +1,41 @@
-// Upload dist/ to a Bunny Storage zone using the official SDK.
+// Upload dist/ to a Bunny Storage zone via the native HTTP API.
+//
+// We hit Bunny directly instead of using @bunny.net/storage-sdk because the
+// SDK passes file contents as a ReadableStream with `duplex: 'half'`, which
+// Node's fetch turns into a chunked-transfer-encoded PUT — and Bunny's API
+// rejects those with a generic "Unauthorized access to storage zone."
+// Passing a Buffer body lets fetch set Content-Length and the same write
+// token that fails via the SDK succeeds here (matches the working curl call).
 //
 // Env:
 //   BUNNY_S3_BUCKET_NAME       — storage zone name (e.g. "andystevens-name")
-//   BUNNY_STORAGE_ACCESS_KEY   — storage zone password (FTP & API Password,
-//                                NOT an S3 read/write token — those are
-//                                permission-scoped and can't list)
-//   BUNNY_STORAGE_REGION       — region constant name; defaults to Falkenstein
-//                                (others: NewYork, LosAngeles, Singapore,
-//                                 Sydney, Stockholm, SaoPaulo, Johannesburg)
+//   BUNNY_STORAGE_ACCESS_KEY   — API+HTTP write token from the dashboard
+//   BUNNY_STORAGE_REGION       — region name; defaults to Falkenstein
 //
-// First pass: uploads every file in dist/. No pruning yet — the bucket starts
-// empty on a fresh Storage Zone, and we're not flipping DNS until the Pull
-// Zone is configured. Pruning can land in a follow-up.
+// First pass: uploads every file in dist/, no pruning. The zone is fresh
+// and DNS hasn't been flipped, so leftover files aren't a concern yet.
 
 import { readdir, readFile } from 'node:fs/promises';
 import { relative, join } from 'node:path';
-import * as BunnyStorageSDK from '@bunny.net/storage-sdk';
+
+const REGION_HOST_PREFIX = {
+  Falkenstein: '',
+  London: 'uk.',
+  NewYork: 'ny.',
+  LosAngeles: 'la.',
+  Singapore: 'sg.',
+  Stockholm: 'se.',
+  SaoPaulo: 'br.',
+  Johannesburg: 'jh.',
+  Sydney: 'syd.',
+};
 
 const regionName = process.env.BUNNY_STORAGE_REGION || 'Falkenstein';
-const region = BunnyStorageSDK.regions.StorageRegion[regionName];
+const prefix = REGION_HOST_PREFIX[regionName];
 const zone = process.env.BUNNY_S3_BUCKET_NAME;
 const accessKey = process.env.BUNNY_STORAGE_ACCESS_KEY;
 
-if (region === undefined) {
+if (prefix === undefined) {
   console.error(`Unknown BUNNY_STORAGE_REGION: ${regionName}`);
   process.exit(1);
 }
@@ -35,8 +48,23 @@ if (!accessKey) {
   process.exit(1);
 }
 
-const sz = BunnyStorageSDK.zone.connect_with_accesskey(region, zone, accessKey);
+const base = `https://${prefix}storage.bunnycdn.com/${zone}/`;
 const DIST = 'dist';
+
+async function upload(remote, buf) {
+  const res = await fetch(base + remote, {
+    method: 'PUT',
+    headers: {
+      AccessKey: accessKey,
+      'Content-Type': 'application/octet-stream',
+    },
+    body: buf,
+  });
+  if (!res.ok) {
+    const text = await res.text().catch(() => '');
+    throw new Error(`${res.status} ${res.statusText} ${text.slice(0, 200)}`);
+  }
+}
 
 const entries = await readdir(DIST, { recursive: true, withFileTypes: true });
 
@@ -45,14 +73,10 @@ let failed = 0;
 for (const e of entries) {
   if (!e.isFile()) continue;
   const localPath = join(e.parentPath, e.name);
-  // SDK's URL builder concatenates pathname + path; the zone URL already
-  // ends in a slash, so paths must NOT start with one or you get a double
-  // slash in the request URL and Bunny rejects it as Unauthorized.
   const remotePath = relative(DIST, localPath).split(/[\\/]/).join('/');
   try {
     const buf = await readFile(localPath);
-    const stream = new Blob([buf]).stream();
-    await BunnyStorageSDK.file.upload(sz, remotePath, stream);
+    await upload(remotePath, buf);
     uploaded++;
     if (uploaded % 50 === 0) console.log(`  uploaded ${uploaded} files…`);
   } catch (err) {
