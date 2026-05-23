@@ -45,7 +45,10 @@ let failed = 0;
 for (const e of entries) {
   if (!e.isFile()) continue;
   const localPath = join(e.parentPath, e.name);
-  const remotePath = '/' + relative(DIST, localPath).split(/[\\/]/).join('/');
+  // SDK's URL builder concatenates pathname + path; the zone URL already
+  // ends in a slash, so paths must NOT start with one or you get a double
+  // slash in the request URL and Bunny rejects it as Unauthorized.
+  const remotePath = relative(DIST, localPath).split(/[\\/]/).join('/');
   try {
     const buf = await readFile(localPath);
     const stream = new Blob([buf]).stream();
