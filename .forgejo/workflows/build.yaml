@@ -26,6 +26,9 @@ jobs:
       BLUESKY_APP_PASSWORD: ${{ secrets.BLUESKY_APP_PASSWORD }}
       # Inlined into the Astro build via the envPrefix config in astro.config.mjs.
       VAPID_PUBLIC_KEY: ${{ secrets.VAPID_PUBLIC_KEY }}
+      # Bunny Edge Script deploy.
+      BUNNY_API_KEY: ${{ secrets.BUNNY_API_KEY }}
+      BUNNY_EDGE_SCRIPT_ID: ${{ vars.BUNNY_EDGE_SCRIPT_ID }}
     steps:
       - uses: actions/checkout@v4
 
@@ -37,6 +40,9 @@ jobs:
 
       - name: Deploy to Bunny Storage
         run: node scripts/deploy-to-bunny.mjs
+
+      - name: Deploy Edge Script
+        run: node scripts/deploy-edge-script.mjs
 
       - name: Send webmentions
         if: success()
