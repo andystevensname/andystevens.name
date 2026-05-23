@@ -10,13 +10,13 @@ jobs:
     runs-on: docker
     container:
       image: node:22-bookworm
-      # Run amd64 (Rosetta-accelerated under OrbStack): Netlify's build
-      # toolchain — puppeteer's chromium, the Deno edge bundler — ships
-      # amd64-only binaries that fail on a native arm64 runner.
-      options: --platform linux/amd64
     env:
-      NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-      NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+      # Static site → Bunny Storage (S3-compatible).
+      AWS_ACCESS_KEY_ID: ${{ secrets.BUNNY_S3_ACCESS_KEY }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.BUNNY_S3_WRITE_TOKEN }}
+      AWS_DEFAULT_REGION: us-east-1  # required by awscli; Bunny accepts any value
+      BUNNY_S3_ENDPOINT: ${{ secrets.BUNNY_S3_ENDPOINT }}
+      # Post-deploy triggers still hit Netlify Functions during Stage A.
       AP_DOMAIN: ${{ secrets.AP_DOMAIN }}
       AP_DELIVER_SECRET: ${{ secrets.AP_DELIVER_SECRET }}
       PUSH_FANOUT_SECRET: ${{ secrets.PUSH_FANOUT_SECRET }}
@@ -32,8 +32,15 @@ jobs:
       - name: Build site
         run: npm run build
 
-      - name: Deploy to Netlify
-        run: npx --yes netlify-cli@latest deploy --prod --dir=dist --site=$NETLIFY_SITE_ID --auth=$NETLIFY_AUTH_TOKEN
+      - name: Install awscli
+        run: apt-get update && apt-get install -y --no-install-recommends awscli
+
+      - name: Deploy to Bunny Storage
+        run: |
+          aws s3 sync dist/ "s3://andystevens-name/" \
+            --endpoint-url "$BUNNY_S3_ENDPOINT" \
+            --delete \
+            --no-progress
 
       - name: Send webmentions
         if: success()
