@@ -36,9 +36,9 @@ jobs:
       - name: Debug — curl PUT from runner using the secret
         run: |
           echo "BUNNY_STORAGE_ACCESS_KEY length: ${#BUNNY_STORAGE_ACCESS_KEY}"
-          # SHA-1 of the key for byte-exact comparison with local value.
-          # Not the secret itself, so Forgejo won't mask it.
           printf '%s' "$BUNNY_STORAGE_ACCESS_KEY" | sha1sum | awk '{print "key sha1:", $1}'
+          echo "BUNNY_S3_BUCKET_NAME length: ${#BUNNY_S3_BUCKET_NAME}"
+          printf '%s' "$BUNNY_S3_BUCKET_NAME" | sha1sum | awk '{print "bucket sha1:", $1}'
           echo "runner-test" > /tmp/runner-curl-test.txt
           curl -sS -o /tmp/curl-body -w "HTTP %{http_code}\n" -X PUT \
             -H "AccessKey: $BUNNY_STORAGE_ACCESS_KEY" \
