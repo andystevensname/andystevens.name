@@ -24,6 +24,8 @@ jobs:
       GO_JAMMING_TOKEN: ${{ secrets.GO_JAMMING_TOKEN }}
       BLUESKY_HANDLE: ${{ secrets.BLUESKY_HANDLE }}
       BLUESKY_APP_PASSWORD: ${{ secrets.BLUESKY_APP_PASSWORD }}
+      # Inlined into the Astro build (PUBLIC_* vars become client-side bundles).
+      PUBLIC_VAPID_KEY: ${{ secrets.PUBLIC_VAPID_KEY }}
     steps:
       - uses: actions/checkout@v4
 
