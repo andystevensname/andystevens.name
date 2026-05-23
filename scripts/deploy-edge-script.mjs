@@ -63,37 +63,14 @@ if (!uploadRes.ok) {
 }
 console.log('Code uploaded.');
 
-console.log('Fetching latest release …');
-const releasesRes = await fetch(
-  `https://api.bunny.net/compute/script/${scriptId}/releases?perPage=1`,
-  { method: 'GET', headers }
-);
-if (!releasesRes.ok) {
-  console.error(
-    `Release lookup failed: ${releasesRes.status} ${await releasesRes.text()}`
-  );
-  process.exit(1);
-}
-const releasesBody = await releasesRes.json();
-// Bunny pagination responses typically use Items[] with a Uuid per item.
-const latest = releasesBody.Items?.[0] ?? releasesBody[0];
-const uuid = latest?.Uuid ?? latest?.uuid;
-if (!uuid) {
-  console.error(
-    'Could not extract release UUID from response:',
-    JSON.stringify(releasesBody).slice(0, 500)
-  );
-  process.exit(1);
-}
-
-console.log(`Publishing release ${uuid} …`);
+// The UUID-less /publish endpoint just publishes whatever code was last
+// uploaded — same call the bunny CLI's `scripts deploy` makes. The
+// `/publish/{uuid}` variant is for re-publishing a specific historical
+// release.
+console.log('Publishing …');
 const publishRes = await fetch(
-  `https://api.bunny.net/compute/script/${scriptId}/publish/${uuid}`,
-  {
-    method: 'POST',
-    headers,
-    body: JSON.stringify({ Note: `deploy ${new Date().toISOString()}` }),
-  }
+  `https://api.bunny.net/compute/script/${scriptId}/publish`,
+  { method: 'POST', headers, body: '{}' }
 );
 if (!publishRes.ok) {
   console.error(
