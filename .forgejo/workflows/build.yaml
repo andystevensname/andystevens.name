@@ -33,6 +33,20 @@ jobs:
       - name: Build site
         run: npm run build
 
+      - name: Debug — curl PUT from runner using the secret
+        run: |
+          echo "BUNNY_STORAGE_ACCESS_KEY length: ${#BUNNY_STORAGE_ACCESS_KEY}"
+          echo "BUNNY_S3_BUCKET_NAME: $BUNNY_S3_BUCKET_NAME"
+          echo "runner-test" > /tmp/runner-curl-test.txt
+          curl -sS -o /tmp/curl-body -w "HTTP %{http_code}\n" -X PUT \
+            -H "AccessKey: $BUNNY_STORAGE_ACCESS_KEY" \
+            -H "Content-Type: application/octet-stream" \
+            --data-binary "@/tmp/runner-curl-test.txt" \
+            "https://ny.storage.bunnycdn.com/$BUNNY_S3_BUCKET_NAME/runner-curl-test.txt"
+          echo "--- response body ---"
+          cat /tmp/curl-body || true
+          echo
+
       - name: Deploy to Bunny Storage
         run: node scripts/deploy-to-bunny.mjs
 
