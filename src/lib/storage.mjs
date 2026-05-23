@@ -1,95 +1,206 @@
-// Storage layer. Single implementation lives here; the rest of the code
-// only ever imports these named functions. To move off Netlify, replace
-// this file with a Turso/Supabase/SQLite version that exports the same API.
+// Storage layer backed by Bunny Edge Database Lite (libSQL/SQLite).
 //
-// Data model (all JSON values):
-//   followers/{urlencoded-actor-url}  -> { actor, inbox, sharedInbox?, followedAt }
-//   activities/{activity-id-hash}     -> original inbound activity (idempotency + audit)
-//   push-subs/{endpoint-hash}         -> { endpoint, keys, createdAt, ua? }
-//   push-meta/last-pushed             -> { slug, date }
+// Same public surface as the previous Netlify Blobs implementation —
+// every call site imports these named functions and nothing else, so
+// the backend swap is invisible to callers. To swap again later, replace
+// the body of this file but keep the same exports.
+//
+// Data model (one row per logical key, keyed by sha256-trim-to-32 string):
+//   followers           id, actor, inbox, shared_inbox, followed_at
+//   activities          id, json
+//   push_subscriptions  id, endpoint, keys_json, created_at, ua
+//   push_meta           key, value           (JSON-encoded value)
+//
+// Env required:
+//   BUNNY_DATABASE_URL          — libSQL URL for the database
+//   BUNNY_DATABASE_WRITE_TOKEN  — full-access token
+//
+// Schema is created lazily on first connect (CREATE TABLE IF NOT EXISTS),
+// so there's no separate migration step to run.
 
-import { getStore } from '@netlify/blobs';
+import { createClient } from '@libsql/client';
 import { createHash } from 'node:crypto';
 
-const FOLLOWERS = 'activitypub-followers';
-const ACTIVITIES = 'activitypub-activities';
-const PUSH_SUBS = 'push-subscriptions';
-const PUSH_META = 'push-meta';
+let _client;
+let _initialized = false;
+
+function getClient() {
+  if (_client) return _client;
+  const url = process.env.BUNNY_DATABASE_URL;
+  const authToken = process.env.BUNNY_DATABASE_WRITE_TOKEN;
+  if (!url || !authToken) {
+    throw new Error(
+      'BUNNY_DATABASE_URL and BUNNY_DATABASE_WRITE_TOKEN must be set'
+    );
+  }
+  _client = createClient({ url, authToken });
+  return _client;
+}
+
+async function ensureSchema() {
+  if (_initialized) return;
+  const client = getClient();
+  await client.batch(
+    [
+      `CREATE TABLE IF NOT EXISTS followers (
+        id           TEXT PRIMARY KEY,
+        actor        TEXT NOT NULL,
+        inbox        TEXT NOT NULL,
+        shared_inbox TEXT,
+        followed_at  TEXT NOT NULL
+      )`,
+      `CREATE TABLE IF NOT EXISTS activities (
+        id   TEXT PRIMARY KEY,
+        json TEXT NOT NULL
+      )`,
+      `CREATE TABLE IF NOT EXISTS push_subscriptions (
+        id         TEXT PRIMARY KEY,
+        endpoint   TEXT NOT NULL,
+        keys_json  TEXT NOT NULL,
+        created_at TEXT NOT NULL,
+        ua         TEXT
+      )`,
+      `CREATE TABLE IF NOT EXISTS push_meta (
+        key   TEXT PRIMARY KEY,
+        value TEXT NOT NULL
+      )`,
+    ],
+    'write'
+  );
+  _initialized = true;
+}
 
 function hashId(id) {
   return createHash('sha256').update(id).digest('hex').slice(0, 32);
 }
 
+// ───── followers ────────────────────────────────────────────────────────
+
 export async function addFollower(actor, inbox, sharedInbox) {
-  const store = getStore({ name: FOLLOWERS, consistency: 'strong' });
-  await store.setJSON(hashId(actor), {
-    actor,
-    inbox,
-    sharedInbox,
-    followedAt: new Date().toISOString(),
+  await ensureSchema();
+  await getClient().execute({
+    sql: `INSERT INTO followers (id, actor, inbox, shared_inbox, followed_at)
+          VALUES (?, ?, ?, ?, ?)
+          ON CONFLICT(id) DO UPDATE SET
+            actor        = excluded.actor,
+            inbox        = excluded.inbox,
+            shared_inbox = excluded.shared_inbox,
+            followed_at  = excluded.followed_at`,
+    args: [hashId(actor), actor, inbox, sharedInbox ?? null, new Date().toISOString()],
   });
 }
 
 export async function removeFollower(actor) {
-  const store = getStore({ name: FOLLOWERS, consistency: 'strong' });
-  await store.delete(hashId(actor));
+  await ensureSchema();
+  await getClient().execute({
+    sql: 'DELETE FROM followers WHERE id = ?',
+    args: [hashId(actor)],
+  });
 }
 
 export async function hasFollower(actor) {
-  const store = getStore({ name: FOLLOWERS, consistency: 'strong' });
-  const data = await store.get(hashId(actor), { type: 'json' });
-  return data !== null;
+  await ensureSchema();
+  const res = await getClient().execute({
+    sql: 'SELECT 1 FROM followers WHERE id = ? LIMIT 1',
+    args: [hashId(actor)],
+  });
+  return res.rows.length > 0;
 }
 
 export async function listFollowers() {
-  const store = getStore({ name: FOLLOWERS });
-  const { blobs } = await store.list();
-  const followers = await Promise.all(
-    blobs.map((b) => store.get(b.key, { type: 'json' }))
+  await ensureSchema();
+  const res = await getClient().execute(
+    'SELECT actor, inbox, shared_inbox, followed_at FROM followers'
   );
-  return followers.filter(Boolean);
+  return res.rows.map((r) => ({
+    actor: r.actor,
+    inbox: r.inbox,
+    sharedInbox: r.shared_inbox ?? undefined,
+    followedAt: r.followed_at,
+  }));
 }
 
+// ───── activities (idempotency + audit) ─────────────────────────────────
+
 export async function recordActivity(id, json) {
-  const store = getStore({ name: ACTIVITIES });
-  await store.setJSON(hashId(id), json);
+  await ensureSchema();
+  await getClient().execute({
+    sql: `INSERT INTO activities (id, json) VALUES (?, ?)
+          ON CONFLICT(id) DO UPDATE SET json = excluded.json`,
+    args: [hashId(id), JSON.stringify(json)],
+  });
 }
 
 export async function getActivity(id) {
-  const store = getStore({ name: ACTIVITIES });
-  return await store.get(hashId(id), { type: 'json' });
+  await ensureSchema();
+  const res = await getClient().execute({
+    sql: 'SELECT json FROM activities WHERE id = ?',
+    args: [hashId(id)],
+  });
+  if (res.rows.length === 0) return null;
+  return JSON.parse(res.rows[0].json);
 }
 
+// ───── push subscriptions ───────────────────────────────────────────────
+
 export async function addPushSubscription(subscription, ua) {
-  const store = getStore({ name: PUSH_SUBS, consistency: 'strong' });
-  await store.setJSON(hashId(subscription.endpoint), {
-    endpoint: subscription.endpoint,
-    keys: subscription.keys,
-    createdAt: new Date().toISOString(),
-    ua: ua || null,
+  await ensureSchema();
+  await getClient().execute({
+    sql: `INSERT INTO push_subscriptions (id, endpoint, keys_json, created_at, ua)
+          VALUES (?, ?, ?, ?, ?)
+          ON CONFLICT(id) DO UPDATE SET
+            endpoint   = excluded.endpoint,
+            keys_json  = excluded.keys_json,
+            created_at = excluded.created_at,
+            ua         = excluded.ua`,
+    args: [
+      hashId(subscription.endpoint),
+      subscription.endpoint,
+      JSON.stringify(subscription.keys),
+      new Date().toISOString(),
+      ua || null,
+    ],
   });
 }
 
 export async function removePushSubscription(endpoint) {
-  const store = getStore({ name: PUSH_SUBS, consistency: 'strong' });
-  await store.delete(hashId(endpoint));
+  await ensureSchema();
+  await getClient().execute({
+    sql: 'DELETE FROM push_subscriptions WHERE id = ?',
+    args: [hashId(endpoint)],
+  });
 }
 
 export async function listPushSubscriptions() {
-  const store = getStore({ name: PUSH_SUBS });
-  const { blobs } = await store.list();
-  const subs = await Promise.all(
-    blobs.map((b) => store.get(b.key, { type: 'json' }))
+  await ensureSchema();
+  const res = await getClient().execute(
+    'SELECT endpoint, keys_json, created_at, ua FROM push_subscriptions'
   );
-  return subs.filter(Boolean);
+  return res.rows.map((r) => ({
+    endpoint: r.endpoint,
+    keys: JSON.parse(r.keys_json),
+    createdAt: r.created_at,
+    ua: r.ua ?? null,
+  }));
 }
 
+// ───── push meta (cursor) ───────────────────────────────────────────────
+
 export async function getLastPushed() {
-  const store = getStore({ name: PUSH_META });
-  return await store.get('last-pushed', { type: 'json' });
+  await ensureSchema();
+  const res = await getClient().execute({
+    sql: 'SELECT value FROM push_meta WHERE key = ?',
+    args: ['last-pushed'],
+  });
+  if (res.rows.length === 0) return null;
+  return JSON.parse(res.rows[0].value);
 }
 
 export async function setLastPushed(data) {
-  const store = getStore({ name: PUSH_META, consistency: 'strong' });
-  await store.setJSON('last-pushed', data);
+  await ensureSchema();
+  await getClient().execute({
+    sql: `INSERT INTO push_meta (key, value) VALUES (?, ?)
+          ON CONFLICT(key) DO UPDATE SET value = excluded.value`,
+    args: ['last-pushed', JSON.stringify(data)],
+  });
 }
