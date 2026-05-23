@@ -33,6 +33,11 @@ const result = await build({
   platform: 'neutral',
   target: 'es2022',
   write: false,
+  // neutral platform ignores `main` and most conditions by default — make
+  // it look for npm packages the way Node would, but prefer ESM and
+  // edge/browser builds when available.
+  mainFields: ['module', 'main'],
+  conditions: ['workerd', 'browser', 'import', 'default'],
   // Bunny's Deno runtime provides node:* built-ins natively.
   external: ['node:*'],
   logLevel: 'info',

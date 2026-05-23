@@ -18,7 +18,10 @@
 // Schema is created lazily on first connect (CREATE TABLE IF NOT EXISTS),
 // so there's no separate migration step to run.
 
-import { createClient } from '@libsql/client';
+// Use the /web subpath: pure-JS client that talks to libsql over HTTP.
+// The default @libsql/client import pulls in a Node-native binary which
+// can't run in Bunny's Deno edge runtime.
+import { createClient } from '@libsql/client/web';
 import { createHash } from 'node:crypto';
 
 let _client;
