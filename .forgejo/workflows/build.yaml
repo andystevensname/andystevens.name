@@ -12,10 +12,13 @@ jobs:
       image: node:22-bookworm
     env:
       # Static site → Bunny Storage (S3-compatible).
-      AWS_ACCESS_KEY_ID: ${{ secrets.BUNNY_S3_ACCESS_KEY }}
+      # Bunny quirk: the bucket name doubles as the S3 access key ID;
+      # the storage zone password is the secret key.
+      AWS_ACCESS_KEY_ID: ${{ secrets.BUNNY_S3_BUCKET_NAME }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.BUNNY_S3_WRITE_TOKEN }}
       AWS_DEFAULT_REGION: us-east-1  # required by awscli; Bunny accepts any value
       BUNNY_S3_ENDPOINT: ${{ secrets.BUNNY_S3_ENDPOINT }}
+      BUNNY_S3_BUCKET_NAME: ${{ secrets.BUNNY_S3_BUCKET_NAME }}
       # Post-deploy triggers still hit Netlify Functions during Stage A.
       AP_DOMAIN: ${{ secrets.AP_DOMAIN }}
       AP_DELIVER_SECRET: ${{ secrets.AP_DELIVER_SECRET }}
@@ -37,7 +40,7 @@ jobs:
 
       - name: Deploy to Bunny Storage
         run: |
-          aws s3 sync dist/ "s3://andystevens-name/" \
+          aws s3 sync dist/ "s3://$BUNNY_S3_BUCKET_NAME/" \
             --endpoint-url "$BUNNY_S3_ENDPOINT" \
             --delete \
             --no-progress
