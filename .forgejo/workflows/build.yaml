@@ -28,7 +28,7 @@ jobs:
       VAPID_PUBLIC_KEY: ${{ secrets.VAPID_PUBLIC_KEY }}
       # Bunny Edge Script deploy.
       BUNNY_API_KEY: ${{ secrets.BUNNY_API_KEY }}
-      BUNNY_EDGE_SCRIPT_ID: ${{ vars.BUNNY_EDGE_SCRIPT_ID }}
+      BUNNY_EDGE_SCRIPT_ID: ${{ secrets.BUNNY_EDGE_SCRIPT_ID }}
     steps:
       - uses: actions/checkout@v4
 
