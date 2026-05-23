@@ -1,6 +1,4 @@
-// Shared push-send logic. Used by:
-//   - netlify/plugins/send-push-notifications (production deploys)
-//   - netlify/functions/push-test (local manual trigger during `netlify dev`)
+// Shared push-send logic, imported by edge-script/handlers/push-fanout.
 
 import webpush from 'web-push';
 import { listPushSubscriptions, removePushSubscription } from './storage.mjs';
@@ -23,7 +21,7 @@ export function buildPayload(post) {
 }
 
 export function configureVapid() {
-  const publicKey = process.env.PUBLIC_VAPID_KEY;
+  const publicKey = process.env.VAPID_PUBLIC_KEY;
   const privateKey = process.env.VAPID_PRIVATE_KEY;
   const subject = process.env.VAPID_SUBJECT;
   if (!publicKey || !privateKey || !subject) return false;
