@@ -33,7 +33,7 @@ const REGION_HOST_PREFIX = {
 const regionName = process.env.BUNNY_STORAGE_REGION || 'Falkenstein';
 const prefix = REGION_HOST_PREFIX[regionName];
 const zone = process.env.BUNNY_S3_BUCKET_NAME;
-const accessKey = process.env.BUNNY_STORAGE_ACCESS_KEY;
+const accessKey = process.env.BUNNY_STORAGE_ACCESS_KEY?.trim();
 
 if (prefix === undefined) {
   console.error(`Unknown BUNNY_STORAGE_REGION: ${regionName}`);
