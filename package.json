@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
+    "@bunny.net/edgescript-sdk": "^0.12.1",
     "@resvg/resvg-js": "^2.6.2",
     "fontkit": "^2.0.4",
     "prettier": "^3.8.1",
