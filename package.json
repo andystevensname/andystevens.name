@@ -19,7 +19,6 @@
     "@netlify/blobs": "^10.7.4",
     "astro": "^6.1.10",
     "marked": "^17.0.5",
-    "netlify-cli": "^26.0.2",
     "remark-directive": "^4.0.0",
     "unist-util-visit": "^5.1.0",
     "web-push": "^3.6.7"

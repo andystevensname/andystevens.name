@@ -118,7 +118,7 @@ const vapidKey = import.meta.env.VAPID_PUBLIC_KEY ?? '';
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(VAPID_KEY),
       });
-      const res = await fetch('/.netlify/functions/push-subscribe', {
+      const res = await fetch('/api/push/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(sub.toJSON()),
@@ -136,7 +136,7 @@ const vapidKey = import.meta.env.VAPID_PUBLIC_KEY ?? '';
       const reg = await navigator.serviceWorker.ready;
       const sub = await reg.pushManager.getSubscription();
       if (sub) {
-        await fetch('/.netlify/functions/push-unsubscribe', {
+        await fetch('/api/push/unsubscribe', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ endpoint: sub.endpoint }),
