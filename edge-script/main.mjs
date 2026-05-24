@@ -1,11 +1,23 @@
-// Bunny Edge Scripting middleware entry. Bound to the andystevens.name Pull
-// Zone; intercepts the dynamic-route paths (ActivityPub, push notifications,
-// AP delivery trigger) and returns Responses inline. Everything else passes
-// through to the static origin (Bunny Storage) unchanged.
+// Bunny Edge Script — standalone mode. The script has its own hostname
+// (assigned by Bunny when you create the script). The andystevens.name
+// Pull Zone routes the dynamic-path prefixes here via Edge Rules:
 //
-// Each handler is a plain Web Fetch (Request) -> Response function reused
-// from the old netlify/functions/ tree — they only needed to move directories
-// to live here.
+//   /ap/*           -> this script's hostname
+//   /api/*          -> this script's hostname
+//   /.well-known/*  -> this script's hostname
+//   /nodeinfo/*     -> this script's hostname
+//
+// Everything else on the Pull Zone keeps going to the static origin
+// (Bunny Storage).
+//
+// We started in middleware mode and hit a documented limitation: a
+// middleware script attached to a Pull Zone backed by a Storage Zone
+// silently 405s POST requests before the script runs. Standalone scripts
+// accept all methods, so federation POSTs to /ap/inbox and our push
+// subscribe/unsubscribe endpoints work as intended.
+//
+// Each handler is a plain Web Fetch (Request) -> Response function
+// reused from the old netlify/functions/ tree.
 
 import * as BunnySDK from '@bunny.net/edgescript-sdk';
 
@@ -21,7 +33,6 @@ import pushSubscribe from './handlers/push-subscribe.mjs';
 import pushUnsubscribe from './handlers/push-unsubscribe.mjs';
 
 function route(pathname) {
-  // Exact paths
   if (pathname === '/.well-known/webfinger') return webfinger;
   if (pathname === '/.well-known/nodeinfo') return nodeinfo;
   if (pathname === '/nodeinfo/2.0') return nodeinfo;
@@ -32,20 +43,16 @@ function route(pathname) {
   if (pathname === '/api/deliver') return deliver;
   if (pathname === '/api/push/subscribe') return pushSubscribe;
   if (pathname === '/api/push/unsubscribe') return pushUnsubscribe;
-  // Object lookup (slug, plus legacy /ap/notes/:slug)
   if (/^\/ap\/notes\/[^/]+\/?$/.test(pathname)) return note;
   if (/^\/ap\/objects\/[^/]+\/[^/]+\/?$/.test(pathname)) return note;
   return null;
 }
 
-const pullzone = BunnySDK.net.http.servePullZone();
-
-pullzone.onOriginRequest(async ({ request }) => {
+BunnySDK.net.http.serve(async (request) => {
   const url = new URL(request.url);
   const handler = route(url.pathname);
   if (!handler) {
-    // Static asset: let the request continue to the storage origin.
-    return request;
+    return new Response('not found', { status: 404 });
   }
   try {
     return await handler(request);
