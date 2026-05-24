@@ -42,8 +42,6 @@ const pullzone = BunnySDK.net.http.servePullZone();
 
 pullzone.onOriginRequest(async ({ request }) => {
   const url = new URL(request.url);
-  // Temporary trace to see which requests reach the middleware.
-  console.log(`mw ${request.method} ${url.pathname}`);
   const handler = route(url.pathname);
   if (!handler) {
     // Static asset: let the request continue to the storage origin.
