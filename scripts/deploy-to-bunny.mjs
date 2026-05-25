@@ -60,14 +60,18 @@ const CONTENT_TYPE_OVERRIDES = {
 };
 
 async function upload(remote, buf) {
-  const contentType =
-    CONTENT_TYPE_OVERRIDES[remote] ?? 'application/octet-stream';
+  // Bunny treats the standard Content-Type header as the request body's
+  // type only — it uses the proprietary "Override-Content-Type" header
+  // to set the MIME stored with the file and returned on subsequent GETs.
+  const headers = {
+    AccessKey: accessKey,
+    'Content-Type': 'application/octet-stream',
+  };
+  const override = CONTENT_TYPE_OVERRIDES[remote];
+  if (override) headers['Override-Content-Type'] = override;
   const res = await fetch(base + remote, {
     method: 'PUT',
-    headers: {
-      AccessKey: accessKey,
-      'Content-Type': contentType,
-    },
+    headers,
     body: buf,
   });
   if (!res.ok) {
