@@ -38,7 +38,15 @@ async function bunnyCompatFetch(request) {
   if (request.method !== 'GET' && request.method !== 'HEAD') {
     init.body = await request.text();
   }
-  return fetch(request.url, init);
+  console.log(`libsql -> ${init.method} ${request.url}`);
+  try {
+    const res = await fetch(request.url, init);
+    console.log(`libsql <- ${res.status}`);
+    return res;
+  } catch (err) {
+    console.error(`libsql fetch failed: ${err.message}`);
+    throw err;
+  }
 }
 
 function getClient() {
