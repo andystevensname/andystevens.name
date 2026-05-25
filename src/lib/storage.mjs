@@ -1,235 +1,197 @@
-// Storage layer backed by Bunny Edge Database Lite (libSQL/SQLite).
+// Storage layer backed by a private Bunny Storage zone (JSON files).
 //
-// Same public surface as the previous Netlify Blobs implementation —
-// every call site imports these named functions and nothing else, so
-// the backend swap is invisible to callers. To swap again later, replace
-// the body of this file but keep the same exports.
+// We landed on this after libsql / Bunny Edge Database Lite proved
+// unreachable from inside Bunny Edge Scripts (fetch crashes with
+// "Cannot read properties of undefined (reading 'loop')" against any
+// *.bunnydb.net URL — appears to be a Bunny runtime bug). The Bunny
+// Storage HTTP API is plain fetch and arch-independent.
 //
-// Data model (one row per logical key, keyed by sha256-trim-to-32 string):
-//   followers           id, actor, inbox, shared_inbox, followed_at
-//   activities          id, json
-//   push_subscriptions  id, endpoint, keys_json, created_at, ua
-//   push_meta           key, value           (JSON-encoded value)
+// Same public surface as before (addFollower, listFollowers, etc.) —
+// callers don't need to change.
+//
+// Data model (one file per key, hashed):
+//   followers/{hash}.json     { actor, inbox, sharedInbox?, followedAt }
+//   activities/{hash}.json    original inbound activity
+//   push-subs/{hash}.json     { endpoint, keys, createdAt, ua? }
+//   push-meta/{key}.json      JSON value
 //
 // Env required:
-//   BUNNY_DATABASE_URL          — libSQL URL for the database
-//   BUNNY_DATABASE_WRITE_TOKEN  — full-access token
-//
-// Schema is created lazily on first connect (CREATE TABLE IF NOT EXISTS),
-// so there's no separate migration step to run.
+//   BUNNY_STATE_BUCKET_NAME   storage zone name
+//   BUNNY_STATE_ACCESS_KEY    storage zone password (write+read)
+//   BUNNY_STATE_REGION        region constant (NewYork etc.), defaults
+//                             to Falkenstein
 
-// Use the /web subpath: pure-JS client that talks to libsql over HTTP.
-// The default @libsql/client import pulls in a Node-native binary which
-// can't run in Bunny's Deno edge runtime.
-import { createClient } from '@libsql/client/web';
 import { createHash } from 'node:crypto';
 
-let _client;
-let _initialized = false;
+const REGION_HOST_PREFIX = {
+  Falkenstein: '',
+  London: 'uk.',
+  NewYork: 'ny.',
+  LosAngeles: 'la.',
+  Singapore: 'sg.',
+  Stockholm: 'se.',
+  SaoPaulo: 'br.',
+  Johannesburg: 'jh.',
+  Sydney: 'syd.',
+};
 
-// Bunny's Deno fetch wrapper crashes when libsql's hrana client passes
-// a plain Request object (TypeError: Cannot read properties of undefined
-// (reading 'loop')). Unpack the Request into URL + init and re-fetch.
-async function bunnyCompatFetch(request) {
-  const init = {
-    method: request.method,
-    headers: Object.fromEntries(request.headers),
-  };
-  if (request.method !== 'GET' && request.method !== 'HEAD') {
-    init.body = await request.text();
-  }
-  console.log(`libsql -> ${init.method} ${request.url}`);
-  try {
-    const res = await fetch(request.url, init);
-    console.log(`libsql <- ${res.status}`);
-    return res;
-  } catch (err) {
-    console.error(`libsql fetch failed: ${err.message}`);
-    throw err;
-  }
-}
-
-function getClient() {
-  if (_client) return _client;
-  const url = process.env.BUNNY_DATABASE_URL;
-  // Bunny's "Add Secrets to Edge Script" linkage injects this env var name.
-  // Fall back to the older name we used while testing in case both still exist.
-  const authToken =
-    process.env.BUNNY_DATABASE_AUTH_TOKEN ||
-    process.env.BUNNY_DATABASE_WRITE_TOKEN;
-  if (!url || !authToken) {
+let _config;
+function cfg() {
+  if (_config) return _config;
+  const region =
+    process.env.BUNNY_STATE_REGION ||
+    process.env.BUNNY_STORAGE_REGION ||
+    'Falkenstein';
+  const prefix = REGION_HOST_PREFIX[region] ?? '';
+  const bucket = process.env.BUNNY_STATE_BUCKET_NAME;
+  const accessKey = process.env.BUNNY_STATE_ACCESS_KEY;
+  if (!bucket || !accessKey) {
     throw new Error(
-      'BUNNY_DATABASE_URL and BUNNY_DATABASE_AUTH_TOKEN must be set'
+      'BUNNY_STATE_BUCKET_NAME and BUNNY_STATE_ACCESS_KEY must be set'
     );
   }
-  _client = createClient({ url, authToken, fetch: bunnyCompatFetch });
-  return _client;
-}
-
-async function ensureSchema() {
-  if (_initialized) return;
-  const client = getClient();
-  await client.batch(
-    [
-      `CREATE TABLE IF NOT EXISTS followers (
-        id           TEXT PRIMARY KEY,
-        actor        TEXT NOT NULL,
-        inbox        TEXT NOT NULL,
-        shared_inbox TEXT,
-        followed_at  TEXT NOT NULL
-      )`,
-      `CREATE TABLE IF NOT EXISTS activities (
-        id   TEXT PRIMARY KEY,
-        json TEXT NOT NULL
-      )`,
-      `CREATE TABLE IF NOT EXISTS push_subscriptions (
-        id         TEXT PRIMARY KEY,
-        endpoint   TEXT NOT NULL,
-        keys_json  TEXT NOT NULL,
-        created_at TEXT NOT NULL,
-        ua         TEXT
-      )`,
-      `CREATE TABLE IF NOT EXISTS push_meta (
-        key   TEXT PRIMARY KEY,
-        value TEXT NOT NULL
-      )`,
-    ],
-    'write'
-  );
-  _initialized = true;
+  _config = {
+    base: `https://${prefix}storage.bunnycdn.com/${bucket}`,
+    accessKey,
+  };
+  return _config;
 }
 
 function hashId(id) {
   return createHash('sha256').update(id).digest('hex').slice(0, 32);
 }
 
+async function putJson(path, value) {
+  const { base, accessKey } = cfg();
+  const res = await fetch(`${base}/${path}`, {
+    method: 'PUT',
+    headers: {
+      AccessKey: accessKey,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(value),
+  });
+  if (!res.ok) {
+    throw new Error(
+      `storage PUT ${path}: ${res.status} ${(await res.text()).slice(0, 200)}`
+    );
+  }
+}
+
+async function getJson(path) {
+  const { base, accessKey } = cfg();
+  const res = await fetch(`${base}/${path}`, {
+    headers: { AccessKey: accessKey },
+  });
+  if (res.status === 404) return null;
+  if (!res.ok) {
+    throw new Error(
+      `storage GET ${path}: ${res.status} ${(await res.text()).slice(0, 200)}`
+    );
+  }
+  return res.json();
+}
+
+async function deletePath(path) {
+  const { base, accessKey } = cfg();
+  const res = await fetch(`${base}/${path}`, {
+    method: 'DELETE',
+    headers: { AccessKey: accessKey },
+  });
+  if (!res.ok && res.status !== 404) {
+    throw new Error(
+      `storage DELETE ${path}: ${res.status} ${(await res.text()).slice(0, 200)}`
+    );
+  }
+}
+
+async function listDir(prefix) {
+  const { base, accessKey } = cfg();
+  const res = await fetch(`${base}/${prefix}/`, {
+    headers: { AccessKey: accessKey, Accept: 'application/json' },
+  });
+  if (res.status === 404) return [];
+  if (!res.ok) {
+    throw new Error(
+      `storage LIST ${prefix}: ${res.status} ${(await res.text()).slice(0, 200)}`
+    );
+  }
+  return res.json();
+}
+
+async function listJsonObjects(prefix) {
+  const items = await listDir(prefix);
+  const files = items.filter((i) => !i.IsDirectory);
+  const results = await Promise.all(
+    files.map((i) => getJson(`${prefix}/${i.ObjectName}`))
+  );
+  return results.filter(Boolean);
+}
+
 // ───── followers ────────────────────────────────────────────────────────
 
 export async function addFollower(actor, inbox, sharedInbox) {
-  await ensureSchema();
-  await getClient().execute({
-    sql: `INSERT INTO followers (id, actor, inbox, shared_inbox, followed_at)
-          VALUES (?, ?, ?, ?, ?)
-          ON CONFLICT(id) DO UPDATE SET
-            actor        = excluded.actor,
-            inbox        = excluded.inbox,
-            shared_inbox = excluded.shared_inbox,
-            followed_at  = excluded.followed_at`,
-    args: [hashId(actor), actor, inbox, sharedInbox ?? null, new Date().toISOString()],
+  await putJson(`followers/${hashId(actor)}.json`, {
+    actor,
+    inbox,
+    sharedInbox: sharedInbox ?? null,
+    followedAt: new Date().toISOString(),
   });
 }
 
 export async function removeFollower(actor) {
-  await ensureSchema();
-  await getClient().execute({
-    sql: 'DELETE FROM followers WHERE id = ?',
-    args: [hashId(actor)],
-  });
+  await deletePath(`followers/${hashId(actor)}.json`);
 }
 
 export async function hasFollower(actor) {
-  await ensureSchema();
-  const res = await getClient().execute({
-    sql: 'SELECT 1 FROM followers WHERE id = ? LIMIT 1',
-    args: [hashId(actor)],
-  });
-  return res.rows.length > 0;
+  return (await getJson(`followers/${hashId(actor)}.json`)) !== null;
 }
 
 export async function listFollowers() {
-  await ensureSchema();
-  const res = await getClient().execute(
-    'SELECT actor, inbox, shared_inbox, followed_at FROM followers'
-  );
-  return res.rows.map((r) => ({
+  const rows = await listJsonObjects('followers');
+  return rows.map((r) => ({
     actor: r.actor,
     inbox: r.inbox,
-    sharedInbox: r.shared_inbox ?? undefined,
-    followedAt: r.followed_at,
+    sharedInbox: r.sharedInbox ?? undefined,
+    followedAt: r.followedAt,
   }));
 }
 
 // ───── activities (idempotency + audit) ─────────────────────────────────
 
 export async function recordActivity(id, json) {
-  await ensureSchema();
-  await getClient().execute({
-    sql: `INSERT INTO activities (id, json) VALUES (?, ?)
-          ON CONFLICT(id) DO UPDATE SET json = excluded.json`,
-    args: [hashId(id), JSON.stringify(json)],
-  });
+  await putJson(`activities/${hashId(id)}.json`, json);
 }
 
 export async function getActivity(id) {
-  await ensureSchema();
-  const res = await getClient().execute({
-    sql: 'SELECT json FROM activities WHERE id = ?',
-    args: [hashId(id)],
-  });
-  if (res.rows.length === 0) return null;
-  return JSON.parse(res.rows[0].json);
+  return await getJson(`activities/${hashId(id)}.json`);
 }
 
 // ───── push subscriptions ───────────────────────────────────────────────
 
 export async function addPushSubscription(subscription, ua) {
-  await ensureSchema();
-  await getClient().execute({
-    sql: `INSERT INTO push_subscriptions (id, endpoint, keys_json, created_at, ua)
-          VALUES (?, ?, ?, ?, ?)
-          ON CONFLICT(id) DO UPDATE SET
-            endpoint   = excluded.endpoint,
-            keys_json  = excluded.keys_json,
-            created_at = excluded.created_at,
-            ua         = excluded.ua`,
-    args: [
-      hashId(subscription.endpoint),
-      subscription.endpoint,
-      JSON.stringify(subscription.keys),
-      new Date().toISOString(),
-      ua || null,
-    ],
+  await putJson(`push-subs/${hashId(subscription.endpoint)}.json`, {
+    endpoint: subscription.endpoint,
+    keys: subscription.keys,
+    createdAt: new Date().toISOString(),
+    ua: ua || null,
   });
 }
 
 export async function removePushSubscription(endpoint) {
-  await ensureSchema();
-  await getClient().execute({
-    sql: 'DELETE FROM push_subscriptions WHERE id = ?',
-    args: [hashId(endpoint)],
-  });
+  await deletePath(`push-subs/${hashId(endpoint)}.json`);
 }
 
 export async function listPushSubscriptions() {
-  await ensureSchema();
-  const res = await getClient().execute(
-    'SELECT endpoint, keys_json, created_at, ua FROM push_subscriptions'
-  );
-  return res.rows.map((r) => ({
-    endpoint: r.endpoint,
-    keys: JSON.parse(r.keys_json),
-    createdAt: r.created_at,
-    ua: r.ua ?? null,
-  }));
+  return await listJsonObjects('push-subs');
 }
 
 // ───── push meta (cursor) ───────────────────────────────────────────────
 
 export async function getLastPushed() {
-  await ensureSchema();
-  const res = await getClient().execute({
-    sql: 'SELECT value FROM push_meta WHERE key = ?',
-    args: ['last-pushed'],
-  });
-  if (res.rows.length === 0) return null;
-  return JSON.parse(res.rows[0].value);
+  return await getJson('push-meta/last-pushed.json');
 }
 
 export async function setLastPushed(data) {
-  await ensureSchema();
-  await getClient().execute({
-    sql: `INSERT INTO push_meta (key, value) VALUES (?, ?)
-          ON CONFLICT(key) DO UPDATE SET value = excluded.value`,
-    args: ['last-pushed', JSON.stringify(data)],
-  });
+  await putJson('push-meta/last-pushed.json', data);
 }

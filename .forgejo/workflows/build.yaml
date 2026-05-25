@@ -37,10 +37,11 @@ jobs:
       # Inlined into the Astro build (PUBLIC_* prefix) so Preferences.astro
       # knows where to POST push subscribe/unsubscribe requests.
       PUBLIC_AP_BASE: ${{ vars.AP_DYNAMIC_BASE }}
-      # Push fanout runs in the runner now (web-push doesn't bundle for
-      # Bunny's edge runtime); needs libsql access + full VAPID keypair.
-      BUNNY_DATABASE_URL: ${{ secrets.BUNNY_DATABASE_URL }}
-      BUNNY_DATABASE_WRITE_TOKEN: ${{ secrets.BUNNY_DATABASE_WRITE_TOKEN }}
+      # Push fanout runs in the runner; needs state-bucket access for
+      # listing subscriptions, plus the full VAPID keypair.
+      BUNNY_STATE_BUCKET_NAME: ${{ vars.BUNNY_STATE_BUCKET_NAME }}
+      BUNNY_STATE_ACCESS_KEY: ${{ secrets.BUNNY_STATE_ACCESS_KEY }}
+      BUNNY_STATE_REGION: ${{ vars.BUNNY_STATE_REGION }}
       VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
       VAPID_SUBJECT: ${{ secrets.VAPID_SUBJECT }}
       # Inlined into the Astro build via the envPrefix config in astro.config.mjs;
