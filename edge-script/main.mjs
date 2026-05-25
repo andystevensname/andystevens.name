@@ -1,23 +1,21 @@
-// Bunny Edge Script — standalone mode. The script has its own hostname
-// (assigned by Bunny when you create the script). The andystevens.name
-// Pull Zone routes the dynamic-path prefixes here via Edge Rules:
+// Bunny Edge Script — standalone mode, acts as the andystevensname
+// Pull Zone's full origin. Two responsibilities:
 //
-//   /ap/*           -> this script's hostname
-//   /api/*          -> this script's hostname
-//   /.well-known/*  -> this script's hostname
-//   /nodeinfo/*     -> this script's hostname
+//   1. Handle the dynamic paths (ActivityPub, push subscribe/unsubscribe,
+//      AP deliver trigger) inline using the imported handlers.
+//   2. Proxy everything else to Bunny Storage with the storage AccessKey
+//      header — the Pull Zone itself can't send custom headers to origin,
+//      so we send them from here.
 //
-// Everything else on the Pull Zone keeps going to the static origin
-// (Bunny Storage).
+// Pull Zone Origin URL is this script's bunny.run hostname. Pull Zone
+// then caches the script's responses (including the static proxies)
+// just like it would cache anything else.
 //
-// We started in middleware mode and hit a documented limitation: a
-// middleware script attached to a Pull Zone backed by a Storage Zone
-// silently 405s POST requests before the script runs. Standalone scripts
-// accept all methods, so federation POSTs to /ap/inbox and our push
-// subscribe/unsubscribe endpoints work as intended.
-//
-// Each handler is a plain Web Fetch (Request) -> Response function
-// reused from the old netlify/functions/ tree.
+// Env required on the script:
+//   AP_*, VAPID_*, BUNNY_DATABASE_*, POST_MANIFEST_URL — same as before
+//   BUNNY_S3_BUCKET_NAME       — storage zone name
+//   BUNNY_STORAGE_REGION       — region constant (NewYork etc.)
+//   BUNNY_STORAGE_ACCESS_KEY   — storage password / read or write token
 
 import * as BunnySDK from '@bunny.net/edgescript-sdk';
 
@@ -31,6 +29,24 @@ import note from './handlers/note.mjs';
 import deliver from './handlers/deliver.mjs';
 import pushSubscribe from './handlers/push-subscribe.mjs';
 import pushUnsubscribe from './handlers/push-unsubscribe.mjs';
+
+const REGION_HOST_PREFIX = {
+  Falkenstein: '',
+  London: 'uk.',
+  NewYork: 'ny.',
+  LosAngeles: 'la.',
+  Singapore: 'sg.',
+  Stockholm: 'se.',
+  SaoPaulo: 'br.',
+  Johannesburg: 'jh.',
+  Sydney: 'syd.',
+};
+
+const STORAGE_REGION = process.env.BUNNY_STORAGE_REGION || 'Falkenstein';
+const STORAGE_PREFIX = REGION_HOST_PREFIX[STORAGE_REGION] ?? '';
+const STORAGE_BUCKET = process.env.BUNNY_S3_BUCKET_NAME;
+const STORAGE_KEY = process.env.BUNNY_STORAGE_ACCESS_KEY;
+const STORAGE_BASE = `https://${STORAGE_PREFIX}storage.bunnycdn.com/${STORAGE_BUCKET}`;
 
 function route(pathname) {
   if (pathname === '/.well-known/webfinger') return webfinger;
@@ -48,16 +64,63 @@ function route(pathname) {
   return null;
 }
 
+// Astro outputs clean URLs (dir/index.html). Map them onto storage paths:
+//   /                → /index.html
+//   /articles/foo/   → /articles/foo/index.html
+//   /articles/foo    → /articles/foo/index.html
+//   /favicon.ico     → /favicon.ico   (last segment has a dot; leave alone)
+function toStoragePath(pathname) {
+  if (pathname.endsWith('/')) return pathname + 'index.html';
+  const last = pathname.split('/').pop();
+  if (last.includes('.')) return pathname;
+  return pathname + '/index.html';
+}
+
+async function proxyStatic(pathname) {
+  const storageUrl = STORAGE_BASE + toStoragePath(pathname);
+  const res = await fetch(storageUrl, {
+    headers: { AccessKey: STORAGE_KEY },
+  });
+  if (res.ok) {
+    // Strip storage-internal headers; keep content-type and length.
+    const headers = new Headers();
+    const ct = res.headers.get('content-type');
+    if (ct) headers.set('content-type', ct);
+    const cl = res.headers.get('content-length');
+    if (cl) headers.set('content-length', cl);
+    return new Response(res.body, { status: 200, headers });
+  }
+  if (res.status === 404) {
+    // Serve the built 404.html if Astro produced one.
+    const fallback = await fetch(STORAGE_BASE + '/404.html', {
+      headers: { AccessKey: STORAGE_KEY },
+    });
+    if (fallback.ok) {
+      return new Response(fallback.body, {
+        status: 404,
+        headers: { 'content-type': 'text/html; charset=utf-8' },
+      });
+    }
+    return new Response('not found', { status: 404 });
+  }
+  return new Response(`storage error: ${res.status}`, { status: 502 });
+}
+
 BunnySDK.net.http.serve(async (request) => {
   const url = new URL(request.url);
   const handler = route(url.pathname);
-  if (!handler) {
-    return new Response('not found', { status: 404 });
+  if (handler) {
+    try {
+      return await handler(request);
+    } catch (err) {
+      console.error(`edge-script handler error for ${url.pathname}:`, err);
+      return new Response('internal error', { status: 500 });
+    }
   }
   try {
-    return await handler(request);
+    return await proxyStatic(url.pathname);
   } catch (err) {
-    console.error(`edge-script handler error for ${url.pathname}:`, err);
-    return new Response('internal error', { status: 500 });
+    console.error(`edge-script proxy error for ${url.pathname}:`, err);
+    return new Response('proxy error', { status: 500 });
   }
 });
