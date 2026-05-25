@@ -52,10 +52,14 @@ async function bunnyCompatFetch(request) {
 function getClient() {
   if (_client) return _client;
   const url = process.env.BUNNY_DATABASE_URL;
-  const authToken = process.env.BUNNY_DATABASE_WRITE_TOKEN;
+  // Bunny's "Add Secrets to Edge Script" linkage injects this env var name.
+  // Fall back to the older name we used while testing in case both still exist.
+  const authToken =
+    process.env.BUNNY_DATABASE_AUTH_TOKEN ||
+    process.env.BUNNY_DATABASE_WRITE_TOKEN;
   if (!url || !authToken) {
     throw new Error(
-      'BUNNY_DATABASE_URL and BUNNY_DATABASE_WRITE_TOKEN must be set'
+      'BUNNY_DATABASE_URL and BUNNY_DATABASE_AUTH_TOKEN must be set'
     );
   }
   _client = createClient({ url, authToken, fetch: bunnyCompatFetch });
