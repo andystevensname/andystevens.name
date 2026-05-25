@@ -27,6 +27,20 @@ import { createHash } from 'node:crypto';
 let _client;
 let _initialized = false;
 
+// Bunny's Deno fetch wrapper crashes when libsql's hrana client passes
+// a plain Request object (TypeError: Cannot read properties of undefined
+// (reading 'loop')). Unpack the Request into URL + init and re-fetch.
+async function bunnyCompatFetch(request) {
+  const init = {
+    method: request.method,
+    headers: Object.fromEntries(request.headers),
+  };
+  if (request.method !== 'GET' && request.method !== 'HEAD') {
+    init.body = await request.text();
+  }
+  return fetch(request.url, init);
+}
+
 function getClient() {
   if (_client) return _client;
   const url = process.env.BUNNY_DATABASE_URL;
@@ -36,7 +50,7 @@ function getClient() {
       'BUNNY_DATABASE_URL and BUNNY_DATABASE_WRITE_TOKEN must be set'
     );
   }
-  _client = createClient({ url, authToken });
+  _client = createClient({ url, authToken, fetch: bunnyCompatFetch });
   return _client;
 }
 
