@@ -17,12 +17,26 @@ jobs:
       # access — reuse the write token here.
       BUNNY_STORAGE_ACCESS_KEY: ${{ secrets.BUNNY_S3_WRITE_TOKEN }}
       BUNNY_STORAGE_REGION: ${{ vars.BUNNY_STORAGE_REGION }}
-      # Post-deploy outbound triggers, all runner-side.
+      # ActivityPub config — used both by build-time static actor/webfinger
+      # generation (scripts/generate-static-ap.mjs) and by runner-side
+      # outbound triggers (deliver-to-activitypub).
       AP_DOMAIN: ${{ secrets.AP_DOMAIN }}
+      AP_USERNAME: ${{ secrets.AP_USERNAME }}
+      AP_PUBLIC_KEY: ${{ secrets.AP_PUBLIC_KEY }}
+      AP_PRIVATE_KEY: ${{ secrets.AP_PRIVATE_KEY }}
+      AP_DISPLAY_NAME: ${{ secrets.AP_DISPLAY_NAME }}
+      AP_SUMMARY: ${{ secrets.AP_SUMMARY }}
+      AP_ICON_URL: ${{ secrets.AP_ICON_URL }}
+      # Subdomain that hosts the dynamic AP endpoints; inboxUrl/outboxUrl/
+      # followersUrl in the generated actor JSON point here.
+      AP_DYNAMIC_BASE: ${{ vars.AP_DYNAMIC_BASE }}
       AP_DELIVER_SECRET: ${{ secrets.AP_DELIVER_SECRET }}
       GO_JAMMING_TOKEN: ${{ secrets.GO_JAMMING_TOKEN }}
       BLUESKY_HANDLE: ${{ secrets.BLUESKY_HANDLE }}
       BLUESKY_APP_PASSWORD: ${{ secrets.BLUESKY_APP_PASSWORD }}
+      # Inlined into the Astro build (PUBLIC_* prefix) so Preferences.astro
+      # knows where to POST push subscribe/unsubscribe requests.
+      PUBLIC_AP_BASE: ${{ vars.AP_DYNAMIC_BASE }}
       # Push fanout runs in the runner now (web-push doesn't bundle for
       # Bunny's edge runtime); needs libsql access + full VAPID keypair.
       BUNNY_DATABASE_URL: ${{ secrets.BUNNY_DATABASE_URL }}

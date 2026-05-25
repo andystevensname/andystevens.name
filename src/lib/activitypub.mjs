@@ -32,14 +32,20 @@ export function config() {
     throw new Error('AP_DOMAIN and AP_USERNAME env vars are required');
   }
   const base = `https://${domain}`;
+  // Dynamic endpoints (inbox, outbox, followers, etc.) live on a separate
+  // hostname — Bunny Pull Zones with Storage Zone origin block POSTs, so
+  // the Edge Script is hosted at a different subdomain (e.g.
+  // ap.andystevens.name). The actor's canonical id stays on the apex.
+  const dynBase = process.env.AP_DYNAMIC_BASE || base;
   cachedConfig = {
     domain,
     username,
     base,
+    dynBase,
     actorUrl: `${base}/ap/actor`,
-    inboxUrl: `${base}/ap/inbox`,
-    outboxUrl: `${base}/ap/outbox`,
-    followersUrl: `${base}/ap/followers`,
+    inboxUrl: `${dynBase}/ap/inbox`,
+    outboxUrl: `${dynBase}/ap/outbox`,
+    followersUrl: `${dynBase}/ap/followers`,
     keyId: `${base}/ap/actor#main-key`,
     displayName: process.env.AP_DISPLAY_NAME || username,
     summary: process.env.AP_SUMMARY || '',
@@ -69,7 +75,7 @@ export function buildActor() {
     inbox: c.inboxUrl,
     outbox: c.outboxUrl,
     followers: c.followersUrl,
-    following: `${c.base}/ap/following`,
+    following: `${c.dynBase}/ap/following`,
     icon: c.iconUrl
       ? { type: 'Image', mediaType: 'image/jpeg', url: c.iconUrl }
       : undefined,
@@ -106,7 +112,7 @@ export function buildAcceptActivity(followActivity) {
   const c = config();
   return {
     '@context': CONTEXT,
-    id: `${c.base}/ap/accepts/${encodeURIComponent(followActivity.id)}`,
+    id: `${c.dynBase}/ap/accepts/${encodeURIComponent(followActivity.id)}`,
     type: 'Accept',
     actor: c.actorUrl,
     object: followActivity,
@@ -123,7 +129,7 @@ export function buildFromManifestItem(item) {
     return { object: null, activity: null, likeTarget: item.likeTarget };
   }
 
-  const objectId = `${c.base}/ap/objects/${item.collection}/${item.slug}`;
+  const objectId = `${c.dynBase}/ap/objects/${item.collection}/${item.slug}`;
 
   const object = {
     '@context': CONTEXT,
@@ -165,7 +171,7 @@ export function buildLikeActivity(item, targetId) {
   const c = config();
   return {
     '@context': CONTEXT,
-    id: `${c.base}/ap/objects/likes/${item.slug}/activity`,
+    id: `${c.dynBase}/ap/objects/likes/${item.slug}/activity`,
     type: 'Like',
     actor: c.actorUrl,
     object: targetId,

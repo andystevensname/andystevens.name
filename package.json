@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build && node scripts/copy-manifest.mjs",
+    "build": "astro build && node scripts/copy-manifest.mjs && node scripts/generate-static-ap.mjs",
     "build:icons": "node scripts/build-icons.mjs",
     "vapid": "node scripts/generate-vapid.mjs",
     "preview": "astro preview",

@@ -69,13 +69,13 @@ const followers = await copyJsonStore('activitypub-followers', async (v) => {
 });
 console.log(`  copied ${followers}`);
 
-console.log('Activities …');
+/*console.log('Activities …');
 const activities = await copyJsonStore('activitypub-activities', async (v) => {
   const id = v.id ?? v['@id'];
   if (!id) throw new Error('missing id');
   await recordActivity(id, v);
 });
-console.log(`  copied ${activities}`);
+console.log(`  copied ${activities}`);*/
 
 console.log('Push subscriptions …');
 const subs = await copyJsonStore('push-subscriptions', async (v) => {

@@ -2,6 +2,9 @@
 import iconsUrl from '../assets/icons.svg?url';
 
 const vapidKey = import.meta.env.VAPID_PUBLIC_KEY ?? '';
+// Push endpoints live on the AP subdomain (ap.andystevens.name) because
+// the apex domain's Pull Zone (Storage origin) blocks POST requests.
+const apBase = import.meta.env.PUBLIC_AP_BASE ?? '';
 ---
 
 <button
@@ -22,6 +25,7 @@ const vapidKey = import.meta.env.VAPID_PUBLIC_KEY ?? '';
   role="dialog"
   aria-label="Preferences"
   data-vapid-key={vapidKey}
+  data-ap-base={apBase}
 >
   <div class="popover-handle" aria-hidden="true"></div>
   <div class="preferences-content">
@@ -53,7 +57,9 @@ const vapidKey = import.meta.env.VAPID_PUBLIC_KEY ?? '';
 <script>
   import { onPageLoad } from '../lib/page-load.js';
 
-  const VAPID_KEY = (document.getElementById('preferences-popover') as HTMLElement | null)?.dataset.vapidKey || '';
+  const popoverEl = document.getElementById('preferences-popover') as HTMLElement | null;
+  const VAPID_KEY = popoverEl?.dataset.vapidKey || '';
+  const AP_BASE = popoverEl?.dataset.apBase || '';
 
   function urlBase64ToUint8Array(b64: string): Uint8Array<ArrayBuffer> {
     const padding = '='.repeat((4 - (b64.length % 4)) % 4);
@@ -118,7 +124,7 @@ const vapidKey = import.meta.env.VAPID_PUBLIC_KEY ?? '';
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(VAPID_KEY),
       });
-      const res = await fetch('/api/push/subscribe', {
+      const res = await fetch(`${AP_BASE}/api/push/subscribe`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(sub.toJSON()),
@@ -136,7 +142,7 @@ const vapidKey = import.meta.env.VAPID_PUBLIC_KEY ?? '';
       const reg = await navigator.serviceWorker.ready;
       const sub = await reg.pushManager.getSubscription();
       if (sub) {
-        await fetch('/api/push/unsubscribe', {
+        await fetch(`${AP_BASE}/api/push/unsubscribe`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ endpoint: sub.endpoint }),

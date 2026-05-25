@@ -51,12 +51,22 @@ if (!accessKey) {
 const base = `https://${prefix}storage.bunnycdn.com/${zone}/`;
 const DIST = 'dist';
 
+// Most files served by Bunny get their Content-Type from extension
+// inference at request time. The two AP files we generate have no
+// extension, so set the right type at upload so Storage returns it.
+const CONTENT_TYPE_OVERRIDES = {
+  '.well-known/webfinger': 'application/jrd+json; charset=utf-8',
+  'ap/actor': 'application/activity+json; charset=utf-8',
+};
+
 async function upload(remote, buf) {
+  const contentType =
+    CONTENT_TYPE_OVERRIDES[remote] ?? 'application/octet-stream';
   const res = await fetch(base + remote, {
     method: 'PUT',
     headers: {
       AccessKey: accessKey,
-      'Content-Type': 'application/octet-stream',
+      'Content-Type': contentType,
     },
     body: buf,
   });
