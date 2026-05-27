@@ -50,6 +50,12 @@ jobs:
       # Bunny Edge Script deploy.
       BUNNY_API_KEY: ${{ secrets.BUNNY_API_KEY }}
       BUNNY_EDGE_SCRIPT_ID: ${{ vars.BUNNY_EDGE_SCRIPT_ID }}
+      # Gemini capsule: built into a container image and pushed to
+      # Codeberg's container registry. Bunny Magic Containers pulls
+      # the public image from there.
+      CODEBERG_USERNAME: ${{ secrets.CODEBERG_USERNAME }}
+      CODEBERG_TOKEN: ${{ secrets.CODEBERG_TOKEN }}
+      GEMINI_IMAGE: ${{ vars.GEMINI_IMAGE }}
     steps:
       - uses: actions/checkout@v4
 
@@ -59,11 +65,32 @@ jobs:
       - name: Build site
         run: npm run build
 
+      - name: Generate gemini capsule
+        run: node scripts/generate-gemtext.mjs
+
       - name: Deploy to Bunny Storage
         run: node scripts/deploy-to-bunny.mjs
 
       - name: Deploy Edge Script
         run: node scripts/deploy-edge-script.mjs
+
+      - name: Install docker CLI
+        run: apt-get update && apt-get install -y --no-install-recommends docker.io
+
+      - name: Build and push gemini container image
+        env:
+          # The runner's dind sidecar; reachable from job containers on
+          # the shared forgejo network.
+          DOCKER_HOST: tcp://forgejo-dind:2375
+        run: |
+          echo "$CODEBERG_TOKEN" | docker login codeberg.org -u "$CODEBERG_USERNAME" --password-stdin
+          docker build \
+            -f gemini-server/Dockerfile \
+            -t "$GEMINI_IMAGE:latest" \
+            -t "$GEMINI_IMAGE:$GITHUB_SHA" \
+            .
+          docker push "$GEMINI_IMAGE:latest"
+          docker push "$GEMINI_IMAGE:$GITHUB_SHA"
 
       - name: Send webmentions
         if: success()
