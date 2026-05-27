@@ -26,11 +26,15 @@ COPY dist-gemini/ /content/
 # cert.pem + key.rsa from --certs. 10y validity so within a single
 # image's life the cert is stable and Gemini clients (TOFU) don't warn.
 ARG GEMINI_HOSTNAME=gemini.andystevens.name
-# agate with --hostname looks for the cert under <certs>/<hostname>/,
-# not at the top-level. Put both files there.
+# agate (via rustls) expects key.rsa to be a PKCS#1 RSA key
+# (-----BEGIN RSA PRIVATE KEY-----). `openssl req -newkey` in OpenSSL 3
+# defaults to PKCS#8 (-----BEGIN PRIVATE KEY-----), which agate rejects
+# silently as "no server certificate chain resolved". Generate the key
+# with genrsa (PKCS#1 native) then sign the cert from it.
 RUN mkdir -p "/certs/${GEMINI_HOSTNAME}" && \
-    openssl req -x509 -newkey rsa:2048 -nodes \
-        -keyout "/certs/${GEMINI_HOSTNAME}/key.rsa" \
+    openssl genrsa -out "/certs/${GEMINI_HOSTNAME}/key.rsa" 2048 && \
+    openssl req -x509 -new \
+        -key "/certs/${GEMINI_HOSTNAME}/key.rsa" \
         -out "/certs/${GEMINI_HOSTNAME}/cert.pem" \
         -days 3650 \
         -subj "/CN=${GEMINI_HOSTNAME}" \
