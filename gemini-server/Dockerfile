@@ -10,7 +10,9 @@
 # Acceptable for a low-traffic personal capsule; revisit with a persistent
 # cert volume or Let's Encrypt if it gets annoying.
 
-FROM rust:1.81-alpine AS build
+# agate requires Rust edition 2024 (stabilized in 1.85). Track the
+# latest 1.x stable so future agate releases don't bite us again.
+FROM rust:1-alpine AS build
 RUN apk add --no-cache musl-dev openssl-dev pkgconfig
 RUN cargo install --root /out agate
 
