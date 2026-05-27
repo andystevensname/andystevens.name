@@ -16,11 +16,22 @@ FROM rust:1-alpine AS build
 RUN apk add --no-cache musl-dev openssl-dev pkgconfig
 RUN cargo install --root /out agate
 
-FROM alpine:3.20
-RUN apk add --no-cache ca-certificates
+FROM alpine:3.22
+RUN apk add --no-cache ca-certificates openssl
 COPY --from=build /out/bin/agate /usr/local/bin/agate
 COPY dist-gemini/ /content/
-RUN mkdir -p /certs
+
+# Pre-generate a long-lived self-signed cert. agate doesn't auto-generate
+# in recent versions; with --hostname matching the subject, it picks up
+# cert.pem + key.rsa from --certs. 10y validity so within a single
+# image's life the cert is stable and Gemini clients (TOFU) don't warn.
+ARG GEMINI_HOSTNAME=gemini.andystevens.name
+RUN mkdir -p /certs && \
+    openssl req -x509 -newkey rsa:2048 -nodes \
+        -keyout /certs/key.rsa -out /certs/cert.pem \
+        -days 3650 \
+        -subj "/CN=${GEMINI_HOSTNAME}" \
+        -addext "subjectAltName=DNS:${GEMINI_HOSTNAME}"
 
 ENV GEMINI_HOSTNAME=gemini.andystevens.name
 EXPOSE 1965
