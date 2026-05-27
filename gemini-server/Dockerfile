@@ -26,9 +26,12 @@ COPY dist-gemini/ /content/
 # cert.pem + key.rsa from --certs. 10y validity so within a single
 # image's life the cert is stable and Gemini clients (TOFU) don't warn.
 ARG GEMINI_HOSTNAME=gemini.andystevens.name
-RUN mkdir -p /certs && \
+# agate with --hostname looks for the cert under <certs>/<hostname>/,
+# not at the top-level. Put both files there.
+RUN mkdir -p "/certs/${GEMINI_HOSTNAME}" && \
     openssl req -x509 -newkey rsa:2048 -nodes \
-        -keyout /certs/key.rsa -out /certs/cert.pem \
+        -keyout "/certs/${GEMINI_HOSTNAME}/key.rsa" \
+        -out "/certs/${GEMINI_HOSTNAME}/cert.pem" \
         -days 3650 \
         -subj "/CN=${GEMINI_HOSTNAME}" \
         -addext "subjectAltName=DNS:${GEMINI_HOSTNAME}"
