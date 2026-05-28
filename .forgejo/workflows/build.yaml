@@ -84,7 +84,12 @@ jobs:
           DOCKER_HOST: tcp://forgejo-dind:2375
         run: |
           echo "$DOCKER_TOKEN" | docker login docker.io -u "$DOCKER_USERNAME" --password-stdin
+          # Bunny Magic Containers runs on amd64 hosts; the runner is
+          # arm64 (Apple Silicon). Force amd64 explicitly so the pushed
+          # image matches the deploy target. OrbStack's binfmt handles
+          # the cross-build under the hood.
           docker build \
+            --platform linux/amd64 \
             -f gemini-server/Dockerfile \
             -t "$GEMINI_IMAGE:latest" \
             -t "$GEMINI_IMAGE:$GITHUB_SHA" \
