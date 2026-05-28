@@ -17,28 +17,21 @@ RUN apk add --no-cache musl-dev openssl-dev pkgconfig
 RUN cargo install --root /out agate
 
 FROM alpine:3.22
-RUN apk add --no-cache ca-certificates openssl
+RUN apk add --no-cache ca-certificates
 COPY --from=build /out/bin/agate /usr/local/bin/agate
 COPY dist-gemini/ /content/
 
-# Pre-generate a long-lived self-signed cert. agate doesn't auto-generate
-# in recent versions; with --hostname matching the subject, it picks up
-# cert.pem + key.rsa from --certs. 10y validity so within a single
-# image's life the cert is stable and Gemini clients (TOFU) don't warn.
-ARG GEMINI_HOSTNAME=gemini.andystevens.name
-# agate (via rustls) expects key.rsa to be a PKCS#1 RSA key
-# (-----BEGIN RSA PRIVATE KEY-----). `openssl req -newkey` in OpenSSL 3
-# defaults to PKCS#8 (-----BEGIN PRIVATE KEY-----), which agate rejects
-# silently as "no server certificate chain resolved". Generate the key
-# with genrsa (PKCS#1 native) then sign the cert from it.
-RUN mkdir -p "/certs/${GEMINI_HOSTNAME}" && \
-    openssl genrsa -traditional -out "/certs/${GEMINI_HOSTNAME}/key.rsa" 2048 && \
-    openssl req -x509 -new \
-        -key "/certs/${GEMINI_HOSTNAME}/key.rsa" \
-        -out "/certs/${GEMINI_HOSTNAME}/cert.pem" \
-        -days 3650 \
-        -subj "/CN=${GEMINI_HOSTNAME}" \
-        -addext "subjectAltName=DNS:${GEMINI_HOSTNAME}"
+# agate generates its own ECDSA keys on first run (Ed25519 if -e is
+# passed). Trying to seed with our own RSA cert was tripping
+# "A folder for <host> exists, but there is no certificate or key file"
+# because agate didn't recognise the key format/algorithm. Empty /certs
+# is what agate wants — it writes cert.pem + key.rsa itself on startup.
+#
+# Caveat: without a persistent volume the cert is fresh every container
+# start, so Gemini clients (TOFU) warn on each redeploy. Acceptable for
+# a low-traffic capsule; revisit with a Bunny Magic Containers volume
+# (or a baked-in long-lived cert in the correct ECDSA format) later.
+RUN mkdir -p /certs
 
 ENV GEMINI_HOSTNAME=gemini.andystevens.name
 EXPOSE 1965
