@@ -82,14 +82,18 @@ jobs:
           # The runner's dind sidecar; reachable from job containers on
           # the shared forgejo network.
           DOCKER_HOST: tcp://forgejo-dind:2375
+          AGATE_BASE_IMAGE: ${{ vars.AGATE_BASE_IMAGE }}
         run: |
           echo "$DOCKER_TOKEN" | docker login docker.io -u "$DOCKER_USERNAME" --password-stdin
           # Bunny Magic Containers runs on amd64 hosts; the runner is
           # arm64 (Apple Silicon). Force amd64 explicitly so the pushed
           # image matches the deploy target. OrbStack's binfmt handles
-          # the cross-build under the hood.
+          # the cross-build, but most of the heavy lifting (compiling
+          # agate) lives in the pre-built AGATE_BASE_IMAGE — this build
+          # is just COPY content + a couple of layers.
           docker build \
             --platform linux/amd64 \
+            --build-arg AGATE_BASE_IMAGE="$AGATE_BASE_IMAGE" \
             -f gemini-server/Dockerfile \
             -t "$GEMINI_IMAGE:latest" \
             -t "$GEMINI_IMAGE:$GITHUB_SHA" \

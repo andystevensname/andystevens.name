@@ -1,0 +1,34 @@
+name: Build agate base image
+
+# Manual only — agate is stable, no need to rebuild unprompted. Run this
+# once during initial setup, then again whenever you want to pick up a
+# new agate release.
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: docker
+    container:
+      image: node:24-bookworm
+    env:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+      AGATE_BASE_IMAGE: ${{ vars.AGATE_BASE_IMAGE }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install docker CLI
+        run: apt-get update && apt-get install -y --no-install-recommends docker.io
+
+      - name: Build and push agate base
+        env:
+          DOCKER_HOST: tcp://forgejo-dind:2375
+        run: |
+          echo "$DOCKER_TOKEN" | docker login docker.io -u "$DOCKER_USERNAME" --password-stdin
+          docker build \
+            --platform linux/amd64 \
+            -f gemini-server/agate-base.Dockerfile \
+            -t "$AGATE_BASE_IMAGE:latest" \
+            gemini-server/
+          docker push "$AGATE_BASE_IMAGE:latest"
