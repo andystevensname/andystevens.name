@@ -51,10 +51,10 @@ jobs:
       BUNNY_API_KEY: ${{ secrets.BUNNY_API_KEY }}
       BUNNY_EDGE_SCRIPT_ID: ${{ vars.BUNNY_EDGE_SCRIPT_ID }}
       # Gemini capsule: built into a container image and pushed to
-      # Codeberg's container registry. Bunny Magic Containers pulls
-      # the public image from there.
-      CODEBERG_USERNAME: ${{ secrets.CODEBERG_USERNAME }}
-      CODEBERG_TOKEN: ${{ secrets.CODEBERG_TOKEN }}
+      # Docker Hub. Bunny Magic Containers only integrates with Docker
+      # Hub / GHCR, not arbitrary registries, so Codeberg was a no-go.
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
       GEMINI_IMAGE: ${{ vars.GEMINI_IMAGE }}
     steps:
       - uses: actions/checkout@v4
@@ -83,7 +83,7 @@ jobs:
           # the shared forgejo network.
           DOCKER_HOST: tcp://forgejo-dind:2375
         run: |
-          echo "$CODEBERG_TOKEN" | docker login codeberg.org -u "$CODEBERG_USERNAME" --password-stdin
+          echo "$DOCKER_TOKEN" | docker login docker.io -u "$DOCKER_USERNAME" --password-stdin
           docker build \
             -f gemini-server/Dockerfile \
             -t "$GEMINI_IMAGE:latest" \
