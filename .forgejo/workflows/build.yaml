@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: docker
     container:
-      image: node:22-bookworm
+      image: node:24-bookworm
     env:
       # Static site → Bunny Storage via the official SDK.
       BUNNY_S3_BUCKET_NAME: ${{ secrets.BUNNY_S3_BUCKET_NAME }}
