@@ -32,7 +32,7 @@ ARG GEMINI_HOSTNAME=gemini.andystevens.name
 # silently as "no server certificate chain resolved". Generate the key
 # with genrsa (PKCS#1 native) then sign the cert from it.
 RUN mkdir -p "/certs/${GEMINI_HOSTNAME}" && \
-    openssl genrsa -out "/certs/${GEMINI_HOSTNAME}/key.rsa" 2048 && \
+    openssl genrsa -traditional -out "/certs/${GEMINI_HOSTNAME}/key.rsa" 2048 && \
     openssl req -x509 -new \
         -key "/certs/${GEMINI_HOSTNAME}/key.rsa" \
         -out "/certs/${GEMINI_HOSTNAME}/cert.pem" \
