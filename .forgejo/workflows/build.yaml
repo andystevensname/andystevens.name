@@ -59,6 +59,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Cache npm deps
+        uses: actions/cache@v4
+        with:
+          # Both the installed tree (so npm ci has nothing to do on a
+          # hit) and npm's own tarball cache (so even a miss is faster).
+          path: |
+            node_modules
+            ~/.npm
+          # package-lock.json drives invalidation: any add/remove/upgrade
+          # changes its hash. Including node version so a future Node
+          # bump doesn't reuse stale native modules. Bump the v1 prefix
+          # to force-bust the cache wholesale if it ever gets corrupted.
+          key: v1-npm-node24-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            v1-npm-node24-
+            v1-npm-
+
       - name: Install dependencies
         run: npm ci
 
