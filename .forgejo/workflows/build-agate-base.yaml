@@ -22,8 +22,8 @@ jobs:
         run: apt-get update && apt-get install -y --no-install-recommends docker.io
 
       - name: Build and push agate base
-        env:
-          DOCKER_HOST: tcp://forgejo-dind:2375
+        #env:
+        #  DOCKER_HOST: tcp://forgejo-dind:2375
         run: |
           echo "$DOCKER_TOKEN" | docker login docker.io -u "$DOCKER_USERNAME" --password-stdin
           docker build \

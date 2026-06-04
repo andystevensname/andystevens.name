@@ -98,7 +98,7 @@ jobs:
         env:
           # The runner's dind sidecar; reachable from job containers on
           # the shared forgejo network.
-          DOCKER_HOST: tcp://forgejo-dind:2375
+          # DOCKER_HOST: 
           AGATE_BASE_IMAGE: ${{ vars.AGATE_BASE_IMAGE }}
         run: |
           echo "$DOCKER_TOKEN" | docker login docker.io -u "$DOCKER_USERNAME" --password-stdin
