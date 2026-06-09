@@ -146,7 +146,7 @@ if (animationCanvas && gearsContainer) {
 
     // JS tick handles per-element randomized animations (beam movement,
     // bar vertex jitter). Phase opacity transitions are handled by the
-    // Web Animations API above; gears rotate via SMIL.
+    // Web Animations API above; gears rotate via requestAnimationFrame.
     //
     // Phase position is derived from wall-clock time, NOT from a
     // per-rAF counter, so that the JS tick stays in lockstep with the
