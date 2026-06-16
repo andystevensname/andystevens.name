@@ -1,5 +1,6 @@
-import { federatable } from '../src/lib/post-sources.mjs';
+import { federatable, ACTIVITYPUB_TOKEN } from '../src/lib/post-sources.mjs';
 import { loadManifest } from '../src/lib/manifest.mjs';
+import { selectUnsyndicated, recordSyndicated, postId } from '../src/lib/syndicate.mjs';
 
 const deliverSecret = process.env.AP_DELIVER_SECRET;
 const domain = process.env.AP_DOMAIN;
@@ -17,11 +18,20 @@ try {
   process.exit(0);
 }
 
-const cutoff = Date.now() - 60 * 60 * 1000;
-const candidates = posts.filter((p) => {
-  if (new Date(p.published).getTime() < cutoff) return false;
-  return federatable(p);
-});
+// Ledger-based dedup: deliver opted-in posts not already recorded for
+// ActivityPub, then record the ones that succeed. (See src/lib/syndicate.mjs.)
+const { candidates, seedIds } = await selectUnsyndicated(
+  posts,
+  ACTIVITYPUB_TOKEN,
+  federatable
+);
+
+// Cold start: seal the existing back-catalogue into the ledger up front so a
+// mid-run failure can't replay it on the next deploy.
+if (seedIds) {
+  await recordSyndicated(ACTIVITYPUB_TOKEN, seedIds);
+  console.log(`ActivityPub: cold start — sealed ${seedIds.length} existing post(s) into the ledger`);
+}
 
 if (candidates.length === 0) {
   console.log('No new items opted into ActivityPub syndication');
@@ -30,6 +40,7 @@ if (candidates.length === 0) {
 
 const deliverUrl = `https://${domain}/api/deliver`;
 
+const sent = [];
 for (const post of candidates) {
   try {
     const res = await fetch(deliverUrl, {
@@ -44,10 +55,12 @@ for (const post of candidates) {
     const result = await res.json().catch(() => ({}));
 
     if (res.ok) {
+      sent.push(postId(post));
       console.log(
         `ActivityPub: delivered ${post.collection}/${post.slug} (${result.delivered}/${result.total} inboxes)`
       );
     } else {
+      // Leave failures OUT of the ledger so they retry next deploy.
       console.warn(
         `ActivityPub: delivery failed for ${post.collection}/${post.slug}: ${res.status}`,
         result.error || ''
@@ -57,3 +70,7 @@ for (const post of candidates) {
     console.warn(`ActivityPub: delivery error for ${post.collection}/${post.slug}:`, e.message);
   }
 }
+
+// On a normal run record only what actually delivered; on cold start the seal
+// above already covered everything.
+if (!seedIds) await recordSyndicated(ACTIVITYPUB_TOKEN, sent);
