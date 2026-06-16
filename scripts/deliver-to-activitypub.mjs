@@ -4,6 +4,12 @@ import { selectUnsyndicated, recordSyndicated, postId } from '../src/lib/syndica
 
 const deliverSecret = process.env.AP_DELIVER_SECRET;
 const domain = process.env.AP_DOMAIN;
+// The dynamic AP endpoints (incl. /api/deliver) are served by the Edge Script
+// on its own subdomain — the apex (AP_DOMAIN) is a Bunny Pull Zone with a
+// Storage origin that rejects POST with 405. AP_DYNAMIC_BASE is a full
+// https:// base URL (same one activitypub.mjs uses for inbox/outbox); fall
+// back to the apex only if it's unset.
+const dynBase = process.env.AP_DYNAMIC_BASE || (domain ? `https://${domain}` : '');
 
 if (!deliverSecret || !domain) {
   console.log('AP_DELIVER_SECRET or AP_DOMAIN not set, skipping ActivityPub delivery');
@@ -33,11 +39,11 @@ const { candidates, seedIds } = await selectUnsyndicated(
   federatable
 );
 
-// Cold start: seal the existing back-catalogue into the ledger up front so a
-// mid-run failure can't replay it on the next deploy.
+// Cold start: seal the back-catalogue (NOT the fresh candidates) so it's never
+// replayed. The fresh candidates are recorded below only after they deliver.
 if (seedIds) {
   await recordSyndicated(ACTIVITYPUB_TOKEN, seedIds);
-  console.log(`ActivityPub: cold start — sealed ${seedIds.length} existing post(s) into the ledger`);
+  console.log(`ActivityPub: cold start — sealed ${seedIds.length} back-catalogue post(s) into the ledger`);
 }
 
 if (candidates.length === 0) {
@@ -45,7 +51,7 @@ if (candidates.length === 0) {
   process.exit(0);
 }
 
-const deliverUrl = `https://${domain}/api/deliver`;
+const deliverUrl = `${dynBase}/api/deliver`;
 
 const sent = [];
 for (const post of candidates) {
@@ -78,6 +84,6 @@ for (const post of candidates) {
   }
 }
 
-// On a normal run record only what actually delivered; on cold start the seal
-// above already covered everything.
-if (!seedIds) await recordSyndicated(ACTIVITYPUB_TOKEN, sent);
+// Record only what actually delivered (failures stay out so they retry next
+// deploy). On cold start the back-catalogue was already sealed above.
+await recordSyndicated(ACTIVITYPUB_TOKEN, sent);

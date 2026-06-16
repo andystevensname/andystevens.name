@@ -83,11 +83,11 @@ const { candidates, seedIds } = await selectUnsyndicated(
   (p) => wantsSyndication(p.syndication, BLUESKY_TOKEN)
 );
 
-// Cold start: seal the existing back-catalogue into the ledger up front so a
-// mid-run failure can't replay it on the next deploy.
+// Cold start: seal the back-catalogue (NOT the fresh candidates) so it's never
+// replayed. The fresh candidates are recorded below only after they post.
 if (seedIds) {
   await recordSyndicated(BLUESKY_TOKEN, seedIds);
-  console.log(`Bluesky: cold start — sealed ${seedIds.length} existing post(s) into the ledger`);
+  console.log(`Bluesky: cold start — sealed ${seedIds.length} back-catalogue post(s) into the ledger`);
 }
 
 if (candidates.length === 0) {
@@ -119,9 +119,9 @@ try {
     }
   }
 
-  // On a normal run record only what actually sent; on cold start the seal
-  // above already covered everything.
-  if (!seedIds) await recordSyndicated(BLUESKY_TOKEN, sent);
+  // Record only what actually sent (failures stay out so they retry next
+  // deploy). On cold start the back-catalogue was already sealed above.
+  await recordSyndicated(BLUESKY_TOKEN, sent);
 } catch (e) {
   console.warn('Bluesky posting error:', e.message);
 }

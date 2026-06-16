@@ -25,10 +25,11 @@ export const postId = (p) => p.url;
 
 // Returns { candidates, seedIds }.
 //   candidates : posts to syndicate this run.
-//   seedIds    : non-null ONLY on cold start — the full set of opted-in ids
-//                to write into the ledger so the back-catalogue is sealed
-//                (the caller records these regardless of per-item send
-//                outcome; it's a one-time seal).
+//   seedIds    : non-null ONLY on cold start — the BACK-CATALOGUE ids to seal
+//                into the ledger so they're never replayed. It deliberately
+//                EXCLUDES the fresh candidates: those must be recorded only
+//                after they actually send, so a failed delivery retries on the
+//                next deploy instead of being silently sealed as "done".
 export async function selectUnsyndicated(posts, target, wants) {
   const opted = posts.filter((p) => wants(p));
   const ledger = await getSyndicatedIds(target);
@@ -38,7 +39,11 @@ export async function selectUnsyndicated(posts, target, wants) {
     const fresh = opted.filter(
       (p) => now - new Date(p.published).getTime() < COLD_START_GRACE_MS
     );
-    return { candidates: fresh, seedIds: opted.map(postId) };
+    const freshIds = new Set(fresh.map(postId));
+    const backCatalogue = opted
+      .filter((p) => !freshIds.has(postId(p)))
+      .map(postId);
+    return { candidates: fresh, seedIds: backCatalogue };
   }
 
   const candidates = opted.filter((p) => !ledger.has(postId(p)));
