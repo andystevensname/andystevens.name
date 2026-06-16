@@ -122,6 +122,22 @@ jobs:
           docker push "$GEMINI_IMAGE:latest"
           docker push "$GEMINI_IMAGE:$GITHUB_SHA"
 
+      # Magic Containers pulls the image only on (re)deploy, not when a new tag
+      # is pushed — so trigger a rolling update to the image we just pushed.
+      # Pinned to the per-commit SHA tag (not :latest) so the reference always
+      # changes and the pull actually happens. Skipped until GEMINI_MC_APP_ID /
+      # GEMINI_MC_CONTAINER are set, so it can't break builds before it's
+      # configured. api_key reuses the account BUNNY_API_KEY (this action does
+      # not support sub-user keys).
+      - name: Redeploy gemini capsule (Bunny Magic Containers)
+        if: success() && vars.GEMINI_MC_APP_ID != ''
+        uses: https://github.com/BunnyWay/actions/container-update-image@main
+        with:
+          api_key: ${{ secrets.BUNNY_API_KEY }}
+          app_id: ${{ vars.GEMINI_MC_APP_ID }}
+          container: ${{ vars.GEMINI_MC_CONTAINER }}
+          image_tag: ${{ github.sha }}
+
       - name: Send webmentions
         if: success()
         continue-on-error: true
