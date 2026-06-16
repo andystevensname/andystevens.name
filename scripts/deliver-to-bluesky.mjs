@@ -60,6 +60,13 @@ if (!handle || !password) {
   process.exit(0);
 }
 
+// The ledger lives in the Bunny state bucket. Without it there's no dedup, so
+// SKIP rather than post blind (posting without the ledger risks duplicates).
+if (!process.env.BUNNY_STATE_BUCKET_NAME || !process.env.BUNNY_STATE_ACCESS_KEY) {
+  console.log('BUNNY_STATE_BUCKET_NAME/ACCESS_KEY not set, skipping Bluesky (ledger unavailable)');
+  process.exit(0);
+}
+
 let posts;
 try {
   posts = await loadManifest();

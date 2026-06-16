@@ -10,6 +10,13 @@ if (!deliverSecret || !domain) {
   process.exit(0);
 }
 
+// The ledger lives in the Bunny state bucket. Without it there's no dedup, so
+// SKIP rather than deliver blind (delivering without the ledger risks dupes).
+if (!process.env.BUNNY_STATE_BUCKET_NAME || !process.env.BUNNY_STATE_ACCESS_KEY) {
+  console.log('BUNNY_STATE_BUCKET_NAME/ACCESS_KEY not set, skipping ActivityPub (ledger unavailable)');
+  process.exit(0);
+}
+
 let posts;
 try {
   posts = await loadManifest();

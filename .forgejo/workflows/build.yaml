@@ -39,7 +39,11 @@ jobs:
       PUBLIC_AP_BASE: ${{ vars.AP_DYNAMIC_BASE }}
       # Push fanout runs in the runner; needs state-bucket access for
       # listing subscriptions, plus the full VAPID keypair.
-      BUNNY_STATE_BUCKET_NAME: ${{ vars.BUNNY_STATE_BUCKET_NAME }}
+      # BUCKET_NAME + ACCESS_KEY are SECRETS; REGION is a VAR. Forgejo keeps the
+      # namespaces separate — BUCKET_NAME was previously read from `vars.` and
+      # silently yielded empty, failing runner-side state calls with
+      # "BUNNY_STATE_* must be set".
+      BUNNY_STATE_BUCKET_NAME: ${{ secrets.BUNNY_STATE_BUCKET_NAME }}
       BUNNY_STATE_ACCESS_KEY: ${{ secrets.BUNNY_STATE_ACCESS_KEY }}
       BUNNY_STATE_REGION: ${{ vars.BUNNY_STATE_REGION }}
       VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
