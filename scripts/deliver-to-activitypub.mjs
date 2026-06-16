@@ -68,10 +68,25 @@ for (const post of candidates) {
     const result = await res.json().catch(() => ({}));
 
     if (res.ok) {
-      sent.push(postId(post));
-      console.log(
-        `ActivityPub: delivered ${post.collection}/${post.slug} (${result.delivered}/${result.total} inboxes)`
-      );
+      const delivered = result.delivered ?? 0;
+      const total = result.total ?? 0;
+      // Record only if something actually landed (or there were no followers to
+      // deliver to). /api/deliver returns 200 even when every inbox rejects, so
+      // a 0/total result must NOT be recorded — otherwise it's sealed as "done"
+      // and never retried. Note: with multiple followers this is per-POST, not
+      // per-inbox, so a partial success records the post and won't re-attempt
+      // the inboxes that failed.
+      if (delivered > 0 || total === 0) {
+        sent.push(postId(post));
+        console.log(
+          `ActivityPub: delivered ${post.collection}/${post.slug} (${delivered}/${total} inboxes)`
+        );
+      } else {
+        console.warn(
+          `ActivityPub: 0/${total} inboxes accepted ${post.collection}/${post.slug}; NOT recording (will retry). Per-inbox failures:`,
+          JSON.stringify(result.failures || [])
+        );
+      }
     } else {
       // Leave failures OUT of the ledger so they retry next deploy.
       console.warn(
