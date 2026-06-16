@@ -219,3 +219,17 @@ export async function addSyndicatedIds(target, ids) {
     updatedAt: new Date().toISOString(),
   });
 }
+
+// Drop one id from a target's ledger so the post re-delivers on the next
+// deploy. Returns true if it was present. Removing a single entry keeps the
+// ledger non-empty (the normal/"warm" path), avoiding the cold-start grace
+// window you'd re-enter by deleting the whole file.
+export async function removeSyndicatedId(target, id) {
+  const set = await getSyndicatedIds(target);
+  if (!set.delete(id)) return false;
+  await putJson(`syndication-meta/${target}.json`, {
+    ids: [...set],
+    updatedAt: new Date().toISOString(),
+  });
+  return true;
+}
