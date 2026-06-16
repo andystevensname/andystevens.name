@@ -12,5 +12,9 @@ RUN apk add --no-cache musl-dev openssl-dev pkgconfig
 RUN cargo install --root /out agate
 
 FROM alpine:3.22
-RUN apk add --no-cache ca-certificates
+# /certs is created here (not in the per-deploy Dockerfile) so the
+# frequent per-push gemini-server build has NO RUN step — it stays
+# FROM + COPY + metadata, which need no amd64 emulation on the arm64
+# runner. Only this base build (rare, manual) executes amd64 code.
+RUN apk add --no-cache ca-certificates && mkdir -p /certs
 COPY --from=build /out/bin/agate /usr/local/bin/agate
