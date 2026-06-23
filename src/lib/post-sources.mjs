@@ -37,8 +37,14 @@ export function wantsSyndication(frontmatterArray, targetToken) {
 export const federatable = (post) =>
   wantsSyndication(post.syndication, ACTIVITYPUB_TOKEN);
 
+// AP object `type` per collection. Use `Note` for everything that should show
+// up as a normal post on Mastodon. Mastodon only natively renders `Note`
+// (and `Question`); `Article` is a "converted" type whose handling is lossy
+// and version-dependent — it frequently federates as "delivered but no visible
+// status". So long-form posts are emitted as `Note` too (the content is the
+// same HTML either way; only the wrapper type changes).
 export const sources = [
-  { collection: 'articles', path: '/articles', type: 'Article' },
+  { collection: 'articles', path: '/articles', type: 'Note' },
   { collection: 'notes',    path: '/notes',    type: 'Note' },
   {
     collection: 'photos',
@@ -70,10 +76,10 @@ export const sources = [
   {
     collection: 'writing',
     path: '/writing',
-    type: 'Article',
+    type: 'Note',
     // Appends the external venue URL to the federated content.
     linkField: 'url',
   },
-  { collection: 'awards', path: '/awards', type: 'Article' },
-  { collection: 'albums', path: '/albums', type: 'Article' },
+  { collection: 'awards', path: '/awards', type: 'Note' },
+  { collection: 'albums', path: '/albums', type: 'Note' },
 ];

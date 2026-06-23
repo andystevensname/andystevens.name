@@ -39,7 +39,11 @@ jobs:
       PUBLIC_AP_BASE: ${{ vars.AP_DYNAMIC_BASE }}
       # Push fanout runs in the runner; needs state-bucket access for
       # listing subscriptions, plus the full VAPID keypair.
-      BUNNY_STATE_BUCKET_NAME: ${{ vars.BUNNY_STATE_BUCKET_NAME }}
+      # BUCKET_NAME + ACCESS_KEY are SECRETS; REGION is a VAR. Forgejo keeps the
+      # namespaces separate — BUCKET_NAME was previously read from `vars.` and
+      # silently yielded empty, failing runner-side state calls with
+      # "BUNNY_STATE_* must be set".
+      BUNNY_STATE_BUCKET_NAME: ${{ secrets.BUNNY_STATE_BUCKET_NAME }}
       BUNNY_STATE_ACCESS_KEY: ${{ secrets.BUNNY_STATE_ACCESS_KEY }}
       BUNNY_STATE_REGION: ${{ vars.BUNNY_STATE_REGION }}
       VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
@@ -117,6 +121,22 @@ jobs:
             .
           docker push "$GEMINI_IMAGE:latest"
           docker push "$GEMINI_IMAGE:$GITHUB_SHA"
+
+      # Magic Containers pulls the image only on (re)deploy, not when a new tag
+      # is pushed — so trigger a rolling update to the image we just pushed.
+      # Pinned to the per-commit SHA tag (not :latest) so the reference always
+      # changes and the pull actually happens. Skipped until GEMINI_MC_APP_ID /
+      # GEMINI_MC_CONTAINER are set, so it can't break builds before it's
+      # configured. api_key reuses the account BUNNY_API_KEY (this action does
+      # not support sub-user keys).
+      - name: Redeploy gemini capsule (Bunny Magic Containers)
+        if: success() && vars.GEMINI_MC_APP_ID != ''
+        uses: https://github.com/BunnyWay/actions/container-update-image@main
+        with:
+          api_key: ${{ secrets.BUNNY_API_KEY }}
+          app_id: ${{ vars.GEMINI_MC_APP_ID }}
+          container: ${{ vars.GEMINI_MC_CONTAINER }}
+          image_tag: ${{ github.sha }}
 
       - name: Send webmentions
         if: success()

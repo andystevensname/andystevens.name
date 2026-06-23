@@ -20,8 +20,12 @@ if (!domain || !secret) {
   console.error('Set AP_DOMAIN and AP_DELIVER_SECRET in your environment');
   process.exit(1);
 }
+// /api/deliver lives on the Edge Script subdomain, not the apex — the apex
+// Pull Zone has a Storage origin that rejects POST with 405. Prefer
+// AP_DYNAMIC_BASE (full https:// base); fall back to the apex.
+const dynBase = process.env.AP_DYNAMIC_BASE || `https://${domain}`;
 
-const res = await fetch(`https://${domain}/api/deliver`, {
+const res = await fetch(`${dynBase}/api/deliver`, {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',

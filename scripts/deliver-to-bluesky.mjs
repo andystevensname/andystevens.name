@@ -1,5 +1,6 @@
 import { wantsSyndication, BLUESKY_TOKEN } from '../src/lib/post-sources.mjs';
 import { loadManifest } from '../src/lib/manifest.mjs';
+import { selectUnsyndicated, recordSyndicated, postId } from '../src/lib/syndicate.mjs';
 
 const BLUESKY_SERVICE = 'https://bsky.social';
 
@@ -59,6 +60,13 @@ if (!handle || !password) {
   process.exit(0);
 }
 
+// The ledger lives in the Bunny state bucket. Without it there's no dedup, so
+// SKIP rather than post blind (posting without the ledger risks duplicates).
+if (!process.env.BUNNY_STATE_BUCKET_NAME || !process.env.BUNNY_STATE_ACCESS_KEY) {
+  console.log('BUNNY_STATE_BUCKET_NAME/ACCESS_KEY not set, skipping Bluesky (ledger unavailable)');
+  process.exit(0);
+}
+
 let posts;
 try {
   posts = await loadManifest();
@@ -67,13 +75,20 @@ try {
   process.exit(0);
 }
 
-// "New" = published within the last hour. Time-based dedup avoids
-// double-posting on re-runs of the same deploy.
-const cutoff = Date.now() - 60 * 60 * 1000;
-const candidates = posts.filter((p) => {
-  if (new Date(p.published).getTime() < cutoff) return false;
-  return wantsSyndication(p.syndication, BLUESKY_TOKEN);
-});
+// Ledger-based dedup: syndicate opted-in posts not already recorded for
+// Bluesky, then record the ones that succeed. (See src/lib/syndicate.mjs.)
+const { candidates, seedIds } = await selectUnsyndicated(
+  posts,
+  BLUESKY_TOKEN,
+  (p) => wantsSyndication(p.syndication, BLUESKY_TOKEN)
+);
+
+// Cold start: seal the back-catalogue (NOT the fresh candidates) so it's never
+// replayed. The fresh candidates are recorded below only after they post.
+if (seedIds) {
+  await recordSyndicated(BLUESKY_TOKEN, seedIds);
+  console.log(`Bluesky: cold start — sealed ${seedIds.length} back-catalogue post(s) into the ledger`);
+}
 
 if (candidates.length === 0) {
   console.log('No new items opted into Bluesky syndication');
@@ -84,6 +99,7 @@ try {
   const session = await createSession(handle, password);
   console.log(`Authenticated as ${session.handle}`);
 
+  const sent = [];
   for (const post of candidates) {
     let text, linkUrl;
     if (post.apType === 'Like') {
@@ -93,9 +109,19 @@ try {
       text = post.title ? `${post.title}\n\n${post.url}` : post.url;
       linkUrl = post.url;
     }
-    const result = await createPost(session, text, linkUrl);
-    console.log(`Posted to Bluesky: ${post.title || post.url} (${result.uri})`);
+    try {
+      const result = await createPost(session, text, linkUrl);
+      sent.push(postId(post));
+      console.log(`Posted to Bluesky: ${post.title || post.url} (${result.uri})`);
+    } catch (e) {
+      // Per-post failure: leave it OUT of the ledger so it retries next deploy.
+      console.warn(`Bluesky: post failed for ${post.url}, will retry next deploy:`, e.message);
+    }
   }
+
+  // Record only what actually sent (failures stay out so they retry next
+  // deploy). On cold start the back-catalogue was already sealed above.
+  await recordSyndicated(BLUESKY_TOKEN, sent);
 } catch (e) {
   console.warn('Bluesky posting error:', e.message);
 }

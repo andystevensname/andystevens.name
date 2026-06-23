@@ -129,7 +129,14 @@ export function buildFromManifestItem(item) {
     return { object: null, activity: null, likeTarget: item.likeTarget };
   }
 
-  const objectId = `${c.dynBase}/ap/objects/${item.collection}/${item.slug}`;
+  // The object id MUST share the actor's host (the apex), NOT the dynamic
+  // subdomain. Mastodon rejects a status whose id host differs from its
+  // author's host (invalid_origin? → reject_payload!), so a cross-subdomain
+  // object id means delivery succeeds (202) but the post is silently dropped.
+  // The matching static object file is emitted by generate-static-ap.mjs.
+  // (Inbox/outbox/followers stay on the subdomain — only object ids must
+  // match the actor host.)
+  const objectId = `${c.base}/ap/objects/${item.collection}/${item.slug}`;
 
   const object = {
     '@context': CONTEXT,

@@ -195,3 +195,41 @@ export async function getLastPushed() {
 export async function setLastPushed(data) {
   await putJson('push-meta/last-pushed.json', data);
 }
+
+// ───── syndication ledger (per-target dedup) ─────────────────────────────
+// One file per target (bluesky, activitypub, …) holding the ids of posts
+// already syndicated there. A per-item ledger — not a time window — is what
+// makes date-only posts syndicate reliably: the old "published within the
+// last hour" gate dropped any hand-authored article (midnight UTC timestamp)
+// that wasn't deployed within the hour. It's also idempotent across re-runs
+// and tolerant of backfilled/out-of-order dates, which a single high-water
+// cursor is not.
+
+export async function getSyndicatedIds(target) {
+  const data = await getJson(`syndication-meta/${target}.json`);
+  return new Set(data?.ids ?? []);
+}
+
+export async function addSyndicatedIds(target, ids) {
+  if (!ids || ids.length === 0) return;
+  const merged = await getSyndicatedIds(target);
+  for (const id of ids) merged.add(id);
+  await putJson(`syndication-meta/${target}.json`, {
+    ids: [...merged],
+    updatedAt: new Date().toISOString(),
+  });
+}
+
+// Drop one id from a target's ledger so the post re-delivers on the next
+// deploy. Returns true if it was present. Removing a single entry keeps the
+// ledger non-empty (the normal/"warm" path), avoiding the cold-start grace
+// window you'd re-enter by deleting the whole file.
+export async function removeSyndicatedId(target, id) {
+  const set = await getSyndicatedIds(target);
+  if (!set.delete(id)) return false;
+  await putJson(`syndication-meta/${target}.json`, {
+    ids: [...set],
+    updatedAt: new Date().toISOString(),
+  });
+  return true;
+}

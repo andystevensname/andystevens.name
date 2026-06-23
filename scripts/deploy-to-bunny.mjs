@@ -53,12 +53,24 @@ const base = `https://${prefix}storage.bunnycdn.com/${zone}/`;
 const DIST = 'dist';
 
 // Most files served by Bunny get their Content-Type from extension
-// inference at request time. The two AP files we generate have no
-// extension, so set the right type at upload so Storage returns it.
+// inference at request time. The AP files we generate have no extension,
+// so set the right type at upload so Storage returns it. Beyond the two
+// fixed paths below, every per-post object under ap/objects/ also needs
+// application/activity+json (see AP_OBJECTS_PREFIX in resolveOverride) —
+// without it remote servers (Mastodon) won't parse the dereferenced object.
 const CONTENT_TYPE_OVERRIDES = {
   '.well-known/webfinger': 'application/jrd+json; charset=utf-8',
   'ap/actor': 'application/activity+json; charset=utf-8',
 };
+const AP_OBJECTS_PREFIX = 'ap/objects/';
+
+function resolveOverride(remote) {
+  if (CONTENT_TYPE_OVERRIDES[remote]) return CONTENT_TYPE_OVERRIDES[remote];
+  if (remote.startsWith(AP_OBJECTS_PREFIX)) {
+    return 'application/activity+json; charset=utf-8';
+  }
+  return undefined;
+}
 
 // ───── small concurrency helper ─────────────────────────────────────────
 
@@ -89,7 +101,7 @@ async function upload(remote, buf) {
     AccessKey: accessKey,
     'Content-Type': 'application/octet-stream',
   };
-  const override = CONTENT_TYPE_OVERRIDES[remote];
+  const override = resolveOverride(remote);
   if (override) headers['Override-Content-Type'] = override;
   const res = await fetch(base + remote, { method: 'PUT', headers, body: buf });
   if (!res.ok) {
