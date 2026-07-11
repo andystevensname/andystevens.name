@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Personal website for andystevens.name built with Astro 5 and deployed to Netlify. Static-only output with no client-side JavaScript framework. Strong emphasis on performance (inlined CSS, subset fonts, no CSS framework) and IndieWeb standards (microformats, WebMention, IndieAuth, Bridgy federation).
+Personal website for andystevens.name built with Astro 5. Static-only output with no client-side JavaScript framework. Built and deployed by a Forgejo Action (`.forgejo/workflows/build.yaml`) to Bunny Storage + CDN. Strong emphasis on performance (inlined CSS, subset fonts, no CSS framework) and IndieWeb standards (microformats, WebMention, Micropub, self-hosted ActivityPub).
 
 ## Commands
 
@@ -31,8 +31,8 @@ No test or lint scripts are configured.
 
 **Animation**: Custom SVG animation system in `src/lib/animation/` (TypeScript modules, no third-party libraries). Used on the homepage via `Animation.astro`.
 
-**RSS**: Generated at `/feed.xml` via `src/pages/feed.xml.ts` using `@astrojs/rss`. Item mapping is in `src/lib/feed.ts`. Each post type has a `mapX()` function — all must set `bodyHtml: renderBody(body)` for outbound webmention sending to work. The feed uses `content` (not `'content:encoded'`) as the item field name for `@astrojs/rss`. Redirects from `/feed`, `/index.xml`, and `/feed/index.xml` to `/feed.xml` are in `netlify.toml` to support go-jamming's feed discovery.
+**RSS**: Generated at `/feed.xml` via `src/pages/feed.xml.ts` using `@astrojs/rss`. Item mapping is in `src/lib/feed.ts`. Each post type has a `mapX()` function — all must set `bodyHtml: renderBody(body)` for outbound webmention sending to work. The feed uses `content` (not `'content:encoded'`) as the item field name for `@astrojs/rss`. Redirects from `/feed`, `/index.xml`, and `/feed/index.xml` to `/feed.xml` are handled by the Bunny Edge Script (`edge-script/main.mjs`) to support go-jamming's feed discovery.
 
 ## Deployment
 
-Netlify with config in `netlify.toml`. Includes aggressive caching headers for fonts and `_astro/` assets, plus Bridgy federation redirects for `.well-known` endpoints.
+Forgejo Action on push to `main` (`.forgejo/workflows/build.yaml`, runner on emily): builds the site, syncs `dist/` to Bunny Storage (`scripts/deploy-to-bunny.mjs`), deploys the Edge Script, **purges the Bunny pull zone** (`scripts/purge-bunny-cache.mjs` — pages carry a 30-day max-age, so a missed purge means stale content), then runs webmention/Bluesky/ActivityPub/push-notification delivery runner-side. Posting paths: Sveltia CMS at `/admin/` (browser -> Forgejo API) and the Micropub shim at `micropub.stormfield.house` (the `/post/` bookmarklet page; babylon repo, `micropub` stack). Both are LAN/tailnet-only.
