@@ -1,15 +1,14 @@
 ---
-title: "Vacation Family"
-photo: "https://media.andystevens.name/photos/35975097.jpg"
-alt: "A random family I snapped on the coast of Schoodic Point in Acadia National Park. The mountain in the background is Cadillac Mountain.
-Schoodic Point, Acadia National Park, Maine."
-date: 2004-04-10 20:21:26
+title: Vacation Family
+photo: https://media.andystevens.name/photos/35975097.jpg
+alt: A random family I snapped on the coast of Schoodic Point in Acadia National Park. The mountain in the background is Cadillac Mountain. Schoodic Point, Acadia National Park, Maine.
+date: 2004-04-10T20:21:26.000Z
 published: false
 albums:
-  - "The East Coast"
-license: "All Rights Reserved"
-flickr_url: "https://www.flickr.com/photos/taylorstevens/35975097/"
-slug: "vacation-family-35975097"
+  - The East Coast
+license: All Rights Reserved
+flickr_url: https://www.flickr.com/photos/taylorstevens/35975097/
+slug: vacation-family-35975097
 width: 1920
 height: 2560
 ---

@@ -12,3 +12,8 @@ await copyFile(
   'public/admin/sveltia-cms.js'
 );
 console.log('Copied sveltia-cms.js to public/admin/');
+await copyFile(
+  'node_modules/@sveltia/cms/dist/sveltia-cms.js.map',
+  'public/admin/sveltia-cms.js.map'
+);
+console.log('Copied sveltia-cms.js.map to public/admin/');
