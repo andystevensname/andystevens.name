@@ -32,7 +32,7 @@ collections:
     slug: '{{uuid_short}}'
     summary: '{{body}}'
     fields:
-      - { label: Date, name: date, widget: datetime, required: false }
+      - { label: Date, name: date, widget: datetime, required: false, picker_utc: true, format: 'YYYY-MM-DDTHH:mm:ss.SSS[Z]' }
       - { label: Published, name: published, widget: boolean, default: true, required: false }
       - { label: Tags, name: tags, widget: list, required: false }
       - { label: Syndication, name: syndication, widget: list, required: false, default: [all] }
@@ -49,7 +49,7 @@ collections:
     fields:
       - { label: Title, name: title, widget: string, required: false }
       - { label: Bookmark of (URL), name: bookmark_of, widget: string }
-      - { label: Date, name: date, widget: datetime, required: false }
+      - { label: Date, name: date, widget: datetime, required: false, picker_utc: true, format: 'YYYY-MM-DDTHH:mm:ss.SSS[Z]' }
       - { label: Published, name: published, widget: boolean, default: true, required: false }
       - { label: Tags, name: tags, widget: list, required: false }
       - { label: Syndication, name: syndication, widget: list, required: false, default: [all] }
@@ -67,7 +67,7 @@ collections:
       - { label: Title, name: title, widget: string }
       - { label: Description, name: description, widget: string, required: false }
       - { label: Quote, name: quote, widget: string, required: false }
-      - { label: Date, name: date, widget: datetime, required: false }
+      - { label: Date, name: date, widget: datetime, required: false, picker_utc: true, format: 'YYYY-MM-DDTHH:mm:ss.SSS[Z]' }
       - { label: Published, name: published, widget: boolean, default: true, required: false }
       - { label: Tags, name: tags, widget: list, required: false }
       - { label: Syndication, name: syndication, widget: list, required: false, default: [all] }
@@ -86,7 +86,7 @@ collections:
       - { label: Like of (URL), name: like_of, widget: string }
       - { label: Title, name: title, widget: string, required: false }
       - { label: Summary, name: summary, widget: string, required: false }
-      - { label: Date, name: date, widget: datetime, required: false }
+      - { label: Date, name: date, widget: datetime, required: false, picker_utc: true, format: 'YYYY-MM-DDTHH:mm:ss.SSS[Z]' }
       - { label: Published, name: published, widget: boolean, default: true, required: false }
       - { label: Syndication, name: syndication, widget: list, required: false, default: [all] }
       - { label: Send push notification, name: notify, widget: boolean, default: true, required: false }
@@ -102,7 +102,7 @@ collections:
     summary: '{{body}}'
     fields:
       - { label: In reply to (URL), name: in_reply_to, widget: string }
-      - { label: Date, name: date, widget: datetime, required: false }
+      - { label: Date, name: date, widget: datetime, required: false, picker_utc: true, format: 'YYYY-MM-DDTHH:mm:ss.SSS[Z]' }
       - { label: Published, name: published, widget: boolean, default: true, required: false }
       - { label: Tags, name: tags, widget: list, required: false }
       - { label: Syndication, name: syndication, widget: list, required: false, default: [all] }
@@ -125,7 +125,7 @@ collections:
       - { label: Width, name: width, widget: number, required: false }
       - { label: Height, name: height, widget: number, required: false }
       - { label: Flickr URL, name: flickr_url, widget: string, required: false }
-      - { label: Date, name: date, widget: datetime, required: false }
+      - { label: Date, name: date, widget: datetime, required: false, picker_utc: true, format: 'YYYY-MM-DDTHH:mm:ss.SSS[Z]' }
       - { label: Published, name: published, widget: boolean, default: true, required: false }
       - { label: Tags, name: tags, widget: list, required: false }
       - { label: Syndication, name: syndication, widget: list, required: false, default: [all] }
@@ -147,7 +147,7 @@ collections:
         options: [poetry, non-fiction, fiction, documentation]
       - { label: Venue, name: venue, widget: string, required: false }
       - { label: URL, name: url, widget: string, required: false }
-      - { label: Date, name: date, widget: datetime, required: false }
+      - { label: Date, name: date, widget: datetime, required: false, picker_utc: true, format: 'YYYY-MM-DDTHH:mm:ss.SSS[Z]' }
       - { label: Published, name: published, widget: boolean, default: true, required: false }
       - { label: Tags, name: tags, widget: list, required: false }
       - { label: Syndication, name: syndication, widget: list, required: false, default: [all] }
@@ -164,7 +164,7 @@ collections:
     fields:
       - { label: Title, name: title, widget: string }
       - { label: Issuer, name: issuer, widget: string, required: false }
-      - { label: Date, name: date, widget: datetime, required: false }
+      - { label: Date, name: date, widget: datetime, required: false, picker_utc: true, format: 'YYYY-MM-DDTHH:mm:ss.SSS[Z]' }
       - { label: Published, name: published, widget: boolean, default: true, required: false }
       - { label: Syndication, name: syndication, widget: list, required: false, default: [all] }
       - { label: Send push notification, name: notify, widget: boolean, default: true, required: false }
@@ -182,7 +182,7 @@ collections:
       - { label: Description, name: description, widget: string, required: false }
       - { label: Cover (URL), name: cover, widget: string, required: false }
       - { label: Flickr URL, name: flickr_url, widget: string, required: false }
-      - { label: Date, name: date, widget: datetime, required: false }
+      - { label: Date, name: date, widget: datetime, required: false, picker_utc: true, format: 'YYYY-MM-DDTHH:mm:ss.SSS[Z]' }
       - { label: Published, name: published, widget: boolean, default: true, required: false }
       - { label: Tags, name: tags, widget: list, required: false }
       - { label: Syndication, name: syndication, widget: list, required: false, default: [all] }
@@ -210,7 +210,7 @@ collections:
           - { label: Docs, name: docs, widget: string, required: false }
       - { label: Language, name: language, widget: string, required: false }
       - { label: License, name: license, widget: string, required: false }
-      - { label: Date, name: date, widget: datetime, required: false }
+      - { label: Date, name: date, widget: datetime, required: false, picker_utc: true, format: 'YYYY-MM-DDTHH:mm:ss.SSS[Z]' }
       - { label: Published, name: published, widget: boolean, default: true, required: false }
       - { label: Tags, name: tags, widget: list, required: false }
       - { label: Syndication, name: syndication, widget: list, required: false, default: [all] }
