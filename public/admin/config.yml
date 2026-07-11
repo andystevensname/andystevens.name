@@ -1,0 +1,231 @@
+# Sveltia CMS configuration — browser-direct to Forgejo (no server side).
+# The API is LAN/tailnet-only; off-net this page loads but cannot reach
+# the backend. Field definitions mirror the Zod schemas in
+# src/content.config.ts — keep the two in sync when adding fields.
+#
+# The date/published/tags/syndication/notify/slug/body block is repeated
+# per collection because YAML anchors can't splice one sequence into
+# another (a `- *anchor` item nests the list instead of merging it).
+
+backend:
+  name: gitea
+  repo: andy/andystevens.name
+  branch: main
+  base_url: https://git.stormfield.house
+  api_root: https://git.stormfield.house/api/v1
+  app_id: SVELTIA_OAUTH_CLIENT_ID # replaced with the Forgejo OAuth2 app client ID
+
+site_url: https://andystevens.name
+media_folder: public/media
+public_folder: /media
+
+slug:
+  encoding: ascii
+  clean_accents: true
+
+collections:
+  - name: notes
+    label: Notes
+    folder: src/content/notes
+    create: true
+    format: yaml-frontmatter
+    slug: '{{uuid_short}}'
+    summary: '{{body}}'
+    fields:
+      - { label: Date, name: date, widget: datetime, required: false }
+      - { label: Published, name: published, widget: boolean, default: true, required: false }
+      - { label: Tags, name: tags, widget: list, required: false }
+      - { label: Syndication, name: syndication, widget: list, required: false, default: [all] }
+      - { label: Send push notification, name: notify, widget: boolean, default: true, required: false }
+      - { label: Slug override, name: slug, widget: string, required: false }
+      - { label: Body, name: body, widget: markdown, required: false }
+
+  - name: bookmarks
+    label: Bookmarks
+    folder: src/content/bookmarks
+    create: true
+    format: yaml-frontmatter
+    slug: '{{slug}}'
+    fields:
+      - { label: Title, name: title, widget: string, required: false }
+      - { label: Bookmark of (URL), name: bookmark_of, widget: string }
+      - { label: Date, name: date, widget: datetime, required: false }
+      - { label: Published, name: published, widget: boolean, default: true, required: false }
+      - { label: Tags, name: tags, widget: list, required: false }
+      - { label: Syndication, name: syndication, widget: list, required: false, default: [all] }
+      - { label: Send push notification, name: notify, widget: boolean, default: true, required: false }
+      - { label: Slug override, name: slug, widget: string, required: false }
+      - { label: Body, name: body, widget: markdown, required: false }
+
+  - name: articles
+    label: Articles
+    folder: src/content/articles
+    create: true
+    format: yaml-frontmatter
+    slug: '{{slug}}'
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Description, name: description, widget: string, required: false }
+      - { label: Quote, name: quote, widget: string, required: false }
+      - { label: Date, name: date, widget: datetime, required: false }
+      - { label: Published, name: published, widget: boolean, default: true, required: false }
+      - { label: Tags, name: tags, widget: list, required: false }
+      - { label: Syndication, name: syndication, widget: list, required: false, default: [all] }
+      - { label: Send push notification, name: notify, widget: boolean, default: true, required: false }
+      - { label: Slug override, name: slug, widget: string, required: false }
+      - { label: Body, name: body, widget: markdown, required: false }
+
+  - name: likes
+    label: Likes
+    folder: src/content/likes
+    create: true
+    format: yaml-frontmatter
+    slug: '{{slug}}'
+    identifier_field: title
+    fields:
+      - { label: Like of (URL), name: like_of, widget: string }
+      - { label: Title, name: title, widget: string, required: false }
+      - { label: Summary, name: summary, widget: string, required: false }
+      - { label: Date, name: date, widget: datetime, required: false }
+      - { label: Published, name: published, widget: boolean, default: true, required: false }
+      - { label: Syndication, name: syndication, widget: list, required: false, default: [all] }
+      - { label: Send push notification, name: notify, widget: boolean, default: true, required: false }
+      - { label: Slug override, name: slug, widget: string, required: false }
+      - { label: Body, name: body, widget: markdown, required: false }
+
+  - name: replies
+    label: Replies
+    folder: src/content/replies
+    create: true
+    format: yaml-frontmatter
+    slug: '{{uuid_short}}'
+    summary: '{{body}}'
+    fields:
+      - { label: In reply to (URL), name: in_reply_to, widget: string }
+      - { label: Date, name: date, widget: datetime, required: false }
+      - { label: Published, name: published, widget: boolean, default: true, required: false }
+      - { label: Tags, name: tags, widget: list, required: false }
+      - { label: Syndication, name: syndication, widget: list, required: false, default: [all] }
+      - { label: Send push notification, name: notify, widget: boolean, default: true, required: false }
+      - { label: Slug override, name: slug, widget: string, required: false }
+      - { label: Body, name: body, widget: markdown, required: false }
+
+  - name: photos
+    label: Photos
+    folder: src/content/photos
+    create: true
+    format: yaml-frontmatter
+    slug: '{{slug}}'
+    fields:
+      - { label: Title, name: title, widget: string, required: false }
+      - { label: Photo URL(s), name: photo, widget: string }
+      - { label: Alt text, name: alt, widget: string, required: false }
+      - { label: Albums, name: albums, widget: list, required: false }
+      - { label: License, name: license, widget: string, required: false }
+      - { label: Width, name: width, widget: number, required: false }
+      - { label: Height, name: height, widget: number, required: false }
+      - { label: Flickr URL, name: flickr_url, widget: string, required: false }
+      - { label: Date, name: date, widget: datetime, required: false }
+      - { label: Published, name: published, widget: boolean, default: true, required: false }
+      - { label: Tags, name: tags, widget: list, required: false }
+      - { label: Syndication, name: syndication, widget: list, required: false, default: [all] }
+      - { label: Send push notification, name: notify, widget: boolean, default: true, required: false }
+      - { label: Slug override, name: slug, widget: string, required: false }
+      - { label: Body, name: body, widget: markdown, required: false }
+
+  - name: writing
+    label: Writing
+    folder: src/content/writing
+    create: true
+    format: yaml-frontmatter
+    slug: '{{slug}}'
+    fields:
+      - { label: Title, name: title, widget: string }
+      - label: Category
+        name: category
+        widget: select
+        options: [poetry, non-fiction, fiction, documentation]
+      - { label: Venue, name: venue, widget: string, required: false }
+      - { label: URL, name: url, widget: string, required: false }
+      - { label: Date, name: date, widget: datetime, required: false }
+      - { label: Published, name: published, widget: boolean, default: true, required: false }
+      - { label: Tags, name: tags, widget: list, required: false }
+      - { label: Syndication, name: syndication, widget: list, required: false, default: [all] }
+      - { label: Send push notification, name: notify, widget: boolean, default: true, required: false }
+      - { label: Slug override, name: slug, widget: string, required: false }
+      - { label: Body, name: body, widget: markdown, required: false }
+
+  - name: awards
+    label: Awards
+    folder: src/content/awards
+    create: true
+    format: yaml-frontmatter
+    slug: '{{slug}}'
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Issuer, name: issuer, widget: string, required: false }
+      - { label: Date, name: date, widget: datetime, required: false }
+      - { label: Published, name: published, widget: boolean, default: true, required: false }
+      - { label: Syndication, name: syndication, widget: list, required: false, default: [all] }
+      - { label: Send push notification, name: notify, widget: boolean, default: true, required: false }
+      - { label: Slug override, name: slug, widget: string, required: false }
+      - { label: Body, name: body, widget: markdown, required: false }
+
+  - name: albums
+    label: Albums
+    folder: src/content/albums
+    create: true
+    format: yaml-frontmatter
+    slug: '{{slug}}'
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Description, name: description, widget: string, required: false }
+      - { label: Cover (URL), name: cover, widget: string, required: false }
+      - { label: Flickr URL, name: flickr_url, widget: string, required: false }
+      - { label: Date, name: date, widget: datetime, required: false }
+      - { label: Published, name: published, widget: boolean, default: true, required: false }
+      - { label: Tags, name: tags, widget: list, required: false }
+      - { label: Syndication, name: syndication, widget: list, required: false, default: [all] }
+      - { label: Send push notification, name: notify, widget: boolean, default: true, required: false }
+      - { label: Slug override, name: slug, widget: string, required: false }
+      - { label: Body, name: body, widget: markdown, required: false }
+
+  - name: code
+    label: Code
+    folder: src/content/code
+    create: true
+    format: yaml-frontmatter
+    slug: '{{slug}}'
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Description, name: description, widget: string, required: false }
+      - label: Projects
+        name: projects
+        widget: list
+        required: false
+        fields:
+          - { label: Project name, name: project_name, widget: string }
+          - { label: Code URLs, name: code_urls, widget: list, required: false }
+          - { label: CLI, name: cli, widget: string, required: false }
+          - { label: Docs, name: docs, widget: string, required: false }
+      - { label: Language, name: language, widget: string, required: false }
+      - { label: License, name: license, widget: string, required: false }
+      - { label: Date, name: date, widget: datetime, required: false }
+      - { label: Published, name: published, widget: boolean, default: true, required: false }
+      - { label: Tags, name: tags, widget: list, required: false }
+      - { label: Syndication, name: syndication, widget: list, required: false, default: [all] }
+      - { label: Send push notification, name: notify, widget: boolean, default: true, required: false }
+      - { label: Slug override, name: slug, widget: string, required: false }
+      - { label: Body, name: body, widget: markdown, required: false }
+
+  - name: pages
+    label: Pages
+    folder: src/content/pages
+    create: true
+    format: yaml-frontmatter
+    slug: '{{slug}}'
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Description, name: description, widget: string, required: false }
+      - { label: Slug override, name: slug, widget: string, required: false }
+      - { label: Body, name: body, widget: markdown, required: false }

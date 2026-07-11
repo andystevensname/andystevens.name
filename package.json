@@ -8,13 +8,15 @@
     "build:icons": "node scripts/build-icons.mjs",
     "vapid": "node scripts/generate-vapid.mjs",
     "preview": "astro preview",
-    "install:clean": "rm -rf node_modules/@andystevensname && npm install && npm link @andystevensname/poem-element @andystevensname/remark-poem-element @andystevensname/remark-project-meta-bar"
+    "install:clean": "rm -rf node_modules/@andystevensname && npm install && npm link @andystevensname/poem-element @andystevensname/remark-poem-element @andystevensname/remark-project-meta-bar",
+    "prebuild": "node scripts/copy-sveltia.mjs"
   },
   "dependencies": {
     "@andystevensname/poem-element": "^1.0.3",
     "@andystevensname/remark-poem-element": "^1.1.1",
     "@andystevensname/remark-project-meta-bar": "^1.1.3",
     "@astrojs/rss": "^4.0.16",
+    "@sveltia/cms": "^0.170.5",
     "astro": "^6.1.10",
     "marked": "^17.0.5",
     "remark-directive": "^4.0.0",
