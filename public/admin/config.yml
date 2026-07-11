@@ -13,7 +13,7 @@ backend:
   branch: main
   base_url: https://git.stormfield.house
   api_root: https://git.stormfield.house/api/v1
-  app_id: SVELTIA_OAUTH_CLIENT_ID # replaced with the Forgejo OAuth2 app client ID
+  app_id: 63de8425-c8ae-4c8e-92e6-34665dc6a505 # Forgejo OAuth2 app (public/PKCE client)
 
 site_url: https://andystevens.name
 media_folder: public/media
