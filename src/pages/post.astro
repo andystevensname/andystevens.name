@@ -23,18 +23,16 @@ const BOOKMARKLET = `javascript:(function(){var u=encodeURIComponent(location.hr
     <main>
       <h1>New post</h1>
 
-      <section id="auth-checking" aria-live="polite">
-        <p>Checking authorization…</p>
-      </section>
-
       <section id="auth-prompt" hidden>
-        <p>You need to authorize this device to post.</p>
-        <button type="button" id="sign-in-btn">Sign in with IndieAuth</button>
-      </section>
-
-      <section id="auth-error" hidden role="alert">
-        <p class="error-message" id="auth-error-message"></p>
-        <button type="button" id="auth-retry-btn">Try again</button>
+        <p>Paste the posting token to authorize this browser (one time).</p>
+        <p class="error-message" id="auth-error-message" hidden role="alert"></p>
+        <div class="field">
+          <label for="token-input">Posting token</label>
+          <input id="token-input" type="password" autocomplete="off" />
+        </div>
+        <div class="actions">
+          <button type="button" id="save-token-btn">Save token</button>
+        </div>
       </section>
 
       <noscript>
@@ -42,7 +40,7 @@ const BOOKMARKLET = `javascript:(function(){var u=encodeURIComponent(location.hr
       </noscript>
 
       <section id="post-success" hidden role="status" aria-live="polite">
-        <p>Posted! It’ll be live once Netlify finishes rebuilding (usually under a minute).</p>
+        <p>Posted! It’ll be live once the site finishes rebuilding (usually a minute or two).</p>
         <p><a id="post-success-link" target="_blank" rel="noopener">View post</a></p>
         <button type="button" id="post-another-btn">Post another</button>
       </section>
@@ -130,7 +128,15 @@ const BOOKMARKLET = `javascript:(function(){var u=encodeURIComponent(location.hr
     </main>
 
     <script>
-      import { ensureToken, startAuth, getToken, clearToken } from '../lib/indieauth';
+      // Posts through the micropub shim (LAN/tailnet-only; see the
+      // babylon repo's micropub stack). Auth is a static bearer token
+      // pasted once per browser — the IndieAuth/PKCE flow this page used
+      // against IndieKit is gone.
+      const MICROPUB_ENDPOINT = 'https://micropub.stormfield.house/micropub';
+      const TOKEN_KEY = 'micropub-token';
+
+      const getToken = () => localStorage.getItem(TOKEN_KEY);
+      const clearToken = () => localStorage.removeItem(TOKEN_KEY);
 
       // ---- Element references ----
       const form = document.getElementById('post-form') as HTMLFormElement;
@@ -139,12 +145,10 @@ const BOOKMARKLET = `javascript:(function(){var u=encodeURIComponent(location.hr
       const contentInput = document.getElementById('post-content') as HTMLTextAreaElement;
       const publishedInput = document.getElementById('post-published') as HTMLInputElement;
 
-      const checkingPanel = document.getElementById('auth-checking')!;
       const promptPanel = document.getElementById('auth-prompt')!;
-      const errorPanel = document.getElementById('auth-error')!;
       const errorMessage = document.getElementById('auth-error-message')!;
-      const signInBtn = document.getElementById('sign-in-btn')!;
-      const retryBtn = document.getElementById('auth-retry-btn')!;
+      const tokenInput = document.getElementById('token-input') as HTMLInputElement;
+      const saveTokenBtn = document.getElementById('save-token-btn') as HTMLButtonElement;
       const successPanel = document.getElementById('post-success')!;
       const successLink = document.getElementById('post-success-link') as HTMLAnchorElement;
       const postAnotherBtn = document.getElementById('post-another-btn')!;
@@ -152,34 +156,44 @@ const BOOKMARKLET = `javascript:(function(){var u=encodeURIComponent(location.hr
       const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
 
       // ---- Panel state ----
-      // Exactly one of these is visible at a time: checking, prompt, error,
-      // form, or success.
-      const allPanels = [checkingPanel, promptPanel, errorPanel, form, successPanel];
+      // Exactly one of these is visible at a time: prompt, form, or success.
+      const allPanels = [promptPanel, form, successPanel];
       function showPanel(visible: HTMLElement) {
         for (const el of allPanels) el.hidden = el !== visible;
       }
 
-      signInBtn.addEventListener('click', () => { startAuth(); });
-      retryBtn.addEventListener('click', () => { startAuth(); });
-
-      // ---- Run auth check ----
-      // Either we have a stored token, we just came back from the
-      // authorization endpoint with ?code=&state=, or we need to start
-      // the flow. ensureToken() handles the first two cases.
-      try {
-        const token = await ensureToken();
-        if (token) {
-          showPanel(form);
-        } else {
-          showPanel(promptPanel);
-        }
-      } catch (err) {
-        errorMessage.textContent = err instanceof Error ? err.message : String(err);
-        showPanel(errorPanel);
+      function showAuthError(msg: string) {
+        errorMessage.textContent = msg;
+        errorMessage.hidden = false;
       }
 
+      // Verify a pasted token against the endpoint before trusting it.
+      saveTokenBtn.addEventListener('click', async () => {
+        const candidate = tokenInput.value.trim();
+        if (!candidate) return;
+        saveTokenBtn.disabled = true;
+        try {
+          const res = await fetch(MICROPUB_ENDPOINT + '?q=config', {
+            headers: { Authorization: `Bearer ${candidate}` },
+          });
+          if (!res.ok) {
+            showAuthError(res.status === 401 ? 'Token rejected.' : `Endpoint error: ${res.status}`);
+            return;
+          }
+          localStorage.setItem(TOKEN_KEY, candidate);
+          tokenInput.value = '';
+          errorMessage.hidden = true;
+          showPanel(form);
+        } catch {
+          showAuthError('Could not reach the posting endpoint — are you on the home network or tailnet?');
+        } finally {
+          saveTokenBtn.disabled = false;
+        }
+      });
+
+      showPanel(getToken() ? form : promptPanel);
+
       // ---- Prefill from query params: ?url=&title=&selection= ----
-      // ensureToken() has already restored them following any callback round-trip.
       const params = new URLSearchParams(window.location.search);
       targetUrl.value = params.get('url') ?? '';
       nameInput.value = params.get('title') ?? '';
@@ -317,10 +331,10 @@ const BOOKMARKLET = `javascript:(function(){var u=encodeURIComponent(location.hr
         submitBtn.textContent = 'Posting…';
 
         try {
-          const res = await fetch('https://ik.andystevens.name/micropub', {
+          const res = await fetch(MICROPUB_ENDPOINT, {
             method: 'POST',
             headers: {
-              Authorization: `Bearer ${token.access_token}`,
+              Authorization: `Bearer ${token}`,
               'Content-Type': 'application/x-www-form-urlencoded',
               Accept: 'application/json',
             },
@@ -342,10 +356,10 @@ const BOOKMARKLET = `javascript:(function(){var u=encodeURIComponent(location.hr
           }
 
           if (res.status === 401 || res.status === 403) {
-            // Token rejected — clear it and bounce back to sign-in.
+            // Token rejected — clear it and bounce back to token entry.
             clearToken();
-            errorMessage.textContent = 'Token rejected. Please sign in again.';
-            showPanel(errorPanel);
+            showAuthError('Token rejected. Paste it again.');
+            showPanel(promptPanel);
             return;
           }
 
