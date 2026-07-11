@@ -95,6 +95,14 @@ jobs:
       - name: Deploy Edge Script
         run: node scripts/deploy-edge-script.mjs
 
+      # Storage uploads don't invalidate the CDN (30-day max-age on
+      # pages), so purge the pull zone or the edges keep serving stale
+      # content — including cached 404s for brand-new post URLs. Runs
+      # before syndication so link previews fetched by Mastodon/Bluesky
+      # see the fresh pages.
+      - name: Purge Bunny pull zone cache
+        run: node scripts/purge-bunny-cache.mjs
+
       - name: Install docker CLI
         run: apt-get update && apt-get install -y --no-install-recommends docker.io
 
