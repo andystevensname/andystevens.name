@@ -10,56 +10,9 @@ jobs:
     runs-on: docker
     container:
       image: node:24-bookworm
-    env:
-      # Static site → Bunny Storage via the official SDK.
-      BUNNY_S3_BUCKET_NAME: ${{ secrets.BUNNY_S3_BUCKET_NAME }}
-      # Bunny's native API uses the same credential pool as S3-compatible
-      # access — reuse the write token here.
-      BUNNY_STORAGE_ACCESS_KEY: ${{ secrets.BUNNY_S3_WRITE_TOKEN }}
-      BUNNY_STORAGE_REGION: ${{ vars.BUNNY_STORAGE_REGION }}
-      # ActivityPub config — used both by build-time static actor/webfinger
-      # generation (scripts/generate-static-ap.mjs) and by runner-side
-      # outbound triggers (deliver-to-activitypub).
-      AP_DOMAIN: ${{ secrets.AP_DOMAIN }}
-      AP_USERNAME: ${{ secrets.AP_USERNAME }}
-      AP_PUBLIC_KEY: ${{ secrets.AP_PUBLIC_KEY }}
-      AP_PRIVATE_KEY: ${{ secrets.AP_PRIVATE_KEY }}
-      AP_DISPLAY_NAME: ${{ secrets.AP_DISPLAY_NAME }}
-      AP_SUMMARY: ${{ secrets.AP_SUMMARY }}
-      AP_ICON_URL: ${{ secrets.AP_ICON_URL }}
-      # Subdomain that hosts the dynamic AP endpoints; inboxUrl/outboxUrl/
-      # followersUrl in the generated actor JSON point here.
-      AP_DYNAMIC_BASE: ${{ vars.AP_DYNAMIC_BASE }}
-      AP_DELIVER_SECRET: ${{ secrets.AP_DELIVER_SECRET }}
-      GO_JAMMING_TOKEN: ${{ secrets.GO_JAMMING_TOKEN }}
-      BLUESKY_HANDLE: ${{ secrets.BLUESKY_HANDLE }}
-      BLUESKY_APP_PASSWORD: ${{ secrets.BLUESKY_APP_PASSWORD }}
-      # Inlined into the Astro build (PUBLIC_* prefix) so Preferences.astro
-      # knows where to POST push subscribe/unsubscribe requests.
-      PUBLIC_AP_BASE: ${{ vars.AP_DYNAMIC_BASE }}
-      # Push fanout runs in the runner; needs state-bucket access for
-      # listing subscriptions, plus the full VAPID keypair.
-      # BUCKET_NAME + ACCESS_KEY are SECRETS; REGION is a VAR. Forgejo keeps the
-      # namespaces separate — BUCKET_NAME was previously read from `vars.` and
-      # silently yielded empty, failing runner-side state calls with
-      # "BUNNY_STATE_* must be set".
-      BUNNY_STATE_BUCKET_NAME: ${{ secrets.BUNNY_STATE_BUCKET_NAME }}
-      BUNNY_STATE_ACCESS_KEY: ${{ secrets.BUNNY_STATE_ACCESS_KEY }}
-      BUNNY_STATE_REGION: ${{ vars.BUNNY_STATE_REGION }}
-      VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
-      VAPID_SUBJECT: ${{ secrets.VAPID_SUBJECT }}
-      # Inlined into the Astro build via the envPrefix config in astro.config.mjs;
-      # also used by push-send.mjs at runtime.
-      VAPID_PUBLIC_KEY: ${{ secrets.VAPID_PUBLIC_KEY }}
-      # Bunny Edge Script deploy.
-      BUNNY_API_KEY: ${{ secrets.BUNNY_API_KEY }}
-      BUNNY_EDGE_SCRIPT_ID: ${{ vars.BUNNY_EDGE_SCRIPT_ID }}
-      # Gemini capsule: built into a container image and pushed to
-      # Docker Hub. Bunny Magic Containers only integrates with Docker
-      # Hub / GHCR, not arbitrary registries, so Codeberg was a no-go.
-      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
-      GEMINI_IMAGE: ${{ vars.GEMINI_IMAGE }}
+    # Secrets are scoped per-step (not job-level) so that npm install and the
+    # dependency-heavy build never see credentials they don't need — a
+    # compromised transitive dep can't exfiltrate what isn't in its env.
     steps:
       - uses: actions/checkout@v4
 
@@ -81,18 +34,54 @@ jobs:
             v1-npm-
 
       - name: Install dependencies
-        run: npm ci
+        # --ignore-scripts blocks npm lifecycle scripts (the classic
+        # supply-chain vector). Safe here: the only deps with install
+        # scripts (esbuild, sharp) ship prebuilt binaries via platform
+        # optionalDependencies, so their scripts are just fallbacks.
+        run: npm ci --ignore-scripts
 
       - name: Build site
+        env:
+          # ActivityPub config for build-time static actor/webfinger
+          # generation (scripts/generate-static-ap.mjs) and the AP_DOMAIN
+          # read in post-manifest.json.ts. Deliberately NO AP_PRIVATE_KEY —
+          # static generation only embeds the public key; signing happens
+          # in the edge script and delivery steps.
+          AP_DOMAIN: ${{ secrets.AP_DOMAIN }}
+          AP_USERNAME: ${{ secrets.AP_USERNAME }}
+          AP_PUBLIC_KEY: ${{ secrets.AP_PUBLIC_KEY }}
+          AP_DISPLAY_NAME: ${{ secrets.AP_DISPLAY_NAME }}
+          AP_SUMMARY: ${{ secrets.AP_SUMMARY }}
+          AP_ICON_URL: ${{ secrets.AP_ICON_URL }}
+          # Subdomain that hosts the dynamic AP endpoints; inboxUrl/
+          # outboxUrl/followersUrl in the generated actor JSON point here.
+          AP_DYNAMIC_BASE: ${{ vars.AP_DYNAMIC_BASE }}
+          # Inlined into the Astro build (PUBLIC_* prefix) so
+          # Preferences.astro knows where to POST push subscribe requests.
+          PUBLIC_AP_BASE: ${{ vars.AP_DYNAMIC_BASE }}
+          # Inlined via envPrefix in astro.config.mjs (public half only).
+          VAPID_PUBLIC_KEY: ${{ secrets.VAPID_PUBLIC_KEY }}
+          # Webmentions are fetched and rendered into pages at build time.
+          GO_JAMMING_TOKEN: ${{ secrets.GO_JAMMING_TOKEN }}
         run: npm run build
 
       - name: Generate gemini capsule
         run: node scripts/generate-gemtext.mjs
 
       - name: Deploy to Bunny Storage
+        env:
+          # Static site → Bunny Storage via the official SDK. Bunny's
+          # native API uses the same credential pool as S3-compatible
+          # access — reuse the write token here.
+          BUNNY_S3_BUCKET_NAME: ${{ secrets.BUNNY_S3_BUCKET_NAME }}
+          BUNNY_STORAGE_ACCESS_KEY: ${{ secrets.BUNNY_S3_WRITE_TOKEN }}
+          BUNNY_STORAGE_REGION: ${{ vars.BUNNY_STORAGE_REGION }}
         run: node scripts/deploy-to-bunny.mjs
 
       - name: Deploy Edge Script
+        env:
+          BUNNY_API_KEY: ${{ secrets.BUNNY_API_KEY }}
+          BUNNY_EDGE_SCRIPT_ID: ${{ vars.BUNNY_EDGE_SCRIPT_ID }}
         run: node scripts/deploy-edge-script.mjs
 
       # Storage uploads don't invalidate the CDN (30-day max-age on
@@ -101,6 +90,8 @@ jobs:
       # before syndication so link previews fetched by Mastodon/Bluesky
       # see the fresh pages.
       - name: Purge Bunny pull zone cache
+        env:
+          BUNNY_API_KEY: ${{ secrets.BUNNY_API_KEY }}
         run: node scripts/purge-bunny-cache.mjs
 
       - name: Install docker CLI
@@ -110,8 +101,14 @@ jobs:
         env:
           # The runner's dind sidecar; reachable from job containers on
           # the shared forgejo network.
-          # DOCKER_HOST: 
+          # DOCKER_HOST:
           AGATE_BASE_IMAGE: ${{ vars.AGATE_BASE_IMAGE }}
+          # Gemini capsule: built into a container image and pushed to
+          # Docker Hub. Bunny Magic Containers only integrates with Docker
+          # Hub / GHCR, not arbitrary registries, so Codeberg was a no-go.
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+          GEMINI_IMAGE: ${{ vars.GEMINI_IMAGE }}
         run: |
           echo "$DOCKER_TOKEN" | docker login docker.io -u "$DOCKER_USERNAME" --password-stdin
           # Bunny Magic Containers runs on amd64 hosts; the runner is
@@ -149,19 +146,50 @@ jobs:
       - name: Send webmentions
         if: success()
         continue-on-error: true
+        env:
+          GO_JAMMING_TOKEN: ${{ secrets.GO_JAMMING_TOKEN }}
         run: node scripts/send-webmentions.mjs
 
+      # The three delivery/fanout steps below share the syndication-ledger
+      # state bucket. BUCKET_NAME + ACCESS_KEY are SECRETS; REGION is a VAR.
+      # Forgejo keeps the namespaces separate — BUCKET_NAME was previously
+      # read from `vars.` and silently yielded empty, failing runner-side
+      # state calls with "BUNNY_STATE_* must be set".
       - name: Deliver to Bluesky
         if: success()
         continue-on-error: true
+        env:
+          BLUESKY_HANDLE: ${{ secrets.BLUESKY_HANDLE }}
+          BLUESKY_APP_PASSWORD: ${{ secrets.BLUESKY_APP_PASSWORD }}
+          BUNNY_STATE_BUCKET_NAME: ${{ secrets.BUNNY_STATE_BUCKET_NAME }}
+          BUNNY_STATE_ACCESS_KEY: ${{ secrets.BUNNY_STATE_ACCESS_KEY }}
+          BUNNY_STATE_REGION: ${{ vars.BUNNY_STATE_REGION }}
         run: node scripts/deliver-to-bluesky.mjs
 
+      # Only needs dynamicBase() (AP_DOMAIN/AP_DYNAMIC_BASE) + the deliver
+      # secret — HTTP signing happens edge-side, so no AP keys here.
       - name: Deliver to ActivityPub
         if: success()
         continue-on-error: true
+        env:
+          AP_DOMAIN: ${{ secrets.AP_DOMAIN }}
+          AP_DYNAMIC_BASE: ${{ vars.AP_DYNAMIC_BASE }}
+          AP_DELIVER_SECRET: ${{ secrets.AP_DELIVER_SECRET }}
+          BUNNY_STATE_BUCKET_NAME: ${{ secrets.BUNNY_STATE_BUCKET_NAME }}
+          BUNNY_STATE_ACCESS_KEY: ${{ secrets.BUNNY_STATE_ACCESS_KEY }}
+          BUNNY_STATE_REGION: ${{ vars.BUNNY_STATE_REGION }}
         run: node scripts/deliver-to-activitypub.mjs
 
+      # Push fanout runs in the runner; needs state-bucket access for
+      # listing subscriptions, plus the full VAPID keypair.
       - name: Send push notifications
         if: success()
         continue-on-error: true
+        env:
+          VAPID_PUBLIC_KEY: ${{ secrets.VAPID_PUBLIC_KEY }}
+          VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
+          VAPID_SUBJECT: ${{ secrets.VAPID_SUBJECT }}
+          BUNNY_STATE_BUCKET_NAME: ${{ secrets.BUNNY_STATE_BUCKET_NAME }}
+          BUNNY_STATE_ACCESS_KEY: ${{ secrets.BUNNY_STATE_ACCESS_KEY }}
+          BUNNY_STATE_REGION: ${{ vars.BUNNY_STATE_REGION }}
         run: node scripts/send-push-notifications.mjs
