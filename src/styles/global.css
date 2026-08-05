@@ -1559,11 +1559,6 @@ article[data-type] {
   }
 }
 
-[data-type] p {
-  margin: 0;
-  padding: 0;
-}
-
 /* Feed icon wrapper sized to line-height so the svg stays small and centers on the first line */
 [data-type] .feed-icon {
   float: inline-start;
@@ -1595,10 +1590,6 @@ article[data-type] {
 [data-type] > div img {
   width: 100%;
   margin: 0.5rem 0;
-}
-
-[data-type] > div blockquote {
-  margin: 0 0 0.5rem 0;
 }
 
 [data-type] > a:first-child {
