@@ -1,20 +1,26 @@
 ---
 title: Poetry Camera
 bookmark_of: https://poetry.camera
-date: ''
-published: false
-tags: []
+date: 2026-08-05T08:58:00.000Z
+published: true
+tags:
+  - poetry
+  - photography
+  - ai
 syndication:
   - all
 notify: true
 slug: ''
 ---
 
-Poetry Camera is an instant camera that captures the moment in a poem, in text, rather than a photo, on printed  thermal receipt paper. I love this idea so much, and on first pass I love the product, too. The camera looks cute and delightedly low-fi. But the quality of the poems they have on their website isn't great. Passable, sure, they have all the parts of a poem, they're easily identified as poems. But like a lot of purely synthetic LLM-based AI art, they miss the mark in every way you wish they wouldn't. They're uncanny, they only feign depth and authenticity. In their FAQ, Poetry Camera's creators include the question, "Can AI make art?"
-
+Poetry Camera is an instant camera that attempts to capture a moment as a text poem, rather than a photo. I love this idea so much, and on first pass I love the product, too. The camera looks cute and the whole thing is delightedly low-fi in a[ GameBoy Printer ](https://en.wikipedia.org/wiki/Game_Boy_Printer)kind of  way. But the poems themselves are a bit of a let down. Passeable, sure, they have all the parts of a poem, they're easily identified as poems by just about everyone. But like a lot of purely generated LLM art, they miss the mark in every way you wish they wouldn't. They're uncanny in how well they feign depth and authenticity. This isn't a failing of the design and ingenuity of the camera makers, but more representative of the state of AI art in general. Maybe this is why, in their FAQ, Poetry Camera's creators include the question, "Can AI make art?"
 
 >" While we don't see the poems _themselves_ as art, we see them as ingredients and materials in a new art form. We humans are used to thinking of poems (or paintings, or novels) as the _end result_ of a laborious creative process. Generative models can create infinitely many words and images in an instant, which gives us the opportunity to use poems (or images) as _intermediaries_ in a new type of creative process. What then becomes the end result? What are we putting our effort into creating?"
 
+Poetry is only differentiated from other creative text when it does something remarkable, when it says something that can't be said in any other way. Otherwise, it's just fancy prose. I realize that sounds like gate keeping, but I've continually asked myself "what is poetry?" for years and that, for me, is the only definition that continues to hold up under scrutiny. And that makes the notion of throw away poetry troublesome, the notion that a poem shouldn't be a summation of effort.
 
-Poetry is only something beyond creative text when it does something remarkable. Otherwise it's just fancy prose. A cheap instant film camera still does the thing that makes it a camera; usually the cheapness imparts some particular aesthetic that brings about, if nothing more, a compelling novelty. But it doesn't eschew the process of creating the photo in the first place, and its novelty doesn't make it any less compelling. The point of the camera is that we've made a machine that can reliably and quickly do what we spent hundreds of hours doing before. This device does not accomplish the same for poems. It does not instantly capture what a good poem captures.
-I think the problem is dressing these up as poems at all. Why force the camera to produce a formal poem, if the poem itself is meant to be discarded or absorbed in other work? Why not let it breathe something unrestrained? If these poems aren't meant to be seen as art at all, but something we use to get to the art, why make this weird restriction on their output to have to look and feel like a poem, knowing it'll never make a good one?
+A cheap instant film camera doesn't forfeit authenticity or depth by greatly limiting the level of control one has over the end product. In fact, usually the cheapness imparts some particular aesthetic that brings about, if nothing more, a compelling novelty. But a cheap camera doesn't eschew the effort that goes into creating a compelling photo in the first place, it just helps speed the physical end result. A skilled photographer can subvert expectations and adapt to the camera to still create compelling art, but aside from the existence of happy accidents, it still requires skill and effort.
+
+I think the problem is dressing up these artifacts up as poems in the first place. Why force the camera to produce a formal poem, if the poem itself is meant to be discarded or absorbed in other work? Why not let it breathe something unrestrained? If these poems aren't meant to be seen as art at all, but something we use to get to the art, why make this weird restriction on their output to have to look and feel like a poem, knowing it'll never make a good one? In the same ways, we might look to the history of the camera for guidance. Early in the art form, the camera stood in for the painter but the subjects remained staged in painterly ways. The art eventually freed itself of these constraints and became more dynamic and unexpected when we moved away from the pose. Maybe now is the time for this technology to do the same.
+
+This is, of course, not to say I think Poetry Camera has failed. I think it's wonderful, I just think it has yet to hit its mark.
