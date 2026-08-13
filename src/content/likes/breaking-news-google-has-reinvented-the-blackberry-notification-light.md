@@ -2,7 +2,7 @@
 like_of: https://thenewthings.com/p/the-new-pixel-feature-i-want-on-my-iphone
 title: 'Breaking news: Google has reinvented the BlackBerry notification light.'
 summary: Remember your phone's status light? It's back, baby.
-date: ''
+date: 2026-08-13T09:26:00.000Z
 published: true
 syndication:
   - all
