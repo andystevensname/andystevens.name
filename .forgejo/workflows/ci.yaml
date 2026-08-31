@@ -1,0 +1,67 @@
+name: PR Checks
+
+# Deliberately a separate workflow from build.yaml rather than a
+# `pull_request` trigger bolted onto it. build.yaml's whole tail is
+# deploy — Bunny storage, edge script, cache purge, the gemini image
+# push, then webmention/Bluesky/ActivityPub/push fanout — and every one
+# of those steps carries a secret. Gating eleven steps behind an `if:`
+# is one forgotten condition away from a pull request deploying to
+# production.
+#
+# So this workflow proves only what a PR needs proven: that the tree
+# installs and builds. It runs with NO repository secrets at all, which
+# matters most for the PRs that need checking — a dependency bump brings
+# in new package code, and that code should not see a credential just to
+# tell us the build is green. Same reasoning as the --ignore-scripts
+# hardening in build.yaml.
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: docker
+    container:
+      image: node:24-bookworm
+    steps:
+      - uses: actions/checkout@v7
+
+      # Mirrors build.yaml's cache so a PR usually restores main's tree
+      # instead of resolving from scratch. Shared key on purpose: a
+      # dependency PR changes package-lock.json, misses, and falls back
+      # through restore-keys to main's entry.
+      - name: Cache npm deps
+        uses: actions/cache@v6
+        with:
+          path: |
+            node_modules
+            ~/.npm
+          key: v1-npm-node24-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            v1-npm-node24-
+            v1-npm-
+
+      # The check that catches the failure mode this workflow exists for:
+      # `npm ci` refuses a lockfile that doesn't satisfy package.json, so
+      # a dependency PR that updates the manifest without regenerating
+      # the lock fails here instead of on main after merge.
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      # AP_DOMAIN/AP_USERNAME are placeholders, NOT the real values —
+      # they exist because scripts/generate-static-ap.mjs hard-exits
+      # without them ("AP_DOMAIN and AP_USERNAME env vars are required").
+      # The actor/webfinger files it writes are discarded with the rest
+      # of dist. Everything else in the build is happy with no env at
+      # all, so nothing real is needed to prove the build works.
+      - name: Build site
+        env:
+          AP_DOMAIN: example.invalid
+          AP_USERNAME: ci
+        run: npm run build
+
+      - name: Generate gemini capsule
+        env:
+          AP_DOMAIN: example.invalid
+          AP_USERNAME: ci
+        run: node scripts/generate-gemtext.mjs
