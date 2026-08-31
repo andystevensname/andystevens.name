@@ -18,7 +18,7 @@
     "@astrojs/rss": "^4.0.16",
     "@sveltia/cms": "^0.197.0",
     "astro": "^6.1.10",
-    "marked": "^17.0.5",
+    "marked": "^18.0.0",
     "remark-directive": "^4.0.0",
     "unist-util-visit": "^5.1.0",
     "web-push": "^3.6.7"
