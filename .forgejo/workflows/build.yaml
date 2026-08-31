@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v7
 
       - name: Cache npm deps
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           # Both the installed tree (so npm ci has nothing to do on a
           # hit) and npm's own tarball cache (so even a miss is faster).
