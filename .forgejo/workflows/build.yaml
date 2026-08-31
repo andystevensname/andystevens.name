@@ -14,10 +14,10 @@ jobs:
     # dependency-heavy build never see credentials they don't need — a
     # compromised transitive dep can't exfiltrate what isn't in its env.
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Cache npm deps
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           # Both the installed tree (so npm ci has nothing to do on a
           # hit) and npm's own tarball cache (so even a miss is faster).
