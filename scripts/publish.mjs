@@ -8,6 +8,8 @@
 // followers (or to send a Like to its target). Run after deploy — manual by
 // design so edits to old posts don't re-spam followers.
 
+import { dynamicBase } from '../src/lib/activitypub.mjs';
+
 const [collection, slug] = process.argv.slice(2);
 if (!collection || !slug) {
   console.error('usage: node scripts/publish.mjs <collection> <slug>');
@@ -20,10 +22,9 @@ if (!domain || !secret) {
   console.error('Set AP_DOMAIN and AP_DELIVER_SECRET in your environment');
   process.exit(1);
 }
-// /api/deliver lives on the Edge Script subdomain, not the apex — the apex
-// Pull Zone has a Storage origin that rejects POST with 405. Prefer
-// AP_DYNAMIC_BASE (full https:// base); fall back to the apex.
-const dynBase = process.env.AP_DYNAMIC_BASE || `https://${domain}`;
+// /api/deliver lives on the Edge Script subdomain, not the apex (whose Storage
+// origin rejects POST with 405). See dynamicBase().
+const dynBase = dynamicBase();
 
 const res = await fetch(`${dynBase}/api/deliver`, {
   method: 'POST',

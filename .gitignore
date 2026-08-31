@@ -24,6 +24,10 @@ data
 report.json
 .claude
 
+# Downloaded syndication-ledger snapshots (live in the Bunny state bucket, not here)
+/activitypub.json
+/bluesky.json
+
 # Local Netlify folder
 .netlify
 
