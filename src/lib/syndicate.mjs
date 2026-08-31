@@ -11,6 +11,14 @@
 
 import { getSyndicatedIds, addSyndicatedIds } from './storage.mjs';
 
+// The ledger lives in the Bunny state bucket; without it there's no dedup, so
+// the delivery scripts skip rather than post blind (which would risk dupes).
+export function ledgerConfigured() {
+  return Boolean(
+    process.env.BUNNY_STATE_BUCKET_NAME && process.env.BUNNY_STATE_ACCESS_KEY
+  );
+}
+
 // Cold-start grace: on the FIRST run for a target (no ledger file yet) we
 // must NOT replay the whole back-catalogue. We seal every existing opted-in
 // post into the ledger and only release those published within this window —
@@ -50,8 +58,58 @@ export async function selectUnsyndicated(posts, target, wants) {
   return { candidates, seedIds: null };
 }
 
-// Record ids into a target's ledger. Caller passes seedIds on cold start, or
-// the ids of successfully-sent posts on a normal run.
-export async function recordSyndicated(target, ids) {
-  await addSyndicatedIds(target, ids);
+// Drives the shared ledger-delivery protocol for one syndication target so
+// each script only has to supply the genuinely target-specific bits:
+//   wants(post)      → is this post opted into `target`?
+//   setup()          → optional one-time prep (e.g. a Bluesky session), run
+//                      only when there's actually something to deliver.
+//   send(post, ctx)  → deliver one post; return truthy if it landed (record
+//                      it) or falsy if not (leave it out so it retries). A
+//                      thrown error is treated as "did not land".
+//
+// The invariants that were easy to get wrong live here, once: seal the
+// cold-start back-catalogue but never the fresh candidates; record only what
+// actually delivered; and write the ledger exactly once per run (the seal and
+// the successes are merged into a single PUT).
+export async function runSyndication({ target, label, posts, wants, send, setup }) {
+  const { candidates, seedIds } = await selectUnsyndicated(posts, target, wants);
+
+  // Starts with the cold-start back-catalogue (sealed so it's never replayed)
+  // and accumulates successfully-delivered candidates; flushed once at the end.
+  const toRecord = seedIds ? [...seedIds] : [];
+  if (seedIds) {
+    console.log(
+      `${label}: cold start — sealed ${seedIds.length} back-catalogue post(s) into the ledger`
+    );
+  }
+
+  if (candidates.length === 0) {
+    if (!seedIds) console.log(`No new items opted into ${label} syndication`);
+    await addSyndicatedIds(target, toRecord);
+    return;
+  }
+
+  let ctx;
+  try {
+    ctx = setup ? await setup() : undefined;
+  } catch (e) {
+    // Setup failed (e.g. auth): seal the back-catalogue, deliver nothing, let
+    // the candidates retry next deploy.
+    console.warn(`${label}: setup failed, skipping delivery this run:`, e.message);
+    await addSyndicatedIds(target, toRecord);
+    return;
+  }
+
+  for (const post of candidates) {
+    try {
+      if (await send(post, ctx)) toRecord.push(postId(post));
+    } catch (e) {
+      console.warn(
+        `${label}: delivery failed for ${post.url}, will retry next deploy:`,
+        e.message
+      );
+    }
+  }
+
+  await addSyndicatedIds(target, toRecord);
 }

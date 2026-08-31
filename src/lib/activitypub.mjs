@@ -19,6 +19,18 @@ function normalizePem(pem) {
     .join('\n');
 }
 
+// The dynamic AP endpoints (inbox, outbox, followers, /api/deliver, …) live on
+// a separate hostname from the actor: Bunny Pull Zones with a Storage Zone
+// origin block POSTs, so the Edge Script is hosted at a subdomain (e.g.
+// ap.andystevens.name) while the actor's canonical id stays on the apex.
+// Returns the full https:// base for those endpoints. Standalone — no
+// AP_USERNAME / key requirements — so the runner-side delivery scripts can use
+// it without pulling in (and being gated by) full config().
+export function dynamicBase() {
+  const domain = process.env.AP_DOMAIN;
+  return process.env.AP_DYNAMIC_BASE || (domain ? `https://${domain}` : '');
+}
+
 // Env vars are immutable per process, so the assembled config (including
 // the relatively costly PEM normalization) is computed once and cached.
 let cachedConfig;
@@ -32,11 +44,7 @@ export function config() {
     throw new Error('AP_DOMAIN and AP_USERNAME env vars are required');
   }
   const base = `https://${domain}`;
-  // Dynamic endpoints (inbox, outbox, followers, etc.) live on a separate
-  // hostname — Bunny Pull Zones with Storage Zone origin block POSTs, so
-  // the Edge Script is hosted at a different subdomain (e.g.
-  // ap.andystevens.name). The actor's canonical id stays on the apex.
-  const dynBase = process.env.AP_DYNAMIC_BASE || base;
+  const dynBase = dynamicBase(); // apex/subdomain split — see dynamicBase() above
   cachedConfig = {
     domain,
     username,
