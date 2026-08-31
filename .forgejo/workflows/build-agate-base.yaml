@@ -16,7 +16,7 @@ jobs:
       DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
       AGATE_BASE_IMAGE: ${{ vars.AGATE_BASE_IMAGE }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Install docker CLI
         run: apt-get update && apt-get install -y --no-install-recommends docker.io
