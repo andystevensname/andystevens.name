@@ -24,10 +24,29 @@ import iconsUrl from '../assets/icons.svg?url';
 const { type, url, date, title, summary, bodyHtml, quote, linkTo, photo, photoWidth, photoHeight, alt, venue, category, eager, priority } = Astro.props;
 const imgLoading = eager ? 'eager' : 'lazy';
 const imgFetchPriority = priority ? 'high' : undefined;
+
+// Accessible name for the date permalink below. Its visible text is only the
+// date, so any two posts published on the same day produced two links with
+// identical accessible names pointing at different posts — axe
+// `identical-links-same-purpose` (WCAG 2.4.9). Appending hidden text rather
+// than setting aria-label keeps the visible date part of the accessible name,
+// which aria-label alone would violate (WCAG 2.5.3, Label in Name).
+const stripHtml = (value: string) => value.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+const truncate = (value: string, max = 60) =>
+  value.length > max ? `${value.slice(0, max).trimEnd()}\u2026` : value;
+
+// Not every type carries a title — notes have only a body, replies only a
+// target — so fall back through whatever identifies the entry, and finally to
+// the type name so the label is never empty.
+const permalinkLabel = truncate(
+  [title, summary, quote, alt, bodyHtml, linkTo]
+    .map((candidate) => (candidate ? stripHtml(candidate) : ''))
+    .find((candidate) => candidate.length > 0) ?? type
+);
 ---
 
 <article class="h-entry" data-type={type} data-category={category ?? type}>
-  <a href={url}><time datetime={date.toISOString()}>{formatDate(date)}</time></a>
+  <a href={url}><time datetime={date.toISOString()}>{formatDate(date)}</time><span class="sr-only">{`, ${permalinkLabel}`}</span></a>
   <div>
     <div class="feed-icon"><svg class="icon" width="20" height="20" aria-hidden="true"><use href={`${iconsUrl}#icon-${type}`}/></svg></div>
     {type === 'article' && (<>
