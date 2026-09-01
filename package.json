@@ -7,7 +7,7 @@
     "dev:logs": "astro dev logs --follow",
     "dev:stop": "astro dev stop",
     "start": "astro dev --background",
-    "build": "astro build && node scripts/copy-manifest.mjs && node scripts/generate-static-ap.mjs",
+    "build": "astro build && node scripts/copy-manifest.mjs && node scripts/generate-static-ap.mjs && node scripts/add-csp.mjs",
     "build:icons": "node scripts/build-icons.mjs",
     "vapid": "node scripts/generate-vapid.mjs",
     "preview": "astro preview",
