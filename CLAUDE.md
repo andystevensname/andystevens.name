@@ -8,7 +8,7 @@ Personal website for andystevens.name built with Astro 5. Static-only output wit
 
 ## Commands
 
-- **Dev server**: `npm run dev`
+- **Dev server**: `npm run dev` (background daemon; `npm run dev:logs` to follow, `npm run dev:stop` to stop, `npm run dev:fg` for foreground)
 - **Build**: `npm run build` (outputs to `dist/`)
 - **Preview build**: `npm run preview`
 - **Format**: `npx prettier --write .`
