@@ -1,4 +1,7 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
+// `z` used to be re-exported from 'astro:content', but that is deprecated
+// and goes away in Astro 8 — it points here now.
+import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 
 const syndication = z.array(z.string()).optional().default([]);

@@ -2,8 +2,11 @@
   "name": "andystevens.name",
   "type": "module",
   "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
+    "dev": "astro dev --background",
+    "dev:fg": "astro dev",
+    "dev:logs": "astro dev logs --follow",
+    "dev:stop": "astro dev stop",
+    "start": "astro dev --background",
     "build": "astro build && node scripts/copy-manifest.mjs && node scripts/generate-static-ap.mjs",
     "build:icons": "node scripts/build-icons.mjs",
     "vapid": "node scripts/generate-vapid.mjs",
@@ -28,10 +31,11 @@
     "@astrojs/check": "^0.9.9",
     "@bunny.net/edgescript-sdk": "^0.12.1",
     "@resvg/resvg-js": "^2.6.2",
+    "@types/node": "^26.4.0",
     "esbuild": "^0.28.0",
     "fontkit": "^2.0.4",
     "gray-matter": "^4.0.3",
     "prettier": "^3.8.1",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.0"
   }
 }

@@ -15,4 +15,8 @@ cd andystevens.name
 npm install
 ```
 
-To run locally, use `npm run dev`
+To run locally, use `npm run dev`. This starts the Astro dev server as a
+background daemon (`astro dev --background`), so it is detached from the
+terminal and cannot be suspended by shell job control. Follow output with
+`npm run dev:logs` and shut it down with `npm run dev:stop`. Use
+`npm run dev:fg` if you want the old foreground/TTY-attached behaviour.
