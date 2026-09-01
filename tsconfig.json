@@ -1,3 +1,17 @@
 {
-  "extends": "astro/tsconfigs/strict"
+  "extends": "astro/tsconfigs/strict",
+  // astro/tsconfigs/base sets `allowJs: true` with `include: ["**/*"]`, so
+  // everything under public/ lands in the TS program — including the vendored
+  // Sveltia bundle that `npm run prebuild` drops at
+  // public/admin/sveltia-cms.js (~2MB minified, longest line ~132k chars,
+  // plus a 7.5MB source map). tsc merely parses it, but the Volar language
+  // server behind `astro check` builds per-character mappings for every file
+  // and runs out of memory doing it — `astro check` OOM'd at both a 4GB and a
+  // 12GB heap. With public/ excluded it finishes in under 4s.
+  //
+  // public/ is copied to the output verbatim and is never part of the source
+  // program, so there is nothing to type-check there. `dist` and
+  // `node_modules` are repeated because specifying `exclude` replaces the
+  // inherited list rather than extending it.
+  "exclude": ["dist", "public", "node_modules"]
 }

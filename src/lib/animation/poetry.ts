@@ -17,7 +17,7 @@ interface PoetryItem {
   rotation: number;
 }
 
-export function createPoetry(group: SVGGElement, width = 400) {
+export function createPoetry(group: SVGGElement, width = 400, viewportHeight = 0) {
   const items: PoetryItem[] = [];
   const maxW = width;
   const minW = width / 4;
@@ -52,8 +52,15 @@ export function createPoetry(group: SVGGElement, width = 400) {
     items.push({ polyEl, vertices, tx, ty, rotation });
   }
 
+  // Derived once from the height the caller measured during setup(), not
+  // re-read from the document mid-animation. populate() runs on every third
+  // frame of the poetry phase (~20x/sec) interleaved with setAttribute
+  // writes, so reading documentElement.clientHeight here was a read-after-
+  // write that risks forcing synchronous layout. The value only changes on
+  // resize, and setup() already re-runs then.
+  const target = Math.floor(viewportHeight / step);
+
   function populate() {
-    const target = Math.floor(document.documentElement.clientHeight / step);
     while (items.length <= target) create(items.length);
   }
 
