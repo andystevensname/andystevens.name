@@ -46,7 +46,7 @@ const apBase = import.meta.env.PUBLIC_AP_BASE ?? '';
       </div>
       <div class="prefs-state" data-state="loading">
         <p data-when="unsupported" class="prefs-note">Your browser doesn't support web push notifications.</p>
-        <p data-when="ios-needs-install" class="prefs-note">On iOS, install this site to your home screen first (Share → Add to Home Screen), then return here to enable.</p>
+        <p data-when="ios-needs-install" class="prefs-note">On iOS, install this site to your home screen first <span class="prefs-note-nowrap">(<svg class="prefs-note-icon" width="1em" height="1em" aria-hidden="true" focusable="false"><use href={`${iconsUrl}#icon-share-ios`} /></svg> Share</span> → Add to Home Screen), then return here to enable.</p>
         <p data-when="denied" class="prefs-note">Notifications are blocked. Allow notifications for this site in your browser settings, then reload.</p>
         <p data-when="error" class="prefs-error"></p>
       </div>
