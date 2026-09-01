@@ -1027,6 +1027,25 @@ label[for="theme-toggle"] {
   font-size: var(--fs-sm);
 }
 
+/* Inline Share glyph in the iOS install note. Sized in em so it tracks the
+   note's font-size — the shared .icon class pins 20px, which towers over
+   --fs-sm body text. Decorative only: the word "Share" stays in the
+   sentence, so the accessible name is unchanged. Paths in the sprite use
+   stroke="currentColor", so it picks up the note colour on its own. */
+/* An SVG is an atomic inline, so there is a soft-wrap opportunity at its
+   edge whether or not whitespace is present — which stranded the opening
+   paren at the end of the previous line. nowrap governs breaks *inside* the
+   run, so the paren has to sit inside it too. */
+.prefs-note-nowrap {
+  white-space: nowrap;
+}
+
+.prefs-note-icon {
+  display: inline-block;
+  vertical-align: -0.18em;
+  margin-inline-end: 0.1em;
+}
+
 .prefs-error {
   color: hsl(0deg 70% 50%);
   margin: 0.5rem 0 0 0;

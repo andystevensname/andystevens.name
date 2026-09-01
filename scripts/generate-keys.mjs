@@ -1,7 +1,17 @@
 // Run once: node scripts/generate-keys.mjs
-// Copy both outputs into Netlify env vars.
-// Preserve the \n newlines - Netlify's UI handles multi-line values correctly
-// if you paste them as-is. If you're setting via CLI, escape them.
+//
+// The two halves go to different places:
+//   AP_PUBLIC_KEY  -> Forgejo Actions secret on andy/andystevens.name. The
+//                     build inlines it into the static actor JSON via
+//                     scripts/generate-static-ap.mjs.
+//   AP_PRIVATE_KEY -> Bunny Edge Script environment variable, NOT a Forgejo
+//                     secret. HTTP signatures are produced in the edge script
+//                     (edge-script/handlers/), never during the build — see
+//                     the "Deliberately NO AP_PRIVATE_KEY" note in
+//                     .forgejo/workflows/build.yaml.
+//
+// Preserve the \n newlines when pasting; src/lib/activitypub.mjs normalizes
+// escaped variants, but intact PEM is what it expects.
 
 import { generateKeyPairSync } from 'node:crypto';
 
@@ -15,5 +25,5 @@ console.log('=== AP_PUBLIC_KEY ===');
 console.log(publicKey);
 console.log('=== AP_PRIVATE_KEY ===');
 console.log(privateKey);
-console.log('Paste each into its own Netlify environment variable.');
+console.log('AP_PUBLIC_KEY -> Forgejo Actions secret; AP_PRIVATE_KEY -> Bunny Edge Script env.');
 console.log('Keep the private key secret. Do not commit it.');

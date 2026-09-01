@@ -53,7 +53,15 @@ self.addEventListener('notificationclick', (event) => {
       const sub = await self.registration.pushManager.getSubscription();
       if (!sub) return;
       try {
-        await fetch('/.netlify/functions/push-unsubscribe', {
+        // Absolute, and hardcoded: this file is served verbatim from
+        // public/ so there is no build-time env inlining the way the page
+        // gets PUBLIC_AP_BASE. Same subdomain the page posts to, and the
+        // same shape. (src/lib/webmentions.ts hardcodes its subdomain for
+        // the same reason.) Was /.netlify/functions/push-unsubscribe, dead
+        // since the move off Netlify to Bunny — the catch below swallowed
+        // it, so the local unsubscribe still worked while the server kept a
+        // stale subscription until the next push 410'd.
+        await fetch('https://ap.andystevens.name/api/push/unsubscribe', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ endpoint: sub.endpoint }),
