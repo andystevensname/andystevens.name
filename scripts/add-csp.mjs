@@ -49,6 +49,18 @@ const CMS_FONTS = 'https://cdn.jsdelivr.net';
 const sha256 = (source) =>
   `'sha256-${createHash('sha256').update(source, 'utf8').digest('base64')}'`;
 
+// Browsers that understand hashes IGNORE 'unsafe-inline' when a hash is
+// present in the same directive, so this is a no-op for them. It only takes
+// effect on pre-CSP2 browsers, which would otherwise block every inline
+// block and render the page unstyled with no theme guard. Lighthouse
+// recommends it for that reason.
+//
+// Guarded on the list being non-empty, which matters: with no hashes there
+// is nothing to suppress it and 'unsafe-inline' would genuinely apply.
+// /admin/ has no inline scripts at all, so its script-src must not get it.
+const withLegacyFallback = (hashes) =>
+  hashes.length ? `${hashes.join(' ')} 'unsafe-inline'` : '';
+
 // Only executable scripts need a hash. application/ld+json is data, is never
 // executed, and browsers do not enforce script-src on it — verified against
 // the built pages, which carry ld+json and pass with no hash for it.
@@ -78,12 +90,12 @@ function policyFor(html, isAdmin) {
     "base-uri 'self'",
     "object-src 'none'",
     "form-action 'self'",
-    `script-src 'self' ${script.join(' ')}`.trim(),
+    `script-src 'self' ${withLegacyFallback(script)}`.trim(),
     // style-src-attr stays 'unsafe-inline': Shiki emits per-token colour
     // style="" attributes that change with every code sample, so hashing
     // them would break on unrelated content edits. Style attributes cannot
     // execute script.
-    isAdmin ? "style-src 'self' 'unsafe-inline'" : `style-src 'self' ${style.join(' ')}`.trim(),
+    isAdmin ? "style-src 'self' 'unsafe-inline'" : `style-src 'self' ${withLegacyFallback(style)}`.trim(),
     "style-src-attr 'unsafe-inline'",
     isAdmin ? `img-src 'self' data: blob: ${MEDIA}` : `img-src 'self' data: ${MEDIA}`,
     isAdmin ? `font-src 'self' ${CMS_FONTS}` : "font-src 'self'",
