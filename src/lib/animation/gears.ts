@@ -1,7 +1,9 @@
 import { svgEl } from './svg.js';
+import { GEAR_PATHS } from './gear-paths.js';
 
 interface GearInfo {
   assemblyEl: SVGGElement;
+  spinEl: SVGGElement;
   wrapEl: SVGGElement;
   pathEl: SVGPathElement;
   circleEl: SVGCircleElement;
@@ -9,20 +11,15 @@ interface GearInfo {
   diametralPitch: number;
   pitchDiameter: number;
   scaledWidth: number;
-  rotation: number;
-  cx: number;
-  cy: number;
-  scaleRatio: number;
-  angularVelocity: number;
+  degPerSecond: number;
   direction: number;
 }
 
-export function createGears(canvas: SVGSVGElement, group: SVGGElement, gearsContainer: Element, width = 400) {
+export function createGears(canvas: SVGSVGElement, group: SVGGElement, width = 400) {
   const teethCounts = [18, 36, 52];
   const gears: GearInfo[] = [];
+  const spins: Animation[] = [];
   let scaleRatio: number | undefined;
-  let animationFrameId: number | null = null;
-  let lastTimestamp: number | null = null;
 
   function measurePath(d: string) {
     const tmp = svgEl<SVGPathElement>('path', { d, visibility: 'hidden' });
@@ -32,26 +29,37 @@ export function createGears(canvas: SVGSVGElement, group: SVGGElement, gearsCont
     return { cx: box.x + box.width / 2, cy: box.y + box.height / 2, width: box.width };
   }
 
-  function applyGearTransform(gear: GearInfo) {
-    const deg = gear.rotation * (180 / Math.PI);
-    gear.wrapEl.setAttribute(
-      'transform',
-      `rotate(${deg}) scale(${gear.scaleRatio}) translate(${-gear.cx},${-gear.cy})`
-    );
-  }
+  function create(i: number) {
+    const d = GEAR_PATHS[i];
+    const { cx, cy, width: pathWidth } = measurePath(d);
 
-  function create(i: number, svgSource: Element) {
-    const d = svgSource.querySelector('path')!.getAttribute('d')!;
-    const { cx, cy, width } = measurePath(d);
-
-    if (scaleRatio === undefined) scaleRatio = 200 / width;
-    const scaledWidth = width * scaleRatio;
+    if (scaleRatio === undefined) scaleRatio = 200 / pathWidth;
+    const scaledWidth = pathWidth * scaleRatio;
     const teeth = teethCounts[i];
     const diametralPitch = (teeth + 2) / scaledWidth;
     const pitchDiameter = scaledWidth - 2 / diametralPitch;
 
     const assemblyEl = svgEl<SVGGElement>('g');
-    const wrapEl = svgEl<SVGGElement>('g');
+
+    // Rotation lives on its own element so it can be a declarative Web
+    // Animation instead of a per-frame transform rewrite. The composition
+    // is unchanged from the old attribute string
+    // `rotate(deg) scale(s) translate(-cx,-cy)`: spinEl supplies the
+    // rotate, wrapEl the static scale + translate.
+    //
+    // transform-box/transform-origin are set explicitly so the rotation
+    // pivots on this group's own local origin, matching SVG's rotate()
+    // with no centre argument. Verified against the attribute form across
+    // several translations, rotations and scales — the browser defaults
+    // happen to agree today, but only the explicit pair is guaranteed.
+    const spinEl = svgEl<SVGGElement>('g');
+    spinEl.style.transformBox = 'view-box';
+    spinEl.style.transformOrigin = '0 0';
+
+    const wrapEl = svgEl<SVGGElement>('g', {
+      transform: `scale(${scaleRatio}) translate(${-cx},${-cy})`,
+    });
+
     const gearClass = `anim-gear-${i + 1}`;
     const pathEl = svgEl<SVGPathElement>('path', {
       d,
@@ -70,35 +78,44 @@ export function createGears(canvas: SVGSVGElement, group: SVGGElement, gearsCont
     });
 
     wrapEl.appendChild(pathEl);
-    assemblyEl.appendChild(wrapEl);
+    spinEl.appendChild(wrapEl);
+    assemblyEl.appendChild(spinEl);
     assemblyEl.appendChild(circleEl);
     group.appendChild(assemblyEl);
 
-    // Calculate angular velocities for precise gear meshing
-    // Base gear (gear 0) rotates at 15°/s
-    const baseAngularVelocity = (15 * Math.PI) / 180; // 15°/s in radians
-    let angularVelocity = baseAngularVelocity;
+    // Angular velocities for precise gear meshing. Base gear (gear 0)
+    // rotates at 15°/s; the others are geared down by their teeth ratio
+    // and turn the other way.
+    const baseDegPerSecond = 15;
+    let degPerSecond = baseDegPerSecond;
     let direction = 1;
 
-    // Gear ratios based on teeth count
     if (i === 1) {
-      // Gear 1 (36 teeth): half speed, opposite direction
-      angularVelocity = baseAngularVelocity * (18 / 36);
+      degPerSecond = baseDegPerSecond * (18 / 36);
       direction = -1;
     } else if (i === 2) {
-      // Gear 2 (52 teeth): 18/52 speed, opposite direction
-      angularVelocity = baseAngularVelocity * (18 / 52);
+      degPerSecond = baseDegPerSecond * (18 / 52);
       direction = -1;
     }
 
-    const gear: GearInfo = {
-      assemblyEl, wrapEl, pathEl, circleEl,
+    gears.push({
+      assemblyEl, spinEl, wrapEl, pathEl, circleEl,
       teeth, diametralPitch, pitchDiameter, scaledWidth,
-      rotation: 0, cx, cy, scaleRatio,
-      angularVelocity, direction
-    };
-    applyGearTransform(gear);
-    gears.push(gear);
+      degPerSecond, direction,
+    });
+  }
+
+  function spin() {
+    for (const gear of gears) {
+      // One full turn per (360 / °-per-second) seconds, linear and
+      // endless — exactly what the old requestAnimationFrame loop
+      // integrated by hand, minus the per-frame main-thread work.
+      const animation = gear.spinEl.animate(
+        [{ transform: 'rotate(0deg)' }, { transform: `rotate(${360 * gear.direction}deg)` }],
+        { duration: (360 / gear.degPerSecond) * 1000, iterations: Infinity, easing: 'linear' }
+      );
+      spins.push(animation);
+    }
   }
 
   function place() {
@@ -129,43 +146,18 @@ export function createGears(canvas: SVGSVGElement, group: SVGGElement, gearsCont
     g2.assemblyEl.setAttribute('transform', `translate(${x2},${y2})`);
   }
 
-  function animateGears(timestamp: number) {
-    // Advance by the real elapsed time, not a fixed 1/60 step, so gears
-    // rotate at the same wall-clock speed regardless of display refresh
-    // rate (the previous SMIL animation was duration-based and therefore
-    // refresh-rate-independent — preserve that property here).
-    if (lastTimestamp === null) lastTimestamp = timestamp;
-    const dt = (timestamp - lastTimestamp) / 1000; // seconds
-    lastTimestamp = timestamp;
-
-    for (const gear of gears) {
-      // angularVelocity is in radians/second
-      gear.rotation += gear.angularVelocity * gear.direction * dt;
-      applyGearTransform(gear);
-    }
-
-    animationFrameId = requestAnimationFrame(animateGears);
-  }
-
   return {
     animate(frameCount: number, startFrame: number, endFrame: number) {
       if (frameCount < startFrame || frameCount > endFrame) return;
-      if (gears.length !== gearsContainer.children.length) {
-        for (let i = 0; i < gearsContainer.children.length; i++) create(i, gearsContainer.children[i]);
+      if (gears.length !== GEAR_PATHS.length) {
+        for (let i = 0; i < GEAR_PATHS.length; i++) create(i);
         place();
-
-        // Start the animation loop
-        if (!animationFrameId) {
-          animationFrameId = requestAnimationFrame(animateGears);
-        }
+        spin();
       }
     },
     destroy() {
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-        animationFrameId = null;
-      }
-      lastTimestamp = null;
+      for (const animation of spins) animation.cancel();
+      spins.length = 0;
       for (const g of gears) g.assemblyEl.remove();
       gears.length = 0;
       scaleRatio = undefined;
