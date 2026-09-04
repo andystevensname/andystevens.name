@@ -6,6 +6,7 @@ import Webmentions from '../../components/Webmentions.astro';
 import PhotoNav from '../../components/PhotoNav.astro';
 import { formatDate } from '../../lib/date';
 import { apAlternateLink } from '../../lib/ap-link.mjs';
+import { markdownSourceLink } from '../../lib/source-link.mjs';
 
 export async function getStaticPaths() {
   const photos = await getCollection('photos');
@@ -29,7 +30,7 @@ const tags = photo.data.tags ?? [];
   title={photo.data.title ?? 'Photo'}
   description={photo.data.alt ?? 'A photo post'}
   canonical={photoUrl}
-  extraHead={apLink}
+  extraHead={apLink + markdownSourceLink('photos', photo, Astro.site)}
 >
   <article class="h-entry">
     {photo.data.title && <h1 class="p-name sr-only" dir="auto">{photo.data.title}</h1>}

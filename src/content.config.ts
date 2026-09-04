@@ -7,6 +7,12 @@ import { glob } from 'astro/loaders';
 const syndication = z.array(z.string()).optional().default([]);
 const notify = z.boolean().optional().default(true);
 
+// Album descriptions were imported from Flickr and may contain HTML. Every
+// consumer (album feed, page summary, meta tags, syndication) renders them
+// as plain text, so strip the tags at the source.
+const stripHtml = (value: string) =>
+  value.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+
 const articles = defineCollection({
   loader: glob({ pattern: '*.md', base: './src/content/articles' }),
   schema: z.object({
@@ -141,7 +147,7 @@ const albums = defineCollection({
   loader: glob({ pattern: '*.md', base: './src/content/albums' }),
   schema: z.object({
     title: z.string(),
-    description: z.string().optional(),
+    description: z.string().optional().transform((value) => (value ? stripHtml(value) : value)),
     cover: z.string().optional(),
     date: z.coerce.date().optional(),
     published: z.boolean().optional().default(true),

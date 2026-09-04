@@ -4,7 +4,9 @@ import Layout from '../../layouts/Layout.astro';
 import HEntryMeta from '../../components/HEntryMeta.astro';
 import PostMeta from '../../components/PostMeta.astro';
 import Webmentions from '../../components/Webmentions.astro';
+import PhotoGrid from '../../components/PhotoGrid.astro';
 import { apAlternateLink } from '../../lib/ap-link.mjs';
+import { markdownSourceLink } from '../../lib/source-link.mjs';
 
 export async function getStaticPaths() {
   const albums = await getCollection('albums');
@@ -36,7 +38,7 @@ allPhotos.sort((a, b) => {
   title={album.data.title}
   description={album.data.description ?? `Photo album: ${album.data.title}`}
   canonical={albumUrl}
-  extraHead={apLink}
+  extraHead={apLink + markdownSourceLink('albums', album, Astro.site)}
 >
   <article class="h-entry">
     <h1 class="p-name" dir="auto">{album.data.title}</h1>
@@ -48,18 +50,7 @@ allPhotos.sort((a, b) => {
       <Content />
     </section>
 
-    <ul class="album-grid">
-      {allPhotos.map((photo) => {
-        const src = Array.isArray(photo.data.photo) ? photo.data.photo[0] : photo.data.photo;
-        return (
-          <li>
-            <a href={`/photos/${photo.id}/?album=${album.id}`} class="album-photo">
-              <img src={`${src}?class=photo200`} srcset={`${src}?class=photo200 200w, ${src}?class=photo400 400w`} sizes="(min-width: 640px) 160px, 50vw" alt={photo.data.alt ?? photo.data.title ?? ''} loading="lazy" decoding="async" width={photo.data.width} height={photo.data.height} />
-            </a>
-          </li>
-        );
-      })}
-    </ul>
+    <PhotoGrid photos={allPhotos} albumId={album.id} />
 
     <PostMeta post={album} />
     <Webmentions url={albumUrl} />

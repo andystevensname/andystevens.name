@@ -1,0 +1,32 @@
+---
+import AlbumCard from './AlbumCard.astro';
+import type { FeedItemData } from '../lib/feed';
+
+interface Props {
+  albums: FeedItemData[];
+  title: string;
+  emptyMessage?: string;
+}
+
+const { albums, title, emptyMessage = 'No albums yet.' } = Astro.props;
+---
+
+<h1 data-type="album">{title}</h1>
+
+{albums.length > 0 ? (
+  <div class="album-cards">
+    {albums.map((album) => (
+      <AlbumCard album={album} />
+    ))}
+  </div>
+) : (
+  <p>{emptyMessage}</p>
+)}
+
+<style>
+  .album-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--grid-gutter);
+  }
+</style>

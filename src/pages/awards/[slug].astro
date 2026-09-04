@@ -5,6 +5,7 @@ import HEntryMeta from '../../components/HEntryMeta.astro';
 import PostMeta from '../../components/PostMeta.astro';
 import Webmentions from '../../components/Webmentions.astro';
 import { apAlternateLink } from '../../lib/ap-link.mjs';
+import { markdownSourceLink } from '../../lib/source-link.mjs';
 
 export async function getStaticPaths() {
   const awards = await getCollection('awards');
@@ -24,7 +25,7 @@ const apLink = apAlternateLink('awards', award, Astro.site);
   title={award.data.title}
   description={`${award.data.title}${award.data.issuer ? ` from ${award.data.issuer}` : ''}`}
   canonical={awardUrl}
-  extraHead={apLink}
+  extraHead={apLink + markdownSourceLink('awards', award, Astro.site)}
 >
   <article class="h-entry">
     <h1 class="p-name">{award.data.title}</h1>

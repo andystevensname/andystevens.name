@@ -65,8 +65,8 @@ jobs:
           GO_JAMMING_TOKEN: ${{ secrets.GO_JAMMING_TOKEN }}
         run: npm run build
 
-      - name: Generate gemini capsule
-        run: node scripts/generate-gemtext.mjs
+      - name: Generate text-protocol feeds (gemini, gopher, markdown)
+        run: node scripts/generate-feeds.mjs
 
       - name: Deploy to Bunny Storage
         env:

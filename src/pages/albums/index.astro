@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
-import FeedList from '../../components/FeedList.astro';
+import AlbumGrid from '../../components/AlbumGrid.astro';
 import { mapAlbums, sortByDate } from '../../lib/feed';
 
 const [albums, photos] = await Promise.all([
@@ -12,5 +12,5 @@ const feed = sortByDate(mapAlbums(albums, photos));
 ---
 
 <Layout title="Albums" description="Photo albums.">
-  <FeedList title="Albums" feed={feed} emptyMessage="No albums yet." type="album" />
+  <AlbumGrid albums={feed} title="Albums" emptyMessage="No albums yet." />
 </Layout>

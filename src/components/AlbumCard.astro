@@ -1,0 +1,80 @@
+---
+interface Props {
+  album: {
+    url: string;
+    title?: string;
+    summary?: string;
+    photo?: string;
+    photoWidth?: number;
+    photoHeight?: number;
+    date: Date;
+  };
+}
+
+const { album } = Astro.props;
+---
+
+<article class="album-card">
+  {album.photo && (
+    <a href={album.url}>
+      <img
+        src={`${album.photo}?class=photo400`}
+        srcset={`${album.photo}?class=photo200 200w, ${album.photo}?class=photo400 400w`}
+        sizes="(max-width: 480px) 200px, 400px"
+        alt={album.title ?? 'Album cover'}
+        loading="lazy"
+        decoding="async"
+        width={album.photoWidth}
+        height={album.photoHeight}
+      />
+    </a>
+  )}
+
+  <h2 dir="auto"><a href={album.url}>{album.title}</a></h2>
+  {album.summary && <p dir="auto">{album.summary}</p>}
+  <time datetime={album.date.toISOString()}>
+    {album.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}
+  </time>
+</article>
+
+<style>
+  .album-card {
+    display: grid;
+    gap: 0.25rem;
+    padding: 1rem;
+    background: var(--bg);
+    border: var(--border-subtle);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+  }
+
+  /* Bleed the cover link to the card edges; its bottom margin plus the
+     grid gap leaves 0.75rem between cover and title. */
+  .album-card > a {
+    margin: -1rem -1rem 0.5rem;
+  }
+
+  .album-card a,
+  .album-card a:visited,
+  .album-card a:hover,
+  .album-card a:active {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .album-card img {
+    width: 100%;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+  }
+
+  .album-card h2 {
+    font-size: var(--fs-md);
+    font-weight: 600;
+  }
+
+  .album-card :is(p, time) {
+    color: var(--c-gray-light);
+    font-size: var(--fs-sm);
+  }
+</style>

@@ -60,8 +60,8 @@ jobs:
           AP_USERNAME: ci
         run: npm run build
 
-      - name: Generate gemini capsule
+      - name: Generate text-protocol feeds (gemini, gopher, markdown)
         env:
           AP_DOMAIN: example.invalid
           AP_USERNAME: ci
-        run: node scripts/generate-gemtext.mjs
+        run: node scripts/generate-feeds.mjs

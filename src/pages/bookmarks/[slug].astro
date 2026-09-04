@@ -5,6 +5,7 @@ import HEntryMeta from '../../components/HEntryMeta.astro';
 import PostMeta from '../../components/PostMeta.astro';
 import Webmentions from '../../components/Webmentions.astro';
 import { apAlternateLink } from '../../lib/ap-link.mjs';
+import { markdownSourceLink } from '../../lib/source-link.mjs';
 
 export async function getStaticPaths() {
   const bookmarks = await getCollection('bookmarks');
@@ -24,7 +25,7 @@ const apLink = apAlternateLink('bookmarks', bookmark, Astro.site);
   title={bookmark.data.title ?? 'Bookmark'}
   description={`Bookmark of ${bookmark.data.bookmark_of}`}
   canonical={bookmarkUrl}
-  extraHead={apLink}
+  extraHead={apLink + markdownSourceLink('bookmarks', bookmark, Astro.site)}
 >
   <article class="h-entry">
     {bookmark.data.title && <h1 class="p-name" dir="auto">{bookmark.data.title}</h1>}

@@ -1,0 +1,71 @@
+---
+interface Props {
+  photos: Array<{
+    id: string;
+    data: {
+      title?: string;
+      alt?: string;
+      photo: string | string[];
+      width?: number;
+      height?: number;
+      date?: Date;
+    };
+  }>;
+  albumId: string;
+}
+
+const { photos, albumId } = Astro.props;
+
+function getPhotoSrc(photoData: string | string[]): string {
+  return Array.isArray(photoData) ? photoData[0] : photoData;
+}
+---
+
+<ul class="photo-grid">
+  {photos.map((photo) => {
+    const src = getPhotoSrc(photo.data.photo);
+    return (
+      <li>
+        <a href={`/photos/${photo.id}/?album=${albumId}`}>
+          <img
+            src={`${src}?class=photo200`}
+            srcset={`${src}?class=photo200 200w, ${src}?class=photo400 400w`}
+            sizes="(min-width: 640px) 160px, 50vw"
+            alt={photo.data.alt ?? photo.data.title ?? ''}
+            loading="lazy"
+            decoding="async"
+            width={photo.data.width}
+            height={photo.data.height}
+          />
+        </a>
+      </li>
+    );
+  })}
+</ul>
+
+<style>
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: var(--grid-gutter);
+    padding: 0;
+    list-style: none;
+  }
+
+  .photo-grid a {
+    display: block;
+  }
+
+  .photo-grid img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+  }
+
+  @media (max-width: 480px) {
+    .photo-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

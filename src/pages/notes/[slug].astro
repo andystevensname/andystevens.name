@@ -5,6 +5,7 @@ import HEntryMeta from '../../components/HEntryMeta.astro';
 import PostMeta from '../../components/PostMeta.astro';
 import Webmentions from '../../components/Webmentions.astro';
 import { apAlternateLink } from '../../lib/ap-link.mjs';
+import { markdownSourceLink } from '../../lib/source-link.mjs';
 
 export async function getStaticPaths() {
   const notes = await getCollection('notes');
@@ -24,7 +25,7 @@ const apLink = apAlternateLink('notes', note, Astro.site);
   title="Note"
   description="A short note."
   canonical={noteUrl}
-  extraHead={apLink}
+  extraHead={apLink + markdownSourceLink('notes', note, Astro.site)}
 >
   <article class="h-entry">
     <HEntryMeta url={noteUrl} date={note.data.date} syndication={note.data.syndication} />

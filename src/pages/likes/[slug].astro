@@ -5,6 +5,7 @@ import HEntryMeta from '../../components/HEntryMeta.astro';
 import PostMeta from '../../components/PostMeta.astro';
 import Webmentions from '../../components/Webmentions.astro';
 import { apAlternateLink } from '../../lib/ap-link.mjs';
+import { markdownSourceLink } from '../../lib/source-link.mjs';
 
 export async function getStaticPaths() {
   const likes = await getCollection('likes');
@@ -24,7 +25,7 @@ const apLink = apAlternateLink('likes', like, Astro.site);
   title="Like"
   description={`Liked ${like.data.like_of}`}
   canonical={likeUrl}
-  extraHead={apLink}
+  extraHead={apLink + markdownSourceLink('likes', like, Astro.site)}
 >
   <article class="h-entry">
     <HEntryMeta url={likeUrl} date={like.data.date} syndication={like.data.syndication} />

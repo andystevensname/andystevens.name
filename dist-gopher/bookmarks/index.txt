@@ -1,0 +1,16 @@
+2026-08-13 The Art of the Copyist	1	/bookmarks/the-art-of-the-copyist.txt		
+2026-08-05 Poetry Camera	1	/bookmarks/poetry-camera.txt		
+2026-07-28 Datatype — variable font that turns text into charts	1	/bookmarks/datatype-variable-font-that-turns-text.txt		
+2026-07-17 Uncovered	1	/bookmarks/uncovered.txt		
+2026-07-11 Verba Prima	1	/bookmarks/verba-prima.txt		
+2026-05-13 The Boring Internet | Terry Godier	1	/bookmarks/the-boring-internet-terry-godier.txt		
+2026-05-12 Since You Arrived — A Series	1	/bookmarks/since-you-arrived-a-series.txt		
+2026-05-10 I Bought Friendster for $30k — Here’s What I’m Doing With It	1	/bookmarks/i-bought-friendster-for-30k.txt		
+2026-04-29 Uses – David Bushell	1	/bookmarks/uses-david-bushell.txt		
+2026-04-29 Melonland	1	/bookmarks/melonland.txt		
+2026-04-27 Have a F*ing Website	1	/bookmarks/have-a-f-ing-website.txt		
+2026-04-01 The HTML Review Issue 05	1	/bookmarks/the-html-review-issue-05.txt		
+2026-03-29 Artist paints Lovecraft's Great Old Ones into all 46 of Hokusai's woodblock prints	1	/bookmarks/artist-paints-lovecrafts-great-old.txt		
+2026-03-23 Poem type for Creative Works in Schema	1	/bookmarks/poem-type-for-creative-works.txt		
+All bookmarks	0	/bookmarks/		
+Home	0	/		

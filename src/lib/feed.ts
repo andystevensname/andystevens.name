@@ -1,5 +1,5 @@
 import type { CollectionEntry } from 'astro:content';
-import { marked } from 'marked';
+import { renderBody as renderBodyShared } from './render-body.mjs';
 
 export type FeedItemData = {
   type: 'article' | 'note' | 'bookmark' | 'like' | 'photo' | 'reply' | 'writing' | 'award' | 'album' | 'code';
@@ -19,9 +19,11 @@ export type FeedItemData = {
   tags?: string[];
 };
 
-function renderBody(body: string | undefined): string | undefined {
-  if (!body?.trim()) return undefined;
-  return marked.parse(body.trim(), { async: false }) as string;
+// Re-exported so feed consumers keep their existing imports; the
+// implementation lives in render-body.mjs, which the plain-Node feed
+// scripts (src/lib/feeds) also use.
+export function renderBody(body: string | undefined): string | undefined {
+  return renderBodyShared(body);
 }
 
 // Builds the fields every feed item shares; `extra` supplies the

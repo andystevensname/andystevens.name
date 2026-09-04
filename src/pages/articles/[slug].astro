@@ -5,6 +5,7 @@ import HEntryMeta from '../../components/HEntryMeta.astro';
 import PostMeta from '../../components/PostMeta.astro';
 import Webmentions from '../../components/Webmentions.astro';
 import { apAlternateLink } from '../../lib/ap-link.mjs';
+import { markdownSourceLink } from '../../lib/source-link.mjs';
 
 
 export async function getStaticPaths() {
@@ -47,7 +48,7 @@ const jsonLd = {
   canonical={postUrl}
   ogType="article"
   jsonLd={jsonLd}
-  extraHead={apLink}
+  extraHead={apLink + markdownSourceLink('articles', post, Astro.site)}
 >
   <article class="h-entry">
     <h1 class="p-name" dir="auto">{post.data.title}</h1>
