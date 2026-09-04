@@ -1,24 +1,71 @@
 // Gopher renderer — file renderer: FeedItem[] → { relpath: body }.
 //
 // Layout mirrors the gemtext capsule:
-//   index.txt                  root menu (type 0 directory)
-//   {collection}/index.txt     collection menu
-//   {collection}/{slug}.txt    full post (type 1 text file)
+//   gophermap                  root menu
+//   {collection}/gophermap     collection menu
+//   {collection}/{slug}.txt    full post, served as a plain text file
 //
-// Selector line format: Label<TAB>Type<TAB>Selector<TAB>Host<TAB>Port<TAB>
-// Type 0 = directory, 1 = text file. Host/Port empty means "same gopher
-// host". Post bodies reuse the gemtext conversion — its `=> url text`
-// link lines read fine as plain text in gopher clients.
+// Menu syntax is RFC 1436:
+//
+//   <type><display><TAB><selector><TAB><host><TAB><port><CR><LF>
+//
+// with the menu terminated by a line containing only ".". Four things
+// about that format are easy to get wrong:
+//
+//   - the item type is the FIRST CHARACTER of the display string, not a
+//     separate tab-delimited field;
+//   - type 0 is a text FILE and type 1 is a DIRECTORY (menu) — the
+//     mapping is not the intuitive one;
+//   - host and port are mandatory on every line, so a menu cannot be
+//     written without knowing the hostname it will be served under;
+//   - lines end CRLF, not LF.
+//
+// Item types used here: 0 text file, 1 directory, i informational,
+// h URL (selector "URL:<href>", which clients dereference over HTTP).
+//
+// Post bodies are plain text and keep the gemtext conversion — its
+// "=> url text" link lines read fine as prose, and gopher has no way to
+// embed a link inside a type-0 file anyway.
 
 import { marked } from 'marked';
 import { tokensToGemtext } from './gemtext.mjs';
 
+const CRLF = '\r\n';
+
+// Hostname the menus advertise. Every selector line has to name a host,
+// so this has to be decided at generation time, not serve time — the
+// same constraint GEMINI_HOSTNAME solves for the capsule.
+export const DEFAULT_GOPHER_HOST = 'gopher.andystevens.name';
+export const DEFAULT_GOPHER_PORT = 70;
+
+// Informational and URL lines don't address a selector on this server.
+// The long-standing convention is to point them at a host that will
+// never answer, so a client that tries to follow one fails fast instead
+// of hanging on a real socket.
+const NULL_SELECTOR = 'fake';
+const NULL_HOST = 'error.host';
+const NULL_PORT = 1;
+
 const fmtDate = (item) => (item.date ? item.date.slice(0, 10) : '');
 
-// A gopher selector line. Labels can't contain tabs; truncate to be safe.
-function entry(label, type, selector) {
-  return `${String(label).replace(/\t/g, ' ').trim()}\t${type}\t${selector}\t\t`;
+// Display strings and selectors are tab-delimited and line-terminated,
+// so they cannot contain tabs or newlines.
+const clean = (value) => String(value).replace(/[\t\r\n]+/g, ' ').trim();
+
+function line(type, display, selector, host, port) {
+  return `${type}${clean(display)}\t${selector}\t${host}\t${port}`;
 }
+
+const info = (text = '') => line('i', text, NULL_SELECTOR, NULL_HOST, NULL_PORT);
+
+const menu = (lines) => lines.join(CRLF) + CRLF + '.' + CRLF;
+
+// A dated title as it appears in a menu: "2026-08-13 The Art of the Copyist".
+const listLabel = (item) =>
+  `${item.date ? fmtDate(item) + ' ' : ''}${item.title || item.slug}`;
+
+const postLine = (item, { host, port }) =>
+  line('0', listLabel(item), `/${item.collection}/${item.slug}.txt`, host, port);
 
 function renderPost(item) {
   const lines = [];
@@ -48,58 +95,63 @@ function renderPost(item) {
   return lines.join('\n');
 }
 
-function renderCollectionIndex(collection, items) {
-  const lines = items.map((item) =>
-    entry(
-      `${item.date ? fmtDate(item) + ' ' : ''}${item.title || item.slug}`,
-      1,
-      `/${collection}/${item.slug}.txt`
-    )
-  );
-  lines.push(entry(`All ${collection}`, 0, `/${collection}/`));
-  lines.push(entry('Home', 0, '/'));
-  return lines.join('\n') + '\n';
+function renderCollectionIndex(label, items, { host, port }) {
+  const lines = [info(label), info()];
+  if (items.length === 0) {
+    lines.push(info('Nothing here yet.'));
+  } else {
+    for (const item of items) lines.push(postLine(item, { host, port }));
+  }
+  lines.push(info());
+  lines.push(line('1', 'Home', '/', host, port));
+  return menu(lines);
 }
 
-function renderHomeIndex(items, { collectionOrder, labels, webUrl }) {
-  const lines = [];
+function renderHomeIndex(items, { collections, host, port, webUrl }) {
+  const lines = [info('andystevens.name'), info(), info('Recent posts'), info()];
   for (const item of items.slice(0, 20)) {
-    lines.push(
-      entry(
-        `${item.date ? fmtDate(item) + ' ' : ''}${item.title || item.slug}`,
-        1,
-        `/${item.collection}/${item.slug}.txt`
-      )
-    );
+    lines.push(postLine(item, { host, port }));
   }
-  for (const collection of collectionOrder) {
-    lines.push(entry(labels[collection], 0, `/${collection}/`));
+  lines.push(info(), info('All collections'), info());
+  for (const { collection, label } of collections) {
+    lines.push(line('1', label, `/${collection}/`, host, port));
   }
-  lines.push(entry('andystevens.name on the web', 1, webUrl));
-  return lines.join('\n') + '\n';
+  lines.push(info());
+  lines.push(
+    line('h', 'andystevens.name on the web', `URL:${webUrl}`, NULL_HOST, NULL_PORT)
+  );
+  return menu(lines);
 }
 
+// `collections` is [{ collection, label }] in menu order — pass the feed
+// registry's own entries so a collection added there can't go missing.
+// items must already be sorted newest-first (sortFeedItems).
 export function renderGopher(items, {
-  collectionOrder,
+  collections,
+  host = DEFAULT_GOPHER_HOST,
+  port = DEFAULT_GOPHER_PORT,
   webUrl = 'https://andystevens.name',
 } = {}) {
+  if (!collections) throw new Error('renderGopher: { collections } is required');
   const files = new Map();
-  const labels = Object.fromEntries(
-    collectionOrder.map((c) => [c, c.charAt(0).toUpperCase() + c.slice(1)])
-  );
+  const addressing = { host, port };
 
   for (const item of items) {
     files.set(`${item.collection}/${item.slug}.txt`, renderPost(item));
   }
-  for (const collection of collectionOrder) {
+  for (const { collection, label } of collections) {
     files.set(
-      `${collection}/index.txt`,
-      renderCollectionIndex(collection, items.filter((i) => i.collection === collection))
+      `${collection}/gophermap`,
+      renderCollectionIndex(
+        label,
+        items.filter((i) => i.collection === collection),
+        addressing
+      )
     );
   }
   files.set(
-    'index.txt',
-    renderHomeIndex(items, { collectionOrder, labels, webUrl })
+    'gophermap',
+    renderHomeIndex(items, { collections, host, port, webUrl })
   );
   return files;
 }
