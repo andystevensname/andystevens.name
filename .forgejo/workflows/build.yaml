@@ -66,6 +66,11 @@ jobs:
         run: npm run build
 
       - name: Generate text-protocol feeds (gemini, gopher, markdown)
+        env:
+          # Gopher menu lines carry the host and port they are served
+          # under, so the hostname is fixed at generation time. Unset
+          # falls back to the default in src/lib/feeds/renderers/gopher.mjs.
+          GOPHER_HOST: ${{ vars.GOPHER_HOST }}
         run: node scripts/generate-feeds.mjs
 
       - name: Deploy to Bunny Storage
@@ -141,6 +146,40 @@ jobs:
           api_key: ${{ secrets.BUNNY_API_KEY }}
           app_id: ${{ vars.GEMINI_MC_APP_ID }}
           container: ${{ vars.GEMINI_MC_CONTAINER }}
+          image_tag: ${{ github.sha }}
+
+      # Same shape as the gemini capsule above, minus the base image: the
+      # server is a dependency-free Node script on stock node:alpine, so
+      # there is nothing to compile and no RUN step to emulate. Guarded on
+      # GOPHER_IMAGE so it stays inert until the Docker Hub repo and the
+      # Magic Containers app exist.
+      - name: Build and push gopher container image
+        if: success() && vars.GOPHER_IMAGE != ''
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+          GOPHER_IMAGE: ${{ vars.GOPHER_IMAGE }}
+        run: |
+          echo "$DOCKER_TOKEN" | docker login docker.io -u "$DOCKER_USERNAME" --password-stdin
+          docker build \
+            --platform linux/amd64 \
+            -f gopher-server/Dockerfile \
+            -t "$GOPHER_IMAGE:latest" \
+            -t "$GOPHER_IMAGE:$GITHUB_SHA" \
+            .
+          docker push "$GOPHER_IMAGE:latest"
+          docker push "$GOPHER_IMAGE:$GITHUB_SHA"
+
+      # Pinned to the per-commit SHA tag for the same reason as the capsule:
+      # Magic Containers pulls on redeploy, not on tag push, so the image
+      # reference has to change for the pull to happen.
+      - name: Redeploy gopher server (Bunny Magic Containers)
+        if: success() && vars.GOPHER_MC_APP_ID != ''
+        uses: https://github.com/BunnyWay/actions/container-update-image@main
+        with:
+          api_key: ${{ secrets.BUNNY_API_KEY }}
+          app_id: ${{ vars.GOPHER_MC_APP_ID }}
+          container: ${{ vars.GOPHER_MC_CONTAINER }}
           image_tag: ${{ github.sha }}
 
       - name: Send webmentions
