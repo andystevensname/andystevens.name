@@ -17,6 +17,9 @@ export function markdownSourceLink(collection, entry, site) {
   );
   if (!source) return '';
   if (entry.data.published === false) return '';
+  // post-manifest.json.ts drops undated entries, so generate-feeds.mjs never
+  // writes a .md for them; advertising one would be a dangling link.
+  if (!entry.data.date) return '';
   const slug = entry.data.slug || entry.id.replace(/\.[^.]+$/, '');
   const href = new URL(`${source.path}/${slug}.md`, site).href;
   return `<link rel="alternate" type="text/markdown" href="${href}" title="Markdown source">`;

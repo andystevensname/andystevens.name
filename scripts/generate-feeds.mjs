@@ -77,15 +77,30 @@ async function buildSourceIndex(collections) {
 // ── Gemini ───────────────────────────────────────────────────────────────
 
 const geminiItems = feedItemsFromManifest(manifest, { feeds: ['gemini'] });
-await writeTree('dist-gemini', renderGemtext(geminiItems, { webUrl: WEB_URL }));
+await writeTree(
+  'dist-gemini',
+  renderGemtext(geminiItems, {
+    collectionOrder: sourcesForFeeds(['gemini']).map((s) => s.collection),
+    webUrl: WEB_URL,
+  })
+);
 
 // ── Gopher ───────────────────────────────────────────────────────────────
 
+// Menus have to name the host they will be served under (see gopher.mjs);
+// GOPHER_HOST overrides the default the way GEMINI_HOSTNAME does for the
+// capsule's container.
 const gopherItems = feedItemsFromManifest(manifest, { feeds: ['gopher'] });
-const gopherOrder = sourcesForFeeds(['gopher']).map((s) => s.collection);
 await writeTree(
   'dist-gopher',
-  renderGopher(gopherItems, { collectionOrder: gopherOrder, webUrl: WEB_URL })
+  renderGopher(gopherItems, {
+    collections: sourcesForFeeds(['gopher']).map((s) => ({
+      collection: s.collection,
+      label: s.label,
+    })),
+    ...(process.env.GOPHER_HOST ? { host: process.env.GOPHER_HOST } : {}),
+    webUrl: WEB_URL,
+  })
 );
 
 // ── Markdown sources ─────────────────────────────────────────────────────

@@ -15,7 +15,7 @@
 //   BUNNY_STORAGE_REGION       — region name; defaults to Falkenstein
 
 import { readdir, readFile } from 'node:fs/promises';
-import { relative, join } from 'node:path';
+import { relative, join, extname } from 'node:path';
 import { createHash } from 'node:crypto';
 
 const REGION_HOST_PREFIX = {
@@ -54,21 +54,37 @@ const DIST = 'dist';
 
 // Most files served by Bunny get their Content-Type from extension
 // inference at request time. The AP files we generate have no extension,
-// so set the right type at upload so Storage returns it. Beyond the two
+// so set the right type at upload so Storage returns it. Beyond the
 // fixed paths below, every per-post object under ap/objects/ also needs
 // application/activity+json (see AP_OBJECTS_PREFIX in resolveOverride) —
-// without it remote servers (Mastodon) won't parse the dereferenced object.
+// without it remote servers (Mastodon) won't parse the dereferenced
+// object. The .md source files and feed.json are the other two inference
+// misses: Bunny doesn't know .md (serves octet-stream, so the
+// <link rel="alternate" type="text/markdown"> page advertises a type the
+// server contradicts) and it would serve feed.json as application/json
+// instead of the application/feed+json the endpoint and <head> declare.
 const CONTENT_TYPE_OVERRIDES = {
   '.well-known/webfinger': 'application/jrd+json; charset=utf-8',
   'ap/actor': 'application/activity+json; charset=utf-8',
+  'feed.json': 'application/feed+json; charset=utf-8',
 };
 const AP_OBJECTS_PREFIX = 'ap/objects/';
+const EXTENSION_OVERRIDES = {
+  '.md': 'text/markdown; charset=utf-8',
+};
+
+// MIME comparison is case-insensitive and shouldn't care about the space
+// after the parameter semicolon, so compare normalized forms — otherwise a
+// cosmetic formatting difference would re-upload the same files forever.
+const normalizeType = (value) => (value || '').toLowerCase().replace(/\s+/g, '');
 
 function resolveOverride(remote) {
   if (CONTENT_TYPE_OVERRIDES[remote]) return CONTENT_TYPE_OVERRIDES[remote];
   if (remote.startsWith(AP_OBJECTS_PREFIX)) {
     return 'application/activity+json; charset=utf-8';
   }
+  const extOverride = EXTENSION_OVERRIDES[extname(remote)];
+  if (extOverride) return extOverride;
   return undefined;
 }
 
@@ -122,7 +138,11 @@ async function remove(remote) {
 }
 
 // Recursive listing. Bunny lists one directory at a time (trailing slash)
-// and tells us per-file Checksum (SHA256, uppercase hex).
+// and tells us per-file Checksum (SHA256, uppercase hex) and ContentType.
+// Neither field appears in the published API schema, but Checksum is
+// demonstrably there — the whole skip-unchanged path is built on it — so
+// ContentType is read on the same basis and treated as best-effort: see
+// needsUpload for what happens when it comes back empty.
 async function listRemote(prefixPath = '') {
   const url = base + prefixPath;
   const res = await fetch(url, {
@@ -142,6 +162,7 @@ async function listRemote(prefixPath = '') {
     } else {
       out.set(prefixPath + item.ObjectName, {
         sha256: (item.Checksum || '').toLowerCase(),
+        contentType: item.ContentType || '',
       });
     }
   }
@@ -179,16 +200,45 @@ for (const file of local) {
   file.sha256 = createHash('sha256').update(buf).digest('hex');
 }
 
-// Plan: PUT files that are missing or have different hashes, skip matches.
-const toUpload = local.filter((f) => {
+// Plan: PUT files that are missing, whose bytes changed, or whose stored
+// Content-Type doesn't match the override we want.
+//
+// That last case is why this isn't a plain checksum comparison. Content-Type
+// is metadata Bunny stores alongside the object; it isn't covered by the
+// checksum, so adding a new entry to the override tables above would
+// otherwise never reach files whose bytes are unchanged — which, the day an
+// override is introduced, is every one of them. Re-uploading is the only way
+// to restate the type.
+//
+// When Bunny reports no ContentType we can't confirm agreement, so we
+// re-upload rather than assume it. That's the safe direction: the override
+// set is the .md sources, feed.json and the AP files — a rounding error
+// against the images and HTML — so the worst case is a negligible constant
+// cost per deploy, whereas assuming agreement would silently never heal.
+// The "Content-Type only" count in the plan line tells you which case you
+// are in: it falls to 0 once the types are restated if Bunny reports them,
+// and sits at the size of the override set if it doesn't.
+function needsUpload(f) {
   const r = remote.get(f.remote);
-  return !r || r.sha256 !== f.sha256;
-});
+  if (!r) return true;
+  if (r.sha256 !== f.sha256) return true;
+  const want = resolveOverride(f.remote);
+  return want !== undefined && normalizeType(r.contentType) !== normalizeType(want);
+}
+
+const toUpload = local.filter(needsUpload);
+const retypedOnly = toUpload.filter((f) => {
+  const r = remote.get(f.remote);
+  return r && r.sha256 === f.sha256;
+}).length;
 const localSet = new Set(local.map((f) => f.remote));
 const toDelete = [...remote.keys()].filter((k) => !localSet.has(k));
 const skipped = local.length - toUpload.length;
 
-console.log(`Plan: ${toUpload.length} upload(s), ${toDelete.length} delete(s), ${skipped} unchanged`);
+console.log(
+  `Plan: ${toUpload.length} upload(s) (${retypedOnly} for Content-Type only), ` +
+    `${toDelete.length} delete(s), ${skipped} unchanged`
+);
 
 const uploadErrors = await pmap(toUpload, CONCURRENCY, async (f) => {
   await upload(f.remote, f.buf);

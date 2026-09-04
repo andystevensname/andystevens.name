@@ -9,6 +9,12 @@ import { renderBody } from '../render-body.mjs';
 
 export const DEFAULT_BASE = 'https://andystevens.name';
 
+/**
+ * @param {{ id: string, data: Record<string, any>, body?: string }} raw
+ * @param {Record<string, any>} source Entry from the feed source registry.
+ * @param {{ base?: string }} [options]
+ * @returns {import('./types').FeedItem}
+ */
 export function toFeedItem(raw, source, { base = DEFAULT_BASE } = {}) {
   const { id, data, body } = raw;
   const slug = data.slug || id.replace(/\.[^.]+$/, '');
@@ -51,6 +57,11 @@ export function toFeedItem(raw, source, { base = DEFAULT_BASE } = {}) {
 }
 
 // Newest first; undated items sort last (stable within a date).
+/**
+ * @template {{ date: string | null }} T
+ * @param {T[]} items
+ * @returns {T[]}
+ */
 export function sortFeedItems(items) {
   const time = (item) => (item.date ? new Date(item.date).getTime() : 0);
   return [...items].sort((a, b) => time(b) - time(a));

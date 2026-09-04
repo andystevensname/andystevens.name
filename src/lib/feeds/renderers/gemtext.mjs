@@ -214,17 +214,29 @@ function renderHomeIndex(items, { collectionOrder, labels, webUrl }) {
   return lines.join('\n');
 }
 
-// The canonical capsule layout. Pass a legacy order to keep the home
-// page's collection list exactly where it was.
+// The order the capsule's home page has always listed collections in.
+// Deliberately not registry order — the two differ (writing sits third
+// here, sixth there) and this is the published layout.
 export const DEFAULT_COLLECTION_ORDER = [
   'articles', 'notes', 'writing', 'bookmarks', 'replies', 'awards', 'albums',
 ];
+
+// Legacy order first, then anything the registry has gained since, so a
+// newly added collection gets an index instead of silently vanishing.
+function orderCollections(collections) {
+  const present = new Set(collections);
+  return [
+    ...DEFAULT_COLLECTION_ORDER.filter((c) => present.has(c)),
+    ...collections.filter((c) => !DEFAULT_COLLECTION_ORDER.includes(c)),
+  ];
+}
 
 // items must already be sorted newest-first (sortFeedItems).
 export function renderGemtext(items, {
   collectionOrder = DEFAULT_COLLECTION_ORDER,
   webUrl = 'https://andystevens.name',
 } = {}) {
+  const order = orderCollections(collectionOrder);
   const files = new Map();
   const label = (collection) =>
     collection.charAt(0).toUpperCase() + collection.slice(1);
@@ -235,7 +247,7 @@ export function renderGemtext(items, {
       renderPost(item)
     );
   }
-  for (const collection of collectionOrder) {
+  for (const collection of order) {
     files.set(
       `${collection}/index.gmi`,
       renderCollectionIndex(label(collection), collection, items.filter((i) => i.collection === collection))
@@ -244,8 +256,8 @@ export function renderGemtext(items, {
   files.set(
     'index.gmi',
     renderHomeIndex(items, {
-      collectionOrder,
-      labels: Object.fromEntries(collectionOrder.map((c) => [c, label(c)])),
+      collectionOrder: order,
+      labels: Object.fromEntries(order.map((c) => [c, label(c)])),
       webUrl,
     })
   );

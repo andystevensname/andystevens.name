@@ -29,8 +29,8 @@ function getPhotoSrc(photoData: string | string[]): string {
         <a href={`/photos/${photo.id}/?album=${albumId}`}>
           <img
             src={`${src}?class=photo200`}
-            srcset={`${src}?class=photo200 200w, ${src}?class=photo400 400w`}
-            sizes="(min-width: 640px) 160px, 50vw"
+            srcset={`${src}?class=photo200 200w, ${src}?class=photo400 400w, ${src}?class=photo800 800w`}
+            sizes="(min-width: 640px) 200px, 50vw"
             alt={photo.data.alt ?? photo.data.title ?? ''}
             loading="lazy"
             decoding="async"

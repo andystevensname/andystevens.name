@@ -1,9 +1,0 @@
-2023-07-23 Other People's Email	1	/writing/other-peoples-email.txt		
-2021-08-09 Implementing Docs as Code - Lessons and Benefits	1	/writing/docs-as-code-jaxenter.txt		
-2021-06-21 A RedMonk Conversation: Documenting the Alternative Cloud	1	/writing/docs-as-code-redmonk.txt		
-2018-06-06 Notes on a Living Room	1	/writing/notes-on-a-living-room.txt		
-2015-04-01 Selected Poems	1	/writing/prick-of-the-spindle.txt		
-2013-09-01 For the Nude Descending the Stairs Towards Me	1	/writing/nude-descending-the-stairs.txt		
-2012-06-01 Aunty Marcy	1	/writing/aunty-marcy.txt		
-All writing	0	/writing/		
-Home	0	/		

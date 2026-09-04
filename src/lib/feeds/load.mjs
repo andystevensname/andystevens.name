@@ -9,6 +9,15 @@ import { getCollection } from 'astro:content';
 import { sourcesForFeeds } from './sources.mjs';
 import { toFeedItem, sortFeedItems } from './item.mjs';
 
+/**
+ * @param {object} [options]
+ * @param {string[]} [options.feeds] Feed keys; collections are those the
+ *   registry says belong to any of them.
+ * @param {string} [options.base] Absolute site origin for item URLs.
+ *   Defaults to DEFAULT_BASE in item.mjs.
+ * @param {boolean} [options.includeUnpublished]
+ * @returns {Promise<import('./types').FeedItem[]>}
+ */
 export async function getFeedItems({ feeds = ['rss'], base, includeUnpublished = false } = {}) {
   const sources = sourcesForFeeds(feeds);
   const collections = await Promise.all(

@@ -1,9 +1,0 @@
-dea6c
-
-Published: 2026-05-08
-
-I'm enabling an optional notifications feature, should anyone decide to install this site as a PWA. I know the oldschool among us will prefer RSS or social media, but maybe someone's crazy enough to want notifications.
-
-
-=> /notes/ All notes
-=> / Home

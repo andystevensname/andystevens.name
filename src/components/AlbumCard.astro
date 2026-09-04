@@ -19,9 +19,9 @@ const { album } = Astro.props;
     <a href={album.url}>
       <img
         src={`${album.photo}?class=photo400`}
-        srcset={`${album.photo}?class=photo200 200w, ${album.photo}?class=photo400 400w`}
-        sizes="(max-width: 480px) 200px, 400px"
-        alt={album.title ?? 'Album cover'}
+        srcset={`${album.photo}?class=photo200 200w, ${album.photo}?class=photo400 400w, ${album.photo}?class=photo800 800w`}
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 320px"
+        alt=""
         loading="lazy"
         decoding="async"
         width={album.photoWidth}
