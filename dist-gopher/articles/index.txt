@@ -1,8 +1,0 @@
-2026-06-16 Restoring the Onscreen iPad Keyboard	1	/articles/restoring-onscreen-ipad-keyboard.txt		
-2026-03-24 Moving to Astro (with AI doing the heavy lifting)	1	/articles/moving-to-astro-with-ai.txt		
-2022-11-12 The Rules of Fear	1	/articles/the-rules-of-fear.txt		
-2022-11-08 I Don't Understand Poetry	1	/articles/i-dont-understand-poetry.txt		
-2022-10-16 On Feeling Alive	1	/articles/on-feeling-alive.txt		
-2021-09-12 On Forgetting	1	/articles/on-forgetting.txt		
-All articles	0	/articles/		
-Home	0	/		
