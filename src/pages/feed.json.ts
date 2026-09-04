@@ -1,6 +1,6 @@
 import type { APIContext } from 'astro';
-import { getFeedItems } from '../lib/feeds/load';
-import { renderJsonFeed } from '../lib/feeds/renderers/json-feed';
+import { getFeedItems } from '../lib/feeds/load.mjs';
+import { renderJsonFeed } from '../lib/feeds/renderers/json-feed.mjs';
 
 export async function GET(context: APIContext) {
   const items = await getFeedItems({ feeds: ['json'], base: context.site!.href });
