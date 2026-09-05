@@ -99,6 +99,7 @@ await writeTree(
       label: s.label,
     })),
     ...(process.env.GOPHER_HOST ? { host: process.env.GOPHER_HOST } : {}),
+    ...(process.env.GOPHER_PORT ? { port: Number(process.env.GOPHER_PORT) } : {}),
     webUrl: WEB_URL,
   })
 );
