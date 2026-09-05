@@ -58,7 +58,33 @@ function extractLinks(tokens, acc = []) {
   return acc;
 }
 
-export function tokensToGemtext(tokens) {
+// Extracted link lines carry whatever href the markdown used. A rooted
+// path like /photos/foo/ only means something if a reader can follow it
+// *in the tree being rendered*: the capsule resolves it against the
+// capsule root, while a gopher post body cannot follow anything at all
+// (type-0 text files have no link syntax, so those lines are prose). So
+// each renderer declares what is reachable, and anything else is rewritten
+// to an absolute web URL — which is always usable, even if only by hand.
+//
+// carried: a Set of collection names reachable in this tree, or null for
+// "nothing is reachable".
+export function hrefResolver({ base = 'https://andystevens.name', carried = null } = {}) {
+  const origin = base.replace(/\/$/, '');
+  return (href) => {
+    if (typeof href !== 'string' || !href.startsWith('/')) return href;
+    if (href.startsWith('//')) return href; // protocol-relative; leave alone
+    if (carried) {
+      const segment = href.slice(1).split(/[/?#]/)[0];
+      if (segment === '' || carried.has(segment)) return href;
+    }
+    return origin + href;
+  };
+}
+
+// `absolutize` defaults to identity so the conversion is unchanged for
+// any caller that doesn't care where links point.
+export function tokensToGemtext(tokens, { absolutize = (href) => href } = {}) {
+  const linkLine = (l) => `=> ${absolutize(l.href)} ${l.text}`;
   const lines = [];
   for (const t of tokens) {
     switch (t.type) {
@@ -67,7 +93,7 @@ export function tokensToGemtext(tokens) {
         lines.push('#'.repeat(depth) + ' ' + inlineText(t.tokens));
         lines.push('');
         for (const l of extractLinks(t.tokens)) {
-          lines.push(`=> ${l.href} ${l.text}`);
+          lines.push(linkLine(l));
         }
         break;
       }
@@ -76,7 +102,7 @@ export function tokensToGemtext(tokens) {
         const links = extractLinks(t.tokens);
         if (links.length) {
           lines.push('');
-          for (const l of links) lines.push(`=> ${l.href} ${l.text}`);
+          for (const l of links) lines.push(linkLine(l));
         }
         lines.push('');
         break;
@@ -88,7 +114,7 @@ export function tokensToGemtext(tokens) {
         lines.push('');
         break;
       case 'blockquote': {
-        const inner = tokensToGemtext(t.tokens);
+        const inner = tokensToGemtext(t.tokens, { absolutize });
         for (const line of inner.split('\n')) {
           if (line.startsWith('=>') || line.startsWith('```')) {
             // Don't quote link/preformatted lines — let them pass through.
@@ -108,7 +134,7 @@ export function tokensToGemtext(tokens) {
             .flatMap((it) => it.tokens || [{ type: 'text', text: it.raw || '' }]);
           lines.push('* ' + inlineText(inner));
           for (const l of extractLinks(inner)) {
-            lines.push(`=> ${l.href} ${l.text}`);
+            lines.push(linkLine(l));
           }
         }
         lines.push('');
@@ -141,7 +167,7 @@ export function tokensToGemtext(tokens) {
 
 const fmtDate = (item) => (item.date ? item.date.slice(0, 10) : '');
 
-function renderPost(item) {
+function renderPost(item, absolutize) {
   const lines = [];
   lines.push(`# ${item.title || item.slug}`);
   lines.push('');
@@ -163,7 +189,7 @@ function renderPost(item) {
   }
 
   lines.push('');
-  lines.push(tokensToGemtext(marked.lexer(item.markdown)));
+  lines.push(tokensToGemtext(marked.lexer(item.markdown), { absolutize }));
   lines.push('───────────────────────');
   lines.push(`=> /${item.collection}/ All ${item.collection}`);
   lines.push('=> / Home');
@@ -237,6 +263,10 @@ export function renderGemtext(items, {
   webUrl = 'https://andystevens.name',
 } = {}) {
   const order = orderCollections(collectionOrder);
+  // A relative link works in the capsule only if the capsule carries that
+  // collection; photos/likes/code are excluded from the gemini feed, so a
+  // link into them has to leave for the web.
+  const absolutize = hrefResolver({ base: webUrl, carried: new Set(order) });
   const files = new Map();
   const label = (collection) =>
     collection.charAt(0).toUpperCase() + collection.slice(1);
@@ -244,7 +274,7 @@ export function renderGemtext(items, {
   for (const item of items) {
     files.set(
       `${item.collection}/${item.slug}.gmi`,
-      renderPost(item)
+      renderPost(item, absolutize)
     );
   }
   for (const collection of order) {

@@ -28,7 +28,7 @@
 // embed a link inside a type-0 file anyway.
 
 import { marked } from 'marked';
-import { tokensToGemtext } from './gemtext.mjs';
+import { tokensToGemtext, hrefResolver } from './gemtext.mjs';
 
 const CRLF = '\r\n';
 
@@ -67,7 +67,7 @@ const listLabel = (item) =>
 const postLine = (item, { host, port }) =>
   line('0', listLabel(item), `/${item.collection}/${item.slug}.txt`, host, port);
 
-function renderPost(item) {
+function renderPost(item, absolutize) {
   const lines = [];
   lines.push(item.title || item.slug);
   lines.push('');
@@ -88,7 +88,7 @@ function renderPost(item) {
   }
 
   lines.push('');
-  lines.push(tokensToGemtext(marked.lexer(item.markdown)));
+  lines.push(tokensToGemtext(marked.lexer(item.markdown), { absolutize }));
   lines.push('');
   lines.push(`=> /${item.collection}/ All ${item.collection}`);
   lines.push('=> / Home');
@@ -135,9 +135,13 @@ export function renderGopher(items, {
   if (!collections) throw new Error('renderGopher: { collections } is required');
   const files = new Map();
   const addressing = { host, port };
+  // carried: null — a gopher post is a plain text file, so no link inside
+  // it can be followed by any client. Every rooted path becomes an
+  // absolute web URL the reader can at least copy.
+  const absolutize = hrefResolver({ base: webUrl, carried: null });
 
   for (const item of items) {
-    files.set(`${item.collection}/${item.slug}.txt`, renderPost(item));
+    files.set(`${item.collection}/${item.slug}.txt`, renderPost(item, absolutize));
   }
   for (const { collection, label } of collections) {
     files.set(
