@@ -13,12 +13,27 @@
 # the target arch, so this build is immune to emulation being absent.
 # /certs is created in agate-base instead (see agate-base.Dockerfile).
 #
-# agate generates its own ECDSA cert on first run if /certs is empty.
-# Without a persistent volume on Bunny Magic Containers, a fresh cert
-# is created per container start — meaning every redeploy invalidates
-# the cert and Gemini clients (TOFU) will warn on the next visit.
-# Acceptable for a low-traffic personal capsule; revisit with a
-# persistent volume or pre-baked ECDSA cert if it gets annoying.
+# agate generates its own ECDSA cert on first run if its certs directory
+# is empty, so that directory must persist or every redeploy issues a new
+# cert and Gemini clients (TOFU) warn on the next visit. A Bunny volume
+# (agate-certs) is mounted at /certs to hold it.
+#
+# It is pointed at /certs/live, NOT /certs, and that subdirectory matters.
+# agate reads every subdirectory of its certs directory as a per-hostname
+# cert directory expecting cert.der and key.der. A Bunny volume is ext4,
+# so mounting one creates lost+found at its root — which agate reads as a
+# hostname, finds empty, and refuses to start:
+#
+#   A folder for lost+found exists, but there is no certificate or key file.
+#
+# It then exits 1, and a crash-looping container takes the whole Magic
+# Containers app unready — which on 2026-09-05 took the gopher server down
+# with it, despite gopher being healthy. Keeping agate one level below the
+# mount point puts lost+found outside what it scans.
+#
+# mkdir runs in the CMD rather than a RUN step, so it happens at container
+# start on the target host and this build still executes nothing under
+# emulation (see above).
 
 # Base image is configurable via build arg so the workflow can pass
 # whatever AGATE_BASE_IMAGE points at. Default matches the workflow's
@@ -30,4 +45,4 @@ COPY dist-gemini/ /content/
 ENV GEMINI_HOSTNAME=gemini.andystevens.name
 EXPOSE 1965
 
-CMD ["sh", "-c", "exec agate --content /content --certs /certs --addr 0.0.0.0:1965 --hostname \"${GEMINI_HOSTNAME}\""]
+CMD ["sh", "-c", "mkdir -p /certs/live && exec agate --content /content --certs /certs/live --addr 0.0.0.0:1965 --hostname \"${GEMINI_HOSTNAME}\""]
