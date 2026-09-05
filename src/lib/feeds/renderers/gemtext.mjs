@@ -8,6 +8,7 @@
 // HTML-stripped because the manifest carries schema-processed data.
 
 import { marked } from 'marked';
+import { parseTarget, toWebUrl, treeIndex } from './links.mjs';
 
 // ───── markdown → gemtext ────────────────────────────────────────────────
 
@@ -58,26 +59,23 @@ function extractLinks(tokens, acc = []) {
   return acc;
 }
 
-// Extracted link lines carry whatever href the markdown used. A rooted
-// path like /photos/foo/ only means something if a reader can follow it
-// *in the tree being rendered*: the capsule resolves it against the
-// capsule root, while a gopher post body cannot follow anything at all
-// (type-0 text files have no link syntax, so those lines are prose). So
-// each renderer declares what is reachable, and anything else is rewritten
-// to an absolute web URL — which is always usable, even if only by hand.
-//
-// carried: a Set of collection names reachable in this tree, or null for
-// "nothing is reachable".
-export function hrefResolver({ base = 'https://andystevens.name', carried = null } = {}) {
-  const origin = base.replace(/\/$/, '');
+// Capsule-shaped addresses. Links that land inside the capsule stay
+// relative — that keeps the reader in Geminispace — but the path has to be
+// translated: the capsule stores posts as {collection}/{slug}.gmi, not the
+// web's {collection}/{slug}/. Collection paths need no translation because
+// agate serves index.gmi for a directory request.
+export function gemtextHref({ base = 'https://andystevens.name', index }) {
   return (href) => {
-    if (typeof href !== 'string' || !href.startsWith('/')) return href;
-    if (href.startsWith('//')) return href; // protocol-relative; leave alone
-    if (carried) {
-      const segment = href.slice(1).split(/[/?#]/)[0];
-      if (segment === '' || carried.has(segment)) return href;
+    const t = parseTarget(href);
+    if (!t) return href;
+    if (t.kind === 'root') return '/';
+    if (t.kind === 'collection' && index.hasCollection(t.collection)) {
+      return `/${t.collection}/`;
     }
-    return origin + href;
+    if (t.kind === 'post' && index.hasPost(t.collection, t.slug)) {
+      return `/${t.collection}/${t.slug}.gmi`;
+    }
+    return toWebUrl(base, href);
   };
 }
 
@@ -263,10 +261,7 @@ export function renderGemtext(items, {
   webUrl = 'https://andystevens.name',
 } = {}) {
   const order = orderCollections(collectionOrder);
-  // A relative link works in the capsule only if the capsule carries that
-  // collection; photos/likes/code are excluded from the gemini feed, so a
-  // link into them has to leave for the web.
-  const absolutize = hrefResolver({ base: webUrl, carried: new Set(order) });
+  const absolutize = gemtextHref({ base: webUrl, index: treeIndex(items) });
   const files = new Map();
   const label = (collection) =>
     collection.charAt(0).toUpperCase() + collection.slice(1);

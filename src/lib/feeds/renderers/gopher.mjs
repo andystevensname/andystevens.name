@@ -28,7 +28,8 @@
 // embed a link inside a type-0 file anyway.
 
 import { marked } from 'marked';
-import { tokensToGemtext, hrefResolver } from './gemtext.mjs';
+import { tokensToGemtext } from './gemtext.mjs';
+import { parseTarget, toWebUrl, treeIndex } from './links.mjs';
 
 const CRLF = '\r\n';
 
@@ -45,6 +46,31 @@ export const DEFAULT_GOPHER_PORT = 70;
 const NULL_SELECTOR = 'fake';
 const NULL_HOST = 'error.host';
 const NULL_PORT = 1;
+
+// Gopher-shaped addresses for links inside a post body.
+//
+// A gopher URL carries the item type as the first path segment — /0/ for a
+// text file, /1/ for a menu — so these cannot be relative, and the mapper
+// has to know whether the target is a post or a collection. Sending a
+// reader who is already in a gopher client out to https:// for a document
+// sitting in the same tree would be a pointless trip to a web browser, so
+// the web is the fallback only for what gopher genuinely does not carry
+// (photos, likes and code are excluded from the feed).
+function gopherHref({ base, host, port, index }) {
+  const authority = Number(port) === 70 ? host : `${host}:${port}`;
+  return (href) => {
+    const t = parseTarget(href);
+    if (!t) return href;
+    if (t.kind === 'root') return `gopher://${authority}/1/`;
+    if (t.kind === 'collection' && index.hasCollection(t.collection)) {
+      return `gopher://${authority}/1/${t.collection}/`;
+    }
+    if (t.kind === 'post' && index.hasPost(t.collection, t.slug)) {
+      return `gopher://${authority}/0/${t.collection}/${t.slug}.txt`;
+    }
+    return toWebUrl(base, href);
+  };
+}
 
 const fmtDate = (item) => (item.date ? item.date.slice(0, 10) : '');
 
@@ -90,8 +116,10 @@ function renderPost(item, absolutize) {
   lines.push('');
   lines.push(tokensToGemtext(marked.lexer(item.markdown), { absolutize }));
   lines.push('');
-  lines.push(`=> /${item.collection}/ All ${item.collection}`);
-  lines.push('=> / Home');
+  // The same treatment the body links get: an inert "/notes/" in a text
+  // file is not something a reader can act on; a gopher URL is.
+  lines.push(`=> ${absolutize(`/${item.collection}/`)} All ${item.collection}`);
+  lines.push(`=> ${absolutize('/')} Home`);
   return lines.join('\n');
 }
 
@@ -135,10 +163,7 @@ export function renderGopher(items, {
   if (!collections) throw new Error('renderGopher: { collections } is required');
   const files = new Map();
   const addressing = { host, port };
-  // carried: null — a gopher post is a plain text file, so no link inside
-  // it can be followed by any client. Every rooted path becomes an
-  // absolute web URL the reader can at least copy.
-  const absolutize = hrefResolver({ base: webUrl, carried: null });
+  const absolutize = gopherHref({ base: webUrl, host, port, index: treeIndex(items) });
 
   for (const item of items) {
     files.set(`${item.collection}/${item.slug}.txt`, renderPost(item, absolutize));
