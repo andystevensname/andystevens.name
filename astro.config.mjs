@@ -7,9 +7,6 @@ import remarkFediverseHandle from './src/lib/remark-fediverse-handle.mjs';
 export default defineConfig({
   site: 'https://andystevens.name',
   output: 'static',
-  redirects: {
-    '/blog': '/articles/',
-  },
   build: {
     inlineStylesheets: 'always',
   },
