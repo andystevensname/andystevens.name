@@ -1,4 +1,4 @@
-// Apex redirects, applied to the pull zone as Bunny Edge Rules by
+// Apex edge configuration, applied to the pull zone as Bunny Edge Rules by
 // scripts/sync-edge-rules.mjs.
 //
 // These live in the repo deliberately. The previous set lived in
@@ -32,5 +32,33 @@ export const redirects = [
     from: ['/blog', '/blog/'],
     to: `https://${HOST}/articles/`,
     status: 301,
+  },
+];
+
+// ── browser caching ──────────────────────────────────────────────────────
+//
+// The zone currently tells browsers:
+//
+//   HTML                    max-age=2592000    30 days
+//   /_astro/*, /fonts/*     max-age=25600000   ~296 days
+//
+// Neither comes from an edge rule — both are zone settings. 296 days for
+// content-addressed assets is right; 30 days for HTML means a returning
+// reader keeps a month-old page, because the CDN purge on each deploy
+// clears Bunny's edges and cannot reach a browser cache. That is why the
+// CSP fix appeared not to work, and it is also why a new post does not
+// reach a returning visitor for up to a month.
+//
+// Fixing that means dropping the zone's Browser Cache Expiration so HTML
+// revalidates — which would take the assets down with it, since the same
+// setting covers both. So the assets get their long life restated here as
+// an explicit rule FIRST, and only then is the zone default lowered.
+// Merging this before changing the setting is the whole point of the
+// ordering; see the readme note.
+export const browserCache = [
+  {
+    description: 'immutable assets - long browser cache',
+    paths: ['/_astro/*', '/fonts/*'],
+    seconds: 31536000, // 1 year; these URLs are content-addressed
   },
 ];
