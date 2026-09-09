@@ -89,6 +89,19 @@ jobs:
           BUNNY_EDGE_SCRIPT_ID: ${{ vars.BUNNY_EDGE_SCRIPT_ID }}
         run: node scripts/deploy-edge-script.mjs
 
+      # Apex redirects live in edge-redirects.mjs and are reconciled onto the
+      # pull zone here. The previous set lived in netlify.toml and vanished
+      # with it (0e5d602), leaving /feed, /index.xml and /feed/index.xml
+      # 404ing unnoticed for months — a dashboard-only edge rule can be lost
+      # the same way, so they are declared in the repo and re-applied every
+      # deploy. Guarded on the pull zone id so it stays inert until set.
+      - name: Sync apex edge redirects
+        if: success() && vars.BUNNY_PULL_ZONE_ID != ''
+        env:
+          BUNNY_API_KEY: ${{ secrets.BUNNY_API_KEY }}
+          BUNNY_PULL_ZONE_ID: ${{ vars.BUNNY_PULL_ZONE_ID }}
+        run: node scripts/sync-edge-rules.mjs
+
       # Storage uploads don't invalidate the CDN (30-day max-age on
       # pages), so purge the pull zone or the edges keep serving stale
       # content — including cached 404s for brand-new post URLs. Runs
