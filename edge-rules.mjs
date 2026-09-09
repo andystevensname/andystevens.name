@@ -1,4 +1,4 @@
-// Apex redirects, applied to the pull zone as Bunny Edge Rules by
+// Apex edge configuration, applied to the pull zone as Bunny Edge Rules by
 // scripts/sync-edge-rules.mjs.
 //
 // These live in the repo deliberately. The previous set lived in
@@ -32,5 +32,28 @@ export const redirects = [
     from: ['/blog', '/blog/'],
     to: `https://${HOST}/articles/`,
     status: 301,
+  },
+];
+
+// ── browser caching ──────────────────────────────────────────────────────
+//
+// The pull zone tells browsers to cache EVERYTHING for 30 days:
+//
+//   cache-control: public, max-age=2592000
+//
+// on HTML and on fingerprinted assets alike. For /_astro/* that is right —
+// the filename changes when the content does. For HTML it means a returning
+// reader keeps a month-old page: the CDN purge on each deploy clears Bunny's
+// edges but cannot reach a browser cache. That is why the CSP fix appeared
+// not to work — the browser was still showing pre-fix HTML, blocked by its
+// own stale policy, while curl saw the corrected page.
+//
+// So the zone default becomes short (see readme: Browser Cache Expiration)
+// and the fingerprinted paths get their long life back explicitly here.
+export const browserCache = [
+  {
+    description: 'immutable assets - long browser cache',
+    paths: ['/_astro/*', '/fonts/*'],
+    seconds: 31536000, // 1 year; these URLs are content-addressed
   },
 ];

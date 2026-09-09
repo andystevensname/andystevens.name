@@ -89,13 +89,14 @@ jobs:
           BUNNY_EDGE_SCRIPT_ID: ${{ vars.BUNNY_EDGE_SCRIPT_ID }}
         run: node scripts/deploy-edge-script.mjs
 
-      # Apex redirects live in edge-redirects.mjs and are reconciled onto the
-      # pull zone here. The previous set lived in netlify.toml and vanished
-      # with it (0e5d602), leaving /feed, /index.xml and /feed/index.xml
-      # 404ing unnoticed for months — a dashboard-only edge rule can be lost
-      # the same way, so they are declared in the repo and re-applied every
-      # deploy. Guarded on the pull zone id so it stays inert until set.
-      - name: Sync apex edge redirects
+      # Apex edge config (redirects + browser cache) lives in edge-rules.mjs
+      # and is reconciled onto the pull zone here. The previous redirects
+      # lived in netlify.toml and vanished with it (0e5d602), leaving /feed,
+      # /index.xml and /feed/index.xml 404ing unnoticed for months — a
+      # dashboard-only edge rule can be lost the same way, so these are
+      # declared in the repo and re-applied every deploy. Guarded on the pull
+      # zone id so it stays inert until set.
+      - name: Sync apex edge rules
         if: success() && vars.BUNNY_PULL_ZONE_ID != ''
         env:
           BUNNY_API_KEY: ${{ secrets.BUNNY_API_KEY }}

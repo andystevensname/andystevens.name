@@ -1,4 +1,4 @@
-// Reconcile the redirects declared in edge-redirects.mjs onto the apex
+// Reconcile the edge configuration declared in edge-rules.mjs onto the apex
 // pull zone as Bunny Edge Rules.
 //
 //   node scripts/sync-edge-rules.mjs            apply
@@ -19,7 +19,7 @@
 // also configured by hand and this script has no business deleting what it
 // did not create.
 
-import { redirects, HOST } from '../edge-redirects.mjs';
+import { redirects, browserCache, HOST } from '../edge-rules.mjs';
 
 const API = 'https://api.bunny.net';
 const key = process.env.BUNNY_API_KEY;
@@ -61,25 +61,50 @@ async function api(path, method = 'GET', body) {
 // action type". ActionParameter1 is the destination and ActionParameter2
 // appears to be the status code. Run --dump against a rule built by hand
 // in the dashboard to confirm the encoding before trusting this.
-function toEdgeRule(redirect, guid) {
+function rule({ description, paths, actionType, param1, param2 }, guid) {
   return {
     Guid: guid ?? null,
-    ActionType: 1,
-    ActionParameter1: redirect.to,
-    ActionParameter2: String(redirect.status),
-    Description: redirect.description,
+    ActionType: actionType,
+    ActionParameter1: param1,
+    ActionParameter2: param2 ?? null,
+    Description: description,
     Enabled: true,
     TriggerMatchingType: 0,
     Triggers: [
       {
-        Type: 0,
-        PatternMatchingType: 0,
-        PatternMatches: redirect.from.map((path) => `*://${HOST}${path}`),
+        Type: 0, // Url
+        PatternMatchingType: 0, // MatchAny
+        PatternMatches: paths.map((path) => `*://${HOST}${path}`),
         Parameter1: null,
       },
     ],
   };
 }
+
+// ActionType 1 = Redirect, 16 = OverrideBrowserCacheTime; trigger Type 0 =
+// Url and both matching types 0 = MatchAny. Those are documented.
+//
+// What is NOT documented is what a Redirect action does with its status
+// code — the spec describes ActionParameter1..3 only as "depends on the
+// action type". ActionParameter2 is the best reading. Likewise
+// OverrideBrowserCacheTime takes its duration in ActionParameter1, in
+// seconds, which is consistent but unconfirmed. Run --dump against rules
+// built by hand in the dashboard to check both before trusting them.
+const declaredRules = [
+  ...redirects.map((r) => ({
+    description: r.description,
+    paths: r.from,
+    actionType: 1,
+    param1: r.to,
+    param2: String(r.status),
+  })),
+  ...browserCache.map((c) => ({
+    description: c.description,
+    paths: c.paths,
+    actionType: 16,
+    param1: String(c.seconds),
+  })),
+];
 
 const zone = await api(`/pullzone/${zoneId}`);
 const existing = zone.EdgeRules ?? [];
@@ -90,7 +115,7 @@ if (dump) {
   process.exit(0);
 }
 
-const declared = new Set(redirects.map((r) => r.description));
+const declared = new Set(declaredRules.map((r) => r.description));
 const unmanaged = existing.filter((r) => !declared.has(r.Description));
 if (unmanaged.length) {
   console.log(`Leaving ${unmanaged.length} rule(s) alone (not declared here):`);
@@ -99,12 +124,12 @@ if (unmanaged.length) {
 
 let added = 0;
 let updated = 0;
-for (const redirect of redirects) {
-  const match = existing.find((r) => r.Description === redirect.description);
-  const payload = toEdgeRule(redirect, match?.Guid);
+for (const declaredRule of declaredRules) {
+  const match = existing.find((r) => r.Description === declaredRule.description);
+  const payload = rule(declaredRule, match?.Guid);
 
   if (dryRun) {
-    console.log(`${match ? 'update' : 'add'}  ${redirect.description}`);
+    console.log(`${match ? 'update' : 'add'}  ${declaredRule.description}`);
     console.log(JSON.stringify(payload, null, 2));
     continue;
   }
@@ -112,11 +137,11 @@ for (const redirect of redirects) {
   await api(`/pullzone/${zoneId}/edgerules/addOrUpdate`, 'POST', payload);
   if (match) updated += 1;
   else added += 1;
-  console.log(`  ${match ? 'updated' : 'added'}: ${redirect.description} -> ${redirect.to} (${redirect.status})`);
+  console.log(`  ${match ? 'updated' : 'added'}: ${declaredRule.description}`);
 }
 
 console.log(
   dryRun
-    ? `Dry run: ${redirects.length} rule(s) would be applied to pull zone ${zoneId}.`
+    ? `Dry run: ${declaredRules.length} rule(s) would be applied to pull zone ${zoneId}.`
     : `Edge rules synced: ${added} added, ${updated} updated.`
 );
