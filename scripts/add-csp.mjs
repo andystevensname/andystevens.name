@@ -75,8 +75,7 @@ function inlineHashes(html) {
   };
 }
 
-function policyFor(html, isAdmin) {
-  const { style, script } = inlineHashes(html);
+function policyFor({ style, script }, isAdmin) {
   const connect = ["'self'", WEBMENTION, MEDIA];
   if (AP_BASE) connect.push(AP_BASE);
   // The CMS fetches data: URIs for embedded UI assets and previews uploads
@@ -115,13 +114,51 @@ async function* htmlFiles(dir) {
   }
 }
 
+const isAdminPage = (file) => relative(DIST, file).split(sep)[0] === 'admin';
+
+// Every public page ships the SAME policy: the union of every inline hash
+// in the build.
+//
+// A per-page hash set looks tighter but breaks client-side navigation.
+// ClientRouter swaps the new document's body into the existing one, and a
+// CSP is fixed when the document is parsed — a <meta> policy arriving in
+// swapped-in markup cannot replace the active one. So the landing page's
+// policy still governs, the incoming page's inline <style> hashes to
+// something it does not list, and the browser blocks it:
+//
+//   Applying inline style violates the following Content Security Policy
+//   directive 'style-src 'self' 'sha256-UgYQ…''. The action has been blocked.
+//   Uncaught InvalidStateError: Transition was aborted because of invalid state
+//
+// The transition then aborts mid-swap and the visitor gets a blank page,
+// while loading the same URL directly works — because then it is the one
+// that set the policy. Reported 2026-09-09, reproduced on /albums/.
+//
+// The union is small: 8 distinct hashes across 684 pages, since 3 are the
+// Layout scripts present on every page and one style hash covers 665 of
+// them. Sharing them costs a few hundred bytes and stays hash-based — a
+// page admits only inline content this build actually ships, not arbitrary
+// injected markup, which is what 'unsafe-inline' would have meant.
+const files = [];
+for await (const file of htmlFiles(DIST)) files.push(file);
+
+const shared = { style: new Set(), script: new Set() };
+for (const file of files) {
+  if (isAdminPage(file)) continue; // separate surface, keeps its own policy
+  const { style, script } = inlineHashes(await readFile(file, 'utf8'));
+  for (const h of style) shared.style.add(h);
+  for (const h of script) shared.script.add(h);
+}
+const sharedHashes = { style: [...shared.style], script: [...shared.script] };
+
 let patched = 0;
-for await (const file of htmlFiles(DIST)) {
+for (const file of files) {
   const html = await readFile(file, 'utf8');
   if (html.includes('http-equiv="Content-Security-Policy"')) continue;
 
-  const isAdmin = relative(DIST, file).split(sep)[0] === 'admin';
-  const meta = `<meta http-equiv="Content-Security-Policy" content="${policyFor(html, isAdmin)}">`;
+  const isAdmin = isAdminPage(file);
+  const hashes = isAdmin ? inlineHashes(html) : sharedHashes;
+  const meta = `<meta http-equiv="Content-Security-Policy" content="${policyFor(hashes, isAdmin)}">`;
 
   // Must sit before the first inline <style>/<script> to govern it, and
   // after <meta charset> so the charset stays inside the first 1024 bytes.
@@ -135,4 +172,8 @@ for await (const file of htmlFiles(DIST)) {
   patched += 1;
 }
 
-console.log(`CSP: injected into ${patched} page(s)${AP_BASE ? '' : ' (PUBLIC_AP_BASE unset — push endpoints omitted from connect-src)'}`);
+console.log(
+  `CSP: injected into ${patched} page(s); ` +
+    `${sharedHashes.script.length} script + ${sharedHashes.style.length} style hash(es) shared site-wide` +
+    `${AP_BASE ? '' : ' (PUBLIC_AP_BASE unset — push endpoints omitted from connect-src)'}`
+);
