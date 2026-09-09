@@ -1,4 +1,6 @@
-const VERSION = 'v3';
+// Bumped to v4 so activate() drops andystevens-v3, which holds HTML cached
+// under the old long max-age.
+const VERSION = 'v4';
 const CACHE = `andystevens-${VERSION}`;
 const OFFLINE_URL = '/offline';
 const PRECACHE = [
@@ -16,8 +18,13 @@ self.addEventListener('install', (event) => {
 
 self.addEventListener('activate', (event) => {
   event.waitUntil((async () => {
+    // Navigation preload is deliberately disabled. The preload request is
+    // issued by the browser with normal HTTP cache semantics, so it would
+    // hand back exactly the stale HTML the document path below exists to
+    // bypass. Worth re-enabling once no browser can still be holding a page
+    // cached under the old max-age (see the fetch handler).
     if (self.registration.navigationPreload) {
-      await self.registration.navigationPreload.enable();
+      await self.registration.navigationPreload.disable();
     }
     const keys = await caches.keys();
     await Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)));
@@ -85,21 +92,39 @@ self.addEventListener('notificationclick', (event) => {
   })());
 });
 
+// Content-addressed paths: the filename changes when the bytes do, so these
+// are safe to serve from cache indefinitely. Everything else on this origin
+// is a document.
+const IMMUTABLE = /^\/(_astro|fonts)\//;
+
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   if (request.method !== 'GET') return;
 
-  if (request.mode === 'navigate') {
+  const url = new URL(request.url);
+  const isDocument =
+    request.mode === 'navigate' ||
+    (url.origin === self.location.origin && !IMMUTABLE.test(url.pathname));
+
+  // Documents: network-first, and forced to revalidate.
+  //
+  // Two things were wrong here. Only request.mode === 'navigate' took this
+  // path, but Astro's ClientRouter fetches the next page with plain fetch(),
+  // so a clicked link fell through to the cache-first branch below and got
+  // whatever was cached — permanently one navigation stale.
+  //
+  // And a plain fetch() honours the HTTP cache. The zone served HTML with
+  // max-age=2592000, briefly 25600000, so a browser can hold a page for
+  // months; that is how stale HTML — and the stale per-page CSP that blanked
+  // client-side navigations — outlived the deploy that fixed it. 'no-cache'
+  // forces revalidation regardless of freshness while still allowing a 304,
+  // which is the only way to reach a browser that already cached a page.
+  if (isDocument) {
     event.respondWith((async () => {
       const cache = await caches.open(CACHE);
       try {
-        const preload = await event.preloadResponse;
-        if (preload) {
-          cache.put(request, preload.clone());
-          return preload;
-        }
-        const network = await fetch(request);
-        cache.put(request, network.clone());
+        const network = await fetch(request, { cache: 'no-cache' });
+        if (network.ok) cache.put(request, network.clone());
         return network;
       } catch {
         const cached = await cache.match(request);
@@ -109,6 +134,8 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Content-addressed assets and cross-origin media: cache-first, refreshed
+  // in the background.
   event.respondWith(caches.open(CACHE).then(async (cache) => {
     const cached = await cache.match(request);
     const network = fetch(request).then((response) => {
