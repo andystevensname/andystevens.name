@@ -54,7 +54,7 @@ These **cannot** go in `edge-script/main.mjs`. That script is bound to `ap.andys
 
 **Cache-control is deliberately split.** HTML is `max-age=0` so browsers revalidate; `/_astro/*` and `/fonts/*` are a year via the edge rule. The zone is set to *Respect origin Cache-Control* for the edge and an explicit browser expiration. Raising the HTML value means content updates stop reaching returning readers — a 30-day value previously hid a deployed fix for exactly that long.
 
-**The service worker serves documents network-first with forced revalidation** (`public/sw.js`). Only `/_astro/*`, `/fonts/*` and cross-origin media are cache-first. `ClientRouter` fetches pages with a plain `fetch()`, so anything cache-first there serves stale HTML on every clicked link. Navigation preload is disabled on purpose; the comment says when it can come back.
+**The service worker serves documents network-first with forced revalidation** (`public/sw.js`). Only `/_astro/*`, `/fonts/*` and cross-origin media are cache-first. `ClientRouter` fetches pages with a plain `fetch()`, so anything cache-first there serves stale HTML on every clicked link. Navigation preload is disabled on purpose — it would bypass that revalidation. **Re-enable on or after 2026-10-09**, once the last HTML cached under the old 30-day `max-age` has expired; `public/sw.js` carries the reasoning and the outside date.
 
 ## Deployment
 
