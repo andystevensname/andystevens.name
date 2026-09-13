@@ -62,3 +62,69 @@ export const browserCache = [
     seconds: 31536000, // 1 year; these URLs are content-addressed
   },
 ];
+
+// ── response security headers ──────────────────────────────────────────────
+//
+// These four headers were live on every response but existed ONLY as
+// hand-made dashboard edge rules — the "reported and left alone" set the
+// sync used to skip. That is the same failure mode as the lost feed
+// redirects: nothing recorded them, and nothing noticed when the COOP one
+// broke the CMS. So they are declared here and reconciled like everything
+// else. (The zone's ForceSSL and b-cdn.net-block rules set no response
+// header and stay hand-managed; the sync still leaves those alone.)
+//
+// The header-level CSP carries only what a <meta> tag cannot: frame-ancestors
+// is ignored in meta, so it must be a header. The full per-page policy is the
+// <meta> injected by add-csp.mjs; the two are enforced together.
+//
+// COOP is the one that bit us. Sveltia's OAuth popup opens at /admin/,
+// navigates cross-origin to Forgejo to authorize, then returns to
+// /admin/?code=…. Any COOP but unsafe-none puts the returning popup in a new
+// browsing-context group, which nulls window.opener — and Sveltia hands the
+// token back via window.opener.postMessage, gated on
+// window.opener.origin === location.origin. With opener null the gate fails
+// and it restarts auth instead of exchanging the code: the login loop.
+//
+// So COOP is split by scope, and deliberately with NO overlap rather than a
+// broad rule plus an /admin/ override: Bunny applies matching rules in order
+// and a second SetResponseHeader for the same header would make the result
+// depend on that order. MatchNone keeps the site rule off /admin/ entirely,
+// so exactly one COOP rule matches any URL and order cannot matter.
+const CSP_HEADER = "frame-ancestors 'none'; base-uri 'self'; object-src 'none'; form-action 'self'";
+
+export const responseHeaders = [
+  {
+    description: 'security header: Content-Security-Policy',
+    paths: ['/*'],
+    name: 'Content-Security-Policy',
+    value: CSP_HEADER,
+  },
+  {
+    description: 'security header: X-Content-Type-Options',
+    paths: ['/*'],
+    name: 'X-Content-Type-Options',
+    value: 'nosniff',
+  },
+  {
+    description: 'security header: Referrer-Policy',
+    paths: ['/*'],
+    name: 'Referrer-Policy',
+    value: 'strict-origin-when-cross-origin',
+  },
+  // Both COOP rules use the SAME path set so they are exact complements
+  // whatever Bunny's `*` does at the zero-character boundary: '/admin' alone
+  // covers the bare directory, '/admin/*' the page and its assets.
+  {
+    description: 'security header: Cross-Origin-Opener-Policy (off /admin)',
+    paths: ['/admin', '/admin/*'],
+    match: 'none', // every URL EXCEPT the CMS
+    name: 'Cross-Origin-Opener-Policy',
+    value: 'same-origin-allow-popups',
+  },
+  {
+    description: 'security header: Cross-Origin-Opener-Policy on /admin (Sveltia OAuth needs window.opener)',
+    paths: ['/admin', '/admin/*'],
+    name: 'Cross-Origin-Opener-Policy',
+    value: 'unsafe-none',
+  },
+];

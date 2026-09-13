@@ -89,7 +89,7 @@ jobs:
           BUNNY_EDGE_SCRIPT_ID: ${{ vars.BUNNY_EDGE_SCRIPT_ID }}
         run: node scripts/deploy-edge-script.mjs
 
-      # Apex edge config (redirects + browser cache) lives in edge-rules.mjs and are reconciled onto the
+      # Apex edge config (redirects + browser cache + response security headers) lives in edge-rules.mjs and are reconciled onto the
       # pull zone here. The previous set lived in netlify.toml and vanished
       # with it (0e5d602), leaving /feed, /index.xml and /feed/index.xml
       # 404ing unnoticed for months — a dashboard-only edge rule can be lost
