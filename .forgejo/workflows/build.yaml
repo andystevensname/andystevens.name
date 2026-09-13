@@ -152,8 +152,13 @@ jobs:
       # GEMINI_MC_CONTAINER are set, so it can't break builds before it's
       # configured. api_key reuses the account BUNNY_API_KEY (this action does
       # not support sub-user keys).
+      # Best-effort: the capsule is a text-protocol mirror, and Bunny's action
+      # crashes on a transient Magic Containers API 5xx (unhandled rejection)
+      # rather than retrying. A blip here must not fail the deploy or skip the
+      # syndication steps below — same rationale as those steps' own guard.
       - name: Redeploy gemini capsule (Bunny Magic Containers)
         if: success() && vars.GEMINI_MC_APP_ID != ''
+        continue-on-error: true
         uses: https://github.com/BunnyWay/actions/container-update-image@main
         with:
           api_key: ${{ secrets.BUNNY_API_KEY }}
@@ -186,8 +191,13 @@ jobs:
       # Pinned to the per-commit SHA tag for the same reason as the capsule:
       # Magic Containers pulls on redeploy, not on tag push, so the image
       # reference has to change for the pull to happen.
+      # Best-effort for the same reason as the gemini redeploy above: a
+      # transient Bunny 502 while saving the container config must not fail
+      # the deploy or skip syndication (this is the step that 502'd on the
+      # e41ec8e deploy).
       - name: Redeploy gopher server (Bunny Magic Containers)
         if: success() && vars.GOPHER_MC_APP_ID != ''
+        continue-on-error: true
         uses: https://github.com/BunnyWay/actions/container-update-image@main
         with:
           api_key: ${{ secrets.BUNNY_API_KEY }}
