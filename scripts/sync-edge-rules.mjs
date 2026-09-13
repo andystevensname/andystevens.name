@@ -19,7 +19,7 @@
 // also configured by hand and this script has no business deleting what it
 // did not create.
 
-import { redirects, browserCache, HOST } from '../edge-rules.mjs';
+import { redirects, browserCache, responseHeaders, HOST } from '../edge-rules.mjs';
 
 const API = 'https://api.bunny.net';
 const key = process.env.BUNNY_API_KEY;
@@ -61,7 +61,7 @@ async function api(path, method = 'GET', body) {
 // action type". ActionParameter1 is the destination and ActionParameter2
 // appears to be the status code. Run --dump against a rule built by hand
 // in the dashboard to confirm the encoding before trusting this.
-function rule({ description, paths, actionType, param1, param2 }, guid) {
+function rule({ description, paths, actionType, param1, param2, patternMatchingType = 0 }, guid) {
   return {
     Guid: guid ?? null,
     ActionType: actionType,
@@ -73,7 +73,10 @@ function rule({ description, paths, actionType, param1, param2 }, guid) {
     Triggers: [
       {
         Type: 0, // Url
-        PatternMatchingType: 0, // MatchAny
+        // 0 = MatchAny (URL matches a pattern); 2 = MatchNone (URL matches
+        // none of them) — the COOP site rule uses MatchNone to stay off
+        // /admin/ so it never overlaps the /admin/ override.
+        PatternMatchingType: patternMatchingType,
         PatternMatches: paths.map((path) => `*://${HOST}${path}`),
         Parameter1: null,
       },
@@ -84,8 +87,10 @@ function rule({ description, paths, actionType, param1, param2 }, guid) {
 // ActionType 1 = Redirect with the status code in ActionParameter2 — that
 // half is confirmed in production: the six redirect paths all answer 301.
 // ActionType 16 = OverrideBrowserCacheTime, duration in ActionParameter1 in
-// seconds, is the same shape but still unconfirmed. --dump after the first
-// run will show whether the rule reads back as declared.
+// seconds, is the same shape but still unconfirmed. ActionType 5 =
+// SetResponseHeader, header name in ActionParameter1 and value in
+// ActionParameter2. --dump after the first run will show whether each rule
+// reads back as declared.
 const declaredRules = [
   ...redirects.map((r) => ({
     description: r.description,
@@ -99,6 +104,14 @@ const declaredRules = [
     paths: c.paths,
     actionType: 16,
     param1: String(c.seconds),
+  })),
+  ...responseHeaders.map((h) => ({
+    description: h.description,
+    paths: h.paths,
+    actionType: 5,
+    param1: h.name,
+    param2: h.value,
+    patternMatchingType: h.match === 'none' ? 2 : 0,
   })),
 ];
 
@@ -116,6 +129,35 @@ const unmanaged = existing.filter((r) => !declared.has(r.Description));
 if (unmanaged.length) {
   console.log(`Leaving ${unmanaged.length} rule(s) alone (not declared here):`);
   for (const r of unmanaged) console.log(`  - ${r.Description || '(no description)'}`);
+}
+
+// A header is now declared here AND still set by a hand-made rule the sync
+// won't touch — the leftover from before these moved into the repo. Two
+// rules setting the same header make the result order-dependent (for COOP,
+// a stray same-origin-allow-popups would defeat the /admin/ unsafe-none
+// override), so call these out explicitly: they must be deleted once in the
+// dashboard.
+//
+// A SetResponseHeader (5) carries its header name in ActionParameter1, but a
+// single rule can set MORE headers through ExtraActions (the hand-made "CSP"
+// rule bundles X-Content-Type-Options and Referrer-Policy that way), so scan
+// those too or the warning under-reports what a rule actually sets.
+const managedHeaders = new Set(responseHeaders.map((h) => h.name.toLowerCase()));
+const headersSetBy = (r) =>
+  [r, ...(r.ExtraActions ?? [])]
+    .filter((a) => a.ActionType === 5 && a.ActionParameter1)
+    .map((a) => a.ActionParameter1);
+const conflicting = unmanaged
+  .map((r) => ({ rule: r, headers: headersSetBy(r).filter((n) => managedHeaders.has(n.toLowerCase())) }))
+  .filter(({ headers }) => headers.length);
+if (conflicting.length) {
+  console.warn(
+    `\n⚠️  ${conflicting.length} hand-made rule(s) still set a header now declared here.\n` +
+      `   Delete them once in the dashboard or they will duplicate/override the managed rule:`,
+  );
+  for (const { rule: r, headers } of conflicting) {
+    console.warn(`   - ${r.Description || '(no description)'} — sets ${headers.join(', ')}`);
+  }
 }
 
 let added = 0;
