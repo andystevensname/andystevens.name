@@ -21,8 +21,21 @@ self.addEventListener('activate', (event) => {
     // Navigation preload is deliberately disabled. The preload request is
     // issued by the browser with normal HTTP cache semantics, so it would
     // hand back exactly the stale HTML the document path below exists to
-    // bypass. Worth re-enabling once no browser can still be holding a page
-    // cached under the old max-age (see the fetch handler).
+    // bypass.
+    //
+    // RE-ENABLE THIS once no browser can still hold a page cached under the
+    // old max-age. The header went to max-age=0 on 2026-09-09; before that
+    // HTML was served with max-age=2592000, and briefly 25600000 the same
+    // day. So the last such entry cannot outlive:
+    //
+    //   2026-10-09  the 30-day value, which is what nearly everyone got
+    //   2027-07-02  the ~296-day value, from a window of roughly an hour
+    //
+    // In practice it decays far faster: the document path below forces
+    // revalidation, so any returning reader is repaired on their second
+    // page view. 2026-10-09 is the honest date to act on; 2027-07-02 is the
+    // ceiling for a reader who loaded during that one-hour window and has
+    // not been back since.
     if (self.registration.navigationPreload) {
       await self.registration.navigationPreload.disable();
     }
