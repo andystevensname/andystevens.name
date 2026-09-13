@@ -1,5 +1,5 @@
 ---
-title: Arguments Against AI Fair Use
+title: Responding to "Arguments in Favor of AI Fair Use"
 description: Response to Kevin Kelly's Arguments in Favor of AI Fair Use
 quote: Kevin Kelly, on his SubStack, shared some compelling points in his Arguments in Favor of AI Fair Use. But I think it misses the mark.
 date: 2026-09-09T09:44:00.000Z
