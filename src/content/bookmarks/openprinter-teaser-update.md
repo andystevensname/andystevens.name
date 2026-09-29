@@ -13,4 +13,4 @@ notify: true
 slug: ''
 ---
 
-It's remarkable to me that I haven't seen category of DIY sooner, but Openprinter is a buildable printer that won't require DRM or proprietary ink, can print sheets or rolls, and even comes with a wall mount option. I'm _really_ hoping it works well enough to replace my other printer.
+It's remarkable to me that I haven't seen this category of DIY sooner, but Openprinter is a buildable printer that won't require DRM or proprietary ink, can print sheets or rolls, and even comes with a wall mount option. I'm _really_ hoping it works well enough to replace my other printer.
