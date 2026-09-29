@@ -1,7 +1,7 @@
 // Shared push-send logic, imported by edge-script/handlers/push-fanout.
 
 import webpush from 'web-push';
-import { listPushSubscriptions, removePushSubscription } from './storage.mjs';
+import { hasValidPushKeys, listPushSubscriptions, removePushSubscription } from './storage.mjs';
 
 export function buildPayload(post) {
   if (post.apType === 'Like') {
@@ -31,11 +31,23 @@ export function configureVapid() {
 
 export async function sendForPosts(posts) {
   if (!posts.length) return { sent: 0, pruned: 0, skipped: 'no-posts' };
-  const subs = await listPushSubscriptions();
-  if (!subs.length) return { sent: 0, pruned: 0, skipped: 'no-subscribers' };
+  const stored = await listPushSubscriptions();
+
+  // Malformed keys fail inside web-push with no status code, so the
+  // 404/410 pruning below never catches them and they fail every run.
+  let pruned = 0;
+  const subs = [];
+  for (const sub of stored) {
+    if (hasValidPushKeys(sub.keys)) {
+      subs.push(sub);
+    } else {
+      await removePushSubscription(sub.endpoint);
+      pruned++;
+    }
+  }
+  if (!subs.length) return { sent: 0, pruned, skipped: 'no-subscribers' };
 
   let sent = 0;
-  let pruned = 0;
   for (const post of posts) {
     const payload = JSON.stringify(buildPayload(post));
     const results = await Promise.allSettled(
