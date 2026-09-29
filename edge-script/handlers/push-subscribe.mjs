@@ -1,4 +1,4 @@
-import { addPushSubscription } from '../../src/lib/storage.mjs';
+import { addPushSubscription, hasValidPushKeys } from '../../src/lib/storage.mjs';
 
 export default async (request) => {
   if (request.method !== 'POST') {
@@ -12,7 +12,7 @@ export default async (request) => {
     return new Response('invalid json', { status: 400 });
   }
 
-  if (!sub?.endpoint || !sub?.keys?.p256dh || !sub?.keys?.auth) {
+  if (!sub?.endpoint || !hasValidPushKeys(sub.keys)) {
     return new Response('invalid subscription', { status: 400 });
   }
 

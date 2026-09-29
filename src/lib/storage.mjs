@@ -169,6 +169,28 @@ export async function getActivity(id) {
 
 // ───── push subscriptions ───────────────────────────────────────────────
 
+// web-push needs a 65-byte uncompressed P-256 point and a 16-byte auth
+// secret. A subscription with anything else can never be sent to, and
+// web-push rejects it before any request goes out, so there is no 404/410
+// to prune it by. Check here so it is refused at subscribe time and
+// dropped at fanout.
+function base64urlLength(value) {
+  try {
+    return atob(value.replace(/-/g, '+').replace(/_/g, '/')).length;
+  } catch {
+    return -1;
+  }
+}
+
+export function hasValidPushKeys(keys) {
+  return (
+    typeof keys?.p256dh === 'string' &&
+    typeof keys?.auth === 'string' &&
+    base64urlLength(keys.p256dh) === 65 &&
+    base64urlLength(keys.auth) === 16
+  );
+}
+
 export async function addPushSubscription(subscription, ua) {
   await putJson(`push-subs/${hashId(subscription.endpoint)}.json`, {
     endpoint: subscription.endpoint,
