@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
-    "@bunny.net/edgescript-sdk": "^0.12.1",
+    "@bunny.net/edgescript-sdk": "^0.13.0",
     "@resvg/resvg-js": "^2.6.2",
     "@types/node": "^26.4.0",
     "esbuild": "^0.28.0",
