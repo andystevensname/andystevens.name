@@ -18,26 +18,20 @@ self.addEventListener('install', (event) => {
 
 self.addEventListener('activate', (event) => {
   event.waitUntil((async () => {
-    // Navigation preload is deliberately disabled. The preload request is
-    // issued by the browser with normal HTTP cache semantics, so it would
-    // hand back exactly the stale HTML the document path below exists to
-    // bypass.
+    // Navigation preload: the browser starts the document request in
+    // parallel with service worker boot. It was disabled from 2026-09-09 to
+    // 2026-10-09 because the preload request honours the HTTP cache, and HTML
+    // was then served with max-age=2592000 — the preload would have handed
+    // back the stale pages the document path below exists to bypass. HTML is
+    // now max-age=0, so a preload always revalidates and is safe again.
     //
-    // RE-ENABLE THIS once no browser can still hold a page cached under the
-    // old max-age. The header went to max-age=0 on 2026-09-09; before that
-    // HTML was served with max-age=2592000, and briefly 25600000 the same
-    // day. So the last such entry cannot outlive:
-    //
-    //   2026-10-09  the 30-day value, which is what nearly everyone got
-    //   2027-07-02  the ~296-day value, from a window of roughly an hour
-    //
-    // In practice it decays far faster: the document path below forces
-    // revalidation, so any returning reader is repaired on their second
-    // page view. 2026-10-09 is the honest date to act on; 2027-07-02 is the
-    // ceiling for a reader who loaded during that one-hour window and has
-    // not been back since.
+    // One residual: for roughly an hour on 2026-09-09 HTML went out with
+    // max-age=25600000, so a reader from that window who has not been back
+    // since could hold a page until 2027-07-02. They are repaired by the
+    // no-cache fetch on any ClientRouter navigation, and this was judged not
+    // worth another nine months without preload.
     if (self.registration.navigationPreload) {
-      await self.registration.navigationPreload.disable();
+      await self.registration.navigationPreload.enable();
     }
     const keys = await caches.keys();
     await Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)));
@@ -136,7 +130,10 @@ self.addEventListener('fetch', (event) => {
     event.respondWith((async () => {
       const cache = await caches.open(CACHE);
       try {
-        const network = await fetch(request, { cache: 'no-cache' });
+        // preloadResponse only exists for navigations; ClientRouter's fetch()
+        // requests still take the forced-revalidation path.
+        const preloaded = request.mode === 'navigate' ? await event.preloadResponse : undefined;
+        const network = preloaded || (await fetch(request, { cache: 'no-cache' }));
         if (network.ok) cache.put(request, network.clone());
         return network;
       } catch {
