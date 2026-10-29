@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: docker
     container:
-      image: node:24-bookworm
+      image: node:26-bookworm
     # Secrets are scoped per-step (not job-level) so that npm install and the
     # dependency-heavy build never see credentials they don't need — a
     # compromised transitive dep can't exfiltrate what isn't in its env.
