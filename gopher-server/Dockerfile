@@ -19,7 +19,7 @@
 # Gopher is plaintext, so there is no certificate here and none of the
 # capsule's TOFU-warning-on-redeploy problem.
 
-FROM node:24-alpine
+FROM node:26-alpine
 
 COPY gopher-server/serve.mjs /app/serve.mjs
 COPY dist-gopher/ /content/
